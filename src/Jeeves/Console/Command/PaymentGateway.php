@@ -50,5 +50,32 @@ EOT
         $prettyPrinter = Build::prettyPrinter();
         $generatedCode = $prettyPrinter->generateCode($file);
         $this->writeFile('generated/MyService.php', $generatedCode);
+
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        $xml = $service->write('config', function($writer) {
+          $writer->writeAttribute('xsi:noNamespaceSchemaLocation','urn:magento:framework:ObjectManager/etc/config.xsd');
+          $writer->write([
+              'name' => 'virtualType',
+              'attributes' => [
+                'name' => 'CloudPaymentsFacade',
+                'type' => 'Magento\Payment\Model\Method\Adapter',
+              ],
+              'value' => [
+                'arguments' => [
+                  [
+                    'name' => 'argument',
+                    'attributes' => [
+                      'name' => 'code',
+                      'xsi:type' => 'string',
+                    ],
+                    'value' => 'cloudpayments',
+                  ]
+                ]
+              ]
+          ]);
+        });
+        echo $xml;
+        $this->writeFile('generated/di.xml', $xml);
     }
 }
