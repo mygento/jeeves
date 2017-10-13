@@ -1,0 +1,20 @@
+{
+    "name": "mygento/jeeves",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nikita Tarasov",
+            "email": "nikita@mygento.ru"
+        }
+    ],
+    "require": {
+      "symfony/console": "^3.0",
+      "memio/memio": "^1.0",
+      "symfony/filesystem": "^3.3"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }
+    },
+    "bin": ["bin/jeeves"]
+}
