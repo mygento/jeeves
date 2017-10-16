@@ -89,6 +89,9 @@ EOT
         $this->genResourceCollection($classNamespace, ucfirst($entity));
         $this->genAdminRoute(ucfirst($vendor).'_'.ucfirst($module), $routepath);
         $this->genAdminControllers($classNamespace, ucfirst($vendor).'_'.ucfirst($module), ucfirst($entity));
+
+        $this->genAdminLayouts($module, $entity);
+        $this->genAdminAcl(ucfirst($vendor).'_'.ucfirst($module), $entity);
     }
 
     protected function genModel($module, $model)
@@ -167,7 +170,6 @@ EOT
         $this->genAdminViewController($module, $module2, $entity);
 
         $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml\\'.$entity);
-        $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Index.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Edit.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
@@ -189,7 +191,7 @@ EOT
           ->addComment('@param \Magento\Framework\View\Result\PageFactory $resultPageFactory')
           ->addComment('@param \Magento\Framework\Registry $coreRegistry')
           ->addComment('@param \Magento\Backend\App\Action\Context $context')
-          ->setBody('$this->resultPageFactory = resultPageFactory;'.PHP_EOL
+          ->setBody('$this->resultPageFactory = $resultPageFactory;'.PHP_EOL
                 .'parent::__construct($coreRegistry, $context);
           ');
 
@@ -208,7 +210,6 @@ EOT
             //.'$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);'.PHP_EOL
             //.'$dataPersistor->clear(\'cms_block\');'.PHP_EOL
             .'return $resultPage;');
-        $method->addParameter('resultPage');
         //echo $namespace;
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Index.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
@@ -251,5 +252,82 @@ EOT
         //   .  'return $resultPage;');
         // $method->addParameter('resultPage');
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+    }
+
+
+    protected function genAdminLayouts($module, $entity)
+    {
+        $path = $module.'_'.$entity.'_index';
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        $xml = $service->write('config', function ($writer) use ($path, $module) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
+            $writer->write([
+                [
+                    'body' => [
+                        'referenceContainer' => [
+                            'attributes' => [
+                              'name' => 'content',
+                            ],
+                            'value' => [
+                                [
+                                    'uiComponent' => [
+                                        'attributes' => [
+                                          'name' => 'cms_block_listing',
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                ]
+            ]);
+        });
+        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+
+        $path = $module.'_'.$entity.'_edit';
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        $xml = $service->write('config', function ($writer) use ($path, $module) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
+        });
+        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+
+        $path = $module.'_'.$entity.'_edit';
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        $xml = $service->write('config', function ($writer) use ($path, $module) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
+        });
+        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+    }
+
+    public function genAdminAcl($module, $entity)
+    {
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        $xml = $service->write('config', function ($writer) use ($module) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Acl/etc/acl.xsd');
+            $writer->write([
+                'acl' => [
+                    'resources' => [
+                        'resource' => [
+                            'attributes' => [
+                                'id' => 'Magento_Backend::admin'
+                            ],
+                            'value' => [
+                                'resource' => [
+                                    'attributes' => [
+                                        'id' => $module.'::template',
+                                        'title' => $module,
+                                    ],
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+        });
+        $this->writeFile('generated/etc/acl.xml', $xml);
     }
 }
