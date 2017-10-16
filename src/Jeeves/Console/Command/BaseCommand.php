@@ -35,6 +35,8 @@ abstract class BaseCommand extends Command
     protected function writeFile($path, $content)
     {
         $fs = new Filesystem();
+        $io = $this->getIO();
+        $io->write(sprintf("Creating: <info>%s</info>.", $path));
         return $fs->dumpFile($path, $content);
     }
 }

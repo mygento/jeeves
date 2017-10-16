@@ -17,60 +17,59 @@ class Application extends BaseApplication
       /**
        * @var IOInterface
        */
-      protected $io;
+    protected $io;
 
-      public function __construct()
-      {
-          parent::__construct('Jeeves', self::VERSION);
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      public function run(InputInterface $input = null, OutputInterface $output = null)
-      {
-          if (null === $output) {
-              $output = Factory::createOutput();
-          }
-          return parent::run($input, $output);
-      }
+    public function __construct()
+    {
+        parent::__construct('Jeeves', self::VERSION);
+    }
 
       /**
        * {@inheritDoc}
        */
-      public function doRun(InputInterface $input, OutputInterface $output)
-      {
-          $io = $this->io = new ConsoleIO($input, $output, $this->getHelperSet());
-          ErrorHandler::register($io);
+    public function run(InputInterface $input = null, OutputInterface $output = null)
+    {
+        if (null === $output) {
+            $output = Factory::createOutput();
+        }
+        return parent::run($input, $output);
+    }
 
-          try {
-              $result = parent::doRun($input, $output);
-              restore_error_handler();
-              return $result;
-          } catch (\Exception $e) {
-              restore_error_handler();
-              throw $e;
-          }
-      }
+      /**
+       * {@inheritDoc}
+       */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $io = $this->io = new ConsoleIO($input, $output, $this->getHelperSet());
+        ErrorHandler::register($io);
+
+        try {
+            $result = parent::doRun($input, $output);
+            restore_error_handler();
+            return $result;
+        } catch (\Exception $e) {
+            restore_error_handler();
+            throw $e;
+        }
+    }
 
       /**
        * Initializes all commands.
        */
-      protected function getDefaultCommands()
-      {
-          $commands = array_merge(parent::getDefaultCommands(), array(
-              new Command\PaymentGateway(),
-              new Command\ModelCrud(),
-          ));
-          return $commands;
-      }
+    protected function getDefaultCommands()
+    {
+        $commands = array_merge(parent::getDefaultCommands(), array(
+            new Command\PaymentGateway(),
+            new Command\ModelCrud(),
+        ));
+        return $commands;
+    }
 
       /**
        * @return IOInterface
        */
-      public function getIO()
-      {
-          return $this->io;
-      }
-
+    public function getIO()
+    {
+        return $this->io;
+    }
 }

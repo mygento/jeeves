@@ -8,35 +8,35 @@ class NullIO extends BaseIO
     */
     public function isInteractive()
     {
-      return false;
+        return false;
     }
     /**
     * {@inheritDoc}
     */
     public function isVerbose()
     {
-      return false;
+        return false;
     }
     /**
     * {@inheritDoc}
     */
     public function isVeryVerbose()
     {
-      return false;
+        return false;
     }
     /**
     * {@inheritDoc}
     */
     public function isDebug()
     {
-      return false;
+        return false;
     }
     /**
     * {@inheritDoc}
     */
     public function isDecorated()
     {
-      return false;
+        return false;
     }
     /**
     * {@inheritDoc}
@@ -67,34 +67,34 @@ class NullIO extends BaseIO
     */
     public function ask($question, $default = null)
     {
-      return $default;
+        return $default;
     }
     /**
     * {@inheritDoc}
     */
     public function askConfirmation($question, $default = true)
     {
-      return $default;
+        return $default;
     }
     /**
     * {@inheritDoc}
     */
     public function askAndValidate($question, $validator, $attempts = false, $default = null)
     {
-      return $default;
+        return $default;
     }
     /**
     * {@inheritDoc}
     */
     public function askAndHideAnswer($question)
     {
-      return null;
+        return null;
     }
     /**
     * {@inheritDoc}
     */
     public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
     {
-      return $default;
+        return $default;
     }
 }

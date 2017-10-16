@@ -24,8 +24,7 @@ class PaymentGateway extends BaseCommand
             ->setDefinition(array(
                 new InputOption('name', null, InputOption::VALUE_REQUIRED, 'Name of the gateway'),
                 new InputOption('codename', null, InputOption::VALUE_OPTIONAL, 'Name of the gateway codename'),
-              )
-            )
+              ))
             ->setHelp(<<<EOT
 <info>php jeeves.phar generate_payment_gateway</info>
 EOT
@@ -53,9 +52,9 @@ EOT
 
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function($writer) {
-          $writer->writeAttribute('xsi:noNamespaceSchemaLocation','urn:magento:framework:ObjectManager/etc/config.xsd');
-          $writer->write([
+        $xml = $service->write('config', function ($writer) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
+            $writer->write([
               'name' => 'virtualType',
               'attributes' => [
                 'name' => 'CloudPaymentsFacade',
@@ -73,7 +72,7 @@ EOT
                   ]
                 ]
               ]
-          ]);
+            ]);
         });
         echo $xml;
         $this->writeFile('generated/di.xml', $xml);

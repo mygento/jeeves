@@ -29,7 +29,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function alert($message, array $context = array())
     {
-      return $this->log(LogLevel::ALERT, $message, $context);
+        return $this->log(LogLevel::ALERT, $message, $context);
     }
     /**
     * Critical conditions.
@@ -42,7 +42,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function critical($message, array $context = array())
     {
-      return $this->log(LogLevel::CRITICAL, $message, $context);
+        return $this->log(LogLevel::CRITICAL, $message, $context);
     }
     /**
     * Runtime errors that do not require immediate action but should typically
@@ -54,7 +54,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function error($message, array $context = array())
     {
-      return $this->log(LogLevel::ERROR, $message, $context);
+        return $this->log(LogLevel::ERROR, $message, $context);
     }
     /**
     * Exceptional occurrences that are not errors.
@@ -68,7 +68,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function warning($message, array $context = array())
     {
-      return $this->log(LogLevel::WARNING, $message, $context);
+        return $this->log(LogLevel::WARNING, $message, $context);
     }
     /**
     * Normal but significant events.
@@ -79,7 +79,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function notice($message, array $context = array())
     {
-      return $this->log(LogLevel::NOTICE, $message, $context);
+        return $this->log(LogLevel::NOTICE, $message, $context);
     }
     /**
     * Interesting events.
@@ -92,7 +92,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function info($message, array $context = array())
     {
-      return $this->log(LogLevel::INFO, $message, $context);
+        return $this->log(LogLevel::INFO, $message, $context);
     }
     /**
     * Detailed debug information.
@@ -103,7 +103,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function debug($message, array $context = array())
     {
-      return $this->log(LogLevel::DEBUG, $message, $context);
+        return $this->log(LogLevel::DEBUG, $message, $context);
     }
     /**
     * Logs with an arbitrary level.
@@ -115,16 +115,16 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     */
     public function log($level, $message, array $context = array())
     {
-      if (in_array($level, array(LogLevel::EMERGENCY, LogLevel::ALERT, LogLevel::CRITICAL, LogLevel::ERROR))) {
-          $this->writeError('<error>'.$message.'</error>', true, self::NORMAL);
-      } elseif ($level === LogLevel::WARNING) {
-          $this->writeError('<warning>'.$message.'</warning>', true, self::NORMAL);
-      } elseif ($level === LogLevel::NOTICE) {
-          $this->writeError('<info>'.$message.'</info>', true, self::VERBOSE);
-      } elseif ($level === LogLevel::INFO) {
-          $this->writeError('<info>'.$message.'</info>', true, self::VERY_VERBOSE);
-      } else {
-          $this->writeError($message, true, self::DEBUG);
-      }
+        if (in_array($level, array(LogLevel::EMERGENCY, LogLevel::ALERT, LogLevel::CRITICAL, LogLevel::ERROR))) {
+            $this->writeError('<error>'.$message.'</error>', true, self::NORMAL);
+        } elseif ($level === LogLevel::WARNING) {
+            $this->writeError('<warning>'.$message.'</warning>', true, self::NORMAL);
+        } elseif ($level === LogLevel::NOTICE) {
+            $this->writeError('<info>'.$message.'</info>', true, self::VERBOSE);
+        } elseif ($level === LogLevel::INFO) {
+            $this->writeError('<info>'.$message.'</info>', true, self::VERY_VERBOSE);
+        } else {
+            $this->writeError($message, true, self::DEBUG);
+        }
     }
 }

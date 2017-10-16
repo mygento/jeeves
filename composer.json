@@ -13,7 +13,9 @@
         "sabre/xml": "^2.0",
         "nette/php-generator": "^3.1"
     },
-    "require-dev": {},
+    "require-dev": {
+      "squizlabs/php_codesniffer": "3.*"
+    },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }
     },
