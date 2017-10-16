@@ -8,10 +8,10 @@
         }
     ],
     "require": {
-      "symfony/console": "^3.0",
-      "memio/memio": "^1.0",
-      "symfony/filesystem": "^3.3",
-        "sabre/xml": "^2.0"
+        "symfony/console": "^3.0",
+        "symfony/filesystem": "^3.3",
+        "sabre/xml": "^2.0",
+        "nette/php-generator": "^3.1"
     },
     "require-dev": {},
     "autoload": {
