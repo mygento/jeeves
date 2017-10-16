@@ -9,7 +9,7 @@
     ],
     "require": {
         "symfony/console": "^3.0",
-        "symfony/filesystem": "^3.3",
+        "symfony/filesystem": "^3.0",
         "sabre/xml": "^2.0",
         "nette/php-generator": "^3.1"
     },
