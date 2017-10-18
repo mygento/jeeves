@@ -17,6 +17,21 @@ use Memio\Model\Argument;
 
 class ModelCrud extends BaseCommand
 {
+
+    private $vendor;
+    private $module;
+
+
+    protected function getNamespace()
+    {
+        return ucfirst($this->vendor).'\\'.ucfirst($this->module);
+    }
+
+    protected function getFullname()
+    {
+        return ucfirst($this->vendor).'_'.ucfirst($this->module);
+    }
+
     protected function configure()
     {
         $this
@@ -60,7 +75,7 @@ EOT
             $fullname
         );
 
-        list($vendor, $module) = explode('/', $fullname);
+        list($this->vendor, $this->module) = explode('/', $fullname);
 
         $entity = $io->askAndValidate(
             'Entity name (<entity>) [<comment>'.$entity.'</comment>]: ',
@@ -68,7 +83,6 @@ EOT
                 if (null === $value) {
                     return $entity;
                 }
-                echo $entity;
                 if (!preg_match('{^[a-z]+$}', $value)) {
                     throw new \InvalidArgumentException(
                         'The entity name '.$value.' is invalid, it should be lowercase and matching: [a-z]'
@@ -82,33 +96,35 @@ EOT
 
         $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $module;
         $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $vendor.'_'.$module.'_'.$entity;
-        $classNamespace = ucfirst($vendor).'\\'.ucfirst($module);
 
-        $this->genModel($classNamespace, ucfirst($entity));
-        $this->genResourceModel($classNamespace, ucfirst($entity), 'mygento_keys');
-        $this->genResourceCollection($classNamespace, ucfirst($entity));
-        $this->genAdminRoute(ucfirst($vendor).'_'.ucfirst($module), $routepath);
-        $this->genAdminControllers($classNamespace, ucfirst($vendor).'_'.ucfirst($module), ucfirst($entity));
+        // php
+        $this->genModel(ucfirst($entity));
+        $this->genResourceModel(ucfirst($entity), $tablename);
+        $this->genResourceCollection(ucfirst($entity));
+        $this->genAdminControllers(ucfirst($entity));
 
-        $this->genAdminLayouts($module, $entity);
-        $this->genAdminAcl(ucfirst($vendor).'_'.ucfirst($module), $entity);
+        // xml
+        $this->genAdminRoute($routepath);
+        $this->genAdminLayouts($entity);
+        $this->genAdminAcl($entity);
+        $this->runCodeStyleFixer();
     }
 
-    protected function genModel($module, $model)
+    protected function genModel($model)
     {
-          $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Model');
+          $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace().'\Model');
           $class = $namespace->addClass($model);
           $class->setExtends('\Magento\Framework\Model\AbstractModel');
           $method = $class->addMethod('_construct')
               ->addComment('Initialize '.$model.' model')
               ->setVisibility('protected')
-              ->setBody('$this->_init(\\'.$module.'\\Model\ResourceModel'.'\\'.$model.'::class);');
+              ->setBody('$this->_init(\\'.$this->getNamespace().'\\Model\ResourceModel'.'\\'.$model.'::class);');
           $this->writeFile('generated/Model/'.$model.'.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
-    protected function genResourceModel($module, $model, $table, $key = 'id')
+    protected function genResourceModel($model, $table, $key = 'id')
     {
-          $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Model\ResourceModel');
+          $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace().'\Model\ResourceModel');
           $class = $namespace->addClass($model);
           $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
           $method = $class->addMethod('_construct')
@@ -118,73 +134,42 @@ EOT
           $this->writeFile('generated/Model/ResourceModel/'.$model.'.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
-    protected function genResourceCollection($module, $model)
+    protected function genResourceCollection($model)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Model\ResourceModel\\'.$model);
+        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace().'\Model\ResourceModel\\'.$model);
         $class = $namespace->addClass('Collection');
         $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
         $method = $class->addMethod('_construct')
           ->addComment('Initialize '.$model.' resource collection')
           ->setVisibility('protected')
           ->setBody('$this->_init('.PHP_EOL.
-            '   '.'\\'.$module.'\\Model'.'\\'.$model.'::class,'.PHP_EOL.
-            '   '.'\\'.$module.'\\Model\ResourceModel'.'\\'.$model.'::class'.PHP_EOL.
+            '   '.'\\'.$this->getNamespace().'\\Model'.'\\'.$model.'::class,'.PHP_EOL.
+            '   '.'\\'.$this->getNamespace().'\\Model\ResourceModel'.'\\'.$model.'::class'.PHP_EOL.
             ');');
         $this->writeFile('generated/Model/ResourceModel/'.$model.'/Collection.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
-    protected function genAdminRoute($module, $path)
+    protected function genAdminControllers($entity)
     {
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function ($writer) use ($path, $module) {
-            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:App/etc/routes.xsd');
-            $writer->write([
-              'name' => 'router',
-              'attributes' => [
-                'id' => 'admin'
-              ],
-              'value' => [
-                  [
-                    'name' => 'route',
-                    'attributes' => [
-                      'id' => strtolower($module),
-                      'frontName' => $path,
-                    ],
-                    'value' => [
-                      'name' => 'module',
-                      'attributes' => [
-                        'name' => $module,
-                      ],
-                    ]
-                  ]
-              ]
-            ]);
-        });
-        $this->writeFile('generated/etc/adminhtml/routes.xml', $xml);
+        $this->genAdminAbstractController($entity);
+        $this->genAdminViewController($entity);
+
+        //$namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml\\'.$entity);
+        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Edit.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
-    protected function genAdminControllers($module, $module2, $entity)
+    protected function genAdminViewController($entity)
     {
-        $this->genAdminAbstractController($module, $module2, $entity);
-        $this->genAdminViewController($module, $module2, $entity);
-
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml\\'.$entity);
-        $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Edit.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-        $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-        $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-    }
-
-    protected function genAdminViewController($module, $module2, $entity)
-    {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml\\'.$entity);
+        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace().'\Controller\Adminhtml\\'.$entity);
         $class = $namespace->addClass('Index');
         $class
-            ->setExtends($module.'\Controller\Adminhtml\\'.$entity)
+            ->setExtends($this->getNamespace().'\Controller\Adminhtml\\'.$entity)
         ;
         $class->addProperty('resultPageFactory')
               ->setVisibility('protected')
-              ->addComment(' \Magento\Framework\View\Result\PageFactory')
+              ->addComment('@var \Magento\Framework\View\Result\PageFactory')
         ;
 
         $method = $class->addMethod('__construct')
@@ -207,22 +192,22 @@ EOT
           ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */'.PHP_EOL
             .'$resultPage = $this->resultPageFactory->create();'.PHP_EOL
             .'$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\''.$entity.'\'));'.PHP_EOL.PHP_EOL
-            //.'$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);'.PHP_EOL
-            //.'$dataPersistor->clear(\'cms_block\');'.PHP_EOL
+            .'//$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);'.PHP_EOL
+            .'//$dataPersistor->clear(\''.$this->module.'_'.strtolower($entity).'\');'.PHP_EOL
             .'return $resultPage;');
         //echo $namespace;
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Index.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
-    protected function genAdminAbstractController($module, $module2, $entity)
+    protected function genAdminAbstractController($entity)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml');
+        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace().'\Controller\Adminhtml');
         $class = $namespace->addClass($entity);
         $class
             ->setAbstract()
             ->setExtends('\Magento\Backend\App\Action')
         ;
-        $class->addConstant('ADMIN_RESOURCE', $module2.'::'.strtolower($entity))
+        $class->addConstant('ADMIN_RESOURCE', $this->getFullname().'::'.strtolower($entity))
               ->addComment('Authorization level')
               ->addComment('')
               ->addComment('@see _isAllowed()')
@@ -237,97 +222,58 @@ EOT
         $method = $class->addMethod('__construct')
           ->addComment('@param \Magento\Framework\Registry $coreRegistry')
           ->addComment('@param \Magento\Backend\App\Action\Context $context')
-          ->setBody('$this->_coreRegistry = $coreRegistry;'.PHP_EOL.'parent::__construct($context);');
+          ->setBody('parent::__construct($context);'.PHP_EOL.'$this->_coreRegistry = $coreRegistry;');
 
         $method->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
         $method->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
 
-        // $method = $class->addMethod('initPage')
-        //   ->setVisibility('protected')
-        //   ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
-        //   ->addComment('@return \Magento\Backend\Model\View\Result\Page')
-        //   ->setBody('$resultPage->setActiveMenu(\'Magento_Cms::cms_block\')'.PHP_EOL
-        //   .'->addBreadcrumb(__(\'CMS\'), __(\'CMS\'));'.PHP_EOL
-        //   .  'return $resultPage;');
-        // $method->addParameter('resultPage');
+        $method = $class->addMethod('initPage')
+          ->setVisibility('protected')
+          ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
+          ->addComment('@return \Magento\Backend\Model\View\Result\Page')
+          ->setBody('$resultPage->setActiveMenu(\''.$this->getFullname().'::'.strtolower($entity).'\');'.PHP_EOL
+          .'//->addBreadcrumb(__(\''.$entity.'\'), __(\''.$entity.'\'));'.PHP_EOL
+          . 'return $resultPage;');
+        $method->addParameter('resultPage');
         $this->writeFile('generated/Controller/Adminhtml/'.$entity.'.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
     }
 
 
-    protected function genAdminLayouts($module, $entity)
+    protected function genAdminRoute($path)
     {
-        $path = $module.'_'.$entity.'_index';
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function ($writer) use ($path, $module) {
-            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
-            $writer->write([
-                [
-                    'body' => [
-                        'referenceContainer' => [
-                            'attributes' => [
-                              'name' => 'content',
-                            ],
-                            'value' => [
-                                [
-                                    'uiComponent' => [
-                                        'attributes' => [
-                                          'name' => 'cms_block_listing',
-                                        ],
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                ]
-            ]);
-        });
-        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
-
-        $path = $module.'_'.$entity.'_edit';
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function ($writer) use ($path, $module) {
-            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
-        });
-        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
-
-        $path = $module.'_'.$entity.'_edit';
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function ($writer) use ($path, $module) {
-            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
-        });
-        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+        $xml = $this->getXmlManager()->generateAdminRoute($this->module, $path, $this->getFullname());
+        $this->writeFile('generated/etc/adminhtml/routes.xml', $xml);
     }
 
-    public function genAdminAcl($module, $entity)
+    protected function genAdminLayouts($entity)
     {
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        $xml = $service->write('config', function ($writer) use ($module) {
-            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Acl/etc/acl.xsd');
-            $writer->write([
-                'acl' => [
-                    'resources' => [
-                        'resource' => [
-                            'attributes' => [
-                                'id' => 'Magento_Backend::admin'
-                            ],
-                            'value' => [
-                                'resource' => [
-                                    'attributes' => [
-                                        'id' => $module.'::template',
-                                        'title' => $module,
-                                    ],
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-        });
+        $uiComponent = $this->module.'_'.$entity.'_listing';
+        $uiComponent = 'cms_block_listing';
+        $xml = $this->getXmlManager()->generateAdminLayoutIndex($uiComponent);
+        $path = $this->module.'_'.$entity.'_index';
+        $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+
+        // $path = $module.'_'.$entity.'_edit';
+        // $service = new \Sabre\Xml\Service();
+        // $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        // $xml = $service->write('config', function ($writer) use ($path, $module) {
+        //     $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
+        // });
+        // $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+        //
+        // $path = $module.'_'.$entity.'_edit';
+        // $service = new \Sabre\Xml\Service();
+        // $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+        // $xml = $service->write('config', function ($writer) use ($path, $module) {
+        //     $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
+        // });
+        // $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+    }
+
+    public function genAdminAcl($entity)
+    {
+        $xml = $this->getXmlManager()->generateAdminAcl($this->getFullname(), $this->module, $entity);
         $this->writeFile('generated/etc/acl.xml', $xml);
     }
 }

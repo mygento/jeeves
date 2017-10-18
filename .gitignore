@@ -2,3 +2,4 @@
 .DS_Store
 composer.lock
 /generated
+.php_cs.cache
