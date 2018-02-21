@@ -61,6 +61,7 @@ class Application extends BaseApplication
         $commands = array_merge(parent::getDefaultCommands(), array(
             new Command\PaymentGateway(),
             new Command\ModelCrud(),
+            new Command\SelfUpdate(),
         ));
         return $commands;
     }
