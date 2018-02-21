@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-      const VERSION = '@package_version@';
+    const VERSION = '0.0.1';
 
       /**
        * @var IOInterface

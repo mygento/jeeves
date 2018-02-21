@@ -26,19 +26,23 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = $this->getIO();
         $updater = new Updater(null, false);
         $updater->setStrategy(Updater::STRATEGY_GITHUB);
         $updater->getStrategy()->setPackageName('mygento/jeeves');
         $updater->getStrategy()->setPharName('jeeves.phar');
-        $updater->getStrategy()->setStability('any');
-        #$updater->getStrategy()->setCurrentLocalVersion('v1.0.1');
+        $updater->getStrategy()->setCurrentLocalVersion(\Mygento\Jeeves\Console\Application::VERSION);
         try {
             $result = $updater->update();
-            echo $result ? "Updated!\n" : "No update needed!\n";
+            if ($result) {
+                $new = $updater->getNewVersion();
+                $old = $updater->getOldVersion();
+                $io->write(sprintf('Updated from %s to %s', $old, $new));
+            } else {
+                $io->write('No update needed!');
+            }
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            echo "Well, something happened! Either an oopsie or something involving hackers.\n";
-            exit(1);
+            $io->writeError($e->getMessage());
         }
     }
 }
