@@ -16,7 +16,7 @@ class SelfUpdate extends BaseCommand
         $this
             ->setName('self-update')
             ->setAliases(array('selfupdate'))
-            ->setDescription('Updates jeeves.phar to the latest version.')
+            ->setDescription('Updates jeeves to the latest version.')
             ->setHelp(<<<EOT
 <info>php jeeves.phar self-update</info>
 EOT
