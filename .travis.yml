@@ -26,5 +26,6 @@ deploy:
   api_key:
     secure: o9c2WOT/QEO5spjFRAFiIyXwzmJuru9yMwelHvDmmTmZIH+/lT1QQ6oqQ9ohix+vtuKxMYdXIgDA8icUzJt0UVyyderA5D3oCDoJ30LNiPCPIMvsk4dAyXLL8zayhvrd9XhrLf0hmmgF5wu7gGs+CV2vWKFeNs5q87vQ/5Xv0Jhuj7vsBrwV3I+rwejZfUL3vHXEej/dbRBdH5ftn86T4ZA3v7ulrslP0qCmHMGEYJz9e4NTSgZtHZB+AcG+exNqC10nz13pXb38N1G15ehsDsPsTneawqJyoRM+vn5kENpUaQHQ9q0nKUma3l9LjFOBlS9N8vn4atjhJDXq1KSnryTF3GWA630vtVYC4GSZjPotQfYcXJW5ahY0/V2RrLMhl8c5ayLqXuHSjjqXf5oA9QdlcT21Qd01mnU6Gm/B/pFZLsrYB6js535edpcgem+1rw0y/pOZ26GEhMVC+7CYenjuGkz5DNfoCDCj4oLbLro+sT3mZb5Xpud9ONtHQpzYlIBYF+AFrrgXjDHSTkhS2xDMl38BGfo8j/CZ06YUxkn/wD2/r4p1ocvEkZzteCHKoBY0sQGmmopSrbMIoQD6ftc5XzcT+xDDTXnMJmBELV2TaK2B+GyZhsX0Hph1/qsiKFNyvcW/qS0CyNvxaCKWM+pg3FL2mpRA6vGHs7cXxmQ=
   file: jeeves.phar
+  name: release-${TRAVIS_BUILD_NUMBER}
   on:
     repo: mygento/jeeves
