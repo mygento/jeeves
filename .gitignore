@@ -3,3 +3,6 @@
 composer.lock
 /generated
 .php_cs.cache
+
+box.phar
+jeeves.phar
