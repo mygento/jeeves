@@ -11,6 +11,7 @@
     "require": {
         "symfony/console": "^2.3 || ^3.0",
         "symfony/filesystem": "^2.4 || ^3.0",
+        "symfony/yaml": "^2.3 || ^3.0",
         "sabre/xml": "^2.1",
         "nette/php-generator": "^3.0",
         "friendsofphp/php-cs-fixer": "~2.2",

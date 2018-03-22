@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.3';
+    const VERSION = '0.0.4';
 
       /**
        * @var IOInterface
@@ -62,7 +62,8 @@ class Application extends BaseApplication
             new Command\PaymentGateway(),
             new Command\ModelCrud(),
             new Command\SelfUpdate(),
-            new Command\Workplace()
+            new Command\Workplace(),
+            new Command\EmptyProject(),
         ));
         return $commands;
     }
