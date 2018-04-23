@@ -79,8 +79,8 @@ class XmlManager
                                 [
                                     'name' => 'resource',
                                     'attributes' => [
-                                        'id' => $fullname.'::'.$entity,
-                                        'title' => ucfirst($module).' '.ucfirst($entity),
+                                        'id' => $fullname . '::' . $entity,
+                                        'title' => ucfirst($module) . ' ' . ucfirst($entity),
                                         'translate' => 'title'
                                     ],
                                 ],
@@ -102,7 +102,7 @@ class XmlManager
                                                     'value' => [
                                                         'resource' => [
                                                             'attributes' => [
-                                                                'id' => $fullname.'::config',
+                                                                'id' => $fullname . '::config',
                                                                 'title' => str_replace('_', ' ', $fullname),
                                                                 'translate' => 'title'
                                                             ],
@@ -121,7 +121,6 @@ class XmlManager
         });
         return $xml;
     }
-
 
     private function getService()
     {

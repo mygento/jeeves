@@ -8,6 +8,7 @@
             "email": "nikita@mygento.ru"
         }
     ],
+    "description": "cli tool to generate M2 code",
     "require": {
         "symfony/console": "^2.3 || ^3.0",
         "symfony/filesystem": "^2.4 || ^3.0",
@@ -19,7 +20,9 @@
         "gitonomy/gitlib": "^1.0"
     },
     "require-dev": {
-      "squizlabs/php_codesniffer": "3.*"
+      "squizlabs/php_codesniffer": "3.*",
+       "phpro/grumphp": "0.14.0",
+       "jakub-onderka/php-parallel-lint": "^0.9.2"
     },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }

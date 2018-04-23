@@ -12,7 +12,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      * @param  array  $context
      * @return null
      */
-    public function emergency($message, array $context = array())
+    public function emergency($message, array $context = [])
     {
         return $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -27,7 +27,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function alert($message, array $context = array())
+    public function alert($message, array $context = [])
     {
         return $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -40,7 +40,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function critical($message, array $context = array())
+    public function critical($message, array $context = [])
     {
         return $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -52,7 +52,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function error($message, array $context = array())
+    public function error($message, array $context = [])
     {
         return $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -66,7 +66,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function warning($message, array $context = array())
+    public function warning($message, array $context = [])
     {
         return $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -77,7 +77,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function notice($message, array $context = array())
+    public function notice($message, array $context = [])
     {
         return $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -90,7 +90,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function info($message, array $context = array())
+    public function info($message, array $context = [])
     {
         return $this->log(LogLevel::INFO, $message, $context);
     }
@@ -101,7 +101,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function debug($message, array $context = array())
+    public function debug($message, array $context = [])
     {
         return $this->log(LogLevel::DEBUG, $message, $context);
     }
@@ -113,16 +113,16 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     * @param  array  $context
     * @return null
     */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        if (in_array($level, array(LogLevel::EMERGENCY, LogLevel::ALERT, LogLevel::CRITICAL, LogLevel::ERROR))) {
-            $this->writeError('<error>'.$message.'</error>', true, self::NORMAL);
+        if (in_array($level, [LogLevel::EMERGENCY, LogLevel::ALERT, LogLevel::CRITICAL, LogLevel::ERROR])) {
+            $this->writeError('<error>' . $message . '</error>', true, self::NORMAL);
         } elseif ($level === LogLevel::WARNING) {
-            $this->writeError('<warning>'.$message.'</warning>', true, self::NORMAL);
+            $this->writeError('<warning>' . $message . '</warning>', true, self::NORMAL);
         } elseif ($level === LogLevel::NOTICE) {
-            $this->writeError('<info>'.$message.'</info>', true, self::VERBOSE);
+            $this->writeError('<info>' . $message . '</info>', true, self::VERBOSE);
         } elseif ($level === LogLevel::INFO) {
-            $this->writeError('<info>'.$message.'</info>', true, self::VERY_VERBOSE);
+            $this->writeError('<info>' . $message . '</info>', true, self::VERY_VERBOSE);
         } else {
             $this->writeError($message, true, self::DEBUG);
         }

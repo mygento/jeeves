@@ -2,11 +2,11 @@
 
 namespace Mygento\Jeeves\IO;
 
+use Mygento\Jeeves\Question\StrictConfirmationQuestion;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\HelperSet;
-use Mygento\Jeeves\Question\StrictConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
@@ -45,13 +45,13 @@ class ConsoleIO extends BaseIO
         $this->input = $input;
         $this->output = $output;
         $this->helperSet = $helperSet;
-        $this->verbosityMap = array(
+        $this->verbosityMap = [
             self::QUIET => OutputInterface::VERBOSITY_QUIET,
             self::NORMAL => OutputInterface::VERBOSITY_NORMAL,
             self::VERBOSE => OutputInterface::VERBOSITY_VERBOSE,
             self::VERY_VERBOSE => OutputInterface::VERBOSITY_VERY_VERBOSE,
             self::DEBUG => OutputInterface::VERBOSITY_DEBUG,
-        );
+        ];
     }
 
     /**

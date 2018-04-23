@@ -27,7 +27,7 @@ class ErrorHandler
         }
 
         if (ini_get('xdebug.scream')) {
-            $message .= "\n\nWarning: You have xdebug.scream enabled, the warning above may be".
+            $message .= "\n\nWarning: You have xdebug.scream enabled, the warning above may be" .
             "\na legitimately suppressed error that you were not supposed to see.";
         }
 
@@ -36,12 +36,12 @@ class ErrorHandler
         }
 
         if (self::$io) {
-            self::$io->writeError('<warning>Deprecation Notice: '.$message.' in '.$file.':'.$line.'</warning>');
+            self::$io->writeError('<warning>Deprecation Notice: ' . $message . ' in ' . $file . ':' . $line . '</warning>');
             if (self::$io->isVerbose()) {
                 self::$io->writeError('<warning>Stack trace:</warning>');
                 self::$io->writeError(array_filter(array_map(function ($a) {
                     if (isset($a['line'], $a['file'])) {
-                        return '<warning> '.$a['file'].':'.$a['line'].'</warning>';
+                        return '<warning> ' . $a['file'] . ':' . $a['line'] . '</warning>';
                     }
 
                     return null;
@@ -57,7 +57,7 @@ class ErrorHandler
      */
     public static function register(IOInterface $io = null)
     {
-        set_error_handler(array(__CLASS__, 'handle'));
+        set_error_handler([__CLASS__, 'handle']);
         error_reporting(E_ALL | E_STRICT);
         self::$io = $io;
     }

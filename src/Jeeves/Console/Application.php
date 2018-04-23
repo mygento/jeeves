@@ -14,9 +14,9 @@ class Application extends BaseApplication
 {
     const VERSION = '0.0.5';
 
-      /**
-       * @var IOInterface
-       */
+    /**
+     * @var IOInterface
+     */
     protected $io;
 
     public function __construct()
@@ -24,9 +24,9 @@ class Application extends BaseApplication
         parent::__construct('Jeeves', self::VERSION);
     }
 
-      /**
-       * {@inheritDoc}
-       */
+    /**
+     * {@inheritDoc}
+     */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
         if (null === $output) {
@@ -35,9 +35,9 @@ class Application extends BaseApplication
         return parent::run($input, $output);
     }
 
-      /**
-       * {@inheritDoc}
-       */
+    /**
+     * {@inheritDoc}
+     */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $io = $this->io = new ConsoleIO($input, $output, $this->getHelperSet());
@@ -53,24 +53,24 @@ class Application extends BaseApplication
         }
     }
 
-      /**
-       * Initializes all commands.
-       */
+    /**
+     * Initializes all commands.
+     */
     protected function getDefaultCommands()
     {
-        $commands = array_merge(parent::getDefaultCommands(), array(
+        $commands = array_merge(parent::getDefaultCommands(), [
             new Command\PaymentGateway(),
             new Command\ModelCrud(),
             new Command\SelfUpdate(),
             new Command\Workplace(),
             new Command\EmptyProject(),
-        ));
+        ]);
         return $commands;
     }
 
-      /**
-       * @return IOInterface
-       */
+    /**
+     * @return IOInterface
+     */
     public function getIO()
     {
         return $this->io;

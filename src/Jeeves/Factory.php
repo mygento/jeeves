@@ -2,18 +2,18 @@
 
 namespace Mygento\Jeeves;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Factory
 {
     public static function createAdditionalStyles()
     {
-        return array(
+        return [
             'highlight' => new OutputFormatterStyle('red'),
             'warning' => new OutputFormatterStyle('black', 'yellow'),
-        );
+        ];
     }
     /**
      * Creates a ConsoleOutput instance

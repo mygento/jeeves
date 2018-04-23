@@ -1,7 +1,9 @@
+/nbproject
 /vendor/
 .DS_Store
 /generated
 .php_cs.cache
+composer.lock
 
 box.phar
 jeeves.phar

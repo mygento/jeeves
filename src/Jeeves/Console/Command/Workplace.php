@@ -2,10 +2,9 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class Workplace extends BaseCommand
 {
@@ -13,13 +12,14 @@ class Workplace extends BaseCommand
     {
         $this
             ->setName('new-workplace')
-            ->setAliases(array('workplace'))
+            ->setAliases(['workplace'])
             ->setDescription('Create workplace')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
                 new InputArgument('repo', InputArgument::OPTIONAL, 'Project repository url'),
-              ))
-            ->setHelp(<<<EOT
+              ])
+            ->setHelp(
+                <<<EOT
 <info>php jeeves.phar new-workplace</info>
 EOT
             )
@@ -32,7 +32,7 @@ EOT
         // Clone to a non-bare repository
         $folder = strtolower($input->getArgument('name'));
         $folder = $io->askAndValidate(
-            'Project Name [<comment>'.$folder.'</comment>]: ',
+            'Project Name [<comment>' . $folder . '</comment>]: ',
             function ($value) use ($folder) {
                 if (null === $value) {
                     return $folder;
@@ -44,7 +44,7 @@ EOT
         );
         $repo = strtolower($input->getArgument('repo'));
         $repo = $io->askAndValidate(
-            'Project repository [<comment>'.$repo.'</comment>]: ',
+            'Project repository [<comment>' . $repo . '</comment>]: ',
             function ($value) use ($repo) {
                 if (null === $value) {
                     return $repo;
@@ -54,10 +54,10 @@ EOT
             null,
             $repo
         );
-        if (!is_dir($folder.'-project')) {
-            mkdir($folder.'-project');
+        if (!is_dir($folder . '-project')) {
+            mkdir($folder . '-project');
         }
-        $workplaceFolder = $folder.'-project'.DIRECTORY_SEPARATOR.$folder.'-workplace';
+        $workplaceFolder = $folder . '-project' . DIRECTORY_SEPARATOR . $folder . '-workplace';
         try {
             $io->write(sprintf("Cloning: <info>%s</info>.", 'workplace'));
             $repository = \Gitonomy\Git\Admin::cloneTo(
@@ -71,17 +71,17 @@ EOT
         try {
             $io->write(sprintf("Cloning: <info>%s</info>.", $repo));
             $repository = \Gitonomy\Git\Admin::cloneTo(
-                $folder.'-project'.DIRECTORY_SEPARATOR.$folder,
+                $folder . '-project' . DIRECTORY_SEPARATOR . $folder,
                 $repo,
                 false
             );
         } catch (\Gitonomy\Git\Exception\RuntimeException $e) {
             $io->writeError($e->getMessage());
         }
-        $srcFolder = $workplaceFolder.DIRECTORY_SEPARATOR.'src';
+        $srcFolder = $workplaceFolder . DIRECTORY_SEPARATOR . 'src';
         if (!is_dir($srcFolder)) {
             $io->write(sprintf("Creating symlink to: <info>%s</info>.", $folder));
-            symlink('../'.$folder, $srcFolder);
+            symlink('../' . $folder, $srcFolder);
             return;
         }
         if (!is_link($srcFolder) &&
@@ -91,9 +91,9 @@ EOT
             )
         ) {
             $io->write(sprintf("Creating symlink to: <info>%s</info>.", $folder));
-            unlink($srcFolder.DIRECTORY_SEPARATOR.'.keep');
+            unlink($srcFolder . DIRECTORY_SEPARATOR . '.keep');
             rmdir($srcFolder);
-            symlink('../'.$folder, $srcFolder);
+            symlink('../' . $folder, $srcFolder);
         }
     }
 }

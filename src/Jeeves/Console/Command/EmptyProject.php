@@ -2,10 +2,9 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -17,12 +16,13 @@ class EmptyProject extends BaseCommand
             ->setName('project-template')
             ->setAliases(['empty-project'])
             ->setDescription('Create new project template')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
                 new InputArgument('repo', InputArgument::OPTIONAL, 'Project repository url'),
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
-            ))
-            ->setHelp(<<<EOT
+            ])
+            ->setHelp(
+                <<<EOT
 <info>php jeeves.phar project-template</info>
 EOT
             );
@@ -34,7 +34,7 @@ EOT
         $vendor = strtolower($input->getArgument('vendor'));
         $name = strtolower($input->getArgument('name'));
         $name = $io->askAndValidate(
-            'Project Name [<comment>'.$name.'</comment>]: ',
+            'Project Name [<comment>' . $name . '</comment>]: ',
             function ($value) use ($name) {
                 if (null === $value) {
                     return $name;
@@ -47,7 +47,7 @@ EOT
 
         $repo = strtolower($input->getArgument('repo'));
         $repo = $io->askAndValidate(
-            'Project repository [<comment>'.$repo.'</comment>]: ',
+            'Project repository [<comment>' . $repo . '</comment>]: ',
             function ($value) use ($repo) {
                 if (null === $value) {
                     return $repo;
@@ -59,7 +59,7 @@ EOT
         );
 
         $composer = [
-            'name' => $vendor.'/'.$name,
+            'name' => $vendor . '/' . $name,
             'type' => 'project',
             'version' => '2.2.0',
             'require' => [

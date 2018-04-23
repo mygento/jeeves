@@ -2,17 +2,16 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-
-
 use Memio\Memio\Config\Build;
+use Memio\Model\Argument;
 use Memio\Model\File;
+
+use Memio\Model\Method;
 use Memio\Model\Object;
 use Memio\Model\Property;
-use Memio\Model\Method;
-use Memio\Model\Argument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class PaymentGateway extends BaseCommand
 {
@@ -21,11 +20,12 @@ class PaymentGateway extends BaseCommand
         $this
             ->setName('generate_payment_gateway')
             ->setDescription('Generate Payment Gateway')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputOption('name', null, InputOption::VALUE_REQUIRED, 'Name of the gateway'),
                 new InputOption('codename', null, InputOption::VALUE_OPTIONAL, 'Name of the gateway codename'),
-              ))
-            ->setHelp(<<<EOT
+              ])
+            ->setHelp(
+                <<<EOT
 <info>php jeeves.phar generate_payment_gateway</info>
 EOT
             )

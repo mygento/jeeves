@@ -2,22 +2,21 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-
 use Humbug\SelfUpdate\Updater;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SelfUpdate extends BaseCommand
 {
-
     protected function configure()
     {
         $this
             ->setName('self-update')
-            ->setAliases(array('selfupdate'))
+            ->setAliases(['selfupdate'])
             ->setDescription('Updates jeeves to the latest version.')
-            ->setHelp(<<<EOT
+            ->setHelp(
+                <<<EOT
 <info>php jeeves.phar self-update</info>
 EOT
             )

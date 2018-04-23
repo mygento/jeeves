@@ -14,7 +14,7 @@ before_script:
     - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
 
 script:
-  - php vendor/bin/phpcs .
+  - php vendor/bin/grumphp run
 
 before_deploy:
   - rm -fR vendor
