@@ -2,12 +2,12 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Filesystem\Filesystem;
-
 use Mygento\Jeeves\Console\Application;
 use Mygento\Jeeves\IO\NullIO;
+
 use Mygento\Jeeves\Util\XmlManager;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class BaseCommand extends Command
 {
@@ -54,7 +54,6 @@ abstract class BaseCommand extends Command
         return $fs->dumpFile($path, $content);
     }
 
-
     protected function runCodeStyleFixer()
     {
         $finder = \PhpCsFixer\Finder::create()
@@ -86,7 +85,7 @@ abstract class BaseCommand extends Command
                 'ternary_operator_spaces' => true,
             ])->setFinder($finder);
 
-        $resolver = new \PhpCsFixer\Console\ConfigurationResolver($config, [], getcwd());
+        $resolver = new \PhpCsFixer\Console\ConfigurationResolver($config, [], getcwd(), new \PhpCsFixer\ToolInfo());
         $errorsManager = new \PhpCsFixer\Error\ErrorsManager();
         $runner = new \PhpCsFixer\Runner\Runner(
             $finder,

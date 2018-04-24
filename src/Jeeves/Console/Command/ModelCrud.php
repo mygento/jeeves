@@ -1,5 +1,4 @@
 <?php
-
 namespace Mygento\Jeeves\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,6 +10,7 @@ class ModelCrud extends BaseCommand
 {
     private $vendor;
     private $module;
+    private $path;
 
     protected function getNamespace()
     {
@@ -34,7 +34,7 @@ class ModelCrud extends BaseCommand
                 new InputOption('tablename', null, InputOption::VALUE_OPTIONAL, 'route path of the module'),
                 new InputOption('routepath', null, InputOption::VALUE_OPTIONAL, 'tablename of the entity'),
                 new InputOption('adminhtml', false, InputOption::VALUE_OPTIONAL, 'create adminhtml or not'),
-              ])
+            ])
             ->setHelp(
                 <<<EOT
 <info>php jeeves.phar generate_model_crud</info>
@@ -45,6 +45,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->path = 'generated';
         $io = $this->getIO();
         $vendor = strtolower($input->getArgument('vendor'));
         $module = strtolower($input->getArgument('module'));
@@ -58,7 +59,9 @@ EOT
                 }
                 if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $value)) {
                     throw new \InvalidArgumentException(
-                        'The package name ' . $value . ' is invalid, it should be lowercase and have a vendor name, a forward slash, and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+'
+                        'The package name ' . $value . ' is invalid, it should be lowercase '
+                        . 'and have a vendor name, a forward slash, '
+                        . 'and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+'
                     );
                 }
                 return $value;
@@ -89,144 +92,223 @@ EOT
         $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $module;
         $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $vendor . '_' . $module . '_' . $entity;
 
-        // php
-        $this->genModel(ucfirst($entity));
-        $this->genResourceModel(ucfirst($entity), $tablename);
-        $this->genResourceCollection(ucfirst($entity));
-        $this->genAdminControllers(ucfirst($entity));
+        // interface
+        $interGenerator = new \Mygento\Jeeves\Generators\Crud\Interfaces();
+        $this->genModelInterface($interGenerator, $entity);
+        $this->genModelRepositoryInterface($interGenerator, $entity);
+        $this->genModelSearchInterface($interGenerator, $entity);
 
-        // xml
-        $this->genAdminRoute($routepath);
-        $this->genAdminLayouts($entity);
-        $this->genAdminAcl($entity);
+        // model
+        $modelGenerator = new \Mygento\Jeeves\Generators\Crud\Model();
+        $this->genModel($modelGenerator, ucfirst($entity));
+        $this->genResourceModel($modelGenerator, ucfirst($entity), $tablename);
+        $this->genResourceCollection($modelGenerator, ucfirst($entity));
+
+        // repository
+        $repoGenerator = new \Mygento\Jeeves\Generators\Crud\Repository();
+        $this->genRepo($repoGenerator, ucfirst($entity));
+
+        // controllers
+        $controllerGenerator = new \Mygento\Jeeves\Generators\Crud\AdminController();
+        $this->genAdminAbstractController($controllerGenerator, ucfirst($entity));
+        $this->genAdminViewController($controllerGenerator, ucfirst($entity));
+        $this->genAdminEditController($controllerGenerator, ucfirst($entity));
+        $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
+        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+
+//        // xml
+//        $this->genAdminRoute($routepath);
+//        $this->genAdminLayouts($entity);
+//        $this->genAdminAcl($entity);
         $this->runCodeStyleFixer();
     }
 
-    protected function genModel($model)
+    private function genRepo($generator, $entityName)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace() . '\Model');
-        $class = $namespace->addClass($model);
-        $class->setExtends('\Magento\Framework\Model\AbstractModel');
-        $method = $class->addMethod('_construct')
-              ->addComment('Initialize ' . $model . ' model')
-              ->setVisibility('protected')
-              ->setBody('$this->_init(\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $model . '::class);');
-        $this->writeFile('generated/Model/' . $model . '.php', '<?php' . PHP_EOL . PHP_EOL . $namespace);
+        $filePath = $this->path . '/Model/';
+        $fileName = $entityName . 'Repository';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genRepository(
+                $fileName,
+                ucfirst($this->module) . ' ' . $entityName,
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Model\\ResourceModel\\' . $entityName,
+                $namePath . 'Model\\ResourceModel\\' . $entityName . '\\Collection',
+                $namePath . 'Model\\' . $entityName,
+                $namePath . 'Api\\Data\\' . $entityName . 'SearchResultsInterface',
+                $namePath . 'Api\\Data\\' . $entityName . 'Interface',
+                $this->getNamespace()
+            )
+        );
     }
 
-    protected function genResourceModel($model, $table, $key = 'id')
+    private function genModelInterface($generator, $entityName)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace() . '\Model\ResourceModel');
-        $class = $namespace->addClass($model);
-        $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
-        $method = $class->addMethod('_construct')
-              ->addComment('Initialize ' . $model . ' resource model')
-              ->setVisibility('protected')
-              ->setBody('$this->_init(\'' . $table . '\', \'' . $key . '\');');
-        $this->writeFile('generated/Model/ResourceModel/' . $model . '.php', '<?php' . PHP_EOL . PHP_EOL . $namespace);
+        $filePath = $this->path . '/Api/Data/';
+        $fileName = ucfirst($entityName) . 'Interface';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genModelInterface(ucfirst($entityName), $this->getNamespace())
+        );
     }
 
-    protected function genResourceCollection($model)
+    private function genModelRepositoryInterface($generator, $entityName)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace() . '\Model\ResourceModel\\' . $model);
-        $class = $namespace->addClass('Collection');
-        $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
-        $method = $class->addMethod('_construct')
-          ->addComment('Initialize ' . $model . ' resource collection')
-          ->setVisibility('protected')
-          ->setBody('$this->_init(' . PHP_EOL .
-            '   ' . '\\' . $this->getNamespace() . '\\Model' . '\\' . $model . '::class,' . PHP_EOL .
-            '   ' . '\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $model . '::class' . PHP_EOL .
-            ');');
-        $this->writeFile('generated/Model/ResourceModel/' . $model . '/Collection.php', '<?php' . PHP_EOL . PHP_EOL . $namespace);
+        $filePath = $this->path . '/Api/';
+        $fileName = ucfirst($entityName) . 'RepositoryInterface';
+        $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genModelRepositoryInterface(
+                $entityName,
+                $namePath . ucfirst($entityName) . 'Interface',
+                $namePath . ucfirst($entityName) . 'SearchResultsInterface',
+                $fileName,
+                $this->getNamespace()
+            )
+        );
     }
 
-    protected function genAdminControllers($entity)
+    private function genModelSearchInterface($generator, $entityName)
     {
-        $this->genAdminAbstractController($entity);
-        $this->genAdminViewController($entity);
-
-        //$namespace = new \Nette\PhpGenerator\PhpNamespace($module.'\Controller\Adminhtml\\'.$entity);
-        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Edit.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+        $filePath = $this->path . '/Api/Data/';
+        $fileName = ucfirst($entityName) . 'SearchResultsInterface';
+        $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genModelSearchInterface(
+                $entityName,
+                $fileName,
+                $namePath . ucfirst($entityName) . 'Interface',
+                $this->getNamespace()
+            )
+        );
     }
 
-    protected function genAdminViewController($entity)
+    private function genModel($generator, $entityName)
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace() . '\Controller\Adminhtml\\' . $entity);
-        $class = $namespace->addClass('Index');
-        $class
-            ->setExtends($this->getNamespace() . '\Controller\Adminhtml\\' . $entity)
-        ;
-        $class->addProperty('resultPageFactory')
-              ->setVisibility('protected')
-              ->addComment('@var \Magento\Framework\View\Result\PageFactory')
-        ;
+        $filePath = $this->path . '/Model/';
+        $fileName = $entityName;
+        $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
 
-        $method = $class->addMethod('__construct')
-          ->addComment('@param \Magento\Framework\View\Result\PageFactory $resultPageFactory')
-          ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-          ->addComment('@param \Magento\Backend\App\Action\Context $context')
-          ->setBody('$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
-                . 'parent::__construct($coreRegistry, $context);
-          ');
-
-        $method->addParameter('resultPageFactory')->setTypeHint('\Magento\Framework\View\Result\PageFactory');
-        $method->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $method->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
-
-        $method = $class->addMethod('execute')
-          ->addComment('Index action')
-          ->addComment('')
-          ->addComment('@return \Magento\Framework\Controller\ResultInterface')
-          ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
-            . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
-            . '$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\'' . $entity . '\'));' . PHP_EOL . PHP_EOL
-            . '//$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);' . PHP_EOL
-            . '//$dataPersistor->clear(\'' . $this->module . '_' . strtolower($entity) . '\');' . PHP_EOL
-            . 'return $resultPage;');
-        //echo $namespace;
-        $this->writeFile('generated/Controller/Adminhtml/' . $entity . '/Index.php', '<?php' . PHP_EOL . PHP_EOL . $namespace);
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genModel(
+                $fileName,
+                $namePath . $entityName . 'Interface',
+                '\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $entityName,
+                $this->getNamespace()
+            )
+        );
     }
 
-    protected function genAdminAbstractController($entity)
+    private function genResourceModel($generator, $entityName, $table, $key = 'id')
     {
-        $namespace = new \Nette\PhpGenerator\PhpNamespace($this->getNamespace() . '\Controller\Adminhtml');
-        $class = $namespace->addClass($entity);
-        $class
-            ->setAbstract()
-            ->setExtends('\Magento\Backend\App\Action')
-        ;
-        $class->addConstant('ADMIN_RESOURCE', $this->getFullname() . '::' . strtolower($entity))
-              ->addComment('Authorization level')
-              ->addComment('')
-              ->addComment('@see _isAllowed()')
-        ;
-        $class->addProperty('_coreRegistry')
-              ->setVisibility('protected')
-              ->addComment('Core registry')
-              ->addComment('')
-              ->addComment('@var \Magento\Framework\Registry')
-        ;
+        $filePath = $this->path . '/Model/ResourceModel/';
+        $fileName = $entityName;
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genResourceModel(
+                $fileName,
+                $table,
+                $key,
+                $this->getNamespace()
+            )
+        );
+    }
 
-        $method = $class->addMethod('__construct')
-          ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-          ->addComment('@param \Magento\Backend\App\Action\Context $context')
-          ->setBody('parent::__construct($context);' . PHP_EOL . '$this->_coreRegistry = $coreRegistry;');
+    private function genResourceCollection($generator, $entityName)
+    {
+        $filePath = $this->path . '/Model/ResourceModel/' . $entityName . '/';
+        $fileName = 'Collection';
 
-        $method->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $method->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genResourceCollection(
+                $entityName,
+                '\\' . $this->getNamespace() . '\\Model' . '\\' . $entityName,
+                '\\' . $this->getNamespace() . '\\Model\\ResourceModel' . '\\' . $entityName,
+                $this->getNamespace()
+            )
+        );
+    }
 
-        $method = $class->addMethod('initPage')
-          ->setVisibility('protected')
-          ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
-          ->addComment('@return \Magento\Backend\Model\View\Result\Page')
-          ->setBody('$resultPage->setActiveMenu(\'' . $this->getFullname() . '::' . strtolower($entity) . '\');' . PHP_EOL
-          . '//->addBreadcrumb(__(\'' . $entity . '\'), __(\'' . $entity . '\'));' . PHP_EOL
-          . 'return $resultPage;');
-        $method->addParameter('resultPage');
-        $this->writeFile('generated/Controller/Adminhtml/' . $entity . '.php', '<?php' . PHP_EOL . PHP_EOL . $namespace);
+    private function genAdminViewController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Index';
+
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminViewController(
+                $entityName,
+                $this->module . '_' . strtolower($entityName),
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminEditController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Edit';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminEditController(
+                $entityName,
+                $this->module . '_' . strtolower($entityName),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Model\\' . $entityName,
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminSaveController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Save';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminSaveController(
+                $entityName,
+                $this->module . '_' . strtolower($entityName),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Model\\' . $entityName,
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminAbstractController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/';
+        $fileName = $entityName;
+
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminAbstractController(
+                $entityName,
+                $this->getFullname(),
+                $this->getNamespace()
+            )
+        );
     }
 
     protected function genAdminRoute($path)
