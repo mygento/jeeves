@@ -114,13 +114,15 @@ EOT
         $this->genAdminViewController($controllerGenerator, ucfirst($entity));
         $this->genAdminEditController($controllerGenerator, ucfirst($entity));
         $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
-        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Save.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
-        //$this->writeFile('generated/Controller/Adminhtml/'.$entity.'/Delete.php', '<?php'.PHP_EOL.PHP_EOL.$namespace);
+        $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
+        $this->genAdminNewController($controllerGenerator, ucfirst($entity));
+        $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
+        $this->genAdminMassController($controllerGenerator, ucfirst($entity));
 
-//        // xml
-//        $this->genAdminRoute($routepath);
-//        $this->genAdminLayouts($entity);
-//        $this->genAdminAcl($entity);
+        // xml
+//      $this->genAdminRoute($routepath);
+//      $this->genAdminLayouts($entity);
+//      $this->genAdminAcl($entity);
         $this->runCodeStyleFixer();
     }
 
@@ -247,6 +249,7 @@ EOT
     {
         $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
         $fileName = 'Index';
+        $namePath = '\\' . $this->getNamespace() . '\\';
 
         $this->writeFile(
             $filePath . $fileName . '.php',
@@ -254,6 +257,7 @@ EOT
             $generator->genAdminViewController(
                 $entityName,
                 $this->module . '_' . strtolower($entityName),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $this->getNamespace()
             )
         );
@@ -295,17 +299,84 @@ EOT
         );
     }
 
+    private function genAdminDeleteController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Delete';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminDeleteController(
+                $entityName,
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminNewController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'NewAction';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminNewController(
+                $entityName,
+                $fileName,
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminInlineController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'InlineEdit';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminInlineController(
+                $entityName,
+                $fileName,
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminMassController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'MassDelete';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminMassController(
+                $entityName,
+                $fileName,
+                $namePath . 'Model\\ResourceModel\\' . $entityName . '\\CollectionFactory',
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
+            )
+        );
+    }
+
     private function genAdminAbstractController($generator, $entityName)
     {
         $filePath = $this->path . '/Controller/Adminhtml/';
         $fileName = $entityName;
-
+        $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminAbstractController(
                 $entityName,
                 $this->getFullname(),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $this->getNamespace()
             )
         );
