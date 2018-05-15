@@ -18,6 +18,8 @@ class Repository
         $rootNamespace
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
+        $namespace->addUse('Magento\Framework\Api\SortOrder');
+        $namespace->addUse('Magento\Framework\Data\Collection');
         $class = $namespace->addClass($className);
         $class->setImplements([$repoInterface]);
 
@@ -105,6 +107,47 @@ class Repository
         $deleteById->addParameter('entityId');
         $deleteById->setBody('return $this->delete($this->getById($entityId));');
 
+        $getList = $class->addMethod('getList')
+            ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $criteria')
+            ->addComment('@return ' . $results)
+            ->setVisibility('public');
+
+        $getList->addParameter('criteria')->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
+        $getList->setBody('/** @var ' . $collection . ' $collection */' . PHP_EOL
+        . '$collection = $this->collectionFactory->create();' . PHP_EOL
+        . 'foreach ($criteria->getFilterGroups() as $filterGroup) {' . PHP_EOL
+        . '    $fields = [];' . PHP_EOL
+        . '    $conditions = [];' . PHP_EOL
+        . '    foreach ($filterGroup->getFilters() as $filter) {' . PHP_EOL
+        . '        $condition = $filter->getConditionType() ? $filter->getConditionType() : \'eq\';' . PHP_EOL
+        . '        $fields[] = $filter->getField();' . PHP_EOL
+        . '        $conditions[] = [$condition => $filter->getValue()];' . PHP_EOL
+        . '    }' . PHP_EOL
+        . '    if ($fields) {' . PHP_EOL
+        . '        $collection->addFieldToFilter($fields, $conditions);' . PHP_EOL
+        . '    }' . PHP_EOL
+        . '}' . PHP_EOL
+        . '$sortOrders = $criteria->getSortOrders();' . PHP_EOL
+        . '$sortAsc = SortOrder::SORT_ASC;'
+        . '$orderAsc = Collection::SORT_ORDER_ASC;'
+        . '$orderDesc = Collection::SORT_ORDER_DESC;'
+        . 'if ($sortOrders) {' . PHP_EOL
+        . '    /** @var SortOrder $sortOrder */' . PHP_EOL
+        . '    foreach ($sortOrders as $sortOrder) {' . PHP_EOL
+        . '        $collection->addOrder(' . PHP_EOL
+        . '            $sortOrder->getField(),' . PHP_EOL
+        . '            ($sortOrder->getDirection() == $sortAsc) ? $orderAsc: $orderDesc' . PHP_EOL
+        . '        );' . PHP_EOL
+        . '    }' . PHP_EOL
+        . '}' . PHP_EOL
+        . '$collection->setCurPage($criteria->getCurrentPage());' . PHP_EOL
+        . '$collection->setPageSize($criteria->getPageSize());' . PHP_EOL . PHP_EOL
+        . '/** @var ' . $results . ' $searchResults */' . PHP_EOL
+        . '$searchResults = $this->searchResultsFactory->create();' . PHP_EOL
+        . '$searchResults->setSearchCriteria($criteria);' . PHP_EOL
+        . '$searchResults->setItems($collection->getItems());' . PHP_EOL
+        . '$searchResults->setTotalCount($collection->getSize());' . PHP_EOL
+        . 'return $searchResults;');
         return $namespace;
     }
 }

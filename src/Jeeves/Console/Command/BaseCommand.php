@@ -79,10 +79,19 @@ abstract class BaseCommand extends Command
                 'no_whitespace_in_blank_line' => true,
                 'object_operator_without_whitespace' => true,
                 'ordered_imports' => true,
-                'phpdoc_order' => true,
-                'phpdoc_add_missing_param_annotation' => true,
                 'standardize_not_equals' => true,
                 'ternary_operator_spaces' => true,
+                // mygento
+                'phpdoc_order' => true,
+                'phpdoc_types' => true,
+                'phpdoc_add_missing_param_annotation' => true,
+                'single_quote' => true,
+                'standardize_not_equals' => true,
+                'ternary_to_null_coalescing' => true,
+                'ternary_operator_spaces' => true,
+                'lowercase_cast' => true,
+                'no_empty_comment' => true,
+                'no_empty_phpdoc' => true,
             ])->setFinder($finder);
 
         $resolver = new \PhpCsFixer\Console\ConfigurationResolver($config, [], getcwd(), new \PhpCsFixer\ToolInfo());
