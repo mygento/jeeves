@@ -119,10 +119,19 @@ EOT
         $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
         $this->genAdminMassController($controllerGenerator, ucfirst($entity));
 
-        // xml
-//      $this->genAdminRoute($routepath);
-//      $this->genAdminLayouts($entity);
-//      $this->genAdminAcl($entity);
+        // Layout
+        $layoutGenerator = new \Mygento\Jeeves\Generators\Crud\Layout();
+        $this->genAdminLayouts($layoutGenerator, $entity);
+
+        //UI
+        $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
+        $this->genAdminUI($uiGenerator, $entity);
+
+        // $xml
+        $this->genAdminRoute($routepath);
+        $this->genAdminAcl($entity);
+
+        // CS
         $this->runCodeStyleFixer();
     }
 
@@ -382,40 +391,106 @@ EOT
         );
     }
 
-    protected function genAdminRoute($path)
-    {
-        $xml = $this->getXmlManager()->generateAdminRoute($this->module, $path, $this->getFullname());
-        $this->writeFile('generated/etc/adminhtml/routes.xml', $xml);
-    }
-
-    protected function genAdminLayouts($entity)
+    protected function genAdminLayouts($layoutGenerator, $entity)
     {
         $uiComponent = $this->module . '_' . $entity . '_listing';
-        $uiComponent = 'cms_block_listing';
-        $xml = $this->getXmlManager()->generateAdminLayoutIndex($uiComponent);
         $path = $this->module . '_' . $entity . '_index';
-        $this->writeFile('generated/view/adminhtml/layout/' . $path . '.xml', $xml);
+        $this->writeFile(
+            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $layoutGenerator->generateAdminLayoutIndex($uiComponent)
+        );
 
-        // $path = $module.'_'.$entity.'_edit';
-        // $service = new \Sabre\Xml\Service();
-        // $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        // $xml = $service->write('config', function ($writer) use ($path, $module) {
-        //     $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
-        // });
-        // $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
-        //
-        // $path = $module.'_'.$entity.'_edit';
-        // $service = new \Sabre\Xml\Service();
-        // $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        // $xml = $service->write('config', function ($writer) use ($path, $module) {
-        //     $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:View/Layout/etc/page_configuration.xsd');
-        // });
-        // $this->writeFile('generated/view/adminhtml/layout/'.$path.'.xml', $xml);
+        $editUiComponent = $this->module . '_' . $entity . '_edit';
+        $path = $this->module . '_' . $entity . '_edit';
+        $this->writeFile(
+            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $layoutGenerator->generateAdminLayoutEdit($editUiComponent)
+        );
+
+        $uiComponent = $this->module . '_' . $entity . '_new';
+        $path = $this->module . '_' . $entity . '_new';
+        $this->writeFile(
+            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $layoutGenerator->generateAdminLayoutNew($uiComponent, $editUiComponent)
+        );
+    }
+
+    protected function genAdminUI($uiGenerator, $entity)
+    {
+        $filePath = $this->path . '/Ui/Component/Listing/';
+        $fileName = ucfirst($entity) . 'Actions';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $uiGenerator->getActions(
+                $entity,
+                $this->module,
+                $entity,
+                $this->getNamespace(),
+                ucfirst($entity) . 'Actions'
+            )
+        );
+
+        $filePath = $this->path . '/Model/' . ucfirst($entity) . '/';
+        $fileName = 'DataProvider';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $uiGenerator->getProvider(
+                $entity,
+                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
+                $this->getNamespace(),
+                $fileName,
+                $this->module . '_' . $entity
+            )
+        );
+
+        $uiComponent = $this->module . '_' . $entity . '_listing';
+        $dataSource = $uiComponent . '_data_source';
+        $addNew = 'Add New ' . ucfirst($entity);
+        $column = $this->module . '_' . $entity . '_columns';
+        $acl = $this->getFullname() . ':' . $entity;
+        $actions = $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions';
+        $this->writeFile(
+            'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $uiGenerator->generateAdminUiIndex(
+                $uiComponent,
+                $dataSource,
+                $column,
+                $addNew,
+                $acl,
+                $actions
+            )
+        );
+
+        $uiComponent = $this->module . '_' . $entity . '_edit';
+        $dataSource = $uiComponent . '_data_source';
+        $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
+        $this->writeFile(
+            'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $uiGenerator->generateAdminUiForm(
+                $uiComponent,
+                $dataSource,
+                $this->module . '/' . $entity . '/save',
+                $provider
+            )
+        );
+    }
+
+    protected function genAdminRoute($path)
+    {
+        $this->writeFile(
+            'generated/etc/adminhtml/routes.xml',
+            $this->getXmlManager()->generateAdminRoute($this->module, $path, $this->getFullname())
+        );
     }
 
     public function genAdminAcl($entity)
     {
-        $xml = $this->getXmlManager()->generateAdminAcl($this->getFullname(), $this->module, $entity);
-        $this->writeFile('generated/etc/acl.xml', $xml);
+        $this->writeFile(
+            'generated/etc/acl.xml',
+            $this->getXmlManager()->generateAdminAcl($this->getFullname(), $this->module, $entity)
+        );
     }
 }

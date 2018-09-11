@@ -59,7 +59,7 @@ class Application extends BaseApplication
     protected function getDefaultCommands()
     {
         $commands = array_merge(parent::getDefaultCommands(), [
-            new Command\PaymentGateway(),
+            //new Command\PaymentGateway(),
             new Command\ModelCrud(),
             new Command\SelfUpdate(),
             new Command\Workplace(),
