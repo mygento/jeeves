@@ -155,7 +155,7 @@ EOT
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genModelInterface(ucfirst($entityName), $this->getNamespace())
+            $generator->genModelInterface($fileName, $this->getNamespace())
         );
     }
 
