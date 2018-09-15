@@ -10,6 +10,7 @@ class UiComponent
     {
         $service = $this->getService();
         return $service->write('listing', function ($writer) use ($uiComponent, $dataSource, $column, $addNew, $acl, $actions) {
+            $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
@@ -183,6 +184,7 @@ class UiComponent
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
             );
+            $writer->setIndentString('    ');
             $writer->write([
                 [
                     'argument' => [

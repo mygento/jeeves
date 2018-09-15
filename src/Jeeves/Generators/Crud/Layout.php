@@ -15,6 +15,7 @@ class Layout
     {
         $service = $this->getService();
         $xml = $service->write('page', function ($writer) use ($uiComponent) {
+            $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:framework:View/Layout/etc/page_configuration.xsd'
@@ -47,6 +48,7 @@ class Layout
     {
         $service = $this->getService();
         $xml = $service->write('page', function ($writer) use ($uiComponent) {
+            $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:framework:View/Layout/etc/page_configuration.xsd'
@@ -79,6 +81,7 @@ class Layout
     {
         $service = $this->getService();
         $xml = $service->write('page', function ($writer) use ($uiComponent) {
+            $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:framework:View/Layout/etc/page_configuration.xsd'

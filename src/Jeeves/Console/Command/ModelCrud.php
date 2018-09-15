@@ -130,6 +130,7 @@ EOT
         // $xml
         $this->genAdminRoute($routepath);
         $this->genAdminAcl($entity);
+        $this->genAdminMenu($entity, $routepath);
 
         // CS
         $this->runCodeStyleFixer();
@@ -490,7 +491,15 @@ EOT
     {
         $this->writeFile(
             'generated/etc/acl.xml',
-            $this->getXmlManager()->generateAdminAcl($this->getFullname(), $this->module, $entity)
+            $this->getXmlManager()->generateAdminAcl($entity, $this->getFullname(), $this->module)
+        );
+    }
+
+    protected function genAdminMenu($entity, $path)
+    {
+        $this->writeFile(
+            'generated/etc/adminhtml/menu.xml',
+            $this->getXmlManager()->generateAdminMenu($entity, $path, $this->getFullname(), $this->module)
         );
     }
 }
