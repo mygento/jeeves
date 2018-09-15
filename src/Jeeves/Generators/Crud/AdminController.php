@@ -5,14 +5,14 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class AdminController
 {
-    public function genAdminAbstractController($className, $fullName, $repository, $rootNamespace)
+    public function genAdminAbstractController($className, $fullName, $acl, $repository, $rootNamespace)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
         $class = $namespace->addClass($className)
             ->setAbstract()
             ->setExtends('\Magento\Backend\App\Action')
         ;
-        $class->addConstant('ADMIN_RESOURCE', $fullName . '::' . strtolower($className))
+        $class->addConstant('ADMIN_RESOURCE', $acl)
             ->addComment('Authorization level')
             ->addComment('')
             ->addComment('@see _isAllowed()')

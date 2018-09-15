@@ -11,6 +11,8 @@ class ModelCrud extends BaseCommand
     private $vendor;
     private $module;
     private $path;
+    private $api = false;
+    private $gui = true;
 
     protected function getNamespace()
     {
@@ -34,6 +36,8 @@ class ModelCrud extends BaseCommand
                 new InputOption('tablename', null, InputOption::VALUE_OPTIONAL, 'route path of the module'),
                 new InputOption('routepath', null, InputOption::VALUE_OPTIONAL, 'tablename of the entity'),
                 new InputOption('adminhtml', false, InputOption::VALUE_OPTIONAL, 'create adminhtml or not'),
+                new InputOption('gui', null, InputOption::VALUE_OPTIONAL, 'GRID ui component', true),
+                new InputOption('api', null, InputOption::VALUE_OPTIONAL, 'API', false),
             ])
             ->setHelp(
                 <<<EOT
@@ -92,6 +96,9 @@ EOT
         $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $module;
         $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $vendor . '_' . $module . '_' . $entity;
 
+        $this->api = (bool)$input->getOption('api');
+        $this->gui = (bool)$input->getOption('gui');
+
         // interface
         $interGenerator = new \Mygento\Jeeves\Generators\Crud\Interfaces();
         $this->genModelInterface($interGenerator, $entity);
@@ -108,30 +115,42 @@ EOT
         $repoGenerator = new \Mygento\Jeeves\Generators\Crud\Repository();
         $this->genRepo($repoGenerator, ucfirst($entity));
 
-        // controllers
-        $controllerGenerator = new \Mygento\Jeeves\Generators\Crud\AdminController();
-        $this->genAdminAbstractController($controllerGenerator, ucfirst($entity));
-        $this->genAdminViewController($controllerGenerator, ucfirst($entity));
-        $this->genAdminEditController($controllerGenerator, ucfirst($entity));
-        $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
-        $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
-        $this->genAdminNewController($controllerGenerator, ucfirst($entity));
-        $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
-        $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+        if ($this->gui) {
+            // controllers
+            $controllerGenerator = new \Mygento\Jeeves\Generators\Crud\AdminController();
+            $this->genAdminAbstractController($controllerGenerator, $entity);
+            $this->genAdminViewController($controllerGenerator, ucfirst($entity));
+            $this->genAdminEditController($controllerGenerator, ucfirst($entity));
+            $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
+            $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
+            $this->genAdminNewController($controllerGenerator, ucfirst($entity));
+            $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
+            $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+        }
 
         // Layout
-        $layoutGenerator = new \Mygento\Jeeves\Generators\Crud\Layout();
-        $this->genAdminLayouts($layoutGenerator, $entity);
+        if ($this->gui) {
+            $layoutGenerator = new \Mygento\Jeeves\Generators\Crud\Layout();
+            $this->genAdminLayouts($layoutGenerator, $entity);
+        }
 
         //UI
-        $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
-        $this->genAdminUI($uiGenerator, $entity);
-        $this->genGridCollection($uiGenerator, ucfirst($entity));
+        if ($this->gui) {
+            $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
+            $this->genAdminUI($uiGenerator, $entity);
+            $this->genGridCollection($uiGenerator, ucfirst($entity));
+        }
 
         // $xml
-        $this->genAdminRoute($routepath);
         $this->genAdminAcl($entity);
-        $this->genAdminMenu($entity, $routepath);
+        if ($this->gui) {
+            $this->genAdminRoute($routepath);
+            $this->genAdminMenu($entity, $routepath);
+        }
+        if ($this->api) {
+            $apiGenerator = new \Mygento\Jeeves\Generators\Crud\Api();
+            $this->genAPI($apiGenerator, $entity);
+        }
         $this->genDI($entity, $tablename);
 
         // CS
@@ -377,18 +396,19 @@ EOT
         );
     }
 
-    private function genAdminAbstractController($generator, $entityName)
+    private function genAdminAbstractController($generator, $entity)
     {
         $filePath = $this->path . '/Controller/Adminhtml/';
-        $fileName = $entityName;
+        $fileName = ucfirst($entity);
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminAbstractController(
-                $entityName,
+                $fileName,
                 $this->getFullname(),
-                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getFullname() . '::' . $this->module . '_' . $entity,
+                $namePath . 'Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 $this->getNamespace()
             )
         );
@@ -526,6 +546,7 @@ EOT
         $this->writeFile(
             'generated/etc/di.xml',
             $this->getXmlManager()->generateDI(
+                $this->gui,
                 $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
                 $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 $this->getNamespace() . '\\Model\\' . ucfirst($entity),
@@ -537,6 +558,19 @@ EOT
                 $this->module . '_' . $entity . '_grid_collection',
                 $entity . '_grid_collection',
                 $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity)
+            )
+        );
+    }
+
+    protected function genAPI($generator, $entity)
+    {
+        $this->writeFile(
+            'generated/etc/webapi.xml',
+            $generator->generateAPI(
+                $entity,
+                $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
+                $this->getFullname() . '::' . $this->module . '_' . $entity,
+                $this->module . ucfirst($entity)
             )
         );
     }

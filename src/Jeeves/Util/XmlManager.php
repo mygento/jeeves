@@ -3,10 +3,10 @@ namespace Mygento\Jeeves\Util;
 
 class XmlManager
 {
-    public function generateDI($repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource)
+    public function generateDI($gui, $repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource)
     {
         $service = $this->getService();
-        return $service->write('config', function ($writer) use ($repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource) {
+        return $service->write('config', function ($writer) use ($gui, $repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
             $writer->write([
@@ -34,72 +34,102 @@ class XmlManager
                 [
                     'name' => 'type',
                     'attributes' => [
-                        'name' => 'Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory'
+                        'name' => 'Magento\Framework\Model\Entity\RepositoryFactory'
                     ],
                     'value' => [
                         'arguments' => [
                             [
                                 'argument' => [
                                     'attributes' => [
-                                        'name' => 'collections',
+                                        'name' => 'entities',
                                         'xsi:type' => 'array'
                                     ],
                                     'value' => [
                                         'name' => 'item',
                                         'attributes' => [
-                                            'name' => $dataSource,
+                                            'name' => $modelInt,
                                             'xsi:type' => 'string'
                                         ],
-                                        'value' => $gridCollection
-                                    ]
+                                        'value' => $repositoryInt
+                                    ],
                                 ]
                             ]
                         ]
                     ]
                 ],
-                [
-                    'name' => 'type',
-                    'attributes' => [
-                        'name' => $gridCollection
+            ]);
+            if ($gui) {
+                $writer->write([
+                    [
+                        'name' => 'type',
+                        'attributes' => [
+                            'name' => 'Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory'
+                        ],
+                        'value' => [
+                            'arguments' => [
+                                [
+                                    'argument' => [
+                                        'attributes' => [
+                                            'name' => 'collections',
+                                            'xsi:type' => 'array'
+                                        ],
+                                        'value' => [
+                                            'name' => 'item',
+                                            'attributes' => [
+                                                'name' => $dataSource,
+                                                'xsi:type' => 'string'
+                                            ],
+                                            'value' => $gridCollection
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
-                    'value' => [
-                        'arguments' => [
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'mainTable',
-                                    'xsi:type' => 'string'
+                    [
+                        'name' => 'type',
+                        'attributes' => [
+                            'name' => $gridCollection
+                        ],
+                        'value' => [
+                            'arguments' => [
+                                [
+                                    'name' => 'argument',
+                                    'attributes' => [
+                                        'name' => 'mainTable',
+                                        'xsi:type' => 'string'
+                                    ],
+                                    'value' => $entityTable
                                 ],
-                                'value' => $entityTable
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'eventPrefix',
-                                    'xsi:type' => 'string'
+                                [
+                                    'name' => 'argument',
+                                    'attributes' => [
+                                        'name' => 'eventPrefix',
+                                        'xsi:type' => 'string'
+                                    ],
+                                    'value' => $eventP
                                 ],
-                                'value' => $eventP
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'eventObject',
-                                    'xsi:type' => 'string'
+                                [
+                                    'name' => 'argument',
+                                    'attributes' => [
+                                        'name' => 'eventObject',
+                                        'xsi:type' => 'string'
+                                    ],
+                                    'value' => $eventO
                                 ],
-                                'value' => $eventO
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'resourceModel',
-                                    'xsi:type' => 'string'
-                                ],
-                                'value' => $resource
+                                [
+                                    'name' => 'argument',
+                                    'attributes' => [
+                                        'name' => 'resourceModel',
+                                        'xsi:type' => 'string'
+                                    ],
+                                    'value' => $resource
+                                ]
                             ]
                         ]
                     ]
-                ]
-            ]);
+                ]);
+            }
         });
     }
 
