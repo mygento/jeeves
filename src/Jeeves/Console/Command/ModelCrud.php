@@ -126,11 +126,13 @@ EOT
         //UI
         $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
         $this->genAdminUI($uiGenerator, $entity);
+        $this->genGridCollection($uiGenerator, ucfirst($entity));
 
         // $xml
         $this->genAdminRoute($routepath);
         $this->genAdminAcl($entity);
         $this->genAdminMenu($entity, $routepath);
+        $this->genDI($entity, $tablename);
 
         // CS
         $this->runCodeStyleFixer();
@@ -392,38 +394,38 @@ EOT
         );
     }
 
-    protected function genAdminLayouts($layoutGenerator, $entity)
+    protected function genAdminLayouts($generator, $entity)
     {
         $uiComponent = $this->module . '_' . $entity . '_listing';
         $path = $this->module . '_' . $entity . '_index';
         $this->writeFile(
             'generated/view/adminhtml/layout/' . $path . '.xml',
-            $layoutGenerator->generateAdminLayoutIndex($uiComponent)
+            $generator->generateAdminLayoutIndex($uiComponent)
         );
 
         $editUiComponent = $this->module . '_' . $entity . '_edit';
         $path = $this->module . '_' . $entity . '_edit';
         $this->writeFile(
             'generated/view/adminhtml/layout/' . $path . '.xml',
-            $layoutGenerator->generateAdminLayoutEdit($editUiComponent)
+            $generator->generateAdminLayoutEdit($editUiComponent)
         );
 
         $uiComponent = $this->module . '_' . $entity . '_new';
         $path = $this->module . '_' . $entity . '_new';
         $this->writeFile(
             'generated/view/adminhtml/layout/' . $path . '.xml',
-            $layoutGenerator->generateAdminLayoutNew($uiComponent, $editUiComponent)
+            $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
         );
     }
 
-    protected function genAdminUI($uiGenerator, $entity)
+    protected function genAdminUI($generator, $entity)
     {
         $filePath = $this->path . '/Ui/Component/Listing/';
         $fileName = ucfirst($entity) . 'Actions';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $uiGenerator->getActions(
+            $generator->getActions(
                 $entity,
                 $this->module,
                 $entity,
@@ -437,7 +439,7 @@ EOT
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $uiGenerator->getProvider(
+            $generator->getProvider(
                 $entity,
                 '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
                 $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
@@ -455,7 +457,7 @@ EOT
         $actions = $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions';
         $this->writeFile(
             'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
-            $uiGenerator->generateAdminUiIndex(
+            $generator->generateAdminUiIndex(
                 $uiComponent,
                 $dataSource,
                 $column,
@@ -470,11 +472,27 @@ EOT
         $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
         $this->writeFile(
             'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
-            $uiGenerator->generateAdminUiForm(
+            $generator->generateAdminUiForm(
                 $uiComponent,
                 $dataSource,
                 $this->module . '/' . $entity . '/save',
                 $provider
+            )
+        );
+    }
+
+    protected function genGridCollection($generator, $entity)
+    {
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
+        $fileName = 'Collection';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->generateGridCollection(
+                $entity,
+                $this->getNamespace(),
+                $fileName,
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection'
             )
         );
     }
@@ -500,6 +518,26 @@ EOT
         $this->writeFile(
             'generated/etc/adminhtml/menu.xml',
             $this->getXmlManager()->generateAdminMenu($entity, $path, $this->getFullname(), $this->module)
+        );
+    }
+
+    protected function genDI($entity, $entityTable)
+    {
+        $this->writeFile(
+            'generated/etc/di.xml',
+            $this->getXmlManager()->generateDI(
+                $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
+                $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
+                $this->getNamespace() . '\\Model\\' . ucfirst($entity),
+                $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
+                $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
+                $this->module . '_' . $entity . '_listing_data_source',
+                $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
+                $entityTable,
+                $this->module . '_' . $entity . '_grid_collection',
+                $entity . '_grid_collection',
+                $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity)
+            )
         );
     }
 }

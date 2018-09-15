@@ -125,7 +125,7 @@ class AdminController
             . 'parent::__construct($repository, $coreRegistry, $context);
           ');
 
-        $construct->addParameter('entityFactory')->setTypeHint($entityClass);
+        $construct->addParameter('entityFactory')->setTypeHint($entityClass . 'Factory');
         $construct->addParameter('resultPageFactory')->setTypeHint('\Magento\Framework\View\Result\PageFactory');
         $construct->addParameter('repository')->setTypeHint($repository);
         $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
@@ -172,7 +172,7 @@ class AdminController
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
-        $class = $namespace->addClass('Edit')
+        $class = $namespace->addClass('Save')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
         ;
 
@@ -189,7 +189,7 @@ class AdminController
 
         $construct->addParameter('dataPersistor')
             ->setTypeHint('\Magento\Framework\App\Request\DataPersistorInterface');
-        $construct->addParameter('entityFactory')->setTypeHint($entityClass);
+        $construct->addParameter('entityFactory')->setTypeHint($entityClass . 'Factory');
         $construct->addParameter('repository')->setTypeHint($repository);
         $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');

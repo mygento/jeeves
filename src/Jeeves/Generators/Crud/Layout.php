@@ -55,6 +55,11 @@ class Layout
             );
             $writer->write([
                 [
+                    'update' => [
+                        'attributes' => [
+                          'handle' => 'editor',
+                        ],
+                    ],
                     'body' => [
                         'referenceContainer' => [
                             'attributes' => [
@@ -80,7 +85,7 @@ class Layout
     public function generateAdminLayoutNew($uiComponent, $handle)
     {
         $service = $this->getService();
-        $xml = $service->write('page', function ($writer) use ($uiComponent) {
+        $xml = $service->write('page', function ($writer) use ($uiComponent, $handle) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -90,7 +95,7 @@ class Layout
                 [
                     'update' => [
                         'attributes' => [
-                          'handle' => 'content',
+                          'handle' => $handle,
                         ],
                     ],
                 ]

@@ -179,7 +179,7 @@ class UiComponent
     public function generateAdminUiForm($uiComponent, $dataSource, $submit, $provider)
     {
         $service = $this->getService();
-        return $service->write('listing', function ($writer) use ($uiComponent, $dataSource, $submit, $provider) {
+        return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider) {
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
@@ -208,24 +208,24 @@ class UiComponent
                                             ],
                                             'value' => $uiComponent . '.' . $dataSource
                                         ],
-                                        [
-                                            'name' => 'item',
-                                            'attributes' => [
-                                                'name' => 'label',
-                                                'xsi:type' => 'string',
-                                                'translate' =>'true'
-                                            ],
-                                            'value' => 'General Information'
-                                        ],
-                                        [
-                                            'name' => 'item',
-                                            'attributes' => [
-                                                'name' => 'template',
-                                                'xsi:type' => 'string',
-                                            ],
-                                            'value' => 'templates/form/collapsible'
-                                        ],
                                     ]
+                                ],
+                                [
+                                    'name' => 'item',
+                                    'attributes' => [
+                                        'name' => 'label',
+                                        'xsi:type' => 'string',
+                                        'translate' =>'true'
+                                    ],
+                                    'value' => 'General Information'
+                                ],
+                                [
+                                    'name' => 'item',
+                                    'attributes' => [
+                                        'name' => 'template',
+                                        'xsi:type' => 'string',
+                                    ],
+                                    'value' => 'templates/form/collapsible'
                                 ]
                             ]
                         ]
@@ -370,7 +370,7 @@ class UiComponent
 
     public function getProvider($entity, $collection, $collectionFactory, $rootNamespace, $className, $persistor)
     {
-        $namespace = new PhpNamespace($rootNamespace . '\Model\\' . $entity);
+        $namespace = new PhpNamespace($rootNamespace . '\Model\\' . ucfirst($entity));
         $namespace->addUse('Magento\Framework\App\Request\DataPersistorInterface');
         $namespace->addUse($collectionFactory);
 
@@ -424,6 +424,111 @@ class UiComponent
             . '    $this->dataPersistor->clear(\'' . $persistor . '\');' . PHP_EOL
             . '}' . PHP_EOL
             . 'return $this->loadedData;');
+        return $namespace;
+    }
+
+    public function generateGridCollection($entity, $rootNamespace, $className, $collection)
+    {
+        $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
+        $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
+        $namespace->addUse('Magento\Framework\Search\AggregationInterface');
+        $namespace->addUse('Magento\Framework\Api\SearchCriteriaInterface');
+        $namespace->addUse($collection, 'ParentCollection');
+
+        $class = $namespace->addClass($className);
+        $class->setExtends($collection);
+        $class->addImplement('Magento\Framework\Api\Search\SearchResultInterface');
+        $class->addProperty('aggregations')
+            ->setVisibility('protected')->addComment('@var AggregationInterface');
+
+        $construct = $class->addMethod('__construct')
+            ->addComment('@param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory')
+            ->addComment('@param \Psr\Log\LoggerInterface $logger')
+            ->addComment('@param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy')
+            ->addComment('@param \Magento\Framework\Event\ManagerInterface $eventManager')
+            ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable')
+            ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix')
+            ->addComment('@param $eventObject')
+            ->addComment('@param $resourceModel')
+            ->addComment('@param string $model')
+            ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
+            ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource')
+            ->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)')
+            ->setVisibility('public');
+
+        $construct->addParameter('entityFactory')->setTypeHint('\Magento\Framework\Data\Collection\EntityFactoryInterface');
+        $construct->addParameter('logger')->setTypeHint('\Psr\Log\LoggerInterface');
+        $construct->addParameter('fetchStrategy')->setTypeHint('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $construct->addParameter('eventManager')->setTypeHint('\Magento\Framework\Event\ManagerInterface');
+        $construct->addParameter('mainTable');
+        $construct->addParameter('eventPrefix');
+        $construct->addParameter('eventObject');
+        $construct->addParameter('resourceModel');
+        $construct->addParameter('model')->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class);
+        $construct->addParameter('connection')->setTypeHint('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
+        $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
+
+        $construct->setBody('parent::__construct(' . PHP_EOL
+            . '    $entityFactory,' . PHP_EOL
+            . '    $logger,' . PHP_EOL
+            . '    $fetchStrategy,' . PHP_EOL
+            . '    $eventManager,' . PHP_EOL
+            . '    $connection,' . PHP_EOL
+            . '    $resource' . PHP_EOL
+            . ');' . PHP_EOL
+            . '$this->_eventPrefix = $eventPrefix;' . PHP_EOL
+            . '$this->_eventObject = $eventObject;' . PHP_EOL
+            . '$this->_init($model, $resourceModel);' . PHP_EOL
+            . '$this->setMainTable($mainTable);');
+
+        $getAggregations = $class->addMethod('getAggregations')
+            ->addComment('@return \Magento\Framework\Search\AggregationInterface')
+            ->setVisibility('public');
+        $getAggregations->setBody('return $this->aggregations;');
+
+        $setAggregations = $class->addMethod('setAggregations')
+            ->addComment('@param \Magento\Framework\Search\AggregationInterface')
+            ->addComment('@return $this')
+            ->setVisibility('public');
+        $setAggregations->addParameter('aggregations');
+        $setAggregations->setBody('$this->aggregations = $aggregations;');
+
+        $getSearchCriteria = $class->addMethod('getSearchCriteria')
+            ->addComment('@return \Magento\Framework\Api\SearchCriteriaInterface|null')
+            ->setVisibility('public');
+        $getSearchCriteria->setBody('return null;');
+
+        $setSearchCriteria = $class->addMethod('setSearchCriteria')
+            ->addComment('@param \Magento\Framework\Search\AggregationInterface')
+            ->addComment('@return $this')
+            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->setVisibility('public');
+        $setSearchCriteria->addParameter('searchCriteria')
+            ->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface')
+            ->setDefaultValue(null);
+        $setSearchCriteria->setBody('return $this;');
+
+        $getTotalCount = $class->addMethod('getTotalCount')
+            ->addComment('@return int')
+            ->setVisibility('public');
+        $getTotalCount->setBody('return $this->getSize();');
+
+        $setTotalCount = $class->addMethod('setTotalCount')
+            ->addComment('@param int $totalCount')
+            ->addComment('@return $this')
+            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->setVisibility('public');
+        $setTotalCount->addParameter('totalCount');
+        $setTotalCount->setBody('return $this;');
+
+        $setItems = $class->addMethod('setItems')
+            ->addComment('@param \Magento\Framework\Api\ExtensibleDataInterface[] $items')
+            ->addComment('@return $this')
+            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->setVisibility('public');
+        $setItems->addParameter('items')->setTypeHint('array')->setDefaultValue(null);
+        $setItems->setBody('return $this;');
+
         return $namespace;
     }
 

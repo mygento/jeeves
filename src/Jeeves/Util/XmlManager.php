@@ -3,6 +3,106 @@ namespace Mygento\Jeeves\Util;
 
 class XmlManager
 {
+    public function generateDI($repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource)
+    {
+        $service = $this->getService();
+        return $service->write('config', function ($writer) use ($repository, $repositoryInt, $model, $modelInt, $searchInt, $dataSource, $gridCollection, $entityTable, $eventP, $eventO, $resource) {
+            $writer->setIndentString('    ');
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
+            $writer->write([
+                [
+                    'name' => 'preference',
+                    'attributes' => [
+                        'for' => $repositoryInt,
+                        'type' => $repository
+                    ]
+                ],
+                [
+                    'name' => 'preference',
+                    'attributes' => [
+                        'for' => $modelInt,
+                        'type' => $model
+                    ]
+                ],
+                [
+                    'name' => 'preference',
+                    'attributes' => [
+                        'for' => $searchInt,
+                        'type' => 'Magento\Framework\Api\SearchResults'
+                    ]
+                ],
+                [
+                    'name' => 'type',
+                    'attributes' => [
+                        'name' => 'Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory'
+                    ],
+                    'value' => [
+                        'arguments' => [
+                            [
+                                'argument' => [
+                                    'attributes' => [
+                                        'name' => 'collections',
+                                        'xsi:type' => 'array'
+                                    ],
+                                    'value' => [
+                                        'name' => 'item',
+                                        'attributes' => [
+                                            'name' => $dataSource,
+                                            'xsi:type' => 'string'
+                                        ],
+                                        'value' => $gridCollection
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'name' => 'type',
+                    'attributes' => [
+                        'name' => $gridCollection
+                    ],
+                    'value' => [
+                        'arguments' => [
+                            [
+                                'name' => 'argument',
+                                'attributes' => [
+                                    'name' => 'mainTable',
+                                    'xsi:type' => 'string'
+                                ],
+                                'value' => $entityTable
+                            ],
+                            [
+                                'name' => 'argument',
+                                'attributes' => [
+                                    'name' => 'eventPrefix',
+                                    'xsi:type' => 'string'
+                                ],
+                                'value' => $eventP
+                            ],
+                            [
+                                'name' => 'argument',
+                                'attributes' => [
+                                    'name' => 'eventObject',
+                                    'xsi:type' => 'string'
+                                ],
+                                'value' => $eventO
+                            ],
+                            [
+                                'name' => 'argument',
+                                'attributes' => [
+                                    'name' => 'resourceModel',
+                                    'xsi:type' => 'string'
+                                ],
+                                'value' => $resource
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+        });
+    }
+
     public function generateAdminRoute($module, $path, $fullname)
     {
         $service = $this->getService();
@@ -45,14 +145,26 @@ class XmlManager
                     [
                         'name'=> 'add',
                         'attributes' => [
-                          'id' => $fullname . '::' . $entity,
-                          'title' => ucfirst($module) . ' ' . ucfirst($entity),
+                          'id' => $fullname . '::' . $module,
+                          'title' => ucfirst($module),
                           'translate' => 'title',
                           'module' => $fullname,
                           'sortOrder' => '90',
                           'parent' => 'Magento_Backend::stores',
+                          'resource' => $fullname . '::' . $module,
+                        ],
+                    ],
+                    [
+                        'name'=> 'add',
+                        'attributes' => [
+                          'id' => $fullname . '::' . $module . '_' . $entity,
+                          'title' => ucfirst($entity),
+                          'translate' => 'title',
+                          'module' => $fullname,
+                          'sortOrder' => '90',
+                          'parent' => $fullname . '::' . $module,
                           'action' => $path . '/' . $entity,
-                          'resource' => $fullname . '::' . $entity,
+                          'resource' => $fullname . '::' . $module . '_' . $entity,
                         ],
                     ]
                 ]
@@ -77,10 +189,20 @@ class XmlManager
                                 [
                                     'name' => 'resource',
                                     'attributes' => [
-                                        'id' => $fullname . '::' . $entity,
-                                        'title' => ucfirst($module) . ' ' . ucfirst($entity),
+                                        'id' => $fullname . '::' . $module,
+                                        'title' => ucfirst($module),
                                         'translate' => 'title'
                                     ],
+                                    'value' => [
+                                        [
+                                            'name' => 'resource',
+                                            'attributes' => [
+                                                'id' => $fullname . '::' . $module . '_' . $entity,
+                                                'title' => ucfirst($module) . ' ' . ucfirst($entity),
+                                                'translate' => 'title'
+                                            ],
+                                        ],
+                                    ]
                                 ],
                                 [
                                     'name' => 'resource',
