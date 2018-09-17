@@ -47,6 +47,9 @@ class Model
             '   ' . $entityClass . '::class,' . PHP_EOL .
             '   ' . $resourceClass . '::class' . PHP_EOL .
             ');');
+        $class->addProperty('_idFieldName', 'id')
+              ->setVisibility('protected')
+              ->addComment('@var string');
         return $namespace;
     }
 }
