@@ -468,22 +468,22 @@ EOT
                 $this->module . '_' . $entity
             )
         );
-
         $uiComponent = $this->module . '_' . $entity . '_listing';
-        $dataSource = $uiComponent . '_data_source';
-        $addNew = 'Add New ' . ucfirst($entity);
-        $column = $this->module . '_' . $entity . '_columns';
-        $acl = $this->getFullname() . ':' . $entity;
-        $actions = $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions';
+        $common = $this->module . '_' . $entity . '_listing'
+            . '.'
+            . $this->module . '_' . $entity . '_listing.';
         $this->writeFile(
             'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
             $generator->generateAdminUiIndex(
                 $uiComponent,
-                $dataSource,
-                $column,
-                $addNew,
-                $acl,
-                $actions
+                $uiComponent . '_data_source',
+                $this->module . '_' . $entity . '_columns',
+                'Add New ' . ucfirst($entity),
+                $this->getFullname() . ':' . $entity,
+                $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
+                $this->module . '/' . $entity . '/inlineEdit',
+                $common . $this->module . '_' . $entity . '_columns.ids',
+                $common . $this->module . '_' . $entity . '_columns_editor'
             )
         );
 

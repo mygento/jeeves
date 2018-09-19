@@ -6,10 +6,10 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class UiComponent
 {
-    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions)
+    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $select, $editor)
     {
         $service = $this->getService();
-        return $service->write('listing', function ($writer) use ($uiComponent, $dataSource, $column, $addNew, $acl, $actions) {
+        return $service->write('listing', function ($writer) use ($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $select, $editor) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -125,10 +125,106 @@ class UiComponent
                         'value' => [
                             'settings' => [
                                 'editorConfig' => [
-
+                                    [
+                                        'name' => 'param',
+                                        'attributes' => [
+                                            'name' => 'clientConfig',
+                                            'xsi:type' => 'array',
+                                        ],
+                                        'value' => [
+                                            [
+                                                'name' => 'item',
+                                                'attributes' => [
+                                                    'name' => 'saveUrl',
+                                                    'xsi:type' => 'url',
+                                                    'path' => $inline
+                                                ],
+                                            ],
+                                            [
+                                                'name' => 'item',
+                                                'attributes' => [
+                                                    'name' => 'validateBeforeSave',
+                                                    'xsi:type' => 'boolean',
+                                                ],
+                                                'value' => 'false'
+                                            ]
+                                        ]
+                                    ],
+                                    [
+                                        'name' => 'param',
+                                        'attributes' => [
+                                            'name' => 'indexField',
+                                            'xsi:type' => 'string',
+                                        ],
+                                        'value' => 'id',
+                                    ],
+                                    [
+                                        'name' => 'param',
+                                        'attributes' => [
+                                            'name' => 'enabled',
+                                            'xsi:type' => 'boolean',
+                                        ],
+                                        'value' => 'true',
+                                    ],
+                                    [
+                                        'name' => 'param',
+                                        'attributes' => [
+                                            'name' => 'selectProvider',
+                                            'xsi:type' => 'string',
+                                        ],
+                                        'value' => $select
+                                    ]
                                 ],
                                 'childDefaults' => [
-
+                                    'param' => [
+                                        'attributes' => [
+                                            'name' => 'fieldAction',
+                                            'xsi:type' => 'array',
+                                        ],
+                                        'value' => [
+                                            [
+                                                'name' => 'item',
+                                                'attributes' => [
+                                                    'name' => 'provider',
+                                                    'xsi:type' => 'string',
+                                                ],
+                                                'value' => $editor
+                                            ],
+                                            [
+                                                'name' => 'item',
+                                                'attributes' => [
+                                                    'name' => 'target',
+                                                    'xsi:type' => 'string',
+                                                ],
+                                                'value' => 'startEdit'
+                                            ],
+                                            [
+                                                'name' => 'item',
+                                                'attributes' => [
+                                                    'name' => 'params',
+                                                    'xsi:type' => 'array',
+                                                ],
+                                                'value' => [
+                                                    [
+                                                        'name' => 'item',
+                                                        'attributes' => [
+                                                            'name' => '0',
+                                                            'xsi:type' => 'string',
+                                                        ],
+                                                        'value' => '${ $.$data.rowIndex }'
+                                                    ],
+                                                    [
+                                                        'name' => 'item',
+                                                        'attributes' => [
+                                                            'name' => '1',
+                                                            'xsi:type' => 'boolean',
+                                                        ],
+                                                        'value' => 'true'
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ],
                                 ]
                             ],
                             'selectionsColumn' => [
