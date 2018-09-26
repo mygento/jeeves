@@ -262,7 +262,7 @@ class AdminController
                 . '     return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '}' . PHP_EOL
                 . 'try {' . PHP_EOL
-                . '    $this->repository->deleteById($entity);' . PHP_EOL
+                . '    $this->repository->deleteById($entityId);' . PHP_EOL
                 . '    $this->messageManager->addSuccessMessage(__(\'You deleted the ' . $entity . '\'));' . PHP_EOL
                 . '    return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
