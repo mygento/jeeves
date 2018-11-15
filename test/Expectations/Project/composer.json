@@ -1,0 +1,73 @@
+{
+    "name": "mygento/sample",
+    "type": "project",
+    "version": "2.2.6",
+    "require": {
+        "magento/product-community-edition": "~2.2",
+        "composer/composer": "1.4.1",
+        "mygento/base": "~2.2",
+        "mygento/module-configsync": "~2.2",
+        "mageplaza/module-smtp": "^1.1.0",
+        "etws/magento-language-ru_ru": "dev-develop"
+    },
+    "replace": {
+      "magento/module-marketplace": "*",
+      "magento/module-cybersource": "*",
+      "magento/module-authorizenet": "*",
+      "magento/module-signifyd": "*",
+      "temando/module-shipping-m2": "*",
+      "shopialfb/facebook-module": "*",
+      "amzn/amazon-pay-and-login-magento-2-module": "*",
+      "amzn/amazon-pay-and-login-with-amazon-core-module": "*",
+      "dotmailer/dotmailer-magento2-extension": "*",
+      "klarna/module-core":  "*",
+      "klarna/module-kp":  "*",
+      "klarna/module-ordermanagement":  "*",
+      "vertex/module-tax": "*",
+      "amzn/amazon-pay-module": "*",
+      "amzn/login-with-amazon-module": "*"
+    },
+    "require-dev": {
+        "mygento/coding-standard": "~2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/"
+        },
+        "psr-0": {
+            "": [
+                "app/code/"
+            ]
+        },
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+            "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
+    "extra": {
+        "magento-force": "override"
+    }
+}
