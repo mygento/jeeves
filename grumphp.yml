@@ -10,9 +10,10 @@ parameters:
                 - "var_dump("
                 - "exit;"
         phplint:
+        phpunit:
+            testsuite: 'Test'
         phpcsfixer2:
             config: '.php_cs'
         phpcs:
             warning_severity: null
         xmllint:
-

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mygento_Sample::sample" title="Sample" translate="title" module="Mygento_Sample" sortOrder="90" parent="Magento_Backend::stores" resource="Mygento_Sample::sample"/>
+        <add id="Mygento_Sample::sample_customeraddress" title="Customeraddress" translate="title" module="Mygento_Sample" sortOrder="90" parent="Mygento_Sample::sample" action="sample/customeraddress" resource="Mygento_Sample::sample_customeraddress"/>
+    </menu>
+</config>

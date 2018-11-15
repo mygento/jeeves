@@ -58,7 +58,7 @@ abstract class BaseCommand extends Command
     {
         $finder = \PhpCsFixer\Finder::create()
             ->name('*.php')
-            ->in('generated');
+            ->in(\Mygento\Jeeves\Console\Application::GEN);
 
         $config = \PhpCsFixer\Config::create()
             ->setRules([

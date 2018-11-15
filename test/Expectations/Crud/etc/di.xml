@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mygento\Sample\Api\CustomeraddressRepositoryInterface" type="Mygento\Sample\Model\CustomeraddressRepository"/>
+    <preference for="Mygento\Sample\Api\Data\CustomeraddressInterface" type="Mygento\Sample\Model\Customeraddress"/>
+    <preference for="Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="Mygento\Sample\Api\Data\CustomeraddressInterface" xsi:type="string">Mygento\Sample\Api\CustomeraddressRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sample_customeraddress_listing_data_source" xsi:type="string">Mygento\Sample\Model\ResourceModel\Customeraddress\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Mygento\Sample\Model\ResourceModel\Customeraddress\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_customeraddress</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_customeraddress_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customeraddress_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\Sample\Model\ResourceModel\Customeraddress</argument>
+        </arguments>
+    </type>
+</config>

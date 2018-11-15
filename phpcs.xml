@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="Jeeves">
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/test/Expectations*</exclude-pattern>
     <rule ref="PSR2"/>
 </ruleset>

@@ -49,7 +49,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->path = 'generated';
+        $this->path = \Mygento\Jeeves\Console\Application::GEN;
         $io = $this->getIO();
         $vendor = strtolower($input->getArgument('vendor'));
         $module = strtolower($input->getArgument('module'));
@@ -419,21 +419,21 @@ EOT
         $uiComponent = $this->module . '_' . $entity . '_listing';
         $path = $this->module . '_' . $entity . '_index';
         $this->writeFile(
-            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutIndex($uiComponent)
         );
 
         $editUiComponent = $this->module . '_' . $entity . '_edit';
         $path = $this->module . '_' . $entity . '_edit';
         $this->writeFile(
-            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutEdit($editUiComponent)
         );
 
         $uiComponent = $this->module . '_' . $entity . '_new';
         $path = $this->module . '_' . $entity . '_new';
         $this->writeFile(
-            'generated/view/adminhtml/layout/' . $path . '.xml',
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
         );
     }
@@ -473,7 +473,7 @@ EOT
             . '.'
             . $this->module . '_' . $entity . '_listing.';
         $this->writeFile(
-            'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
             $generator->generateAdminUiIndex(
                 $uiComponent,
                 $uiComponent . '_data_source',
@@ -491,7 +491,7 @@ EOT
         $dataSource = $uiComponent . '_data_source';
         $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
         $this->writeFile(
-            'generated/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
             $generator->generateAdminUiForm(
                 $uiComponent,
                 $dataSource,
@@ -520,7 +520,7 @@ EOT
     protected function genAdminRoute($path)
     {
         $this->writeFile(
-            'generated/etc/adminhtml/routes.xml',
+            $this->path . '/etc/adminhtml/routes.xml',
             $this->getXmlManager()->generateAdminRoute($this->module, $path, $this->getFullname())
         );
     }
@@ -528,7 +528,7 @@ EOT
     public function genAdminAcl($entity)
     {
         $this->writeFile(
-            'generated/etc/acl.xml',
+            $this->path . '/etc/acl.xml',
             $this->getXmlManager()->generateAdminAcl($entity, $this->getFullname(), $this->module)
         );
     }
@@ -536,7 +536,7 @@ EOT
     protected function genAdminMenu($entity, $path)
     {
         $this->writeFile(
-            'generated/etc/adminhtml/menu.xml',
+            $this->path . '/etc/adminhtml/menu.xml',
             $this->getXmlManager()->generateAdminMenu($entity, $path, $this->getFullname(), $this->module)
         );
     }
@@ -544,7 +544,7 @@ EOT
     protected function genDI($entity, $entityTable)
     {
         $this->writeFile(
-            'generated/etc/di.xml',
+            $this->path . '/etc/di.xml',
             $this->getXmlManager()->generateDI(
                 $this->gui,
                 $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
@@ -565,7 +565,7 @@ EOT
     protected function genAPI($generator, $entity)
     {
         $this->writeFile(
-            'generated/etc/webapi.xml',
+            $this->path . '/etc/webapi.xml',
             $generator->generateAPI(
                 $entity,
                 $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
