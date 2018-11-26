@@ -31,7 +31,7 @@ class ProjectTest extends \PHPUnit\Framework\TestCase
         $this->checkFile('.scss-lint.yml');
         $this->checkFile('.shippable.yml');
         $this->checkJson('composer.json');
-        $this->checkJson('composer.json');
+        $this->checkJson('package.json');
         $this->checkFile('Gemfile');
         $this->checkFile('grumphp.yml');
         $this->checkFile('Gulpfile.js');

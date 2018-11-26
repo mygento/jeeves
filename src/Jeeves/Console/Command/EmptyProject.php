@@ -129,6 +129,34 @@ EOT
         ];
 
         $this->writeFile($path . 'composer.json', json_encode($composer, JSON_PRETTY_PRINT |  JSON_UNESCAPED_SLASHES));
+
+        $packages = [
+            'name' => $name,
+            'license' => 'private',
+            'version' => '1.0.0',
+            'description' => '',
+            'main' => 'Gulpfile.js',
+            'dependencies' => [
+                'font-awesome' => '^4.7.0',
+                'gulp' => '4.0.0',
+                'gulp-changed' => '^3.2.0',
+                'gulp-cssnano' => '^2.1.3',
+                'gulp-eslint' => '^5.0.0',
+                'gulp-sass' => '^4.0.2',
+                'gulp-scss-lint' => '^0.7.1',
+                'node-normalize-scss' => '^8.0.0',
+                'node-reset-scss' => '^1.0.1',
+                'sassime' => '^1.1.6',
+            ],
+            'devDependencies' => [
+                'gulp-notify' => '^3.2.0',
+                'gulp-sourcemaps' => '^2.6.4',
+                'guppy-pre-commit' => '^0.4.0',
+            ],
+        ];
+
+        $this->writeFile($path . 'package.json', json_encode($packages, JSON_PRETTY_PRINT |  JSON_UNESCAPED_SLASHES));
+
         $IS_PULL_REQUEST = '$IS_PULL_REQUEST';
         $BRANCH = '$BRANCH';
 
@@ -744,7 +772,7 @@ CONFIG;
             'amd' => true,
             'prototypejs' => true,
           ],
-          'globals' => [],
+          'globals' => new \ArrayObject(),
           'extends' => 'eslint:recommended',
           'rules' => [
             'indent' => ['error', 2],
