@@ -49,4 +49,5 @@ return PhpCsFixer\Config::create()
         'lowercase_cast' => true,
         'no_empty_comment' => true,
         'no_empty_phpdoc' => true,
+        'return_type_declaration' => true,
     ]);
