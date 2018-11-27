@@ -1,8 +1,17 @@
+<?php
+
+namespace Mygento\Jeeves\Generators\Project;
+
+class Deploy
+{
+    public function generateDeployer($name, $repo)
+    {
+        $mina = <<<RUBY
 require 'mina/deploy'
 require 'mina/git'
 
-set :application_name, 'sample' # application  name
-set :repository, ''
+set :application_name, '$name' # application  name
+set :repository, '$repo'
 
 set :shared_dirs, ['var/log','var/backups','var/report','pub/media', 'var/import','var/export']
 set :shared_files, ['app/etc/env.php','pub/sitemap.xml']
@@ -12,9 +21,9 @@ set :ssh_options, '-A'
 set :forward_agent, true
 
 task :stage do
-  set :user, 'sample'
+  set :user, '$name'
   set :domain, 'host.ru'
-  set :deploy_to, "/var/www/sample/host.ru"
+  set :deploy_to, "/var/www/$name/host.ru"
   set :branch, 'stage'
   set :php_bin, 'php'
   set :composer_install_command, 'install --no-dev'
@@ -22,9 +31,9 @@ task :stage do
 end
 
 task :production do
-  set :user, 'sample'
+  set :user, '$name'
   set :domain, 'host.ru'
-  set :deploy_to, "/var/www/sample/host.ru"
+  set :deploy_to, "/var/www/$name/host.ru"
   set :branch, 'production'
   set :php_bin, 'php'
   set :composer_install_command, 'install --no-dev --prefer-dist --no-interaction --quiet'
@@ -55,12 +64,12 @@ end
 
 task :magento do
   command "PTH=$(pwd)"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" deploy:mode:set production -s"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" config:set dev/js/minify_files 1"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" config:set dev/css/minify_files 1"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" setup:upgrade --keep-generated"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" setup:di:compile -q"
-  command "#{fetch(:php_bin)} \"$PTH/bin/magento\" setup:static-content:deploy ru_RU -q"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" deploy:mode:set production -s"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" config:set dev/js/minify_files 1"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" config:set dev/css/minify_files 1"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" setup:upgrade --keep-generated"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" setup:di:compile -q"
+  command "#{fetch(:php_bin)} \"\$PTH/bin/magento\" setup:static-content:deploy ru_RU -q"
 end
 
 desc "Deploys the current version to the server."
@@ -81,3 +90,52 @@ task :deploy do
     end
   end
 end
+
+RUBY;
+        return $mina;
+    }
+
+    public function generateGems()
+    {
+        $gem = <<<GEM
+source 'https://rubygems.org'
+
+gem 'mina', git: 'https://github.com/luckyraul/mina.git', branch: 'relative_path'
+gem 'scss_lint', require: false
+
+GEM;
+        return $gem;
+    }
+
+    public function generateCI()
+    {
+        $IS_PULL_REQUEST = '$IS_PULL_REQUEST';
+        $BRANCH = '$BRANCH';
+
+        $shippable = <<<CONFIG
+branches:
+  only:
+    - stage
+    - production
+
+build:
+  pre_ci_boot:
+    image_name: mygento/deployer
+    image_tag: v1-full
+    pull: true
+  ci:
+    - apt-get install libxml2-utils
+    - composer self-update
+    - bundle install
+    - if [[ $IS_PULL_REQUEST == true ]]; then npm install --production --silent --no-progress; fi
+    - if [[ $IS_PULL_REQUEST == true ]]; then NODE_ENV=production gulp lint; fi
+    - if [[ $IS_PULL_REQUEST == true ]]; then rm composer.json; rm composer.lock; fi
+    - if [[ $IS_PULL_REQUEST == true ]]; then composer require mygento/coding-standard --quiet; fi
+    - if [[ $IS_PULL_REQUEST == true ]]; then php vendor/bin/grumphp run; fi
+  on_success:
+    - if [[ $IS_PULL_REQUEST != true ]]; then mina $BRANCH deploy; fi
+
+CONFIG;
+        return $shippable;
+    }
+}
