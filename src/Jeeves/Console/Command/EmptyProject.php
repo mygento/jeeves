@@ -16,9 +16,9 @@ class EmptyProject extends BaseCommand
             ->setDescription('Create new project template')
             ->setDefinition([
                 new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
+                new InputArgument('path', InputArgument::OPTIONAL, 'Path of the module', '.'),
                 new InputArgument('repo', InputArgument::OPTIONAL, 'Project repository url'),
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
-                new InputArgument('path', InputArgument::OPTIONAL, 'Path of the module', '.'),
             ])
             ->setHelp(
                 <<<EOT
@@ -70,6 +70,35 @@ EOT
 
         if (!is_dir($path . 'app/etc')) {
             mkdir($path . 'app/etc');
+        }
+
+        if (!is_dir($path . 'app/design')) {
+            mkdir($path . 'app/design');
+        }
+
+        if (!is_dir($path . 'app/design/frontend')) {
+            mkdir($path . 'app/design/frontend');
+        }
+        $v = ucfirst($vendor);
+
+        if (!is_dir($path . 'app/design/frontend/' . $v)) {
+            mkdir($path . 'app/design/frontend/' . $v);
+        }
+
+        if (!is_dir($path . 'app/design/frontend/' . $v . '/' . $name)) {
+            mkdir($path . 'app/design/frontend/' . $v . '/' . $name);
+        }
+
+        if (!is_dir($path . 'app/design/frontend/' . $v . '/' . $name . '/web')) {
+            mkdir($path . 'app/design/frontend/' . $v . '/' . $name . '/web');
+        }
+
+        if (!is_dir($path . 'app/design/frontend/' . $v . '/' . $name . '/web/scss')) {
+            mkdir($path . 'app/design/frontend/' . $v . '/' . $name . '/web/scss');
+        }
+
+        if (!is_dir($path . 'app/design/frontend/' . $v . '/' . $name . '/web/css')) {
+            mkdir($path . 'app/design/frontend/' . $v . '/' . $name . '/web/css');
         }
 
         $this->writeFile($path . 'app/etc/config.php', $phpGenerator->generateConfig());

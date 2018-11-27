@@ -1,9 +1,9 @@
 {
     "name": "sample",
-    "license": "private",
+    "private": true,
     "version": "1.0.0",
     "description": "",
-    "main": "Gulpfile.js",
+    "main": "gulpfile.js",
     "dependencies": {
         "font-awesome": "^4.7.0",
         "gulp": "4.0.0",

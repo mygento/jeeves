@@ -2,6 +2,20 @@
   "chmod": "0755",
   "directories": ["src", "bin","vendor"],
   "files": [],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "tests",
+        "spec",
+        "doc",
+        "test",
+        "Tests",
+        "fixtures"
+      ],
+      "in": "vendor"
+    }
+  ],
   "main": "bin/jeeves",
   "output": "jeeves.phar",
   "stub": true

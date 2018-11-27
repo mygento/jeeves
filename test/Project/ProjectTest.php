@@ -34,7 +34,7 @@ class ProjectTest extends \PHPUnit\Framework\TestCase
         $this->checkJson('package.json');
         $this->checkFile('Gemfile');
         $this->checkFile('grumphp.yml');
-        $this->checkFile('Gulpfile.js');
+        $this->checkFile('gulpfile.js');
     }
 
     private function checkFile($file)
