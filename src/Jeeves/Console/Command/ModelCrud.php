@@ -5,6 +5,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class ModelCrud extends BaseCommand
 {
@@ -13,6 +14,12 @@ class ModelCrud extends BaseCommand
     private $path;
     private $api = false;
     private $gui = true;
+
+    private $menu = [];
+    private $acl = [];
+    private $admin;
+    private $guiList = [];
+    private $di = [];
 
     protected function getNamespace()
     {
@@ -30,8 +37,8 @@ class ModelCrud extends BaseCommand
             ->setName('generate_model_crud')
             ->setDescription('Generate Model Crud')
             ->setDefinition([
-                new InputArgument('module', InputArgument::REQUIRED, 'Name of the module'),
-                new InputArgument('name', InputArgument::REQUIRED, 'Name of the entity'),
+                new InputArgument('module', InputArgument::OPTIONAL, 'Name of the module'),
+                new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
                 new InputOption('tablename', null, InputOption::VALUE_OPTIONAL, 'route path of the module'),
                 new InputOption('routepath', null, InputOption::VALUE_OPTIONAL, 'tablename of the entity'),
@@ -50,54 +57,125 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->path = \Mygento\Jeeves\Console\Application::GEN;
+        $filename = '.jeeves.yaml';
+        if (file_exists($filename)) {
+            $config = Yaml::parseFile($filename);
+        } else {
+            $io = $this->getIO();
+            $v = strtolower($input->getArgument('vendor'));
+            $m = strtolower($input->getArgument('module'));
+            $e = strtolower($input->getArgument('name'));
+            $fullname = $v . '/' . $m;
+            $fullname = $io->askAndValidate(
+                'Package name (<vendor>/<name>) [<comment>' . $fullname . '</comment>]: ',
+                function ($value) use ($fullname) {
+                    if (null === $value) {
+                        return $fullname;
+                    }
+                    if (!preg_match('{^[a-zA-Z]+/[a-zA-Z]+$}', $value)) {
+                        throw new \InvalidArgumentException(
+                            'The package name ' . $value . ' is invalid'
+                            . 'and have a vendor name, a forward slash, '
+                            . 'and a package name'
+                        );
+                    }
+                    return $value;
+                },
+                null,
+                $fullname
+            );
+            list($v, $m) = explode('/', $fullname);
+
+            $e = $io->askAndValidate(
+                'Entity name (<entity>) [<comment>' . $e . '</comment>]: ',
+                function ($value) use ($e) {
+                    if (null === $value) {
+                        return $e;
+                    }
+                    if (!preg_match('{^[a-zA-Z]+$}', $value)) {
+                        throw new \InvalidArgumentException(
+                            'The entity name ' . $value . ' is invalid'
+                        );
+                    }
+                    return $value;
+                },
+                null,
+                $e
+            );
+
+            $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $m;
+            $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $v . '_' . $m . '_' . $e;
+            $api = (bool) $input->getOption('api');
+            $gui = (bool) $input->getOption('gui');
+
+            $config = [
+                $v => [
+                    $m => [
+                        $e => [
+                            'gui' => $gui,
+                            'api' => $api,
+                            'columns' => [
+                                'id' => [
+                                    'type' => 'int',
+                                    'pk' => true,
+                                    'unsigned' => true,
+                                    'comment' => $e . ' ID',
+                                ]
+                            ],
+                            'tablename' => strtolower($tablename),
+                            'route' => [
+                                'admin' => strtolower($routepath)
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        //reset
+        $this->acl = [];
+        $this->admin = null;
+        $this->menu = [];
+        $this->di = [];
+        $this->guiList = [];
+
+        foreach ($config as $vendor => $mod) {
+            foreach ($mod as $module => $ent) {
+                foreach ($ent as $entity => $config) {
+                    $this->genModule($input, $vendor, $module, $entity, $config);
+                }
+            }
+        }
+        //xml
+        $this->genAdminAcl($this->acl);
+        $this->genAdminRoute($this->admin);
+        $this->genAdminMenu($this->menu);
+        $this->genDI($this->di);
+
+        // CS
+        $this->runCodeStyleFixer();
+    }
+
+    private function genModule($input, $vendor, $module, $entity, $config)
+    {
         $io = $this->getIO();
-        $vendor = strtolower($input->getArgument('vendor'));
-        $module = strtolower($input->getArgument('module'));
-        $entity = strtolower($input->getArgument('name'));
-        $fullname = $vendor . '/' . $module;
-        $fullname = $io->askAndValidate(
-            'Package name (<vendor>/<name>) [<comment>' . $fullname . '</comment>]: ',
-            function ($value) use ($fullname) {
-                if (null === $value) {
-                    return $fullname;
-                }
-                if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $value)) {
-                    throw new \InvalidArgumentException(
-                        'The package name ' . $value . ' is invalid, it should be lowercase '
-                        . 'and have a vendor name, a forward slash, '
-                        . 'and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+'
-                    );
-                }
-                return $value;
-            },
-            null,
-            $fullname
-        );
+        $this->vendor = strtolower($vendor);
+        $this->module = strtolower($module);
+        $entity = strtolower($entity);
+        $this->api = $config['api'] ?? false;
+        $this->gui = $config['gui'] ?? false;
 
-        list($this->vendor, $this->module) = explode('/', $fullname);
+        $tablename = $config['tablename'] ?? $this->vendor . '_' . $this->module . '_' . $entity;
 
-        $entity = $io->askAndValidate(
-            'Entity name (<entity>) [<comment>' . $entity . '</comment>]: ',
-            function ($value) use ($entity) {
-                if (null === $value) {
-                    return $entity;
-                }
-                if (!preg_match('{^[a-z]+$}', $value)) {
-                    throw new \InvalidArgumentException(
-                        'The entity name ' . $value . ' is invalid, it should be lowercase and matching: [a-z]'
-                    );
-                }
-                return $value;
-            },
-            null,
-            $entity
-        );
+        if (!isset($config['route'])) {
+            $config['route'] = [];
+        }
 
-        $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $module;
-        $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $vendor . '_' . $module . '_' . $entity;
+        if (!isset($config['route']['admin']) || !$config['route']['admin']) {
+            $config['route']['admin'] = $this->module;
+        }
 
-        $this->api = (bool)$input->getOption('api');
-        $this->gui = (bool)$input->getOption('gui');
+        $routepath = $config['route']['admin'];
 
         // interface
         $interGenerator = new \Mygento\Jeeves\Generators\Crud\Interfaces();
@@ -141,20 +219,18 @@ EOT
             $this->genGridCollection($uiGenerator, ucfirst($entity));
         }
 
-        // $xml
-        $this->genAdminAcl($entity);
+        // xml
+        $this->acl[] = $entity;
         if ($this->gui) {
-            $this->genAdminRoute($routepath);
-            $this->genAdminMenu($entity, $routepath);
+            $this->admin = $routepath;
+            $this->menu[$entity] = $routepath;
+            $this->guiList[$entity] = $tablename;
         }
         if ($this->api) {
             $apiGenerator = new \Mygento\Jeeves\Generators\Crud\Api();
             $this->genAPI($apiGenerator, $entity);
         }
-        $this->genDI($entity, $tablename);
-
-        // CS
-        $this->runCodeStyleFixer();
+        $this->di[] = $entity;
     }
 
     private function genRepo($generator, $entityName)
@@ -521,43 +597,47 @@ EOT
     {
         $this->writeFile(
             $this->path . '/etc/adminhtml/routes.xml',
-            $this->getXmlManager()->generateAdminRoute($this->module, $path, $this->getFullname())
+            $this->getXmlManager()->generateAdminRoute($path, $this->getFullname(), $this->module)
         );
     }
 
-    public function genAdminAcl($entity)
+    public function genAdminAcl($entities)
     {
         $this->writeFile(
             $this->path . '/etc/acl.xml',
-            $this->getXmlManager()->generateAdminAcl($entity, $this->getFullname(), $this->module)
+            $this->getXmlManager()->generateAdminAcl($entities, $this->getFullname(), $this->module)
         );
     }
 
-    protected function genAdminMenu($entity, $path)
+    protected function genAdminMenu($entities)
     {
         $this->writeFile(
             $this->path . '/etc/adminhtml/menu.xml',
-            $this->getXmlManager()->generateAdminMenu($entity, $path, $this->getFullname(), $this->module)
+            $this->getXmlManager()->generateAdminMenu($entities, $this->getFullname(), $this->module)
         );
     }
 
-    protected function genDI($entity, $entityTable)
+    protected function genDI($entities)
     {
         $this->writeFile(
             $this->path . '/etc/di.xml',
             $this->getXmlManager()->generateDI(
-                $this->gui,
-                $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
-                $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                $this->getNamespace() . '\\Model\\' . ucfirst($entity),
-                $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
-                $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
-                $this->module . '_' . $entity . '_listing_data_source',
-                $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
-                $entityTable,
-                $this->module . '_' . $entity . '_grid_collection',
-                $entity . '_grid_collection',
-                $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity)
+                $this->guiList,
+                $entities,
+                $this->getNamespace(),
+                $this->module
+                // $this->gui,
+                // $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
+                // $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
+                // $this->getNamespace() . '\\Model\\' . ucfirst($entity),
+                // $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
+                // $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
+                // $this->module . '_' . $entity . '_listing_data_source',
+                // $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
+                // $entityTable,
+                // $this->module . '_' . $entity . '_grid_collection',
+                // $entity . '_grid_collection',
+                // $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity)
             )
         );
     }

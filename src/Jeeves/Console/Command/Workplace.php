@@ -59,7 +59,7 @@ EOT
         }
         $workplaceFolder = $folder . '-project' . DIRECTORY_SEPARATOR . $folder . '-workplace';
         try {
-            $io->write(sprintf("Cloning: <info>%s</info>.", 'workplace'));
+            $io->write(sprintf('Cloning: <info>%s</info>.', 'workplace'));
             $repository = \Gitonomy\Git\Admin::cloneTo(
                 $workplaceFolder,
                 'https://github.com/mygento/workplace.git',
@@ -69,7 +69,7 @@ EOT
             $io->writeError($e->getMessage());
         }
         try {
-            $io->write(sprintf("Cloning: <info>%s</info>.", $repo));
+            $io->write(sprintf('Cloning: <info>%s</info>.', $repo));
             $repository = \Gitonomy\Git\Admin::cloneTo(
                 $folder . '-project' . DIRECTORY_SEPARATOR . $folder,
                 $repo,
@@ -80,7 +80,7 @@ EOT
         }
         $srcFolder = $workplaceFolder . DIRECTORY_SEPARATOR . 'src';
         if (!is_dir($srcFolder)) {
-            $io->write(sprintf("Creating symlink to: <info>%s</info>.", $folder));
+            $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
             symlink('../' . $folder, $srcFolder);
             return;
         }
@@ -90,7 +90,7 @@ EOT
                 count(scandir($srcFolder)) <= 3
             )
         ) {
-            $io->write(sprintf("Creating symlink to: <info>%s</info>.", $folder));
+            $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
             unlink($srcFolder . DIRECTORY_SEPARATOR . '.keep');
             rmdir($srcFolder);
             symlink('../' . $folder, $srcFolder);

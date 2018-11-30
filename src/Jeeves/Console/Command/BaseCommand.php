@@ -50,7 +50,7 @@ abstract class BaseCommand extends Command
     {
         $fs = new Filesystem();
         $io = $this->getIO();
-        $io->write(sprintf("Creating: <info>%s</info>.", $path));
+        $io->write(sprintf('Creating: <info>%s</info>.', $path));
         return $fs->dumpFile($path, $content);
     }
 
@@ -110,7 +110,7 @@ abstract class BaseCommand extends Command
         );
 
         $io = $this->getIO();
-        $io->write(sprintf("Fixing CS"));
+        $io->write(sprintf('Fixing CS'));
         $changed = $runner->fix();
 
         $invalidErrors = $errorsManager->getInvalidErrors();

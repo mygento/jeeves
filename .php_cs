@@ -1,6 +1,6 @@
 <?php
 $finder = PhpCsFixer\Finder::create()
-    ->in('src');    
+    ->in('src');
 
 return PhpCsFixer\Config::create()
     ->setFinder($finder)
@@ -24,5 +24,13 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => true,
         'standardize_not_equals' => true,
         'ternary_operator_spaces' => true,
+        'phpdoc_types' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'single_quote' => true,
+        'standardize_not_equals' => true,
+        'ternary_to_null_coalescing' => true,
+        'lowercase_cast' => true,
+        'no_empty_comment' => true,
+        'no_empty_phpdoc' => true,
+        'return_type_declaration' => true,
     ]);
-
