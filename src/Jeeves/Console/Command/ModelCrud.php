@@ -20,6 +20,7 @@ class ModelCrud extends BaseCommand
     private $admin;
     private $guiList = [];
     private $di = [];
+    private $db = [];
 
     protected function getNamespace()
     {
@@ -138,6 +139,7 @@ EOT
         $this->menu = [];
         $this->di = [];
         $this->guiList = [];
+        $this->db = [];
 
         foreach ($config as $vendor => $mod) {
             foreach ($mod as $module => $ent) {
@@ -150,6 +152,7 @@ EOT
         $this->genAdminAcl($this->acl);
         $this->genAdminRoute($this->admin);
         $this->genAdminMenu($this->menu);
+        $this->genDBSchema($this->db);
         $this->genDI($this->di);
 
         // CS
@@ -163,7 +166,7 @@ EOT
         $this->module = strtolower($module);
         $entity = strtolower($entity);
         $this->api = $config['api'] ?? false;
-        $this->gui = $config['gui'] ?? false;
+        $this->gui = $config['gui'] ?? true;
 
         $tablename = $config['tablename'] ?? $this->vendor . '_' . $this->module . '_' . $entity;
 
@@ -231,6 +234,9 @@ EOT
             $this->genAPI($apiGenerator, $entity);
         }
         $this->di[] = $entity;
+        if (!empty($config['columns']) && $tablename) {
+            $this->db[$tablename] = $config['columns'];
+        }
     }
 
     private function genRepo($generator, $entityName)
@@ -595,6 +601,9 @@ EOT
 
     protected function genAdminRoute($path)
     {
+        if (!$path) {
+            return;
+        }
         $this->writeFile(
             $this->path . '/etc/adminhtml/routes.xml',
             $this->getXmlManager()->generateAdminRoute($path, $this->getFullname(), $this->module)
@@ -613,7 +622,11 @@ EOT
     {
         $this->writeFile(
             $this->path . '/etc/adminhtml/menu.xml',
-            $this->getXmlManager()->generateAdminMenu($entities, $this->getFullname(), $this->module)
+            $this->getXmlManager()->generateAdminMenu(
+                $entities,
+                $this->getFullname(),
+                $this->module
+            )
         );
     }
 
@@ -626,18 +639,16 @@ EOT
                 $entities,
                 $this->getNamespace(),
                 $this->module
-                // $this->gui,
-                // $this->getNamespace() . '\\Model\\' . ucfirst($entity) . 'Repository',
-                // $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                // $this->getNamespace() . '\\Model\\' . ucfirst($entity),
-                // $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
-                // $this->getNamespace() . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
-                // $this->module . '_' . $entity . '_listing_data_source',
-                // $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
-                // $entityTable,
-                // $this->module . '_' . $entity . '_grid_collection',
-                // $entity . '_grid_collection',
-                // $this->getNamespace() . '\\Model\\ResourceModel\\' . ucfirst($entity)
+            )
+        );
+    }
+
+    protected function genDBSchema($db)
+    {
+        $this->writeFile(
+            $this->path . '/etc/db_schema.xml',
+            $this->getXmlManager()->generateSchema(
+                $db
             )
         );
     }

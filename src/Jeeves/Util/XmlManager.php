@@ -324,6 +324,63 @@ class XmlManager
         });
     }
 
+    public function generateSchema($db)
+    {
+        $service = $this->getService();
+        $entityList = array_map(
+            function ($tablename, $entity) {
+                $columnList = array_map(
+                    function ($column, $param) {
+                        switch ($param['type']) {
+                            case 'varchar':
+                                $type = [
+                                    'length' => var_export($param['length'] ?? 255, true),
+                                ];
+                                break;
+                            case 'int':
+                                $type = [
+                                    'identity' => var_export($param['pk'] ?? false, true),
+                                    'unsigned' => var_export($param['unsigned'] ?? false, true),
+                                ];
+                                break;
+                            default:
+                                $type = [];
+                                break;
+                        }
+                        return [
+                            'name' => 'column',
+                            'attributes' =>  array_merge([
+                                'xsi:type' => $param['type'],
+                                'name' => $column,
+                                'nullable' => var_export($param['null'] ?? false, true),
+                                'comment' => 'comment',
+                            ], $type),
+                        ];
+                    },
+                    array_keys($entity),
+                    $entity
+                );
+                return [
+                    'name' => 'table',
+                    'attributes' => [
+                        'name' => $tablename,
+                        'resource' => 'default',
+                        'engine' => 'innodb',
+                        'comment' => 'comment',
+                    ],
+                    'value' => $columnList,
+                ];
+            },
+            array_keys($db),
+            $db
+        );
+        return $service->write('schema', function ($writer) use ($entityList) {
+            $writer->setIndentString('    ');
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd');
+            $writer->write($entityList);
+        });
+    }
+
     private function getService()
     {
         $service = new \Sabre\Xml\Service();
