@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mygento_sample_customeraddress" resource="default" engine="innodb" comment="comment">
+        <column xsi:type="int" name="id" nullable="false" comment="comment" identity="true" unsigned="true" padding="10"/>
+        <column xsi:type="varchar" name="city" nullable="false" comment="comment" length="100"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="comment" default="CURRENT_TIMESTAMP" on_update="false"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" comment="comment" default="CURRENT_TIMESTAMP" on_update="true"/>
+        <column xsi:type="decimal" name="price" nullable="false" comment="comment" precision="10" scale="4"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="IX_CITY" indexType="btree">
+            <column name="city"/>
+        </index>
+    </table>
+    <table name="mygento_sample_banner" resource="default" engine="innodb" comment="comment">
+        <column xsi:type="int" name="id" nullable="false" comment="comment" identity="false" unsigned="true" padding="10"/>
+        <column xsi:type="varchar" name="name" nullable="false" comment="comment" length="255"/>
+        <column xsi:type="varchar" name="subname" nullable="false" comment="comment" length="255"/>
+        <column xsi:type="int" name="product_id" nullable="false" comment="comment" identity="false" unsigned="true" padding="10"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="IX_NAME">
+            <column name="name"/>
+            <column name="subname"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="IX_PR_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+    </table>
+</schema>

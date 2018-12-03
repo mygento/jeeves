@@ -2,7 +2,7 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing_data_source</item>
+            <item name="provider" xsi:type="string">sample_banner_listing.sample_banner_listing_data_source</item>
         </item>
     </argument>
     <settings>
@@ -10,23 +10,23 @@
             <button name="add">
                 <url path="*/*/new"/>
                 <class>primary</class>
-                <label translate="true">Add New Customeraddress</label>
+                <label translate="true">Add New Banner</label>
             </button>
         </buttons>
-        <spinner>sample_customeraddress_columns</spinner>
+        <spinner>sample_banner_columns</spinner>
         <deps>
-            <dep>sample_customeraddress_listing.sample_customeraddress_listing_data_source</dep>
+            <dep>sample_banner_listing.sample_banner_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="sample_customeraddress_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="sample_banner_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Mygento_Sample:customeraddress</aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sample_customeraddress_listing_data_source">
+        <aclResource>Mygento_Sample:banner</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sample_banner_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
@@ -59,7 +59,7 @@
                         <message translate="true">Are you sure you want to delete selected items?</message>
                         <title translate="true">Delete items</title>
                     </confirm>
-                    <url path="sample/customeraddress/massDelete"/>
+                    <url path="sample/banner/massDelete"/>
                     <type>delete</type>
                     <label translate="true">Delete</label>
                 </settings>
@@ -68,7 +68,7 @@
                 <settings>
                     <callback>
                         <target>editSelected</target>
-                        <provider>sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns_editor</provider>
+                        <provider>sample_banner_listing.sample_banner_listing.sample_banner_columns_editor</provider>
                     </callback>
                     <type>edit</type>
                     <label translate="true">Edit</label>
@@ -77,20 +77,20 @@
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="sample_customeraddress_columns">
+    <columns name="sample_banner_columns">
         <settings>
             <editorConfig>
                 <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="sample/customeraddress/inlineEdit"/>
+                    <item name="saveUrl" xsi:type="url" path="sample/banner/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
                 <param name="indexField" xsi:type="string">id</param>
                 <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns.ids</param>
+                <param name="selectProvider" xsi:type="string">sample_banner_listing.sample_banner_listing.sample_banner_columns.ids</param>
             </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns_editor</item>
+                    <item name="provider" xsi:type="string">sample_banner_listing.sample_banner_listing.sample_banner_columns_editor</item>
                     <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -104,7 +104,7 @@
                 <indexField>id</indexField>
             </settings>
         </selectionsColumn>
-        <actionsColumn name="actions" class="Mygento\Sample\Ui\Component\Listing\CustomeraddressActions">
+        <actionsColumn name="actions" class="Mygento\Sample\Ui\Component\Listing\BannerActions">
             <settings>
                 <indexField>id</indexField>
             </settings>
@@ -120,47 +120,36 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
-        <column name="city">
+        <column name="name">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
                 </editor>
-                <label translate="true">City</label>
+                <label translate="true">Name</label>
                 <sorting>asc</sorting>
             </settings>
         </column>
-        <column name="created_at">
-            <settings>
-                <filter>dateRange</filter>
-                <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
-                <label translate="true">Created At</label>
-                <sorting>asc</sorting>
-            </settings>
-        </column>
-        <column name="updated_at">
-            <settings>
-                <filter>dateRange</filter>
-                <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
-                <label translate="true">Updated At</label>
-                <sorting>asc</sorting>
-            </settings>
-        </column>
-        <column name="price">
+        <column name="subname">
             <settings>
                 <filter>text</filter>
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
                 </editor>
-                <label translate="true">Price</label>
+                <label translate="true">Subname</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="product_id">
+            <settings>
+                <filter>textRange</filter>
+                <dataType>text</dataType>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Product Id</label>
                 <sorting>asc</sorting>
             </settings>
         </column>

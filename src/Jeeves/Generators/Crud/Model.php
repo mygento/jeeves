@@ -4,9 +4,9 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
 
-class Model
+class Model extends Common
 {
-    public function genModel($className, $entInterface, $resource, $rootNamespace)
+    public function genModel($className, $entInterface, $resource, $rootNamespace, $fields = self::DEFAULT_FIELDS)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Model\AbstractModel');
@@ -18,6 +18,21 @@ class Model
             ->addComment('@return void')
             ->setVisibility('protected')
             ->setBody('$this->_init(' . $resource . '::class);');
+
+        foreach ($fields as $name => $value) {
+            $method = $this->snakeCaseToUpperCamelCase($name);
+            $class->addMethod('get' . $method)
+                ->addComment('Get ' . str_replace('_', ' ', $name))
+                ->addComment('@return ' . $this->convertType($value['type']) . '|null')
+                ->setVisibility('public')->setBody('return $this->getData(self::' . strtoupper($name) . ');');
+            $setter = $class->addMethod('set' . $method)
+                ->addComment('Set ' . str_replace('_', ' ', $name))
+                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . strtolower($name))
+                ->addComment('@return ' . $entInterface)
+                ->setVisibility('public');
+            $setter->addParameter(strtolower($name));
+            $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . strtolower($name) . ');');
+        }
         return $namespace;
     }
 

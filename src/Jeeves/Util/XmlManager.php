@@ -329,36 +329,110 @@ class XmlManager
         $service = $this->getService();
         $entityList = array_map(
             function ($tablename, $entity) {
+                $entity['indexes'] = $entity['indexes'] ?? [];
+                $entity['fk'] = $entity['fk'] ?? [];
                 $columnList = array_map(
+                    [$this, 'getColumn'],
+                    array_keys($entity['columns']),
+                    $entity['columns']
+                );
+                $primaryContraintList = array_map(
                     function ($column, $param) {
-                        switch ($param['type']) {
-                            case 'varchar':
-                                $type = [
-                                    'length' => var_export($param['length'] ?? 255, true),
-                                ];
-                                break;
-                            case 'int':
-                                $type = [
-                                    'identity' => var_export($param['pk'] ?? false, true),
-                                    'unsigned' => var_export($param['unsigned'] ?? false, true),
-                                ];
-                                break;
-                            default:
-                                $type = [];
-                                break;
+                        if (!isset($param['pk']) && !isset($param['identity'])) {
+                            return [];
+                        }
+                        if (isset($param['pk']) && $param['pk'] == false) {
+                            return [];
+                        }
+                        if (isset($param['identity']) && $param['identity'] == false) {
+                            return [];
                         }
                         return [
                             'name' => 'column',
-                            'attributes' =>  array_merge([
-                                'xsi:type' => $param['type'],
+                            'attributes' =>  [
                                 'name' => $column,
-                                'nullable' => var_export($param['null'] ?? false, true),
-                                'comment' => 'comment',
-                            ], $type),
+                            ]
                         ];
                     },
-                    array_keys($entity),
-                    $entity
+                    array_keys($entity['columns']),
+                    $entity['columns']
+                );
+                $primaryContraint = [];
+                if (!empty($primaryContraintList)) {
+                    $primaryContraint = [
+                        'name' => 'constraint',
+                        'attributes' =>  [
+                            'xsi:type' => 'primary',
+                            'referenceId' => 'PRIMARY',
+                        ],
+                        'value' => $primaryContraintList,
+                    ];
+                }
+                $constraintList = array_map(
+                    function ($name, $param) use ($tablename) {
+                        return [
+                            'name' => 'constraint',
+                            'attributes' =>  [
+                                'xsi:type' => 'foreign',
+                                'referenceId' => $name,
+                                'table' => $tablename,
+                                'column' => $param['column'],
+                                'referenceTable' => $param['referenceTable'],
+                                'referenceColumn' => $param['referenceColumn'],
+                                'onDelete' => $param['onDelete'] ?? 'CASCADE',
+                            ],
+                        ];
+                    },
+                    array_keys($entity['fk']),
+                    $entity['fk']
+                );
+                $indexFKList = array_map(
+                    function ($column, $param) {
+                        return [
+                            'name' => 'index',
+                            'attributes' =>  [
+                                'referenceId' => $param['indexName'],
+                                'indexType' => 'btree',
+                            ],
+                            'value' => array_map(
+                                [$this, 'getIndexColumn'],
+                                [$param['column']]
+                            ),
+                        ];
+                    },
+                    array_keys($entity['fk']),
+                    $entity['fk']
+                );
+                $indexList = array_map(
+                    function ($name, $param) {
+                        $param['type'] = $param['type'] ?? 'btree';
+                        if ($param['type'] === 'unique') {
+                            return [
+                                'name' => 'constraint',
+                                'attributes' =>  [
+                                    'xsi:type' => 'unique',
+                                    'referenceId' => $name,
+                                ],
+                                'value' => array_map(
+                                    [$this, 'getIndexColumn'],
+                                    $param['columns']
+                                ),
+                            ];
+                        }
+                        return [
+                            'name' => 'index',
+                            'attributes' =>  [
+                                'referenceId' => $name,
+                                'indexType' => $param['type'],
+                            ],
+                            'value' => array_map(
+                                [$this, 'getIndexColumn'],
+                                $param['columns']
+                            ),
+                        ];
+                    },
+                    array_keys($entity['indexes']),
+                    $entity['indexes']
                 );
                 return [
                     'name' => 'table',
@@ -368,7 +442,13 @@ class XmlManager
                         'engine' => 'innodb',
                         'comment' => 'comment',
                     ],
-                    'value' => $columnList,
+                    'value' => array_merge(
+                        $columnList,
+                        [$primaryContraint],
+                        $indexList,
+                        $constraintList,
+                        $indexFKList
+                    )
                 ];
             },
             array_keys($db),
@@ -379,6 +459,78 @@ class XmlManager
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd');
             $writer->write($entityList);
         });
+    }
+
+    private function getIndexColumn($name)
+    {
+        return [
+            'name' => 'column',
+            'attributes' => [
+                'name' => $name,
+            ]
+        ];
+    }
+
+    private function getColumn($column, $param)
+    {
+        $optional = [];
+        switch ($param['type']) {
+            case 'blob':
+            case 'boolean':
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+            case 'varbinary':
+                $type = [];
+                break;
+            case 'int':
+            case 'smallint':
+            case 'bigint':
+            case 'tinyint':
+                $type = [
+                    'identity' => var_export($param['identity'] ?? false, true), //autoinrement
+                    'unsigned' => var_export($param['unsigned'] ?? false, true),
+                    'padding' => var_export($param['padding'] ?? 10, true),
+                ];
+                break;
+            case 'real':
+            case 'decimal':
+            case 'float':
+            case 'double':
+                $type = [
+                    'precision' => var_export($param['precision'] ?? 10, true),
+                    'scale' => var_export($param['scale'] ?? 4, true),
+                ];
+                break;
+            case 'text':
+            case 'mediumtext':
+            case 'longtext':
+                $type = [];
+                break;
+            case 'varchar':
+                $type = [
+                    'length' => var_export($param['length'] ?? 255, true),
+                ];
+                break;
+            default:
+                throw new \Exception('Error column type');
+                break;
+        }
+        if (isset($param['default'])) {
+            $optional['default'] =  (string) $param['default'];
+        }
+        if (isset($param['on_update'])) {
+            $optional['on_update'] =  var_export($param['on_update'], true);
+        }
+        return [
+            'name' => 'column',
+            'attributes' =>  array_merge([
+                'xsi:type' => $param['type'],
+                'name' => $column,
+                'nullable' => var_export($param['null'] ?? false, true),
+                'comment' => 'comment',
+            ], $type, $optional),
+        ];
     }
 
     private function getService()

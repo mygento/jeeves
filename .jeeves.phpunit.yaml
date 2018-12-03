@@ -1,0 +1,56 @@
+Mygento:
+  Sample:
+    CustomerAddress:
+      columns:
+        id:
+          type: int
+          pk: true
+          identity: true
+          unsigned: true
+          comment: 'Address ID'
+        city:
+          type: varchar
+          nullable: false
+          comment: 'City'
+          length: 100
+        created_at:
+          type: timestamp
+          nullable: false
+          default: 'CURRENT_TIMESTAMP'
+          comment: 'Create time'
+          on_update: false
+        updated_at:
+          type: timestamp
+          nullable: false
+          default: 'CURRENT_TIMESTAMP'
+          comment: 'Modify time'
+          on_update: true
+        price:
+          type: decimal
+      indexes:
+        IX_CITY:
+          columns: ['city']
+    Banner:
+      columns:
+        id:
+          type: int
+          pk: true
+          unsigned: true
+          comment: 'Banner ID'
+        name:
+          type: varchar
+        subname:
+          type: varchar
+        product_id:
+          type: int
+          unsigned: true
+      indexes:
+        IX_NAME:
+          type: 'unique'
+          columns: ['name', 'subname']
+      fk:
+        FK_PROD_ID_CAT_PRD_ENT_ID:
+          column: 'product_id'
+          referenceTable: 'catalog_product_entity'
+          referenceColumn: 'entity_id'
+          indexName: 'IX_PR_ID'

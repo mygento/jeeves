@@ -2,7 +2,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sample_customeraddress_edit.sample_customeraddress_edit_data_source</item>
+            <item name="provider" xsi:type="string">sample_banner_edit.sample_banner_edit_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">General Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -15,22 +15,22 @@
             <button name="delete" class="Mygento\Base\Block\Adminhtml\Component\Edit\DeleteButton"/>
             <button name="back" class="Mygento\Base\Block\Adminhtml\Component\Edit\BackButton"/>
         </buttons>
-        <namespace>sample_customeraddress_edit</namespace>
+        <namespace>sample_banner_edit</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>sample_customeraddress_edit.sample_customeraddress_edit_data_source</dep>
+            <dep>sample_banner_edit.sample_banner_edit_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="sample_customeraddress_edit_data_source">
+    <dataSource name="sample_banner_edit_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
         <settings>
-            <submitUrl path="sample/customeraddress/save"/>
+            <submitUrl path="sample/banner/save"/>
         </settings>
-        <dataProvider name="sample_customeraddress_edit_data_source" class="Mygento\Sample\Model\Customeraddress\DataProvider">
+        <dataProvider name="sample_banner_edit_data_source" class="Mygento\Sample\Model\Banner\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
@@ -44,7 +44,7 @@
         <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customeraddress</item>
+                    <item name="source" xsi:string="string">banner</item>
                 </item>
             </argument>
             <settings>
@@ -53,52 +53,40 @@
                 <dataScope>id</dataScope>
             </settings>
         </field>
-        <field name="city" formElement="input">
+        <field name="name" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customeraddress</item>
+                    <item name="source" xsi:string="string">banner</item>
                 </item>
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">City</label>
-                <dataScope>city</dataScope>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
             </settings>
         </field>
-        <field name="created_at" formElement="input">
+        <field name="subname" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customeraddress</item>
-                </item>
-            </argument>
-            <settings>
-                <dataType>date</dataType>
-                <label translate="true">Created At</label>
-                <dataScope>created_at</dataScope>
-            </settings>
-        </field>
-        <field name="updated_at" formElement="input">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customeraddress</item>
-                </item>
-            </argument>
-            <settings>
-                <dataType>date</dataType>
-                <label translate="true">Updated At</label>
-                <dataScope>updated_at</dataScope>
-            </settings>
-        </field>
-        <field name="price" formElement="input">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customeraddress</item>
+                    <item name="source" xsi:string="string">banner</item>
                 </item>
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">Price</label>
-                <dataScope>price</dataScope>
+                <label translate="true">Subname</label>
+                <dataScope>subname</dataScope>
+            </settings>
+        </field>
+        <field name="product_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:string="string">banner</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Product Id</label>
+                <dataScope>product_id</dataScope>
             </settings>
         </field>
     </fieldset>

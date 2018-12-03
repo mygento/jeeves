@@ -12,6 +12,7 @@ before_script:
     - composer selfupdate
     - composer install --no-interaction --prefer-dist
     - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
+    - mv .jeeves.phpunit.yaml .jeeves.yaml
 
 script:
   - php vendor/bin/grumphp run

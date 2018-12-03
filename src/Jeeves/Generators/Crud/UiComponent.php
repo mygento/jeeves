@@ -4,12 +4,58 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
 
-class UiComponent
+class UiComponent extends Common
 {
-    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $select, $editor)
+    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $fields = self::DEFAULT_FIELDS)
     {
         $service = $this->getService();
-        return $service->write('listing', function ($writer) use ($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $select, $editor) {
+        $columns = array_map(
+            function ($name, $param) {
+                switch ($param['type']) {
+                    case 'smallint':
+                    case 'bigint':
+                    case 'tinyint':
+                    case 'int':
+                        $filter = 'textRange';
+                        $dataType = 'text';
+                        break;
+                    case 'date':
+                    case 'datetime':
+                    case 'timestamp':
+                        $filter = 'dateRange';
+                        $dataType = 'date';
+                        break;
+                    default:
+                        $filter = 'text';
+                        $dataType = 'text';
+                }
+                return [
+                    'name' => 'column',
+                    'attributes' => [
+                        'name' => $name
+                    ],
+                    'value' => [
+                        'settings' => [
+                            'filter' => $filter,
+                            'dataType' => $dataType,
+                            'editor' => [
+                                'editorType' => $dataType,
+                            ],
+                            'label' => [
+                                'attributes' => [
+                                    'translate' => 'true',
+                                ],
+                                'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
+                            ],
+                            'sorting' => 'asc'
+                        ]
+                    ]
+                ];
+            },
+            array_keys($fields),
+            $fields
+        );
+        return $service->write('listing', function ($writer) use ($columns, $uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -106,127 +152,13 @@ class UiComponent
                             ]
                         ]
                     ],
-                    'listingToolbar' => [
-                        'massaction' => [
-                            'attributes' => [
-                                'name' => 'listing_massaction',
-                            ],
-                        ],
-                        'paging' => [
-                            'attributes' => [
-                                'name' => 'listing_paging',
-                            ],
-                        ]
-                    ],
+                    'listingToolbar' => $this->getToolbar($massDelete, $editor),
                     'columns' => [
                         'attributes' => [
                             'name' => $column,
                         ],
-                        'value' => [
-                            'settings' => [
-                                'editorConfig' => [
-                                    [
-                                        'name' => 'param',
-                                        'attributes' => [
-                                            'name' => 'clientConfig',
-                                            'xsi:type' => 'array',
-                                        ],
-                                        'value' => [
-                                            [
-                                                'name' => 'item',
-                                                'attributes' => [
-                                                    'name' => 'saveUrl',
-                                                    'xsi:type' => 'url',
-                                                    'path' => $inline
-                                                ],
-                                            ],
-                                            [
-                                                'name' => 'item',
-                                                'attributes' => [
-                                                    'name' => 'validateBeforeSave',
-                                                    'xsi:type' => 'boolean',
-                                                ],
-                                                'value' => 'false'
-                                            ]
-                                        ]
-                                    ],
-                                    [
-                                        'name' => 'param',
-                                        'attributes' => [
-                                            'name' => 'indexField',
-                                            'xsi:type' => 'string',
-                                        ],
-                                        'value' => 'id',
-                                    ],
-                                    [
-                                        'name' => 'param',
-                                        'attributes' => [
-                                            'name' => 'enabled',
-                                            'xsi:type' => 'boolean',
-                                        ],
-                                        'value' => 'true',
-                                    ],
-                                    [
-                                        'name' => 'param',
-                                        'attributes' => [
-                                            'name' => 'selectProvider',
-                                            'xsi:type' => 'string',
-                                        ],
-                                        'value' => $select
-                                    ]
-                                ],
-                                'childDefaults' => [
-                                    'param' => [
-                                        'attributes' => [
-                                            'name' => 'fieldAction',
-                                            'xsi:type' => 'array',
-                                        ],
-                                        'value' => [
-                                            [
-                                                'name' => 'item',
-                                                'attributes' => [
-                                                    'name' => 'provider',
-                                                    'xsi:type' => 'string',
-                                                ],
-                                                'value' => $editor
-                                            ],
-                                            [
-                                                'name' => 'item',
-                                                'attributes' => [
-                                                    'name' => 'target',
-                                                    'xsi:type' => 'string',
-                                                ],
-                                                'value' => 'startEdit'
-                                            ],
-                                            [
-                                                'name' => 'item',
-                                                'attributes' => [
-                                                    'name' => 'params',
-                                                    'xsi:type' => 'array',
-                                                ],
-                                                'value' => [
-                                                    [
-                                                        'name' => 'item',
-                                                        'attributes' => [
-                                                            'name' => '0',
-                                                            'xsi:type' => 'string',
-                                                        ],
-                                                        'value' => '${ $.$data.rowIndex }'
-                                                    ],
-                                                    [
-                                                        'name' => 'item',
-                                                        'attributes' => [
-                                                            'name' => '1',
-                                                            'xsi:type' => 'boolean',
-                                                        ],
-                                                        'value' => 'true'
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ],
-                                ]
-                            ],
+                        'value' => array_merge([
+                            'settings' => $this->getListingSettings($inline, $select, $editor),
                             'selectionsColumn' => [
                                 'attributes' => [
                                     'name' => 'ids'
@@ -234,23 +166,6 @@ class UiComponent
                                 'value' => [
                                     'settings' => [
                                         'indexField' => 'id'
-                                    ]
-                                ]
-                            ],
-                            'column' => [
-                                'attributes' => [
-                                    'name' => 'id'
-                                ],
-                                'value' => [
-                                    'settings' => [
-                                        'filter' => 'textRange',
-                                        'label' => [
-                                            'attributes' => [
-                                                'translate' => 'true'
-                                            ],
-                                            'value' => 'ID',
-                                        ],
-                                        'sorting' => 'asc',
                                     ]
                                 ]
                             ],
@@ -265,17 +180,80 @@ class UiComponent
                                     ]
                                 ]
                             ]
-                        ]
+                        ], $columns)
                     ]
                 ]
             ]);
         });
     }
 
-    public function generateAdminUiForm($uiComponent, $dataSource, $submit, $provider)
+    public function generateAdminUiForm($uiComponent, $dataSource, $submit, $provider, $entity, $fields = self::DEFAULT_FIELDS)
     {
         $service = $this->getService();
-        return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider) {
+        $fieldset = array_map(
+            function ($name, $param) use ($entity) {
+                switch ($param['type']) {
+                    case 'smallint':
+                    case 'bigint':
+                    case 'tinyint':
+                    case 'int':
+                        $dataType = 'text';
+                        break;
+                    case 'date':
+                    case 'datetime':
+                    case 'timestamp':
+                        $dataType = 'date';
+                        break;
+                    default:
+                        $dataType = 'text';
+                }
+                return [
+                    'name' => 'field',
+                    'attributes' => [
+                        'name' => strtolower($name),
+                        'formElement' => 'input',
+                    ],
+                    'value' => [
+                        'argument' => [
+                            'attributes' => [
+                                'name' => 'data',
+                                'xsi:type' => 'array',
+                            ],
+                            'value' => [
+                                'item' => [
+                                    'attributes' => [
+                                        'name' => 'config',
+                                        'xsi:type' => 'array',
+                                    ],
+                                    'value' => [
+                                        'item' => [
+                                            'attributes' => [
+                                                'name' => 'source',
+                                                'xsi:string' => 'string',
+                                            ],
+                                            'value' => strtolower($entity),
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'settings' => [
+                            'dataType' => $dataType,
+                            'label' => [
+                                'attributes' => [
+                                    'translate' => 'true',
+                                ],
+                                'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
+                            ],
+                            'dataScope' => strtolower($name),
+                        ]
+                    ]
+                ];
+            },
+            array_keys($fields),
+            $fields
+        );
+        return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider, $fieldset) {
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
@@ -427,25 +405,11 @@ class UiComponent
                         'attributes' => [
                             'name' => 'general',
                         ],
-                        'value' => [
+                        'value' => array_merge([
                             'settings' => [
                                 'label' => ''
                             ],
-                            [
-                                'name' => 'field',
-                                'attributes' => [
-                                    'name' => 'id',
-                                    'formElement' => 'input',
-                                ],
-                                'value' => [
-                                    'settings' => [
-                                        'dataType' => 'text',
-                                        'visible' => 'false',
-                                        'dataScope' => 'id'
-                                    ]
-                                ]
-                            ]
-                        ]
+                        ], $fieldset),
                     ]
                 ]
             ]);
@@ -626,6 +590,243 @@ class UiComponent
         $setItems->setBody('return $this;');
 
         return $namespace;
+    }
+
+    private function getToolbar($massDelete, $editor)
+    {
+        return [
+            'attributes' => [
+                'name' => 'listing_top',
+            ],
+            'value' => [
+                'settings' => [
+                    'sticky' => true,
+                ],
+                'bookmark' => [
+                    'attributes' => [
+                        'name' => 'bookmarks',
+                    ],
+                ],
+                'columnsControls' => [
+                    'attributes' => [
+                        'name' => 'columns_controls',
+                    ],
+                ],
+                'filterSearch' => [
+                    'attributes' => [
+                        'name' => 'fulltext',
+                    ],
+                ],
+                'filters' => [
+                    'attributes' => [
+                        'name' => 'listing_filters',
+                    ],
+                    'value' => [
+                        'settings' => [
+                            'templates' => [
+                                'filters' => [
+                                    'select' => [
+                                        [
+                                            'name' => 'param',
+                                            'attributes' => [
+                                                'name' => 'template',
+                                                'xsi:type' => 'string',
+                                            ],
+                                            'value' => 'ui/grid/filters/elements/ui-select',
+                                        ],
+                                        [
+                                            'name' => 'param',
+                                            'attributes' => [
+                                                'name' => 'component',
+                                                'xsi:type' => 'string',
+                                            ],
+                                            'value' => 'Magento_Ui/js/form/element/ui-select',
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'massaction' => [
+                    'attributes' => [
+                        'name' => 'listing_massaction',
+                    ],
+                    'value' => [
+                        [
+                            'name' => 'action',
+                            'attributes' => [
+                                'name' => 'delete',
+                            ],
+                            'value' => [
+                                'settings' => [
+                                    'confirm' => [
+                                        'message' => [
+                                            'attributes' => [
+                                                'translate' => 'true',
+                                            ],
+                                            'value' => 'Are you sure you want to delete selected items?',
+                                        ],
+                                        'title' => [
+                                            'attributes' => [
+                                                'translate' => 'true',
+                                            ],
+                                            'value' => 'Delete items',
+                                        ]
+                                    ],
+                                    'url' => [
+                                        'attributes' => [
+                                            'path' => $massDelete,
+                                        ],
+                                    ],
+                                    'type' => 'delete',
+                                    'label' => [
+                                        'attributes' => [
+                                            'translate' => 'true',
+                                        ],
+                                        'value' => 'Delete',
+                                    ]
+                                ]
+                            ]
+                        ],
+                        [
+                            'name' => 'action',
+                            'attributes' => [
+                                'name' => 'edit',
+                            ],
+                            'value' => [
+                                'settings' => [
+                                    'callback' => [
+                                        'target' => 'editSelected',
+                                        'provider' => $editor,
+                                    ],
+                                    'type' => 'edit',
+                                    'label' => [
+                                        'attributes' => [
+                                            'translate' => 'true',
+                                        ],
+                                        'value' => 'Edit',
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ]
+                ],
+                'paging' => [
+                    'attributes' => [
+                        'name' => 'listing_paging',
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    private function getListingSettings($inline, $select, $editor)
+    {
+        return [
+            'editorConfig' => [
+                [
+                    'name' => 'param',
+                    'attributes' => [
+                        'name' => 'clientConfig',
+                        'xsi:type' => 'array',
+                    ],
+                    'value' => [
+                        [
+                            'name' => 'item',
+                            'attributes' => [
+                                'name' => 'saveUrl',
+                                'xsi:type' => 'url',
+                                'path' => $inline
+                            ],
+                        ],
+                        [
+                            'name' => 'item',
+                            'attributes' => [
+                                'name' => 'validateBeforeSave',
+                                'xsi:type' => 'boolean',
+                            ],
+                            'value' => 'false'
+                        ]
+                    ]
+                ],
+                [
+                    'name' => 'param',
+                    'attributes' => [
+                        'name' => 'indexField',
+                        'xsi:type' => 'string',
+                    ],
+                    'value' => 'id',
+                ],
+                [
+                    'name' => 'param',
+                    'attributes' => [
+                        'name' => 'enabled',
+                        'xsi:type' => 'boolean',
+                    ],
+                    'value' => 'true',
+                ],
+                [
+                    'name' => 'param',
+                    'attributes' => [
+                        'name' => 'selectProvider',
+                        'xsi:type' => 'string',
+                    ],
+                    'value' => $select
+                ]
+            ],
+            'childDefaults' => [
+                'param' => [
+                    'attributes' => [
+                        'name' => 'fieldAction',
+                        'xsi:type' => 'array',
+                    ],
+                    'value' => [
+                        [
+                            'name' => 'item',
+                            'attributes' => [
+                                'name' => 'provider',
+                                'xsi:type' => 'string',
+                            ],
+                            'value' => $editor
+                        ],
+                        [
+                            'name' => 'item',
+                            'attributes' => [
+                                'name' => 'target',
+                                'xsi:type' => 'string',
+                            ],
+                            'value' => 'startEdit'
+                        ],
+                        [
+                            'name' => 'item',
+                            'attributes' => [
+                                'name' => 'params',
+                                'xsi:type' => 'array',
+                            ],
+                            'value' => [
+                                [
+                                    'name' => 'item',
+                                    'attributes' => [
+                                        'name' => '0',
+                                        'xsi:type' => 'string',
+                                    ],
+                                    'value' => '${ $.$data.rowIndex }'
+                                ],
+                                [
+                                    'name' => 'item',
+                                    'attributes' => [
+                                        'name' => '1',
+                                        'xsi:type' => 'boolean',
+                                    ],
+                                    'value' => 'true'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ]
+        ];
     }
 
     private function getService()

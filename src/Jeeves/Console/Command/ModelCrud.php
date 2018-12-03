@@ -118,7 +118,7 @@ EOT
                             'columns' => [
                                 'id' => [
                                     'type' => 'int',
-                                    'pk' => true,
+                                    'identity' => true,
                                     'unsigned' => true,
                                     'comment' => $e . ' ID',
                                 ]
@@ -179,16 +179,17 @@ EOT
         }
 
         $routepath = $config['route']['admin'];
+        $fields = $config['columns'];
 
         // interface
         $interGenerator = new \Mygento\Jeeves\Generators\Crud\Interfaces();
-        $this->genModelInterface($interGenerator, $entity);
+        $this->genModelInterface($interGenerator, $entity, $fields);
         $this->genModelRepositoryInterface($interGenerator, $entity);
         $this->genModelSearchInterface($interGenerator, $entity);
 
         // model
         $modelGenerator = new \Mygento\Jeeves\Generators\Crud\Model();
-        $this->genModel($modelGenerator, ucfirst($entity));
+        $this->genModel($modelGenerator, ucfirst($entity), $fields);
         $this->genResourceModel($modelGenerator, ucfirst($entity), $tablename);
         $this->genResourceCollection($modelGenerator, ucfirst($entity));
 
@@ -218,7 +219,7 @@ EOT
         //UI
         if ($this->gui) {
             $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
-            $this->genAdminUI($uiGenerator, $entity);
+            $this->genAdminUI($uiGenerator, $entity, $fields);
             $this->genGridCollection($uiGenerator, ucfirst($entity));
         }
 
@@ -234,8 +235,8 @@ EOT
             $this->genAPI($apiGenerator, $entity);
         }
         $this->di[] = $entity;
-        if (!empty($config['columns']) && $tablename) {
-            $this->db[$tablename] = $config['columns'];
+        if (!empty($config) && $tablename) {
+            $this->db[$tablename] = $config;
         }
     }
 
@@ -261,14 +262,18 @@ EOT
         );
     }
 
-    private function genModelInterface($generator, $entityName)
+    private function genModelInterface($generator, $entityName, $fields)
     {
         $filePath = $this->path . '/Api/Data/';
         $fileName = ucfirst($entityName) . 'Interface';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genModelInterface($fileName, $this->getNamespace())
+            $generator->genModelInterface(
+                $fileName,
+                $this->getNamespace(),
+                $fields
+            )
         );
     }
 
@@ -307,7 +312,7 @@ EOT
         );
     }
 
-    private function genModel($generator, $entityName)
+    private function genModel($generator, $entityName, $fields)
     {
         $filePath = $this->path . '/Model/';
         $fileName = $entityName;
@@ -320,7 +325,8 @@ EOT
                 $fileName,
                 $namePath . $entityName . 'Interface',
                 '\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $entityName,
-                $this->getNamespace()
+                $this->getNamespace(),
+                $fields
             )
         );
     }
@@ -520,7 +526,7 @@ EOT
         );
     }
 
-    protected function genAdminUI($generator, $entity)
+    protected function genAdminUI($generator, $entity, $fields)
     {
         $filePath = $this->path . '/Ui/Component/Listing/';
         $fileName = ucfirst($entity) . 'Actions';
@@ -564,8 +570,10 @@ EOT
                 $this->getFullname() . ':' . $entity,
                 $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
                 $this->module . '/' . $entity . '/inlineEdit',
+                $this->module . '/' . $entity . '/massDelete',
                 $common . $this->module . '_' . $entity . '_columns.ids',
-                $common . $this->module . '_' . $entity . '_columns_editor'
+                $common . $this->module . '_' . $entity . '_columns_editor',
+                $fields
             )
         );
 
@@ -578,7 +586,9 @@ EOT
                 $uiComponent,
                 $dataSource,
                 $this->module . '/' . $entity . '/save',
-                $provider
+                $provider,
+                $entity,
+                $fields
             )
         );
     }
@@ -647,9 +657,7 @@ EOT
     {
         $this->writeFile(
             $this->path . '/etc/db_schema.xml',
-            $this->getXmlManager()->generateSchema(
-                $db
-            )
+            $this->getXmlManager()->generateSchema($db)
         );
     }
 

@@ -4,16 +4,27 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
 
-class Interfaces
+class Interfaces extends Common
 {
-    public function genModelInterface($className, $rootNamespace)
+    public function genModelInterface($className, $rootNamespace, $fields = self::DEFAULT_FIELDS)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
-        $interface->addMethod('getId')
-              ->addComment('get ID')
-              ->addComment('@return int|null')
-              ->setVisibility('public');
+
+        foreach ($fields as $name => $value) {
+            $interface->addConstant(strtoupper($name), strtolower($name));
+            $method = $this->snakeCaseToUpperCamelCase($name);
+            $interface->addMethod('get' . $method)
+                ->addComment('Get ' . str_replace('_', ' ', $name))
+                ->addComment('@return ' . $this->convertType($value['type']) . '|null')
+                ->setVisibility('public');
+            $interface->addMethod('set' . $method)
+                ->addComment('Set ' . str_replace('_', ' ', $name))
+                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . strtolower($name))
+                ->addComment('@return \\' . $rootNamespace . '\Api\Data\\' . $className)
+                ->setVisibility('public')
+                ->addParameter(strtolower($name));
+        }
         return $namespace;
     }
 

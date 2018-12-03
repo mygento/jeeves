@@ -13,4 +13,99 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     {
         $this->_init(\Mygento\Sample\Model\ResourceModel\Customeraddress::class);
     }
+
+    /**
+     * Get id
+     * @return int|null
+     */
+    public function getId()
+    {
+        return $this->getData(self::ID);
+    }
+
+    /**
+     * Set id
+     * @param int $id
+     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::ID, $id);
+    }
+
+    /**
+     * Get city
+     * @return string|null
+     */
+    public function getCity()
+    {
+        return $this->getData(self::CITY);
+    }
+
+    /**
+     * Set city
+     * @param string $city
+     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     */
+    public function setCity($city)
+    {
+        return $this->setData(self::CITY, $city);
+    }
+
+    /**
+     * Get created at
+     * @return string|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(self::CREATED_AT);
+    }
+
+    /**
+     * Set created at
+     * @param string $created_at
+     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     */
+    public function setCreatedAt($created_at)
+    {
+        return $this->setData(self::CREATED_AT, $created_at);
+    }
+
+    /**
+     * Get updated at
+     * @return string|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->getData(self::UPDATED_AT);
+    }
+
+    /**
+     * Set updated at
+     * @param string $updated_at
+     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        return $this->setData(self::UPDATED_AT, $updated_at);
+    }
+
+    /**
+     * Get price
+     * @return float|null
+     */
+    public function getPrice()
+    {
+        return $this->getData(self::PRICE);
+    }
+
+    /**
+     * Set price
+     * @param float $price
+     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::PRICE, $price);
+    }
 }
