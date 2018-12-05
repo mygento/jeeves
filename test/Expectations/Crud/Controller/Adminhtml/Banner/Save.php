@@ -28,6 +28,9 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Banner
     /**
      * Save Banner action
      *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

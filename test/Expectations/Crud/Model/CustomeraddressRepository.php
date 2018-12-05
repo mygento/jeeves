@@ -5,6 +5,9 @@ namespace Mygento\Sample\Model;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRepositoryInterface
 {
     /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress */

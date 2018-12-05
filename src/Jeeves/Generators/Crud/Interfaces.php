@@ -20,10 +20,10 @@ class Interfaces extends Common
                 ->setVisibility('public');
             $interface->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))
-                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . strtolower($name))
+                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
                 ->addComment('@return \\' . $rootNamespace . '\Api\Data\\' . $className)
                 ->setVisibility('public')
-                ->addParameter(strtolower($name));
+                ->addParameter($this->snakeCaseToCamelCase($name));
         }
         return $namespace;
     }

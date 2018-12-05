@@ -5,6 +5,9 @@ namespace Mygento\Sample\Model;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
 {
     /** @var \Mygento\Sample\Model\ResourceModel\Banner */

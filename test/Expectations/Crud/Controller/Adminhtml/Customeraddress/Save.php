@@ -28,6 +28,9 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
     /**
      * Save Customeraddress action
      *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

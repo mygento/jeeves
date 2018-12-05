@@ -56,8 +56,8 @@ interface BannerInterface
 
     /**
      * Set product id
-     * @param int $product_id
+     * @param int $productId
      * @return \Mygento\Sample\Api\Data\BannerInterface
      */
-    public function setProductId($product_id);
+    public function setProductId($productId);
 }

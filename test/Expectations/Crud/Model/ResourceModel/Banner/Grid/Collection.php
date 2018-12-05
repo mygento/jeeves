@@ -17,10 +17,10 @@ class Collection extends ParentCollection implements SearchResultInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
-     * @param $eventObject
-     * @param $resourceModel
+     * @param string $mainTable
+     * @param string $eventPrefix
+     * @param string $eventObject
+     * @param string $resourceModel
      * @param string $model
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
@@ -31,11 +31,11 @@ class Collection extends ParentCollection implements SearchResultInterface
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $mainTable,
-        $eventPrefix,
-        $eventObject,
-        $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
+        string $mainTable,
+        string $eventPrefix,
+        string $eventObject,
+        string $resourceModel,
+        string $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -62,8 +62,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     }
 
     /**
-     * @param \Magento\Framework\Search\AggregationInterface
-     * @param mixed $aggregations
+     * @param \Magento\Framework\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations)
@@ -80,7 +79,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     }
 
     /**
-     * @param \Magento\Framework\Search\AggregationInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

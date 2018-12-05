@@ -11,7 +11,7 @@ class MassDelete extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
     private $collectionFactory;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory collectionFactory
+     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
@@ -30,6 +30,8 @@ class MassDelete extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
     }
 
     /**
+     * Execute action
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

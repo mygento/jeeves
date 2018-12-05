@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="mygento_sample_customeraddress" resource="default" engine="innodb" comment="comment">
-        <column xsi:type="int" name="id" nullable="false" comment="comment" identity="true" unsigned="true" padding="10"/>
-        <column xsi:type="varchar" name="city" nullable="false" comment="comment" length="100"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="comment" default="CURRENT_TIMESTAMP" on_update="false"/>
-        <column xsi:type="timestamp" name="updated_at" nullable="false" comment="comment" default="CURRENT_TIMESTAMP" on_update="true"/>
-        <column xsi:type="decimal" name="price" nullable="false" comment="comment" precision="10" scale="4"/>
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" padding="10" comment="Address ID"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="100" comment="City"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Create time"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Modify time"/>
+        <column xsi:type="decimal" name="price" nullable="false" precision="10" scale="4" comment="Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
@@ -14,10 +14,10 @@
         </index>
     </table>
     <table name="mygento_sample_banner" resource="default" engine="innodb" comment="comment">
-        <column xsi:type="int" name="id" nullable="false" comment="comment" identity="false" unsigned="true" padding="10"/>
-        <column xsi:type="varchar" name="name" nullable="false" comment="comment" length="255"/>
-        <column xsi:type="varchar" name="subname" nullable="false" comment="comment" length="255"/>
-        <column xsi:type="int" name="product_id" nullable="false" comment="comment" identity="false" unsigned="true" padding="10"/>
+        <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" padding="10" comment="Banner ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name"/>
+        <column xsi:type="varchar" name="subname" nullable="false" length="255" comment="Subname"/>
+        <column xsi:type="int" name="product_id" nullable="false" identity="false" unsigned="true" padding="10" comment="Product_id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

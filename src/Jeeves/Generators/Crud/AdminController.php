@@ -46,6 +46,8 @@ class AdminController
 
         $init = $class->addMethod('initPage')
             ->setVisibility('protected')
+            ->addComment('Init page')
+            ->addComment('')
             ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
             ->addComment('@return \Magento\Backend\Model\View\Result\Page')
             ->setBody('$resultPage->setActiveMenu(\'' . $fullName . '::' . strtolower($className) . '\');' . PHP_EOL
@@ -197,6 +199,9 @@ class AdminController
         $class->addMethod('execute')
             ->addComment('Save ' . $entity . ' action')
             ->addComment('')
+            ->addComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)')
+            ->addComment('@SuppressWarnings(PHPMD.CyclomaticComplexity)')
+            ->addComment('')
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
@@ -347,6 +352,7 @@ class AdminController
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
         $class->addMethod('execute')
+            ->addComment('Execute action')
             ->addComment('')
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody('/** @var \Magento\Framework\Controller\Result\Json $resultJson */' . PHP_EOL
@@ -408,7 +414,7 @@ class AdminController
         ;
 
         $construct = $class->addMethod('__construct')
-            ->addComment('@param ' . $collection . ' collectionFactory')
+            ->addComment('@param ' . $collection . ' $collectionFactory')
             ->addComment('@param \Magento\Ui\Component\MassAction\Filter $filter')
             ->addComment('@param ' . $repository . ' $repository')
             ->addComment('@param \Magento\Framework\Registry $coreRegistry')
@@ -427,6 +433,7 @@ class AdminController
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
         $class->addMethod('execute')
+            ->addComment('Execute action')
             ->addComment('')
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody('$collection = $this->filter->getCollection($this->collectionFactory->create());' . PHP_EOL

@@ -24,6 +24,8 @@ class InlineEdit extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
     }
 
     /**
+     * Execute action
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

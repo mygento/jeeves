@@ -22,6 +22,7 @@ class Repository
         $namespace->addUse('Magento\Framework\Data\Collection');
         $class = $namespace->addClass($className);
         $class->setImplements([$repoInterface]);
+        $class->setComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)');
 
         $class->addProperty('resource')
             ->setVisibility('private')->addComment('@var ' . $resource);

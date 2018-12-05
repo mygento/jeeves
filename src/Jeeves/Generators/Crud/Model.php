@@ -27,11 +27,11 @@ class Model extends Common
                 ->setVisibility('public')->setBody('return $this->getData(self::' . strtoupper($name) . ');');
             $setter = $class->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))
-                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . strtolower($name))
+                ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
                 ->addComment('@return ' . $entInterface)
                 ->setVisibility('public');
-            $setter->addParameter(strtolower($name));
-            $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . strtolower($name) . ');');
+            $setter->addParameter($this->snakeCaseToCamelCase($name));
+            $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');
         }
         return $namespace;
     }

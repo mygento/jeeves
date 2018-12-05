@@ -528,8 +528,7 @@ class XmlManager
                 'xsi:type' => $param['type'],
                 'name' => $column,
                 'nullable' => var_export($param['null'] ?? false, true),
-                'comment' => 'comment',
-            ], $type, $optional),
+            ], $type, $optional, ['comment' => $param['comment'] ?? ucfirst($column)]),
         ];
     }
 

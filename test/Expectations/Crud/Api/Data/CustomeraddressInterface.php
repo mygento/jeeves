@@ -44,10 +44,10 @@ interface CustomeraddressInterface
 
     /**
      * Set created at
-     * @param string $created_at
+     * @param string $createdAt
      * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
      */
-    public function setCreatedAt($created_at);
+    public function setCreatedAt($createdAt);
 
     /**
      * Get updated at
@@ -57,10 +57,10 @@ interface CustomeraddressInterface
 
     /**
      * Set updated at
-     * @param string $updated_at
+     * @param string $updatedAt
      * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
      */
-    public function setUpdatedAt($updated_at);
+    public function setUpdatedAt($updatedAt);
 
     /**
      * Get price

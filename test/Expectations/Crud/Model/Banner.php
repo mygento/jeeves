@@ -82,11 +82,11 @@ class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInt
 
     /**
      * Set product id
-     * @param int $product_id
+     * @param int $productId
      * @return \Mygento\Sample\Api\Data\BannerInterface
      */
-    public function setProductId($product_id)
+    public function setProductId($productId)
     {
-        return $this->setData(self::PRODUCT_ID, $product_id);
+        return $this->setData(self::PRODUCT_ID, $productId);
     }
 }

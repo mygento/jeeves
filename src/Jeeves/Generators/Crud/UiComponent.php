@@ -422,9 +422,9 @@ class UiComponent extends Common
         $class = $namespace->addClass($className);
         $class->setExtends('\Mygento\Base\Ui\Component\Listing\Actions');
         $class->addProperty('route', $route)
-            ->setVisibility('protected');
+            ->setVisibility('protected')->addComment('@var string');
         $class->addProperty('controller', $controller)
-            ->setVisibility('protected');
+            ->setVisibility('protected')->addComment('@var string');
         return $namespace;
     }
 
@@ -506,10 +506,10 @@ class UiComponent extends Common
             ->addComment('@param \Psr\Log\LoggerInterface $logger')
             ->addComment('@param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy')
             ->addComment('@param \Magento\Framework\Event\ManagerInterface $eventManager')
-            ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable')
-            ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix')
-            ->addComment('@param $eventObject')
-            ->addComment('@param $resourceModel')
+            ->addComment('@param string $mainTable')
+            ->addComment('@param string $eventPrefix')
+            ->addComment('@param string $eventObject')
+            ->addComment('@param string $resourceModel')
             ->addComment('@param string $model')
             ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
             ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource')
@@ -520,11 +520,11 @@ class UiComponent extends Common
         $construct->addParameter('logger')->setTypeHint('\Psr\Log\LoggerInterface');
         $construct->addParameter('fetchStrategy')->setTypeHint('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $construct->addParameter('eventManager')->setTypeHint('\Magento\Framework\Event\ManagerInterface');
-        $construct->addParameter('mainTable');
-        $construct->addParameter('eventPrefix');
-        $construct->addParameter('eventObject');
-        $construct->addParameter('resourceModel');
-        $construct->addParameter('model')->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class);
+        $construct->addParameter('mainTable')->setTypeHint('string');
+        $construct->addParameter('eventPrefix')->setTypeHint('string');
+        $construct->addParameter('eventObject')->setTypeHint('string');
+        $construct->addParameter('resourceModel')->setTypeHint('string');
+        $construct->addParameter('model')->setTypeHint('string')->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class);
         $construct->addParameter('connection')->setTypeHint('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
         $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 
@@ -547,7 +547,7 @@ class UiComponent extends Common
         $getAggregations->setBody('return $this->aggregations;');
 
         $setAggregations = $class->addMethod('setAggregations')
-            ->addComment('@param \Magento\Framework\Search\AggregationInterface')
+            ->addComment('@param \Magento\Framework\Search\AggregationInterface $aggregations')
             ->addComment('@return $this')
             ->setVisibility('public');
         $setAggregations->addParameter('aggregations');
@@ -559,7 +559,7 @@ class UiComponent extends Common
         $getSearchCriteria->setBody('return null;');
 
         $setSearchCriteria = $class->addMethod('setSearchCriteria')
-            ->addComment('@param \Magento\Framework\Search\AggregationInterface')
+            ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria')
             ->addComment('@return $this')
             ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
             ->setVisibility('public');

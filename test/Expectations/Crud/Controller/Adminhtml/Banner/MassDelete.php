@@ -11,7 +11,7 @@ class MassDelete extends \Mygento\Sample\Controller\Adminhtml\Banner
     private $collectionFactory;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Banner\CollectionFactory collectionFactory
+     * @param \Mygento\Sample\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Mygento\Sample\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
@@ -30,6 +30,8 @@ class MassDelete extends \Mygento\Sample\Controller\Adminhtml\Banner
     }
 
     /**
+     * Execute action
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
