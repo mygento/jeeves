@@ -88,27 +88,27 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkLayout()
     {
-        $this->checkXml('view/adminhtml/layout/sample_customeraddress_edit.xml');
-        $this->checkXml('view/adminhtml/layout/sample_customeraddress_index.xml');
-        $this->checkXml('view/adminhtml/layout/sample_customeraddress_new.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_edit.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_index.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_new.xml');
 
-        $this->checkXml('view/adminhtml/layout/sample_banner_edit.xml');
-        $this->checkXml('view/adminhtml/layout/sample_banner_index.xml');
-        $this->checkXml('view/adminhtml/layout/sample_banner_new.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_banner_edit.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_banner_index.xml');
+        $this->checkXml('view/adminhtml/layout/samplemodule_banner_new.xml');
     }
 
     private function checkUi()
     {
         $this->checkFile('Ui/Component/Listing/CustomeraddressActions.php');
         $this->checkFile('Model/Customeraddress/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/sample_customeraddress_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/sample_customeraddress_edit.xml');
+        $this->checkXml('view/adminhtml/ui_component/samplemodule_customeraddress_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/samplemodule_customeraddress_edit.xml');
         $this->checkFile('Model/ResourceModel/Customeraddress/Grid/Collection.php');
 
         $this->checkFile('Ui/Component/Listing/BannerActions.php');
         $this->checkFile('Model/Banner/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/sample_banner_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/sample_banner_edit.xml');
+        $this->checkXml('view/adminhtml/ui_component/samplemodule_banner_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/samplemodule_banner_edit.xml');
         $this->checkFile('Model/ResourceModel/Banner/Grid/Collection.php');
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
-class Delete extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class Delete extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
     /**
      * Delete Customeraddress action

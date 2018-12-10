@@ -1,22 +1,22 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
     /**
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\Sample\Model\CustomeraddressFactory $entityFactory
-     * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Model\CustomeraddressFactory $entityFactory
+     * @param \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\Sample\Model\CustomeraddressFactory $entityFactory,
-        \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository,
+        \Mygento\Samplemodule\Model\CustomeraddressFactory $entityFactory,
+        \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -62,7 +62,7 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(__('You saved the Customeraddress'));
-            $this->dataPersistor->clear('sample_customeraddress');
+            $this->dataPersistor->clear('samplemodule_customeraddress');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
             }
@@ -72,7 +72,7 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Customeraddress'));
         }
-        $this->dataPersistor->set('sample_customeraddress', $data);
+        $this->dataPersistor->set('samplemodule_customeraddress', $data);
         return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
     }
 }

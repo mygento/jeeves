@@ -1,21 +1,21 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
-class InlineEdit extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class InlineEdit extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
     /** @var \Magento\Framework\Controller\Result\JsonFactory */
     private $jsonFactory;
 
     /**
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {

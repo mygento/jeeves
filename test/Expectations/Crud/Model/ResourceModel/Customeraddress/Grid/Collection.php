@@ -1,11 +1,11 @@
 <?php
 
-namespace Mygento\Sample\Model\ResourceModel\Customeraddress\Grid;
+namespace Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Mygento\Sample\Model\ResourceModel\Customeraddress\Collection as ParentCollection;
+use Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Collection as ParentCollection;
 
 class Collection extends ParentCollection implements SearchResultInterface
 {

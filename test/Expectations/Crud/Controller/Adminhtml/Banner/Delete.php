@@ -1,8 +1,8 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Banner;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
 
-class Delete extends \Mygento\Sample\Controller\Adminhtml\Banner
+class Delete extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
 {
     /**
      * Delete Banner action

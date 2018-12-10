@@ -1,22 +1,22 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Banner;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Mygento\Sample\Controller\Adminhtml\Banner
+class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
 {
     /**
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\Sample\Model\BannerFactory $entityFactory
-     * @param \Mygento\Sample\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Model\BannerFactory $entityFactory
+     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\Sample\Model\BannerFactory $entityFactory,
-        \Mygento\Sample\Api\BannerRepositoryInterface $repository,
+        \Mygento\Samplemodule\Model\BannerFactory $entityFactory,
+        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -62,7 +62,7 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Banner
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(__('You saved the Banner'));
-            $this->dataPersistor->clear('sample_banner');
+            $this->dataPersistor->clear('samplemodule_banner');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
             }
@@ -72,7 +72,7 @@ class Save extends \Mygento\Sample\Controller\Adminhtml\Banner
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Banner'));
         }
-        $this->dataPersistor->set('sample_banner', $data);
+        $this->dataPersistor->set('samplemodule_banner', $data);
         return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
     }
 }

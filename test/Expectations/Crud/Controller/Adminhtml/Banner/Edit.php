@@ -1,26 +1,26 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Banner;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
 
-class Edit extends \Mygento\Sample\Controller\Adminhtml\Banner
+class Edit extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
 {
-    /** @var \Mygento\Sample\Model\BannerFactory */
+    /** @var \Mygento\Samplemodule\Model\BannerFactory */
     private $entityFactory;
 
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
-     * @param \Mygento\Sample\Model\BannerFactory $entityFactory
+     * @param \Mygento\Samplemodule\Model\BannerFactory $entityFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Mygento\Sample\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Sample\Model\BannerFactory $entityFactory,
+        \Mygento\Samplemodule\Model\BannerFactory $entityFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Mygento\Sample\Api\BannerRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -48,7 +48,7 @@ class Edit extends \Mygento\Sample\Controller\Adminhtml\Banner
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        $this->coreRegistry->register('sample_banner', $entity);
+        $this->coreRegistry->register('samplemodule_banner', $entity);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

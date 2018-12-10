@@ -2,7 +2,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sample_banner_edit.sample_banner_edit_data_source</item>
+            <item name="provider" xsi:type="string">samplemodule_banner_edit.samplemodule_banner_edit_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">General Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -15,22 +15,22 @@
             <button name="delete" class="Mygento\Base\Block\Adminhtml\Component\Edit\DeleteButton"/>
             <button name="back" class="Mygento\Base\Block\Adminhtml\Component\Edit\BackButton"/>
         </buttons>
-        <namespace>sample_banner_edit</namespace>
+        <namespace>samplemodule_banner_edit</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>sample_banner_edit.sample_banner_edit_data_source</dep>
+            <dep>samplemodule_banner_edit.samplemodule_banner_edit_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="sample_banner_edit_data_source">
+    <dataSource name="samplemodule_banner_edit_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
         <settings>
-            <submitUrl path="sample/banner/save"/>
+            <submitUrl path="samplemodule/banner/save"/>
         </settings>
-        <dataProvider name="sample_banner_edit_data_source" class="Mygento\Sample\Model\Banner\DataProvider">
+        <dataProvider name="samplemodule_banner_edit_data_source" class="Mygento\Samplemodule\Model\Banner\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>

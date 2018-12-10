@@ -1,13 +1,13 @@
 <?php
 
-namespace Mygento\Sample\Model\Customeraddress;
+namespace Mygento\Samplemodule\Model\Customeraddress;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory;
+use Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory;
 
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
-    /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress\Collection */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Collection */
     protected $collection;
 
     /** @var DataPersistorInterface */
@@ -17,7 +17,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
      * @param string $name
      * @param string $primaryFieldName
@@ -51,12 +51,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($items as $model) {
             $this->loadedData[$model->getId()] = $model->getData();
         }
-        $data = $this->dataPersistor->get('sample_customeraddress');
+        $data = $this->dataPersistor->get('samplemodule_customeraddress');
         if (!empty($data)) {
             $model = $this->collection->getNewEmptyItem();
             $model->setData($data);
             $this->loadedData[$model->getId()] = $model->getData();
-            $this->dataPersistor->clear('sample_customeraddress');
+            $this->dataPersistor->clear('samplemodule_customeraddress');
         }
         return $this->loadedData;
     }

@@ -1,21 +1,21 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
-class Index extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class Index extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -35,7 +35,7 @@ class Index extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
         $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Customeraddress'));
 
         //$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
-        //$dataPersistor->clear('sample_customeraddress');
+        //$dataPersistor->clear('samplemodule_customeraddress');
         return $resultPage;
     }
 }

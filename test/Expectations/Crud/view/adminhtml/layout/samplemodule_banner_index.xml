@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <uiComponent name="sample_customeraddress_listing"/>
+            <uiComponent name="samplemodule_banner_listing"/>
         </referenceContainer>
     </body>
 </page>

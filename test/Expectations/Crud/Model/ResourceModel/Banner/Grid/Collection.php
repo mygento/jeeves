@@ -1,11 +1,11 @@
 <?php
 
-namespace Mygento\Sample\Model\ResourceModel\Banner\Grid;
+namespace Mygento\Samplemodule\Model\ResourceModel\Banner\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Mygento\Sample\Model\ResourceModel\Banner\Collection as ParentCollection;
+use Mygento\Samplemodule\Model\ResourceModel\Banner\Collection as ParentCollection;
 
 class Collection extends ParentCollection implements SearchResultInterface
 {

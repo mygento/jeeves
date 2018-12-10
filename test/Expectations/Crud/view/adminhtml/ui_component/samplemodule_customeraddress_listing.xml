@@ -2,7 +2,7 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing_data_source</item>
+            <item name="provider" xsi:type="string">samplemodule_customeraddress_listing.samplemodule_customeraddress_listing_data_source</item>
         </item>
     </argument>
     <settings>
@@ -13,20 +13,20 @@
                 <label translate="true">Add New Customeraddress</label>
             </button>
         </buttons>
-        <spinner>sample_customeraddress_columns</spinner>
+        <spinner>samplemodule_customeraddress_columns</spinner>
         <deps>
-            <dep>sample_customeraddress_listing.sample_customeraddress_listing_data_source</dep>
+            <dep>samplemodule_customeraddress_listing.samplemodule_customeraddress_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="sample_customeraddress_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="samplemodule_customeraddress_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Mygento_Sample:customeraddress</aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sample_customeraddress_listing_data_source">
+        <aclResource>Mygento_Samplemodule:customeraddress</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="samplemodule_customeraddress_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
@@ -59,7 +59,7 @@
                         <message translate="true">Are you sure you want to delete selected items?</message>
                         <title translate="true">Delete items</title>
                     </confirm>
-                    <url path="sample/customeraddress/massDelete"/>
+                    <url path="samplemodule/customeraddress/massDelete"/>
                     <type>delete</type>
                     <label translate="true">Delete</label>
                 </settings>
@@ -68,7 +68,7 @@
                 <settings>
                     <callback>
                         <target>editSelected</target>
-                        <provider>sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns_editor</provider>
+                        <provider>samplemodule_customeraddress_listing.samplemodule_customeraddress_listing.samplemodule_customeraddress_columns_editor</provider>
                     </callback>
                     <type>edit</type>
                     <label translate="true">Edit</label>
@@ -77,20 +77,20 @@
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="sample_customeraddress_columns">
+    <columns name="samplemodule_customeraddress_columns">
         <settings>
             <editorConfig>
                 <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="sample/customeraddress/inlineEdit"/>
+                    <item name="saveUrl" xsi:type="url" path="samplemodule/customeraddress/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
                 <param name="indexField" xsi:type="string">id</param>
                 <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns.ids</param>
+                <param name="selectProvider" xsi:type="string">samplemodule_customeraddress_listing.samplemodule_customeraddress_listing.samplemodule_customeraddress_columns.ids</param>
             </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">sample_customeraddress_listing.sample_customeraddress_listing.sample_customeraddress_columns_editor</item>
+                    <item name="provider" xsi:type="string">samplemodule_customeraddress_listing.samplemodule_customeraddress_listing.samplemodule_customeraddress_columns_editor</item>
                     <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -104,7 +104,7 @@
                 <indexField>id</indexField>
             </settings>
         </selectionsColumn>
-        <actionsColumn name="actions" class="Mygento\Sample\Ui\Component\Listing\CustomeraddressActions">
+        <actionsColumn name="actions" class="Mygento\Samplemodule\Ui\Component\Listing\CustomeraddressActions">
             <settings>
                 <indexField>id</indexField>
             </settings>

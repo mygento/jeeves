@@ -1,26 +1,26 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
-class Edit extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class Edit extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
-    /** @var \Mygento\Sample\Model\CustomeraddressFactory */
+    /** @var \Mygento\Samplemodule\Model\CustomeraddressFactory */
     private $entityFactory;
 
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
-     * @param \Mygento\Sample\Model\CustomeraddressFactory $entityFactory
+     * @param \Mygento\Samplemodule\Model\CustomeraddressFactory $entityFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Sample\Model\CustomeraddressFactory $entityFactory,
+        \Mygento\Samplemodule\Model\CustomeraddressFactory $entityFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -48,7 +48,7 @@ class Edit extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        $this->coreRegistry->register('sample_customeraddress', $entity);
+        $this->coreRegistry->register('samplemodule_customeraddress', $entity);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

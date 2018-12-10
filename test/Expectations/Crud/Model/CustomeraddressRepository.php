@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Sample\Model;
+namespace Mygento\Samplemodule\Model;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
@@ -8,31 +8,31 @@ use Magento\Framework\Data\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRepositoryInterface
+class CustomeraddressRepository implements \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface
 {
-    /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Customeraddress */
     private $resource;
 
-    /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory */
     private $collectionFactory;
 
-    /** @var \Mygento\Sample\Model\CustomeraddressFactory */
+    /** @var \Mygento\Samplemodule\Model\CustomeraddressFactory */
     private $entityFactory;
 
-    /** @var \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterfaceFactory */
+    /** @var \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterfaceFactory */
     private $searchResultsFactory;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress $resource
-     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
-     * @param \Mygento\Sample\Model\CustomeraddressFactory $entityFactory
-     * @param \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Customeraddress $resource
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
+     * @param \Mygento\Samplemodule\Model\CustomeraddressFactory $entityFactory
+     * @param \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         ResourceModel\Customeraddress $resource,
         ResourceModel\Customeraddress\CollectionFactory $collectionFactory,
         CustomeraddressFactory $entityFactory,
-        \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterfaceFactory $searchResultsFactory
+        \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -43,7 +43,7 @@ class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRe
     /**
      * @param int $entityId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Mygento\Sample\Model\Customeraddress
+     * @return \Mygento\Samplemodule\Model\Customeraddress
      */
     public function getById($entityId)
     {
@@ -51,18 +51,18 @@ class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRe
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('Sample Customeraddress with id "%1" does not exist.', $entityId)
+                __('Samplemodule Customeraddress with id "%1" does not exist.', $entityId)
             );
         }
         return $entity;
     }
 
     /**
-     * @param \Mygento\Sample\Api\Data\CustomeraddressInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Mygento\Sample\Model\Customeraddress
+     * @return \Mygento\Samplemodule\Model\Customeraddress
      */
-    public function save(\Mygento\Sample\Api\Data\CustomeraddressInterface $entity)
+    public function save(\Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity)
     {
         try {
             $this->resource->save($entity);
@@ -75,11 +75,11 @@ class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRe
     }
 
     /**
-     * @param \Mygento\Sample\Api\Data\CustomeraddressInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @return bool
      */
-    public function delete(\Mygento\Sample\Api\Data\CustomeraddressInterface $entity)
+    public function delete(\Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity)
     {
         try {
             $this->resource->delete($entity);
@@ -104,11 +104,11 @@ class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRe
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
-        /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress\Collection $collection */
+        /** @var \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Collection $collection */
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $fields = [];
@@ -138,7 +138,7 @@ class CustomeraddressRepository implements \Mygento\Sample\Api\CustomeraddressRe
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
 
-        /** @var \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterface $searchResults */
+        /** @var \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($collection->getItems());

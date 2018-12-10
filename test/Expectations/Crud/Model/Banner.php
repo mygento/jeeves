@@ -1,17 +1,17 @@
 <?php
 
-namespace Mygento\Sample\Model;
+namespace Mygento\Samplemodule\Model;
 
 use Magento\Framework\Model\AbstractModel;
 
-class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInterface
+class Banner extends AbstractModel implements \Mygento\Samplemodule\Api\Data\BannerInterface
 {
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Mygento\Sample\Model\ResourceModel\Banner::class);
+        $this->_init(\Mygento\Samplemodule\Model\ResourceModel\Banner::class);
     }
 
     /**
@@ -26,7 +26,7 @@ class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInt
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function setId($id)
     {
@@ -45,7 +45,7 @@ class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInt
     /**
      * Set name
      * @param string $name
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function setName($name)
     {
@@ -64,7 +64,7 @@ class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInt
     /**
      * Set subname
      * @param string $subname
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function setSubname($subname)
     {
@@ -83,7 +83,7 @@ class Banner extends AbstractModel implements \Mygento\Sample\Api\Data\BannerInt
     /**
      * Set product id
      * @param int $productId
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function setProductId($productId)
     {

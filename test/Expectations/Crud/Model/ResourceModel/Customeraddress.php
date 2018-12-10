@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Sample\Model\ResourceModel;
+namespace Mygento\Samplemodule\Model\ResourceModel;
 
 class Customeraddress extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -10,6 +10,6 @@ class Customeraddress extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      */
     protected function _construct()
     {
-        $this->_init('mygento_sample_customeraddress', 'id');
+        $this->_init('mygento_samplemodule_customeraddress', 'id');
     }
 }

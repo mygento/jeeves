@@ -1,14 +1,14 @@
 <?php
 
-namespace Mygento\Sample\Api;
+namespace Mygento\Samplemodule\Api;
 
 interface CustomeraddressRepositoryInterface
 {
     /**
      * Save customeraddress
-     * @param \Mygento\Sample\Api\Data\CustomeraddressInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function save(Data\CustomeraddressInterface $entity);
 
@@ -16,7 +16,7 @@ interface CustomeraddressRepositoryInterface
      * Retrieve customeraddress
      * @param int $entityId
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function getById($entityId);
 
@@ -24,13 +24,13 @@ interface CustomeraddressRepositoryInterface
      * Retrieve customeraddress entities matching the specified criteria
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\CustomeraddressSearchResultsInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete customeraddress
-     * @param \Mygento\Sample\Api\Data\CustomeraddressInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\CustomeraddressInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool true on success
      */

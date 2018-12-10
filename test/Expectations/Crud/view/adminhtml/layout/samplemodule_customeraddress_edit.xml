@@ -3,7 +3,7 @@
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="sample_customeraddress_edit"/>
+            <uiComponent name="samplemodule_customeraddress_edit"/>
         </referenceContainer>
     </body>
 </page>

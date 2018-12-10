@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Sample\Model;
+namespace Mygento\Samplemodule\Model;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
@@ -8,31 +8,31 @@ use Magento\Framework\Data\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
+class BannerRepository implements \Mygento\Samplemodule\Api\BannerRepositoryInterface
 {
-    /** @var \Mygento\Sample\Model\ResourceModel\Banner */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Banner */
     private $resource;
 
-    /** @var \Mygento\Sample\Model\ResourceModel\Banner\CollectionFactory */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory */
     private $collectionFactory;
 
-    /** @var \Mygento\Sample\Model\BannerFactory */
+    /** @var \Mygento\Samplemodule\Model\BannerFactory */
     private $entityFactory;
 
-    /** @var \Mygento\Sample\Api\Data\BannerSearchResultsInterfaceFactory */
+    /** @var \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterfaceFactory */
     private $searchResultsFactory;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Banner $resource
-     * @param \Mygento\Sample\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
-     * @param \Mygento\Sample\Model\BannerFactory $entityFactory
-     * @param \Mygento\Sample\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Banner $resource
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
+     * @param \Mygento\Samplemodule\Model\BannerFactory $entityFactory
+     * @param \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         ResourceModel\Banner $resource,
         ResourceModel\Banner\CollectionFactory $collectionFactory,
         BannerFactory $entityFactory,
-        \Mygento\Sample\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
+        \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -43,7 +43,7 @@ class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
     /**
      * @param int $entityId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Mygento\Sample\Model\Banner
+     * @return \Mygento\Samplemodule\Model\Banner
      */
     public function getById($entityId)
     {
@@ -51,18 +51,18 @@ class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('Sample Banner with id "%1" does not exist.', $entityId)
+                __('Samplemodule Banner with id "%1" does not exist.', $entityId)
             );
         }
         return $entity;
     }
 
     /**
-     * @param \Mygento\Sample\Api\Data\BannerInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\BannerInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Mygento\Sample\Model\Banner
+     * @return \Mygento\Samplemodule\Model\Banner
      */
-    public function save(\Mygento\Sample\Api\Data\BannerInterface $entity)
+    public function save(\Mygento\Samplemodule\Api\Data\BannerInterface $entity)
     {
         try {
             $this->resource->save($entity);
@@ -75,11 +75,11 @@ class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
     }
 
     /**
-     * @param \Mygento\Sample\Api\Data\BannerInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\BannerInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @return bool
      */
-    public function delete(\Mygento\Sample\Api\Data\BannerInterface $entity)
+    public function delete(\Mygento\Samplemodule\Api\Data\BannerInterface $entity)
     {
         try {
             $this->resource->delete($entity);
@@ -104,11 +104,11 @@ class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Mygento\Sample\Api\Data\BannerSearchResultsInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
-        /** @var \Mygento\Sample\Model\ResourceModel\Banner\Collection $collection */
+        /** @var \Mygento\Samplemodule\Model\ResourceModel\Banner\Collection $collection */
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $fields = [];
@@ -138,7 +138,7 @@ class BannerRepository implements \Mygento\Sample\Api\BannerRepositoryInterface
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
 
-        /** @var \Mygento\Sample\Api\Data\BannerSearchResultsInterface $searchResults */
+        /** @var \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($collection->getItems());

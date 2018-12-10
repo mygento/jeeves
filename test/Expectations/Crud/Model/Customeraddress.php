@@ -1,17 +1,17 @@
 <?php
 
-namespace Mygento\Sample\Model;
+namespace Mygento\Samplemodule\Model;
 
 use Magento\Framework\Model\AbstractModel;
 
-class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\CustomeraddressInterface
+class Customeraddress extends AbstractModel implements \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
 {
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Mygento\Sample\Model\ResourceModel\Customeraddress::class);
+        $this->_init(\Mygento\Samplemodule\Model\ResourceModel\Customeraddress::class);
     }
 
     /**
@@ -26,7 +26,7 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function setId($id)
     {
@@ -45,7 +45,7 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     /**
      * Set city
      * @param string $city
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function setCity($city)
     {
@@ -64,7 +64,7 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     /**
      * Set created at
      * @param string $createdAt
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function setCreatedAt($createdAt)
     {
@@ -83,7 +83,7 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     /**
      * Set updated at
      * @param string $updatedAt
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -102,7 +102,7 @@ class Customeraddress extends AbstractModel implements \Mygento\Sample\Api\Data\
     /**
      * Set price
      * @param float $price
-     * @return \Mygento\Sample\Api\Data\CustomeraddressInterface
+     * @return \Mygento\Samplemodule\Api\Data\CustomeraddressInterface
      */
     public function setPrice($price)
     {

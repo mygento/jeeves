@@ -1,21 +1,21 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Banner;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
 
-class InlineEdit extends \Mygento\Sample\Controller\Adminhtml\Banner
+class InlineEdit extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
 {
     /** @var \Magento\Framework\Controller\Result\JsonFactory */
     private $jsonFactory;
 
     /**
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Mygento\Sample\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Mygento\Sample\Api\BannerRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {

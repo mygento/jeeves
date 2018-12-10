@@ -1,5 +1,5 @@
 Mygento:
-  Sample:
+  SampleModule:
     CustomerAddress:
       columns:
         id:

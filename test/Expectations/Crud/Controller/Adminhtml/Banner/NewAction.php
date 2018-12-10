@@ -1,21 +1,21 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Banner;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
 
-class NewAction extends \Mygento\Sample\Controller\Adminhtml\Banner
+class NewAction extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
 {
     /** @var \Magento\Backend\Model\View\Result\ForwardFactory */
     private $resultForwardFactory;
 
     /**
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Mygento\Sample\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Mygento\Sample\Api\BannerRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {

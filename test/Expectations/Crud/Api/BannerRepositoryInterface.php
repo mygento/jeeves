@@ -1,14 +1,14 @@
 <?php
 
-namespace Mygento\Sample\Api;
+namespace Mygento\Samplemodule\Api;
 
 interface BannerRepositoryInterface
 {
     /**
      * Save banner
-     * @param \Mygento\Sample\Api\Data\BannerInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\BannerInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function save(Data\BannerInterface $entity);
 
@@ -16,7 +16,7 @@ interface BannerRepositoryInterface
      * Retrieve banner
      * @param int $entityId
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\BannerInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
      */
     public function getById($entityId);
 
@@ -24,13 +24,13 @@ interface BannerRepositoryInterface
      * Retrieve banner entities matching the specified criteria
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\Sample\Api\Data\BannerSearchResultsInterface
+     * @return \Mygento\Samplemodule\Api\Data\BannerSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete banner
-     * @param \Mygento\Sample\Api\Data\BannerInterface $entity
+     * @param \Mygento\Samplemodule\Api\Data\BannerInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool true on success
      */

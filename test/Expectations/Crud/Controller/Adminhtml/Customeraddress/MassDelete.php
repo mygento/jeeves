@@ -1,26 +1,26 @@
 <?php
 
-namespace Mygento\Sample\Controller\Adminhtml\Customeraddress;
+namespace Mygento\Samplemodule\Controller\Adminhtml\Customeraddress;
 
-class MassDelete extends \Mygento\Sample\Controller\Adminhtml\Customeraddress
+class MassDelete extends \Mygento\Samplemodule\Controller\Adminhtml\Customeraddress
 {
     /** @var \Magento\Ui\Component\MassAction\Filter */
     private $filter;
 
-    /** @var \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory */
+    /** @var \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory */
     private $collectionFactory;
 
     /**
-     * @param \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
+     * @param \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory
      * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository
+     * @param \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Sample\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory,
+        \Mygento\Samplemodule\Model\ResourceModel\Customeraddress\CollectionFactory $collectionFactory,
         \Magento\Ui\Component\MassAction\Filter $filter,
-        \Mygento\Sample\Api\CustomeraddressRepositoryInterface $repository,
+        \Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {

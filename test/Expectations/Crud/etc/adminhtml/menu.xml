@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Mygento_Sample::sample" title="Sample" translate="title" module="Mygento_Sample" sortOrder="90" parent="Magento_Backend::stores" resource="Mygento_Sample::sample"/>
-        <add id="Mygento_Sample::sample_customeraddress" title="Customeraddress" translate="title" module="Mygento_Sample" sortOrder="90" parent="Mygento_Sample::sample" action="sample/customeraddress" resource="Mygento_Sample::sample_customeraddress"/>
-        <add id="Mygento_Sample::sample_banner" title="Banner" translate="title" module="Mygento_Sample" sortOrder="90" parent="Mygento_Sample::sample" action="sample/banner" resource="Mygento_Sample::sample_banner"/>
+        <add id="Mygento_Samplemodule::samplemodule" title="Samplemodule" translate="title" module="Mygento_Samplemodule" sortOrder="90" parent="Magento_Backend::stores" resource="Mygento_Samplemodule::samplemodule"/>
+        <add id="Mygento_Samplemodule::samplemodule_customeraddress" title="Customeraddress" translate="title" module="Mygento_Samplemodule" sortOrder="90" parent="Mygento_Samplemodule::samplemodule" action="samplemodule/customeraddress" resource="Mygento_Samplemodule::samplemodule_customeraddress"/>
+        <add id="Mygento_Samplemodule::samplemodule_banner" title="Banner" translate="title" module="Mygento_Samplemodule" sortOrder="90" parent="Mygento_Samplemodule::samplemodule" action="samplemodule/banner" resource="Mygento_Samplemodule::samplemodule_banner"/>
     </menu>
 </config>
