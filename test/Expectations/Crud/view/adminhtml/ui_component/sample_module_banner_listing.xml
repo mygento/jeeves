@@ -104,11 +104,6 @@
                 <indexField>id</indexField>
             </settings>
         </selectionsColumn>
-        <actionsColumn name="actions" class="Mygento\SampleModule\Ui\Component\Listing\BannerActions">
-            <settings>
-                <indexField>id</indexField>
-            </settings>
-        </actionsColumn>
         <column name="id">
             <settings>
                 <filter>textRange</filter>
@@ -153,5 +148,10 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
+        <actionsColumn name="actions" class="Mygento\SampleModule\Ui\Component\Listing\BannerActions">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>

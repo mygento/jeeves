@@ -44,7 +44,7 @@
         <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">banner</item>
+                    <item name="source" xsi:type="string">banner</item>
                 </item>
             </argument>
             <settings>
@@ -57,7 +57,7 @@
         <field name="name" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">banner</item>
+                    <item name="source" xsi:type="string">banner</item>
                 </item>
             </argument>
             <settings>
@@ -70,7 +70,7 @@
         <field name="subname" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">banner</item>
+                    <item name="source" xsi:type="string">banner</item>
                 </item>
             </argument>
             <settings>
@@ -83,7 +83,7 @@
         <field name="product_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">banner</item>
+                    <item name="source" xsi:type="string">banner</item>
                 </item>
             </argument>
             <settings>

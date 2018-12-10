@@ -169,6 +169,7 @@ class UiComponent extends Common
                                     ]
                                 ]
                             ],
+                        ], $columns, [
                             'actionsColumn' => [
                                 'attributes' => [
                                     'name' => 'actions',
@@ -180,7 +181,7 @@ class UiComponent extends Common
                                     ]
                                 ]
                             ]
-                        ], $columns)
+                        ])
                     ]
                 ]
             ]);
@@ -229,7 +230,7 @@ class UiComponent extends Common
                                         'item' => [
                                             'attributes' => [
                                                 'name' => 'source',
-                                                'xsi:string' => 'string',
+                                                'xsi:type' => 'string',
                                             ],
                                             'value' => $this->camelCaseToSnakeCase($entity),
                                         ]

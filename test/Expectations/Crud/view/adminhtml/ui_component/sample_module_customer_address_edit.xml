@@ -44,7 +44,7 @@
         <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customer_address</item>
+                    <item name="source" xsi:type="string">customer_address</item>
                 </item>
             </argument>
             <settings>
@@ -57,7 +57,7 @@
         <field name="city" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customer_address</item>
+                    <item name="source" xsi:type="string">customer_address</item>
                 </item>
             </argument>
             <settings>
@@ -70,7 +70,7 @@
         <field name="created_at" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customer_address</item>
+                    <item name="source" xsi:type="string">customer_address</item>
                 </item>
             </argument>
             <settings>
@@ -83,7 +83,7 @@
         <field name="updated_at" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customer_address</item>
+                    <item name="source" xsi:type="string">customer_address</item>
                 </item>
             </argument>
             <settings>
@@ -96,7 +96,7 @@
         <field name="price" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:string="string">customer_address</item>
+                    <item name="source" xsi:type="string">customer_address</item>
                 </item>
             </argument>
             <settings>
