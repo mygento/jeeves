@@ -53,6 +53,25 @@ class Common
     }
 
     /**
+     * Split At UpperCase
+     * @param  string $s
+     * @return string
+     */
+    public function splitAtUpperCase($s)
+    {
+        return implode(' ', preg_split('/(?=[A-Z])/', $s, -1, PREG_SPLIT_NO_EMPTY));
+    }
+
+    /**
+     * @param  string $entity
+     * @return string
+     */
+    public function getEntityName($entity)
+    {
+        return $this->splitAtUpperCase($this->snakeCaseToUpperCamelCase($entity));
+    }
+
+    /**
     * @param string $name
     * @param mixed $type
     * @return string

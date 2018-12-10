@@ -1,26 +1,26 @@
 <?php
 
-namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
+namespace Mygento\SampleModule\Controller\Adminhtml\Banner;
 
-class MassDelete extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
+class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
     /** @var \Magento\Ui\Component\MassAction\Filter */
     private $filter;
 
-    /** @var \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory */
+    /** @var \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory */
     private $collectionFactory;
 
     /**
-     * @param \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
+     * @param \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
      * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory,
+        \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory,
         \Magento\Ui\Component\MassAction\Filter $filter,
-        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
+        \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {

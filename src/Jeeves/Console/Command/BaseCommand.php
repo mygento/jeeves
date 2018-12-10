@@ -16,7 +16,15 @@ abstract class BaseCommand extends Command
      */
     private $io;
 
+    /**
+     * @var XmlManager
+     */
     private $xmlManager;
+
+    /**
+     * @var \Mygento\Jeeves\Generators\Crud\Common
+     */
+    private $converter;
 
     /**
      * @return IOInterface
@@ -92,6 +100,7 @@ abstract class BaseCommand extends Command
                 'lowercase_cast' => true,
                 'no_empty_comment' => true,
                 'no_empty_phpdoc' => true,
+                'return_type_declaration' => true,
             ])->setFinder($finder);
 
         $resolver = new \PhpCsFixer\Console\ConfigurationResolver($config, [], getcwd(), new \PhpCsFixer\ToolInfo());
@@ -157,5 +166,17 @@ abstract class BaseCommand extends Command
         }
         $io = $this->getIO();
         $io->write($output);
+    }
+
+    /**
+     * get Converter
+     * @return \Mygento\Jeeves\Generators\Crud\Common
+     */
+    protected function getConverter()
+    {
+        if (null === $this->converter) {
+            $this->converter = new \Mygento\Jeeves\Generators\Crud\Common();
+        }
+        return $this->converter;
     }
 }

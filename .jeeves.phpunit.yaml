@@ -1,6 +1,7 @@
 Mygento:
   SampleModule:
     CustomerAddress:
+      comment: 'Table for Customer Address'
       columns:
         id:
           type: int

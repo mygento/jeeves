@@ -1,13 +1,13 @@
 <?php
 
-namespace Mygento\Samplemodule\Model\Banner;
+namespace Mygento\SampleModule\Model\Banner;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory;
+use Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory;
 
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
-    /** @var \Mygento\Samplemodule\Model\ResourceModel\Banner\Collection */
+    /** @var \Mygento\SampleModule\Model\ResourceModel\Banner\Collection */
     protected $collection;
 
     /** @var DataPersistorInterface */
@@ -17,7 +17,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * @param \Mygento\Samplemodule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
+     * @param \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
      * @param string $name
      * @param string $primaryFieldName
@@ -51,12 +51,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($items as $model) {
             $this->loadedData[$model->getId()] = $model->getData();
         }
-        $data = $this->dataPersistor->get('samplemodule_banner');
+        $data = $this->dataPersistor->get('sample_module_banner');
         if (!empty($data)) {
             $model = $this->collection->getNewEmptyItem();
             $model->setData($data);
             $this->loadedData[$model->getId()] = $model->getData();
-            $this->dataPersistor->clear('samplemodule_banner');
+            $this->dataPersistor->clear('sample_module_banner');
         }
         return $this->loadedData;
     }

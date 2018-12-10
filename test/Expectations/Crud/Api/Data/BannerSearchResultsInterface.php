@@ -1,18 +1,18 @@
 <?php
 
-namespace Mygento\Samplemodule\Api\Data;
+namespace Mygento\SampleModule\Api\Data;
 
 interface BannerSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
-     * Get list of banner
-     * @return \Mygento\Samplemodule\Api\Data\BannerInterface[]
+     * Get list of Banner
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface[]
      */
     public function getItems();
 
     /**
-     * Set list of banner
-     * @param \Mygento\Samplemodule\Api\Data\BannerInterface[] $items
+     * Set list of Banner
+     * @param \Mygento\SampleModule\Api\Data\BannerInterface[] $items
      */
     public function setItems(array $items);
 }

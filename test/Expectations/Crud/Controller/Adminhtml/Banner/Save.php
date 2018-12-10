@@ -1,22 +1,22 @@
 <?php
 
-namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
+namespace Mygento\SampleModule\Controller\Adminhtml\Banner;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
+class Save extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
     /**
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\Samplemodule\Model\BannerFactory $entityFactory
-     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\SampleModule\Model\BannerFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\Samplemodule\Model\BannerFactory $entityFactory,
-        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
+        \Mygento\SampleModule\Model\BannerFactory $entityFactory,
+        \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -50,7 +50,7 @@ class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
                 if (!$entity->getId() && $entityId) {
                     $this
                         ->messageManager
-                        ->addErrorMessage(__('This Banner no longer exists.'));
+                        ->addErrorMessage(__('This Banner no longer exists'));
                     return $resultRedirect->setPath('*/*/');
                 }
             }
@@ -62,7 +62,7 @@ class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(__('You saved the Banner'));
-            $this->dataPersistor->clear('samplemodule_banner');
+            $this->dataPersistor->clear('sample_module_banner');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
             }
@@ -72,7 +72,7 @@ class Save extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Banner'));
         }
-        $this->dataPersistor->set('samplemodule_banner', $data);
+        $this->dataPersistor->set('sample_module_banner', $data);
         return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
     }
 }

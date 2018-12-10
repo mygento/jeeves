@@ -210,7 +210,7 @@ class UiComponent extends Common
                 return [
                     'name' => 'field',
                     'attributes' => [
-                        'name' => strtolower($name),
+                        'name' => $this->camelCaseToSnakeCase($name),
                         'formElement' => 'input',
                     ],
                     'value' => [
@@ -231,7 +231,7 @@ class UiComponent extends Common
                                                 'name' => 'source',
                                                 'xsi:string' => 'string',
                                             ],
-                                            'value' => strtolower($entity),
+                                            'value' => $this->camelCaseToSnakeCase($entity),
                                         ]
                                     ]
                                 ]
@@ -245,7 +245,8 @@ class UiComponent extends Common
                                 ],
                                 'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
-                            'dataScope' => strtolower($name),
+                            'visible' => $this->camelCaseToSnakeCase($name) === 'id' ? 'false' : 'true',
+                            'dataScope' => $this->camelCaseToSnakeCase($name),
                         ]
                     ]
                 ];

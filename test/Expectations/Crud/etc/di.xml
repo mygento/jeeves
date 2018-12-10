@@ -1,41 +1,41 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface" type="Mygento\Samplemodule\Model\CustomeraddressRepository"/>
-    <preference for="Mygento\Samplemodule\Api\BannerRepositoryInterface" type="Mygento\Samplemodule\Model\BannerRepository"/>
-    <preference for="Mygento\Samplemodule\Api\Data\CustomeraddressInterface" type="Mygento\Samplemodule\Model\Customeraddress"/>
-    <preference for="Mygento\Samplemodule\Api\Data\BannerInterface" type="Mygento\Samplemodule\Model\Banner"/>
-    <preference for="Mygento\Samplemodule\Api\Data\CustomeraddressSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Mygento\Samplemodule\Api\Data\BannerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Mygento\SampleModule\Api\CustomerAddressRepositoryInterface" type="Mygento\SampleModule\Model\CustomerAddressRepository"/>
+    <preference for="Mygento\SampleModule\Api\BannerRepositoryInterface" type="Mygento\SampleModule\Model\BannerRepository"/>
+    <preference for="Mygento\SampleModule\Api\Data\CustomerAddressInterface" type="Mygento\SampleModule\Model\CustomerAddress"/>
+    <preference for="Mygento\SampleModule\Api\Data\BannerInterface" type="Mygento\SampleModule\Model\Banner"/>
+    <preference for="Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\BannerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
-                <item name="Mygento\Samplemodule\Api\Data\CustomeraddressInterface" xsi:type="string">Mygento\Samplemodule\Api\CustomeraddressRepositoryInterface</item>
-                <item name="Mygento\Samplemodule\Api\Data\BannerInterface" xsi:type="string">Mygento\Samplemodule\Api\BannerRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\CustomerAddressInterface" xsi:type="string">Mygento\SampleModule\Api\CustomerAddressRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\BannerInterface" xsi:type="string">Mygento\SampleModule\Api\BannerRepositoryInterface</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="samplemodule_customeraddress_listing_data_source" xsi:type="string">Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Grid\Collection</item>
-                <item name="samplemodule_banner_listing_data_source" xsi:type="string">Mygento\Samplemodule\Model\ResourceModel\Banner\Grid\Collection</item>
+                <item name="sample_module_customer_address_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection</item>
+                <item name="sample_module_banner_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Banner\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
-    <type name="Mygento\Samplemodule\Model\ResourceModel\Customeraddress\Grid\Collection">
+    <type name="Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">mygento_samplemodule_customeraddress</argument>
-            <argument name="eventPrefix" xsi:type="string">samplemodule_customeraddress_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">customeraddress_grid_collection</argument>
-            <argument name="resourceModel" xsi:type="string">Mygento\Samplemodule\Model\ResourceModel\Customeraddress</argument>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_customer_address</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_customer_address_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_address_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress</argument>
         </arguments>
     </type>
-    <type name="Mygento\Samplemodule\Model\ResourceModel\Banner\Grid\Collection">
+    <type name="Mygento\SampleModule\Model\ResourceModel\Banner\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">mygento_samplemodule_banner</argument>
-            <argument name="eventPrefix" xsi:type="string">samplemodule_banner_grid_collection</argument>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_banner</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_banner_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">banner_grid_collection</argument>
-            <argument name="resourceModel" xsi:type="string">Mygento\Samplemodule\Model\ResourceModel\Banner</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Banner</argument>
         </arguments>
     </type>
 </config>

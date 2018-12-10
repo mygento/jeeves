@@ -27,9 +27,9 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkInterfaces()
     {
-        $this->checkFile('Api/CustomeraddressRepositoryInterface.php');
-        $this->checkFile('Api/Data/CustomeraddressInterface.php');
-        $this->checkFile('Api/Data/CustomeraddressSearchResultsInterface.php');
+        $this->checkFile('Api/CustomerAddressRepositoryInterface.php');
+        $this->checkFile('Api/Data/CustomerAddressInterface.php');
+        $this->checkFile('Api/Data/CustomerAddressSearchResultsInterface.php');
 
         $this->checkFile('Api/BannerRepositoryInterface.php');
         $this->checkFile('Api/Data/BannerInterface.php');
@@ -38,9 +38,9 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkModels()
     {
-        $this->checkFile('Model/Customeraddress.php');
-        $this->checkFile('Model/ResourceModel/Customeraddress.php');
-        $this->checkFile('Model/ResourceModel/Customeraddress/Collection.php');
+        $this->checkFile('Model/CustomerAddress.php');
+        $this->checkFile('Model/ResourceModel/CustomerAddress.php');
+        $this->checkFile('Model/ResourceModel/CustomerAddress/Collection.php');
 
         $this->checkFile('Model/Banner.php');
         $this->checkFile('Model/ResourceModel/Banner.php');
@@ -49,7 +49,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkRepository()
     {
-        $this->checkFile('Model/CustomeraddressRepository.php');
+        $this->checkFile('Model/CustomerAddressRepository.php');
 
         $this->checkFile('Model/BannerRepository.php');
     }
@@ -67,14 +67,14 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkControllers()
     {
-        $this->checkFile('Controller/Adminhtml/Customeraddress.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/Delete.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/Edit.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/Index.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/InlineEdit.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/MassDelete.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/NewAction.php');
-        $this->checkFile('Controller/Adminhtml/Customeraddress/Save.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/Delete.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/Edit.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/Index.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/InlineEdit.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/MassDelete.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/NewAction.php');
+        $this->checkFile('Controller/Adminhtml/CustomerAddress/Save.php');
 
         $this->checkFile('Controller/Adminhtml/Banner.php');
         $this->checkFile('Controller/Adminhtml/Banner/Delete.php');
@@ -88,27 +88,27 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkLayout()
     {
-        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_edit.xml');
-        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_index.xml');
-        $this->checkXml('view/adminhtml/layout/samplemodule_customeraddress_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_edit.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_new.xml');
 
-        $this->checkXml('view/adminhtml/layout/samplemodule_banner_edit.xml');
-        $this->checkXml('view/adminhtml/layout/samplemodule_banner_index.xml');
-        $this->checkXml('view/adminhtml/layout/samplemodule_banner_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_banner_edit.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_banner_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_banner_new.xml');
     }
 
     private function checkUi()
     {
-        $this->checkFile('Ui/Component/Listing/CustomeraddressActions.php');
-        $this->checkFile('Model/Customeraddress/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/samplemodule_customeraddress_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/samplemodule_customeraddress_edit.xml');
-        $this->checkFile('Model/ResourceModel/Customeraddress/Grid/Collection.php');
+        $this->checkFile('Ui/Component/Listing/CustomerAddressActions.php');
+        $this->checkFile('Model/CustomerAddress/DataProvider.php');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_customer_address_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_customer_address_edit.xml');
+        $this->checkFile('Model/ResourceModel/CustomerAddress/Grid/Collection.php');
 
         $this->checkFile('Ui/Component/Listing/BannerActions.php');
         $this->checkFile('Model/Banner/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/samplemodule_banner_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/samplemodule_banner_edit.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_banner_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_banner_edit.xml');
         $this->checkFile('Model/ResourceModel/Banner/Grid/Collection.php');
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Mygento\Samplemodule\Ui\Component\Listing;
+namespace Mygento\SampleModule\Ui\Component\Listing;
 
 class BannerActions extends \Mygento\Base\Ui\Component\Listing\Actions
 {
     /** @var string */
-    protected $route = 'samplemodule';
+    protected $route = 'sample_module';
 
     /** @var string */
     protected $controller = 'banner';

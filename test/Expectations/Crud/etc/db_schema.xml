@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="mygento_samplemodule_customeraddress" resource="default" engine="innodb" comment="comment">
+    <table name="mygento_sample_module_customer_address" resource="default" engine="innodb" comment="Table for Customer Address">
         <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" padding="10" comment="Address ID"/>
         <column xsi:type="varchar" name="city" nullable="false" length="100" comment="City"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Create time"/>
@@ -13,7 +13,7 @@
             <column name="city"/>
         </index>
     </table>
-    <table name="mygento_samplemodule_banner" resource="default" engine="innodb" comment="comment">
+    <table name="mygento_sample_module_banner" resource="default" engine="innodb" comment="mygento_sample_module_banner Table">
         <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" padding="10" comment="Banner ID"/>
         <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name"/>
         <column xsi:type="varchar" name="subname" nullable="false" length="255" comment="Subname"/>
@@ -25,7 +25,7 @@
             <column name="name"/>
             <column name="subname"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_samplemodule_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_module_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
         <index referenceId="IX_PR_ID" indexType="btree">
             <column name="product_id"/>
         </index>

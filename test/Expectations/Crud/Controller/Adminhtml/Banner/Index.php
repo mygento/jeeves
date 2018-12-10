@@ -1,21 +1,21 @@
 <?php
 
-namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
+namespace Mygento\SampleModule\Controller\Adminhtml\Banner;
 
-class Index extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
+class Index extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
+        \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -35,7 +35,7 @@ class Index extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
         $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Banner'));
 
         //$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
-        //$dataPersistor->clear('samplemodule_banner');
+        //$dataPersistor->clear('sample_module_banner');
         return $resultPage;
     }
 }

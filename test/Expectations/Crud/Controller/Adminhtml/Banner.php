@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Samplemodule\Controller\Adminhtml;
+namespace Mygento\SampleModule\Controller\Adminhtml;
 
 abstract class Banner extends \Magento\Backend\App\Action
 {
@@ -9,7 +9,7 @@ abstract class Banner extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Mygento_Samplemodule::samplemodule_banner';
+    const ADMIN_RESOURCE = 'Mygento_SampleModule::sample_module_banner';
 
     /**
      * Core registry
@@ -21,17 +21,17 @@ abstract class Banner extends \Magento\Backend\App\Action
     /**
      * Banner repository
      *
-     * @var \Mygento\Samplemodule\Api\BannerRepositoryInterface
+     * @var \Mygento\SampleModule\Api\BannerRepositoryInterface
      */
     protected $repository;
 
     /**
-     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
+        \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -48,7 +48,7 @@ abstract class Banner extends \Magento\Backend\App\Action
      */
     protected function initPage($resultPage)
     {
-        $resultPage->setActiveMenu('Mygento_Samplemodule::banner');
+        $resultPage->setActiveMenu('Mygento_SampleModule::banner');
         //->addBreadcrumb(__('Banner'), __('Banner'));
         return $resultPage;
     }

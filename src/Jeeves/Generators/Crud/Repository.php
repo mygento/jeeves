@@ -4,7 +4,7 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
 
-class Repository
+class Repository extends Common
 {
     public function genRepository(
         $className,

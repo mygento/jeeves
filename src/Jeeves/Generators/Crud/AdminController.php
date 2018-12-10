@@ -3,10 +3,12 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
 
-class AdminController
+class AdminController extends Common
 {
     public function genAdminAbstractController($className, $fullName, $acl, $repository, $rootNamespace)
     {
+        $entityName = $this->getEntityName($className);
+
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
         $class = $namespace->addClass($className)
             ->setAbstract()
@@ -50,8 +52,8 @@ class AdminController
             ->addComment('')
             ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
             ->addComment('@return \Magento\Backend\Model\View\Result\Page')
-            ->setBody('$resultPage->setActiveMenu(\'' . $fullName . '::' . strtolower($className) . '\');' . PHP_EOL
-            . '//->addBreadcrumb(__(\'' . $className . '\'), __(\'' . $className . '\'));' . PHP_EOL
+            ->setBody('$resultPage->setActiveMenu(\'' . $fullName . '::' . $this->camelCaseToSnakeCase($className) . '\');' . PHP_EOL
+            . '//->addBreadcrumb(__(\'' . $entityName . '\'), __(\'' . $entityName . '\'));' . PHP_EOL
             . 'return $resultPage;');
         $init->addParameter('resultPage');
         return $namespace;
@@ -59,6 +61,7 @@ class AdminController
 
     public function genAdminViewController($entity, $shortName, $repository, $rootNamespace)
     {
+        $entityName = $this->getEntityName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Index')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
@@ -88,9 +91,9 @@ class AdminController
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
-                . '$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\'' . $entity . '\'));' . PHP_EOL . PHP_EOL
+                . '$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL . PHP_EOL
                 . '//$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);' . PHP_EOL
-                . '//$dataPersistor->clear(\'' . $shortName . '\');' . PHP_EOL
+                . '//$dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . 'return $resultPage;');
         return $namespace;
     }
@@ -102,6 +105,8 @@ class AdminController
         $entityClass,
         $rootNamespace
     ) {
+        $entityName = $this->getEntityName($entity);
+
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Edit')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
@@ -134,7 +139,7 @@ class AdminController
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
         $class->addMethod('execute')
-            ->addComment('Edit ' . $entity . ' action')
+            ->addComment('Edit ' . $entityName . ' action')
             ->addComment('')
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody('$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
@@ -143,22 +148,22 @@ class AdminController
                 . 'try {' . PHP_EOL
                 . '$entity = $this->repository->getById($entityId);' . PHP_EOL
                 . '} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {' . PHP_EOL
-                . '$this->messageManager->addError(__(\'This ' . $entity . ' no longer exists.\'));' . PHP_EOL
+                . '$this->messageManager->addError(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
                 . '/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '}' . PHP_EOL
                 . '}' . PHP_EOL
-                . '$this->coreRegistry->register(\'' . $shortName . '\', $entity);' . PHP_EOL . PHP_EOL
+                . '$this->coreRegistry->register(\'' . $this->camelCaseToSnakeCase($shortName) . '\', $entity);' . PHP_EOL . PHP_EOL
                 . '/** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
                 . '$this->initPage($resultPage)->addBreadcrumb(' . PHP_EOL
-                . '    $entityId ? __(\'Edit ' . $entity . '\') : __(\'New ' . $entity . '\'),' . PHP_EOL
-                . '    $entityId ? __(\'Edit ' . $entity . '\') : __(\'New ' . $entity . '\')' . PHP_EOL
+                . '    $entityId ? __(\'Edit ' . $entityName . '\') : __(\'New ' . $entityName . '\'),' . PHP_EOL
+                . '    $entityId ? __(\'Edit ' . $entityName . '\') : __(\'New ' . $entityName . '\')' . PHP_EOL
                 . ');' . PHP_EOL
-                . '$resultPage->getConfig()->getTitle()->prepend(__(\'' . $entity . '\'));' . PHP_EOL
+                . '$resultPage->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL
                 . '$resultPage->getConfig()->getTitle()->prepend(' . PHP_EOL
-                . '    $entity->getId() ? $entity->getTitle() : __(\'New ' . $entity . '\')' . PHP_EOL
+                . '    $entity->getId() ? $entity->getTitle() : __(\'New ' . $entityName . '\')' . PHP_EOL
                 . ');' . PHP_EOL
                 . 'return $resultPage;');
 
@@ -172,6 +177,7 @@ class AdminController
         $entityClass,
         $rootNamespace
     ) {
+        $entityName = $this->getEntityName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
         $class = $namespace->addClass('Save')
@@ -218,7 +224,7 @@ class AdminController
                 . '        if (!$entity->getId() && $entityId) {' . PHP_EOL
                 . '            $this' . PHP_EOL
                 . '                ->messageManager' . PHP_EOL
-                . '                ->addErrorMessage(__(\'This ' . $entity . ' no longer exists.\'));' . PHP_EOL
+                . '                ->addErrorMessage(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
                 . '            return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '        }' . PHP_EOL
                 . '    }' . PHP_EOL
@@ -229,8 +235,8 @@ class AdminController
                 . '$entity->setData($data);' . PHP_EOL
                 . 'try {' . PHP_EOL
                 . '    $this->repository->save($entity);' . PHP_EOL
-                . '    $this->messageManager->addSuccessMessage(__(\'You saved the ' . $entity . '\'));' . PHP_EOL
-                . '    $this->dataPersistor->clear(\'' . $shortName . '\');' . PHP_EOL
+                . '    $this->messageManager->addSuccessMessage(__(\'You saved the ' . $entityName . '\'));' . PHP_EOL
+                . '    $this->dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . '    if ($this->getRequest()->getParam(\'back\')) {' . PHP_EOL
                 . '        return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $entity->getId()]);' . PHP_EOL
                 . '    }' . PHP_EOL
@@ -238,9 +244,9 @@ class AdminController
                 . '} catch (LocalizedException $e) {' . PHP_EOL
                 . '    $this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
-                . '    $this->messageManager->addExceptionMessage($e, __(\'Something went wrong while saving the ' . $entity . '\'));' . PHP_EOL
+                . '    $this->messageManager->addExceptionMessage($e, __(\'Something went wrong while saving the ' . $entityName . '\'));' . PHP_EOL
                 . '}' . PHP_EOL
-                . '$this->dataPersistor->set(\'' . $shortName . '\', $data);' . PHP_EOL
+                . '$this->dataPersistor->set(\'' . $this->camelCaseToSnakeCase($shortName) . '\', $data);' . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $this->getRequest()->getParam(\'id\')]);');
 
         return $namespace;
@@ -254,21 +260,22 @@ class AdminController
         $class = $namespace->addClass('Delete')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
         ;
+        $entityName = $this->getEntityName($entity);
 
         $class->addMethod('execute')
-            ->addComment('Delete ' . $entity . ' action')
+            ->addComment('Delete ' . $entityName . ' action')
             ->addComment('')
             ->addComment('@return \Magento\Framework\Controller\ResultInterface')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
                 . '$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . 'if (!$entityId) {' . PHP_EOL
-                . '    $this->messageManager->addErrorMessage(__(\'We can not find a ' . $entity . ' to delete.\'));' . PHP_EOL
+                . '    $this->messageManager->addErrorMessage(__(\'We can not find a ' . $entityName . ' to delete.\'));' . PHP_EOL
                 . '     return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '}' . PHP_EOL
                 . 'try {' . PHP_EOL
                 . '    $this->repository->deleteById($entityId);' . PHP_EOL
-                . '    $this->messageManager->addSuccessMessage(__(\'You deleted the ' . $entity . '\'));' . PHP_EOL
+                . '    $this->messageManager->addSuccessMessage(__(\'You deleted the ' . $entityName . '\'));' . PHP_EOL
                 . '    return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
                 . '    $this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL

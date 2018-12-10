@@ -1,26 +1,26 @@
 <?php
 
-namespace Mygento\Samplemodule\Controller\Adminhtml\Banner;
+namespace Mygento\SampleModule\Controller\Adminhtml\Banner;
 
-class Edit extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
+class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
-    /** @var \Mygento\Samplemodule\Model\BannerFactory */
+    /** @var \Mygento\SampleModule\Model\BannerFactory */
     private $entityFactory;
 
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
-     * @param \Mygento\Samplemodule\Model\BannerFactory $entityFactory
+     * @param \Mygento\SampleModule\Model\BannerFactory $entityFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository
+     * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\Samplemodule\Model\BannerFactory $entityFactory,
+        \Mygento\SampleModule\Model\BannerFactory $entityFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Mygento\Samplemodule\Api\BannerRepositoryInterface $repository,
+        \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
@@ -42,13 +42,13 @@ class Edit extends \Mygento\Samplemodule\Controller\Adminhtml\Banner
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->messageManager->addError(__('This Banner no longer exists.'));
+                $this->messageManager->addError(__('This Banner no longer exists'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        $this->coreRegistry->register('samplemodule_banner', $entity);
+        $this->coreRegistry->register('sample_module_banner', $entity);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

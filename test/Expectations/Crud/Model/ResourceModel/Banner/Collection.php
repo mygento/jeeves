@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Samplemodule\Model\ResourceModel\Banner;
+namespace Mygento\SampleModule\Model\ResourceModel\Banner;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -13,8 +13,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-           \Mygento\Samplemodule\Model\Banner::class,
-           \Mygento\Samplemodule\Model\ResourceModel\Banner::class
+           \Mygento\SampleModule\Model\Banner::class,
+           \Mygento\SampleModule\Model\ResourceModel\Banner::class
         );
     }
 }

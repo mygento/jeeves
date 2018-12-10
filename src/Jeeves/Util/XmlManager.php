@@ -60,7 +60,7 @@ class XmlManager
                 return [
                     'name' => 'item',
                     'attributes' => [
-                        'name' => $module . '_' . $entity . '_listing_data_source',
+                        'name' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_listing_data_source',
                         'xsi:type' => 'string'
                     ],
                     'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
@@ -91,7 +91,7 @@ class XmlManager
                                     'name' => 'eventPrefix',
                                     'xsi:type' => 'string'
                                 ],
-                                'value' => $module . '_' . $entity . '_grid_collection',
+                                'value' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
                             ],
                             [
                                 'name' => 'argument',
@@ -99,7 +99,7 @@ class XmlManager
                                     'name' => 'eventObject',
                                     'xsi:type' => 'string'
                                 ],
-                                'value' => $entity . '_grid_collection',
+                                'value' => $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
                             ],
                             [
                                 'name' => 'argument',
@@ -192,7 +192,7 @@ class XmlManager
                   [
                     'name' => 'route',
                     'attributes' => [
-                      'id' => strtolower($module),
+                      'id' => $this->getConverter()->camelCaseToSnakeCase($module),
                       'frontName' => $path,
                     ],
                     'value' => [
@@ -215,14 +215,18 @@ class XmlManager
                 return [
                     'name'=> 'add',
                     'attributes' => [
-                      'id' => $fullname . '::' . $module . '_' . $entity,
-                      'title' => ucfirst($entity),
+                      'id' => $fullname . '::'
+                        . $this->getConverter()->camelCaseToSnakeCase($module)
+                        . '_' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                      'title' => $this->getConverter()->splitAtUpperCase($entity),
                       'translate' => 'title',
                       'module' => $fullname,
                       'sortOrder' => '90',
-                      'parent' => $fullname . '::' . $module,
-                      'action' => $path . '/' . $entity,
-                      'resource' => $fullname . '::' . $module . '_' . $entity,
+                      'parent' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($module),
+                      'action' => $path . '/' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                      'resource' => $fullname . '::'
+                        . $this->getConverter()->camelCaseToSnakeCase($module)
+                        . '_' . $this->getConverter()->camelCaseToSnakeCase($entity),
                     ],
                 ];
             },
@@ -233,13 +237,13 @@ class XmlManager
         $common = [
             'name'=> 'add',
             'attributes' => [
-              'id' => $fullname . '::' . $module,
-              'title' => ucfirst($module),
+              'id' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($module),
+              'title' => $this->getConverter()->splitAtUpperCase($module),
               'translate' => 'title',
               'module' => $fullname,
               'sortOrder' => '90',
               'parent' => 'Magento_Backend::stores',
-              'resource' => $fullname . '::' . $module,
+              'resource' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($module),
             ],
         ];
         return $service->write('config', function ($writer) use ($common, $entityList) {
@@ -259,8 +263,11 @@ class XmlManager
                 return [
                     'name' => 'resource',
                     'attributes' => [
-                        'id' => $fullname . '::' . $module . '_' . $entity,
-                        'title' => ucfirst($module) . ' ' . ucfirst($entity),
+                        'id' => $fullname . '::'
+                          . $this->getConverter()->camelCaseToSnakeCase($module)
+                          . '_' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'title' => $this->getConverter()->splitAtUpperCase($module)
+                            . ' ' . $this->getConverter()->splitAtUpperCase($entity),
                         'translate' => 'title'
                     ],
                 ];
@@ -281,8 +288,9 @@ class XmlManager
                                 [
                                     'name' => 'resource',
                                     'attributes' => [
-                                        'id' => $fullname . '::' . $module,
-                                        'title' => ucfirst($module),
+                                        'id' => $fullname . '::'
+                                          . $this->getConverter()->camelCaseToSnakeCase($module),
+                                        'title' => $this->getConverter()->splitAtUpperCase($module),
                                         'translate' => 'title'
                                     ],
                                     'value' => $entityList,
@@ -306,7 +314,7 @@ class XmlManager
                                                         'resource' => [
                                                             'attributes' => [
                                                                 'id' => $fullname . '::config',
-                                                                'title' => str_replace('_', ' ', $fullname),
+                                                                'title' => $this->getConverter()->splitAtUpperCase($fullname),
                                                                 'translate' => 'title'
                                                             ],
                                                         ],
@@ -440,7 +448,7 @@ class XmlManager
                         'name' => $tablename,
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => 'comment',
+                        'comment' => $entity['comment'] ?? $tablename . ' Table',
                     ],
                     'value' => array_merge(
                         $columnList,
@@ -537,5 +545,14 @@ class XmlManager
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
         return $service;
+    }
+
+    /**
+     * Get Converter
+     * @return \Mygento\Jeeves\Generators\Crud\Common
+     */
+    private function getConverter()
+    {
+        return new \Mygento\Jeeves\Generators\Crud\Common();
     }
 }

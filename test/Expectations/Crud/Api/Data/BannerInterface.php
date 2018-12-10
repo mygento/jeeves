@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Samplemodule\Api\Data;
+namespace Mygento\SampleModule\Api\Data;
 
 interface BannerInterface
 {
@@ -18,7 +18,7 @@ interface BannerInterface
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function setId($id);
 
@@ -31,7 +31,7 @@ interface BannerInterface
     /**
      * Set name
      * @param string $name
-     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function setName($name);
 
@@ -44,7 +44,7 @@ interface BannerInterface
     /**
      * Set subname
      * @param string $subname
-     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function setSubname($subname);
 
@@ -57,7 +57,7 @@ interface BannerInterface
     /**
      * Set product id
      * @param int $productId
-     * @return \Mygento\Samplemodule\Api\Data\BannerInterface
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function setProductId($productId);
 }

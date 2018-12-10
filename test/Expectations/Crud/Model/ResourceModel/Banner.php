@@ -1,6 +1,6 @@
 <?php
 
-namespace Mygento\Samplemodule\Model\ResourceModel;
+namespace Mygento\SampleModule\Model\ResourceModel;
 
 class Banner extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -10,6 +10,6 @@ class Banner extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('mygento_samplemodule_banner', 'id');
+        $this->_init('mygento_sample_module_banner', 'id');
     }
 }

@@ -162,20 +162,22 @@ EOT
     private function genModule($input, $vendor, $module, $entity, $config)
     {
         $io = $this->getIO();
-        $this->vendor = strtolower($vendor);
-        $this->module = strtolower($module);
-        $entity = strtolower($entity);
+        $this->vendor = $vendor;
+        $this->module = $module;
         $this->api = $config['api'] ?? false;
         $this->gui = $config['gui'] ?? true;
 
-        $tablename = $config['tablename'] ?? $this->vendor . '_' . $this->module . '_' . $entity;
+        $tablename = $config['tablename'] ??
+            $this->getConverter()->camelCaseToSnakeCase($this->vendor)
+                . '_' . $this->getConverter()->camelCaseToSnakeCase($module)
+                . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
 
         if (!isset($config['route'])) {
             $config['route'] = [];
         }
 
         if (!isset($config['route']['admin']) || !$config['route']['admin']) {
-            $config['route']['admin'] = $this->module;
+            $config['route']['admin'] = $this->getConverter()->camelCaseToSnakeCase($this->module);
         }
 
         $routepath = $config['route']['admin'];
@@ -219,7 +221,7 @@ EOT
         //UI
         if ($this->gui) {
             $uiGenerator = new \Mygento\Jeeves\Generators\Crud\UiComponent();
-            $this->genAdminUI($uiGenerator, $entity, $fields);
+            $this->genAdminUI($uiGenerator, $entity, $routepath, $fields);
             $this->genGridCollection($uiGenerator, ucfirst($entity));
         }
 
@@ -250,7 +252,7 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genRepository(
                 $fileName,
-                ucfirst($this->module) . ' ' . $entityName,
+                $this->getConverter()->getEntityName($this->module) . ' ' . $this->getConverter()->getEntityName($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $namePath . 'Model\\ResourceModel\\' . $entityName,
                 $namePath . 'Model\\ResourceModel\\' . $entityName . '\\Collection',
@@ -495,7 +497,9 @@ EOT
             $generator->genAdminAbstractController(
                 $fileName,
                 $this->getFullname(),
-                $this->getFullname() . '::' . $this->module . '_' . $entity,
+                $this->getFullname()
+                    . '::' . $this->getConverter()->camelCaseToSnakeCase($this->module)
+                    . '_' . $this->getConverter()->camelCaseToSnakeCase($entity),
                 $namePath . 'Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 $this->getNamespace()
             )
@@ -504,29 +508,32 @@ EOT
 
     protected function genAdminLayouts($generator, $entity)
     {
-        $uiComponent = $this->module . '_' . $entity . '_listing';
-        $path = $this->module . '_' . $entity . '_index';
+        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
+            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $uiComponent = $parent . '_listing';
+        $path = $parent . '_index';
         $this->writeFile(
             $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutIndex($uiComponent)
         );
 
-        $editUiComponent = $this->module . '_' . $entity . '_edit';
-        $path = $this->module . '_' . $entity . '_edit';
+        $editUiComponent = $parent . '_edit';
+        $path = $parent . '_edit';
         $this->writeFile(
             $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutEdit($editUiComponent)
         );
 
-        $uiComponent = $this->module . '_' . $entity . '_new';
-        $path = $this->module . '_' . $entity . '_new';
+        $uiComponent = $parent . '_new';
+        $path = $parent . '_new';
         $this->writeFile(
             $this->path . '/view/adminhtml/layout/' . $path . '.xml',
             $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
         );
     }
 
-    protected function genAdminUI($generator, $entity, $fields)
+    protected function genAdminUI($generator, $entity, $routepath, $fields)
     {
         $filePath = $this->path . '/Ui/Component/Listing/';
         $fileName = ucfirst($entity) . 'Actions';
@@ -535,8 +542,8 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->getActions(
                 $entity,
-                $this->module,
-                $entity,
+                $routepath,
+                $this->getConverter()->camelCaseToSnakeCase($entity),
                 $this->getNamespace(),
                 ucfirst($entity) . 'Actions'
             )
@@ -553,31 +560,35 @@ EOT
                 $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
                 $this->getNamespace(),
                 $fileName,
-                $this->module . '_' . $entity
+                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity)
             )
         );
-        $uiComponent = $this->module . '_' . $entity . '_listing';
-        $common = $this->module . '_' . $entity . '_listing'
-            . '.'
-            . $this->module . '_' . $entity . '_listing.';
+
+        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
+            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $url = $this->getConverter()->camelCaseToSnakeCase($this->module) . '/' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $uiComponent = $parent . '_listing';
+        $common = $parent . '_listing' . '.' . $parent . '_listing.';
         $this->writeFile(
             $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
             $generator->generateAdminUiIndex(
                 $uiComponent,
                 $uiComponent . '_data_source',
-                $this->module . '_' . $entity . '_columns',
-                'Add New ' . ucfirst($entity),
-                $this->getFullname() . ':' . $entity,
+                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns',
+                'Add New ' . $this->getConverter()->getEntityName($entity),
+                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
                 $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
-                $this->module . '/' . $entity . '/inlineEdit',
-                $this->module . '/' . $entity . '/massDelete',
-                $common . $this->module . '_' . $entity . '_columns.ids',
-                $common . $this->module . '_' . $entity . '_columns_editor',
+                $url . '/inlineEdit',
+                $url . '/massDelete',
+                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns.ids',
+                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns_editor',
                 $fields
             )
         );
 
-        $uiComponent = $this->module . '_' . $entity . '_edit';
+        $uiComponent = $parent . '_edit';
         $dataSource = $uiComponent . '_data_source';
         $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
         $this->writeFile(
@@ -585,7 +596,7 @@ EOT
             $generator->generateAdminUiForm(
                 $uiComponent,
                 $dataSource,
-                $this->module . '/' . $entity . '/save',
+                $url . '/save',
                 $provider,
                 $entity,
                 $fields

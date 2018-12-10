@@ -3,14 +3,14 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Mygento_Samplemodule::samplemodule" title="Samplemodule" translate="title">
-                    <resource id="Mygento_Samplemodule::samplemodule_customeraddress" title="Samplemodule Customeraddress" translate="title"/>
-                    <resource id="Mygento_Samplemodule::samplemodule_banner" title="Samplemodule Banner" translate="title"/>
+                <resource id="Mygento_SampleModule::sample_module" title="Sample Module" translate="title">
+                    <resource id="Mygento_SampleModule::sample_module_customer_address" title="Sample Module Customer Address" translate="title"/>
+                    <resource id="Mygento_SampleModule::sample_module_banner" title="Sample Module Banner" translate="title"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mygento_Samplemodule::config" title="Mygento Samplemodule" translate="title"/>
+                            <resource id="Mygento_SampleModule::config" title="Mygento_ Sample Module" translate="title"/>
                         </resource>
                     </resource>
                 </resource>
