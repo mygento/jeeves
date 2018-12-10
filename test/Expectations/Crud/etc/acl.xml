@@ -10,7 +10,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mygento_SampleModule::config" title="Mygento_ Sample Module" translate="title"/>
+                            <resource id="Mygento_SampleModule::config" title="Mygento Sample Module" translate="title"/>
                         </resource>
                     </resource>
                 </resource>

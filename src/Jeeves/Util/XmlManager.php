@@ -314,7 +314,7 @@ class XmlManager
                                                         'resource' => [
                                                             'attributes' => [
                                                                 'id' => $fullname . '::config',
-                                                                'title' => $this->getConverter()->splitAtUpperCase($fullname),
+                                                                'title' => $this->getConverter()->getEntityName($fullname),
                                                                 'translate' => 'title'
                                                             ],
                                                         ],
