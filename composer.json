@@ -21,8 +21,8 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
-        "phpro/grumphp": "0.14.0",
-        "jakub-onderka/php-parallel-lint": "^0.9.2",
+        "phpro/grumphp": "^0.14.0",
+        "jakub-onderka/php-parallel-lint": "^1.0.0",
         "phpunit/phpunit": "^6.5"
     },
     "autoload": {
