@@ -23,6 +23,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkRepository();
         $this->checkGui();
         $this->checkXml('etc/di.xml');
+        $this->checkXml('etc/webapi.xml');
     }
 
     private function checkInterfaces()
@@ -128,6 +129,13 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->assertXmlFileEqualsXmlFile(
             \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
             'test/Expectations/Crud/'.$file
+        );
+        $this->assertFileEquals(
+            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
+            'test/Expectations/Crud/'.$file,
+            '',
+            false,
+            false
         );
     }
 }

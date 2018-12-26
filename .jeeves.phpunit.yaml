@@ -32,6 +32,7 @@ Mygento:
         IX_CITY:
           columns: ['city']
     Banner:
+      api: true
       columns:
         id:
           type: int

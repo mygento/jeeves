@@ -4,7 +4,7 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 class Api
 {
-    const VERSION = '/v1/';
+    const VERSION = '/V1/';
 
     public function generateAPI($entity, $repository, $acl, $prefix)
     {
