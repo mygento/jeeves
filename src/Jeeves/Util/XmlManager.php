@@ -529,7 +529,7 @@ class XmlManager
             'attributes' =>  array_merge([
                 'xsi:type' => $param['type'],
                 'name' => $column,
-                'nullable' => var_export($param['null'] ?? false, true),
+                'nullable' => var_export($param['nullable'] ?? false, true),
             ], $type, $optional, ['comment' => $param['comment'] ?? ucfirst($column)]),
         ];
     }
