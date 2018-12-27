@@ -11,7 +11,7 @@ Mygento:
           comment: 'Address ID'
         city:
           type: varchar
-          nullable: false
+          nullable: true
           comment: 'City'
           length: 100
         created_at:
