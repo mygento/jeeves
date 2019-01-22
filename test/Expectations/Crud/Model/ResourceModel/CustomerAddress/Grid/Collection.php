@@ -4,12 +4,11 @@ namespace Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Search\AggregationInterface;
 use Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Collection as ParentCollection;
 
 class Collection extends ParentCollection implements SearchResultInterface
 {
-    /** @var AggregationInterface */
+    /** @var \Magento\Framework\Api\Search\AggregationInterface */
     protected $aggregations;
 
     /**
@@ -54,7 +53,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     }
 
     /**
-     * @return \Magento\Framework\Search\AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations()
     {
@@ -62,7 +61,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     }
 
     /**
-     * @param \Magento\Framework\Search\AggregationInterface $aggregations
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations)
