@@ -493,7 +493,6 @@ class UiComponent extends Common
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
         $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
-        $namespace->addUse('Magento\Framework\Search\AggregationInterface');
         $namespace->addUse('Magento\Framework\Api\SearchCriteriaInterface');
         $namespace->addUse($collection, 'ParentCollection');
 
@@ -501,7 +500,7 @@ class UiComponent extends Common
         $class->setExtends($collection);
         $class->addImplement('Magento\Framework\Api\Search\SearchResultInterface');
         $class->addProperty('aggregations')
-            ->setVisibility('protected')->addComment('@var AggregationInterface');
+            ->setVisibility('protected')->addComment('@var \Magento\Framework\Api\Search\AggregationInterface');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory')
@@ -544,12 +543,12 @@ class UiComponent extends Common
             . '$this->setMainTable($mainTable);');
 
         $getAggregations = $class->addMethod('getAggregations')
-            ->addComment('@return \Magento\Framework\Search\AggregationInterface')
+            ->addComment('@return \Magento\Framework\Api\Search\AggregationInterface')
             ->setVisibility('public');
         $getAggregations->setBody('return $this->aggregations;');
 
         $setAggregations = $class->addMethod('setAggregations')
-            ->addComment('@param \Magento\Framework\Search\AggregationInterface $aggregations')
+            ->addComment('@param \Magento\Framework\Api\Search\AggregationInterface $aggregations')
             ->addComment('@return $this')
             ->setVisibility('public');
         $setAggregations->addParameter('aggregations');
