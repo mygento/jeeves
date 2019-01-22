@@ -552,7 +552,7 @@ class UiComponent extends Common
             ->addComment('@return $this')
             ->setVisibility('public');
         $setAggregations->addParameter('aggregations');
-        $setAggregations->setBody('$this->aggregations = $aggregations;');
+        $setAggregations->setBody('$this->aggregations = $aggregations;' . PHP_EOL . 'return $this;');
 
         $getSearchCriteria = $class->addMethod('getSearchCriteria')
             ->addComment('@return \Magento\Framework\Api\SearchCriteriaInterface|null')
