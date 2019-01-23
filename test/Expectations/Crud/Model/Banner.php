@@ -26,7 +26,7 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\SampleModule\Api\Data\BannerInterface
+     * @return $this
      */
     public function setId($id)
     {
@@ -45,7 +45,7 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     /**
      * Set name
      * @param string $name
-     * @return \Mygento\SampleModule\Api\Data\BannerInterface
+     * @return $this
      */
     public function setName($name)
     {
@@ -64,7 +64,7 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     /**
      * Set subname
      * @param string $subname
-     * @return \Mygento\SampleModule\Api\Data\BannerInterface
+     * @return $this
      */
     public function setSubname($subname)
     {
@@ -83,7 +83,7 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     /**
      * Set product id
      * @param int $productId
-     * @return \Mygento\SampleModule\Api\Data\BannerInterface
+     * @return $this
      */
     public function setProductId($productId)
     {

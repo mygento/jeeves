@@ -21,7 +21,7 @@ class Interfaces extends Common
             $interface->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))
                 ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
-                ->addComment('@return \\' . $rootNamespace . '\Api\Data\\' . $className)
+                ->addComment('@return $this')
                 ->setVisibility('public')
                 ->addParameter($this->snakeCaseToCamelCase($name));
         }

@@ -19,7 +19,7 @@ interface CustomerAddressInterface
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setId($id);
 
@@ -32,7 +32,7 @@ interface CustomerAddressInterface
     /**
      * Set city
      * @param string $city
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setCity($city);
 
@@ -45,7 +45,7 @@ interface CustomerAddressInterface
     /**
      * Set created at
      * @param string $createdAt
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setCreatedAt($createdAt);
 
@@ -58,7 +58,7 @@ interface CustomerAddressInterface
     /**
      * Set updated at
      * @param string $updatedAt
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setUpdatedAt($updatedAt);
 
@@ -71,7 +71,7 @@ interface CustomerAddressInterface
     /**
      * Set price
      * @param float $price
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setPrice($price);
 }

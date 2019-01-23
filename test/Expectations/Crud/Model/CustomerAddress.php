@@ -26,7 +26,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     /**
      * Set id
      * @param int $id
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setId($id)
     {
@@ -45,7 +45,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     /**
      * Set city
      * @param string $city
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setCity($city)
     {
@@ -64,7 +64,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     /**
      * Set created at
      * @param string $createdAt
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
@@ -83,7 +83,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     /**
      * Set updated at
      * @param string $updatedAt
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -102,7 +102,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     /**
      * Set price
      * @param float $price
-     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
+     * @return $this
      */
     public function setPrice($price)
     {

@@ -43,7 +43,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /**
      * @param int $entityId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Mygento\SampleModule\Model\Banner
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function getById($entityId)
     {
@@ -60,7 +60,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /**
      * @param \Mygento\SampleModule\Api\Data\BannerInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Mygento\SampleModule\Model\Banner
+     * @return \Mygento\SampleModule\Api\Data\BannerInterface
      */
     public function save(\Mygento\SampleModule\Api\Data\BannerInterface $entity)
     {

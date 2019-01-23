@@ -52,7 +52,7 @@ class Repository extends Common
 
         $getById = $class->addMethod('getById')
             ->addComment('@param int $entityId')
-            ->addComment('@return ' . $entity)
+            ->addComment('@return ' . $entityInterface)
             ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
             ->setVisibility('public');
 
@@ -68,7 +68,7 @@ class Repository extends Common
 
         $save = $class->addMethod('save')
             ->addComment('@param ' . $entityInterface . ' $entity')
-            ->addComment('@return ' . $entity)
+            ->addComment('@return ' . $entityInterface)
             ->addComment('@throws \Magento\Framework\Exception\CouldNotSaveException')
             ->setVisibility('public');
 

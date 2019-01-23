@@ -28,7 +28,7 @@ class Model extends Common
             $setter = $class->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))
                 ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
-                ->addComment('@return ' . $entInterface)
+                ->addComment('@return $this')
                 ->setVisibility('public');
             $setter->addParameter($this->snakeCaseToCamelCase($name));
             $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');

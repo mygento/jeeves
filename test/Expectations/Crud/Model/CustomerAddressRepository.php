@@ -43,7 +43,7 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     /**
      * @param int $entityId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Mygento\SampleModule\Model\CustomerAddress
+     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
      */
     public function getById($entityId)
     {
@@ -60,7 +60,7 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     /**
      * @param \Mygento\SampleModule\Api\Data\CustomerAddressInterface $entity
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Mygento\SampleModule\Model\CustomerAddress
+     * @return \Mygento\SampleModule\Api\Data\CustomerAddressInterface
      */
     public function save(\Mygento\SampleModule\Api\Data\CustomerAddressInterface $entity)
     {
