@@ -4,21 +4,21 @@ namespace Mygento\SampleModule\Controller\Adminhtml\Banner;
 
 class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
-    /** @var \Mygento\SampleModule\Model\BannerFactory */
+    /** @var \Mygento\SampleModule\Api\Data\BannerInterfaceFactory */
     private $entityFactory;
 
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
-     * @param \Mygento\SampleModule\Model\BannerFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\SampleModule\Model\BannerFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,

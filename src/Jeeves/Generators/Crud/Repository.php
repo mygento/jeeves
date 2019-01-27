@@ -36,13 +36,13 @@ class Repository extends Common
         $construct = $class->addMethod('__construct')
             ->addComment('@param ' . $resource . ' $resource')
             ->addComment('@param ' . $collection . 'Factory $collectionFactory')
-            ->addComment('@param ' . $entity . 'Factory $entityFactory')
+            ->addComment('@param ' . $entityInterface . 'Factory $entityFactory')
             ->addComment('@param ' . $results . 'Factory $searchResultsFactory')
             ->setVisibility('public');
 
         $construct->addParameter('resource')->setTypeHint($resource);
         $construct->addParameter('collectionFactory')->setTypeHint($collection . 'Factory');
-        $construct->addParameter('entityFactory')->setTypeHint($entity . 'Factory');
+        $construct->addParameter('entityFactory')->setTypeHint($entityInterface . 'Factory');
         $construct->addParameter('searchResultsFactory')->setTypeHint($results . 'Factory');
 
         $construct->setBody('$this->resource = $resource;' . PHP_EOL

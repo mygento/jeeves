@@ -25,13 +25,13 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner $resource
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
-     * @param \Mygento\SampleModule\Model\BannerFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         ResourceModel\Banner $resource,
         ResourceModel\Banner\CollectionFactory $collectionFactory,
-        BannerFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->resource = $resource;

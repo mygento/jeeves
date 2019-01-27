@@ -4,21 +4,21 @@ namespace Mygento\SampleModule\Controller\Adminhtml\CustomerAddress;
 
 class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
 {
-    /** @var \Mygento\SampleModule\Model\CustomerAddressFactory */
+    /** @var \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory */
     private $entityFactory;
 
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
     /**
-     * @param \Mygento\SampleModule\Model\CustomerAddressFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Mygento\SampleModule\Model\CustomerAddressFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,

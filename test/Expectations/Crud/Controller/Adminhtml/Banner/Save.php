@@ -6,16 +6,22 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Save extends \Mygento\SampleModule\Controller\Adminhtml\Banner
 {
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
+    private $dataPersistor;
+
+    /** @var \Mygento\SampleModule\Api\Data\BannerInterfaceFactory */
+    private $entityFactory;
+
     /**
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\SampleModule\Model\BannerFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\BannerRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\SampleModule\Model\BannerFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\BannerRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context

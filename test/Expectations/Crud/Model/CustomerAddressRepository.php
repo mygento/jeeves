@@ -25,13 +25,13 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\CustomerAddress $resource
      * @param \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\CollectionFactory $collectionFactory
-     * @param \Mygento\SampleModule\Model\CustomerAddressFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         ResourceModel\CustomerAddress $resource,
         ResourceModel\CustomerAddress\CollectionFactory $collectionFactory,
-        CustomerAddressFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->resource = $resource;

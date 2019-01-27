@@ -396,7 +396,7 @@ EOT
                 $entityName,
                 $this->module . '_' . strtolower($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
-                $namePath . 'Model\\' . $entityName,
+                $namePath . 'Api\\Data\\' . $entityName . 'Interface',
                 $this->getNamespace()
             )
         );
@@ -414,7 +414,7 @@ EOT
                 $entityName,
                 $this->module . '_' . strtolower($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
-                $namePath . 'Model\\' . $entityName,
+                $namePath . 'Api\\Data\\' . $entityName . 'Interface',
                 $this->getNamespace()
             )
         );

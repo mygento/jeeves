@@ -184,6 +184,16 @@ class AdminController extends Common
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
         ;
 
+        $class->addProperty('dataPersistor')
+            ->setVisibility('private')
+            ->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface')
+        ;
+
+        $class->addProperty('entityFactory')
+            ->setVisibility('private')
+            ->addComment('@var ' . $entityClass . 'Factory')
+        ;
+
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor')
             ->addComment('@param ' . $entityClass . 'Factory $entityFactory')

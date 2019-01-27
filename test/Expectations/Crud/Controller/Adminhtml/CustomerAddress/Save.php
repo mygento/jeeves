@@ -6,16 +6,22 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
 {
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
+    private $dataPersistor;
+
+    /** @var \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory */
+    private $entityFactory;
+
     /**
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\SampleModule\Model\CustomerAddressFactory $entityFactory
+     * @param \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\SampleModule\Model\CustomerAddressFactory $entityFactory,
+        \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
