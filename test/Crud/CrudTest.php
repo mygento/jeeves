@@ -11,7 +11,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     {
         $application = new \Symfony\Component\Console\Application();
         $application->add(new ModelCrud());
-        $command = $application->find('generate_model_crud');
+        $command = $application->find('generate-model-crud');
         $this->commandTester = new CommandTester($command);
     }
 

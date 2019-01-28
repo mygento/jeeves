@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.13';
+    const VERSION = '0.0.14';
     const GEN = 'generate';
 
     /**
@@ -65,6 +65,7 @@ class Application extends BaseApplication
             new Command\SelfUpdate(),
             new Command\Workplace(),
             new Command\EmptyProject(),
+            new Command\ShippingModule(),
         ]);
         return $commands;
     }

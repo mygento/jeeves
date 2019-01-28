@@ -22,20 +22,11 @@ class ModelCrud extends BaseCommand
     private $di = [];
     private $db = [];
 
-    protected function getNamespace()
-    {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
-    }
-
-    protected function getFullname()
-    {
-        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
-    }
-
     protected function configure()
     {
         $this
-            ->setName('generate_model_crud')
+            ->setName('generate-model-crud')
+            ->setAliases(['generate_model_crud', 'crud'])
             ->setDescription('Generate Model Crud')
             ->setDefinition([
                 new InputArgument('module', InputArgument::OPTIONAL, 'Name of the module'),
@@ -49,7 +40,7 @@ class ModelCrud extends BaseCommand
             ])
             ->setHelp(
                 <<<EOT
-<info>php jeeves.phar generate_model_crud</info>
+<info>php jeeves.phar generate-model-crud</info>
 EOT
             )
         ;
@@ -683,5 +674,15 @@ EOT
                 $this->module . ucfirst($entity)
             )
         );
+    }
+
+    protected function getNamespace()
+    {
+        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
+    }
+
+    protected function getFullname()
+    {
+        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
     }
 }
