@@ -16,7 +16,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /** @var \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory */
     private $collectionFactory;
 
-    /** @var \Mygento\SampleModule\Model\BannerFactory */
+    /** @var \Mygento\SampleModule\Api\Data\BannerInterfaceFactory */
     private $entityFactory;
 
     /** @var \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory */

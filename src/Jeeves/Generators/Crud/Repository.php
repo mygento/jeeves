@@ -29,7 +29,7 @@ class Repository extends Common
         $class->addProperty('collectionFactory')
             ->setVisibility('private')->addComment('@var ' . $collection . 'Factory');
         $class->addProperty('entityFactory')
-            ->setVisibility('private')->addComment('@var ' . $entity . 'Factory');
+            ->setVisibility('private')->addComment('@var ' . $entityInterface . 'Factory');
         $class->addProperty('searchResultsFactory')
             ->setVisibility('private')->addComment('@var ' . $results . 'Factory');
 

@@ -16,7 +16,7 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     /** @var \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\CollectionFactory */
     private $collectionFactory;
 
-    /** @var \Mygento\SampleModule\Model\CustomerAddressFactory */
+    /** @var \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory */
     private $entityFactory;
 
     /** @var \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory */
