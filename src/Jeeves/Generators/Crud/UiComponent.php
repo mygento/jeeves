@@ -62,6 +62,7 @@ class UiComponent extends Common
                 switch ($param['type']) {
                     case 'bool':
                     case 'boolean':
+                        $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
                         $col['value']['settings']['options'] = [
                             'attributes' => [
                                 'class' => $options,
@@ -220,24 +221,28 @@ class UiComponent extends Common
                     case 'tinyint':
                     case 'int':
                         $dataType = 'text';
+                        $formElement = 'input';
                         break;
                     case 'date':
                     case 'datetime':
                     case 'timestamp':
                         $dataType = 'date';
+                        $formElement = 'input';
                         break;
                     case 'bool':
                     case 'boolean':
                         $dataType = 'boolean';
+                        $formElement = 'checkbox';
                         break;
                     default:
                         $dataType = 'text';
+                        $formElement = 'input';
                 }
                 $field = [
                     'name' => 'field',
                     'attributes' => [
                         'name' => $this->camelCaseToSnakeCase($name),
-                        'formElement' => 'input',
+                        'formElement' => $formElement,
                     ],
                     'value' => [
                         'argument' => [

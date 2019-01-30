@@ -80,7 +80,7 @@
                 <dataScope>subname</dataScope>
             </settings>
         </field>
-        <field name="is_active" formElement="input">
+        <field name="is_active" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">banner</item>
