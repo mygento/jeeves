@@ -25,9 +25,9 @@
             <column name="name"/>
             <column name="subname"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_module_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="IX_PR_ID" indexType="btree">
+        <constraint xsi:type="unique" referenceId="IX_PRD_U">
             <column name="product_id"/>
-        </index>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_module_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
 </schema>

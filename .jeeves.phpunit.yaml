@@ -50,6 +50,9 @@ Mygento:
         IX_NAME:
           type: 'unique'
           columns: ['name', 'subname']
+        IX_PRD_U:
+          type: 'unique'
+          columns: ['product_id']
       fk:
         FK_PROD_ID_CAT_PRD_ENT_ID:
           column: 'product_id'

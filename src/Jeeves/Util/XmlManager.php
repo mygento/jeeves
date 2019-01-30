@@ -388,23 +388,6 @@ class XmlManager
                     array_keys($entity['fk']),
                     $entity['fk']
                 );
-                $indexFKList = array_map(
-                    function ($column, $param) {
-                        return [
-                            'name' => 'index',
-                            'attributes' =>  [
-                                'referenceId' => $param['indexName'],
-                                'indexType' => 'btree',
-                            ],
-                            'value' => array_map(
-                                [$this, 'getIndexColumn'],
-                                [$param['column']]
-                            ),
-                        ];
-                    },
-                    array_keys($entity['fk']),
-                    $entity['fk']
-                );
                 $indexList = array_map(
                     function ($name, $param) {
                         $param['type'] = $param['type'] ?? 'btree';
@@ -436,6 +419,35 @@ class XmlManager
                     array_keys($entity['indexes']),
                     $entity['indexes']
                 );
+                $indexColumn = array_filter(array_map(
+                    function ($indx) {
+                        if (count($indx['columns']) > 1) {
+                            return null;
+                        }
+                        return $indx['columns'][0];
+                    },
+                    array_values($entity['indexes'])
+                ));
+                $indexFKList = array_filter(array_map(
+                    function ($column, $param) use ($indexColumn) {
+                        if (in_array($param['column'], $indexColumn)) {
+                            return [];
+                        }
+                        return [
+                            'name' => 'index',
+                            'attributes' =>  [
+                                'indexType' => 'btree',
+                                'referenceId' => $param['indexName'],
+                            ],
+                            'value' => array_map(
+                                [$this, 'getIndexColumn'],
+                                [$param['column']]
+                            ),
+                        ];
+                    },
+                    array_keys($entity['fk']),
+                    $entity['fk']
+                ));
                 return [
                     'name' => 'table',
                     'attributes' => [
