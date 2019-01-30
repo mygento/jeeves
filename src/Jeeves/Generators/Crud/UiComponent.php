@@ -29,7 +29,7 @@ class UiComponent extends Common
                         $filter = 'text';
                         $dataType = 'text';
                 }
-                return [
+                $col = [
                     'name' => 'column',
                     'attributes' => [
                         'name' => $name
@@ -47,10 +47,13 @@ class UiComponent extends Common
                                 ],
                                 'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
-                            'sorting' => 'asc'
                         ]
                     ]
                 ];
+                if ($name === 'id') {
+                    $col['value']['settings']['sorting'] = 'asc';
+                }
+                return $col;
             },
             array_keys($fields),
             $fields
