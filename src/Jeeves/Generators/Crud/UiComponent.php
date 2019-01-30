@@ -12,6 +12,12 @@ class UiComponent extends Common
         $columns = array_map(
             function ($name, $param) {
                 switch ($param['type']) {
+                    case 'bool':
+                    case 'boolean':
+                        $filter = 'select';
+                        $dataType = 'select';
+                        $options = 'Magento\Config\Model\Config\Source\Yesno';
+                        break;
                     case 'smallint':
                     case 'bigint':
                     case 'tinyint':
@@ -52,6 +58,18 @@ class UiComponent extends Common
                 ];
                 if ($name === 'id') {
                     $col['value']['settings']['sorting'] = 'asc';
+                }
+                switch ($param['type']) {
+                    case 'bool':
+                    case 'boolean':
+                        $col['value']['settings']['options'] = [
+                            'attributes' => [
+                                'class' => $options,
+                            ]
+                        ];
+                        break;
+                    default:
+                        break;
                 }
                 return $col;
             },
@@ -208,10 +226,14 @@ class UiComponent extends Common
                     case 'timestamp':
                         $dataType = 'date';
                         break;
+                    case 'bool':
+                    case 'boolean':
+                        $dataType = 'boolean';
+                        break;
                     default:
                         $dataType = 'text';
                 }
-                return [
+                $field = [
                     'name' => 'field',
                     'attributes' => [
                         'name' => $this->camelCaseToSnakeCase($name),
@@ -254,6 +276,43 @@ class UiComponent extends Common
                         ]
                     ]
                 ];
+                switch ($param['type']) {
+                    case 'bool':
+                    case 'boolean':
+                        $field['value']['formElements'] = [
+                            'checkbox' => [
+                                'settings' => [
+                                    'valueMap' => [
+                                        [
+                                            [
+                                                'map' => [
+                                                    'attributes' => [
+                                                        'name' => 'false',
+                                                        'xsi:type' => 'number',
+                                                    ],
+                                                    'value' => 0,
+                                                ]
+                                            ],
+                                            [
+                                                'map' => [
+                                                    'attributes' => [
+                                                        'name' => 'true',
+                                                        'xsi:type' => 'number',
+                                                    ],
+                                                    'value' => 1,
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                    'prefer' => 'toggle'
+                                ]
+                            ]
+                        ];
+                        break;
+                    default:
+                        break;
+                }
+                return $field;
             },
             array_keys($fields),
             $fields

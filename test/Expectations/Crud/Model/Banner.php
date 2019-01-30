@@ -72,6 +72,25 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     }
 
     /**
+     * Get is active
+     * @return bool|null
+     */
+    public function getIsActive()
+    {
+        return $this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * Set is active
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
      * Get product id
      * @return int|null
      */

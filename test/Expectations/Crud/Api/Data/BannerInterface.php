@@ -7,6 +7,7 @@ interface BannerInterface
     const ID = 'id';
     const NAME = 'name';
     const SUBNAME = 'subname';
+    const IS_ACTIVE = 'is_active';
     const PRODUCT_ID = 'product_id';
 
     /**
@@ -47,6 +48,19 @@ interface BannerInterface
      * @return $this
      */
     public function setSubname($subname);
+
+    /**
+     * Get is active
+     * @return bool|null
+     */
+    public function getIsActive();
+
+    /**
+     * Set is active
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive);
 
     /**
      * Get product id

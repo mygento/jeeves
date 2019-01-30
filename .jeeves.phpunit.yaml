@@ -43,6 +43,8 @@ Mygento:
           type: varchar
         subname:
           type: varchar
+        is_active:
+          type: boolean
         product_id:
           type: int
           unsigned: true
