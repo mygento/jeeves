@@ -69,6 +69,12 @@ class UiComponent extends Common
                             ]
                         ];
                         break;
+                    case 'date':
+                    case 'datetime':
+                    case 'timestamp':
+                        $col['attributes']['class'] = 'Magento\Ui\Component\Listing\Columns\Date';
+                        $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/date';
+                        break;
                     default:
                         break;
                 }
