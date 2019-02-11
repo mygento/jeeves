@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.15';
+    const VERSION = '0.1.0';
     const GEN = 'generate';
 
     /**
@@ -60,6 +60,7 @@ class Application extends BaseApplication
     protected function getDefaultCommands()
     {
         $commands = array_merge(parent::getDefaultCommands(), [
+            new Command\Generate(),
             //new Command\PaymentGateway(),
             new Command\ModelCrud(),
             new Command\SelfUpdate(),

@@ -103,20 +103,22 @@ EOT
             $config = [
                 $v => [
                     $m => [
-                        $e => [
-                            'gui' => $gui,
-                            'api' => $api,
-                            'columns' => [
-                                'id' => [
-                                    'type' => 'int',
-                                    'identity' => true,
-                                    'unsigned' => true,
-                                    'comment' => $e . ' ID',
+                        'crud' => [
+                            $e => [
+                                'gui' => $gui,
+                                'api' => $api,
+                                'columns' => [
+                                    'id' => [
+                                        'type' => 'int',
+                                        'identity' => true,
+                                        'unsigned' => true,
+                                        'comment' => $e . ' ID',
+                                    ]
+                                ],
+                                'tablename' => strtolower($tablename),
+                                'route' => [
+                                    'admin' => strtolower($routepath)
                                 ]
-                            ],
-                            'tablename' => strtolower($tablename),
-                            'route' => [
-                                'admin' => strtolower($routepath)
                             ]
                         ]
                     ]
@@ -133,8 +135,12 @@ EOT
         $this->db = [];
 
         foreach ($config as $vendor => $mod) {
-            foreach ($mod as $module => $ent) {
-                foreach ($ent as $entity => $config) {
+            foreach ($mod as $module => $mode) {
+                if(!isset($mode['crud']) || $mode['crud'] === false) {
+                    continue;
+                }
+                var_dump($mode['crud']);
+                foreach ($mode['crud'] as $entity => $config) {
                     $this->genModule($input, $vendor, $module, $entity, $config);
                 }
             }
@@ -172,6 +178,9 @@ EOT
         }
 
         $routepath = $config['route']['admin'];
+        if(!isset($config['columns'])) {
+            return;
+        }
         $fields = $config['columns'];
 
         // interface
