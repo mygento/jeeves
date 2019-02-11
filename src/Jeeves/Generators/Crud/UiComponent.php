@@ -57,6 +57,7 @@ class UiComponent extends Common
                     ]
                 ];
                 if ($name === 'id') {
+                    unset($col['value']['settings']['editor']);
                     $col['value']['settings']['sorting'] = 'asc';
                 }
                 switch ($param['type']) {
