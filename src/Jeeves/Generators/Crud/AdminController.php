@@ -375,28 +375,27 @@ class AdminController extends Common
             ->setBody('/** @var \Magento\Framework\Controller\Result\Json $resultJson */' . PHP_EOL
         . '$resultJson = $this->jsonFactory->create();' . PHP_EOL
         . '$error = false;' . PHP_EOL
-        . '$messages = [];' . PHP_EOL
-
-        . 'if ($this->getRequest()->getParam(\'isAjax\')) {' . PHP_EOL
-        . '    $postItems = $this->getRequest()->getParam(\'items\', []);' . PHP_EOL
-        . '    if (!count($postItems)) {' . PHP_EOL
-        . '        $messages[] = __(\'Please correct the data sent.\');' . PHP_EOL
+        . '$messages = [];' . PHP_EOL . PHP_EOL
+        . '$postItems = $this->getRequest()->getParam(\'items\', []);' . PHP_EOL
+        . 'if (!($this->getRequest()->getParam(\'isAjax\') && count($postItems))) {' . PHP_EOL
+        . '    return $resultJson->setData([' . PHP_EOL
+        . '        \'messages\' => [__(\'Please correct the data sent.\')],' . PHP_EOL
+        . '        \'error\' => true,' . PHP_EOL
+        . '    ]);' . PHP_EOL
+        . '}' . PHP_EOL
+        . 'foreach (array_keys($postItems) as $id) {' . PHP_EOL
+        . '    try {' . PHP_EOL
+        . '        $entity = $this->repository->getById($id);' . PHP_EOL
+        . '        $entity->setData(array_merge($entity->getData(), $postItems[$id]));' . PHP_EOL
+        . '        $this->repository->save($entity);' . PHP_EOL
+        . '    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {' . PHP_EOL
+        . '        $messages[] = $id .\' -> \'. __(\'Not found\');' . PHP_EOL
         . '        $error = true;' . PHP_EOL
-        . '    }' . PHP_EOL
-        . '    foreach (array_keys($postItems) as $id) {' . PHP_EOL
-        . '        try {' . PHP_EOL
-        . '            $entity = $this->repository->getById($id);' . PHP_EOL
-        . '            $entity->setData(array_merge($entity->getData(), $postItems[$id]));' . PHP_EOL
-        . '            $this->repository->save($entity);' . PHP_EOL
-        . '        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {' . PHP_EOL
-        . '            $messages[] = $id .\' -> \'. __(\'Not found\');' . PHP_EOL
-        . '            $error = true;' . PHP_EOL
-        . '            continue;' . PHP_EOL
-        . '        } catch (\Exception $e) {' . PHP_EOL
-        . '            $messages[] = __($e->getMessage());' . PHP_EOL
-        . '            $error = true;' . PHP_EOL
-        . '            continue;' . PHP_EOL
-        . '        }' . PHP_EOL
+        . '        continue;' . PHP_EOL
+        . '    } catch (\Exception $e) {' . PHP_EOL
+        . '        $messages[] = __($e->getMessage());' . PHP_EOL
+        . '        $error = true;' . PHP_EOL
+        . '        continue;' . PHP_EOL
         . '    }' . PHP_EOL
         . '}' . PHP_EOL
 
