@@ -148,7 +148,7 @@ class AdminController extends Common
                 . 'try {' . PHP_EOL
                 . '$entity = $this->repository->getById($entityId);' . PHP_EOL
                 . '} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {' . PHP_EOL
-                . '$this->messageManager->addError(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
+                . '$this->messageManager->addErrorMessage(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
                 . '/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
