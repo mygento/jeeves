@@ -13,8 +13,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-           \Mygento\SampleModule\Model\CustomerAddress::class,
-           \Mygento\SampleModule\Model\ResourceModel\CustomerAddress::class
+            \Mygento\SampleModule\Model\CustomerAddress::class,
+            \Mygento\SampleModule\Model\ResourceModel\CustomerAddress::class
         );
     }
 }

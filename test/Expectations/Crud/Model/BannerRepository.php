@@ -51,7 +51,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('Sample Module Banner with id "%1" does not exist.', $entityId)
+            __('Sample Module Banner with id "%1" does not exist.', $entityId)
             );
         }
         return $entity;
@@ -68,7 +68,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
             $this->resource->save($entity);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __($exception->getMessage())
+            __($exception->getMessage())
             );
         }
         return $entity;
@@ -85,7 +85,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                __($exception->getMessage())
+            __($exception->getMessage())
             );
         }
         return true;

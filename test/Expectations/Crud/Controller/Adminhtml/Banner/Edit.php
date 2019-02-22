@@ -42,7 +42,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Banner
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->messageManager->addError(__('This Banner no longer exists'));
+                $this->messageManager->addErrorMessage(__('This Banner no longer exists'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');

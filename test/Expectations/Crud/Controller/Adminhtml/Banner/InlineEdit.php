@@ -34,26 +34,27 @@ class InlineEdit extends \Mygento\SampleModule\Controller\Adminhtml\Banner
         $resultJson = $this->jsonFactory->create();
         $error = false;
         $messages = [];
-        if ($this->getRequest()->getParam('isAjax')) {
-            $postItems = $this->getRequest()->getParam('items', []);
-            if (!count($postItems)) {
-                $messages[] = __('Please correct the data sent.');
+
+        $postItems = $this->getRequest()->getParam('items', []);
+        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
+        }
+        foreach (array_keys($postItems) as $id) {
+            try {
+                $entity = $this->repository->getById($id);
+                $entity->setData(array_merge($entity->getData(), $postItems[$id]));
+                $this->repository->save($entity);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $messages[] = $id . ' -> ' . __('Not found');
                 $error = true;
-            }
-            foreach (array_keys($postItems) as $id) {
-                try {
-                    $entity = $this->repository->getById($id);
-                    $entity->setData(array_merge($entity->getData(), $postItems[$id]));
-                    $this->repository->save($entity);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    $messages[] = $id . ' -> ' . __('Not found');
-                    $error = true;
-                    continue;
-                } catch (\Exception $e) {
-                    $messages[] = __($e->getMessage());
-                    $error = true;
-                    continue;
-                }
+                continue;
+            } catch (\Exception $e) {
+                $messages[] = __($e->getMessage());
+                $error = true;
+                continue;
             }
         }
         return $resultJson->setData([
