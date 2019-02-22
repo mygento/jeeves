@@ -6,7 +6,7 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class UiComponent extends Common
 {
-    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $fields = self::DEFAULT_FIELDS)
+    public function generateAdminUiIndex($uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $fields = self::DEFAULT_FIELDS, $readonly = false)
     {
         $service = $this->getService();
         $columns = array_map(
@@ -84,12 +84,46 @@ class UiComponent extends Common
             array_keys($fields),
             $fields
         );
-        return $service->write('listing', function ($writer) use ($columns, $uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor) {
+        return $service->write('listing', function ($writer) use ($columns, $uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $readonly) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
             );
+            $actionColumn = $readonly ? [] : [
+                'actionsColumn' => [
+                    'attributes' => [
+                        'name' => 'actions',
+                        'class' => $actions
+                    ],
+                    'value' => [
+                        'settings' => [
+                            'indexField' => 'id'
+                        ]
+                    ]
+                ]
+            ];
+            $addNewButton = $readonly ? [] : [
+                'button' => [
+                    'attributes' => [
+                      'name' => 'add',
+                    ],
+                    'value' => [
+                        'url' => [
+                            'attributes' => [
+                                'path' => '*/*/new'
+                            ]
+                        ],
+                        'class' => 'primary',
+                        'label' => [
+                            'attributes' => [
+                                'translate' => 'true'
+                            ],
+                            'value' => $addNew
+                        ]
+                    ]
+                ]
+            ];
             $writer->write([
                 [
                     'argument' => [
@@ -118,27 +152,7 @@ class UiComponent extends Common
                         ]
                     ],
                     'settings' => [
-                        'buttons' => [
-                            'button' => [
-                                'attributes' => [
-                                  'name' => 'add',
-                                ],
-                                'value' => [
-                                    'url' => [
-                                        'attributes' => [
-                                            'path' => '*/*/new'
-                                        ]
-                                    ],
-                                    'class' => 'primary',
-                                    'label' => [
-                                        'attributes' => [
-                                            'translate' => 'true'
-                                        ],
-                                        'value' => $addNew
-                                    ]
-                                ]
-                            ]
-                        ],
+                        'buttons' => $addNewButton,
                         'spinner' => $column,
                         'deps' => [
                             'dep' => $uiComponent . '.' . $dataSource
@@ -181,7 +195,7 @@ class UiComponent extends Common
                             ]
                         ]
                     ],
-                    'listingToolbar' => $this->getToolbar($massDelete, $editor),
+                    'listingToolbar' => $this->getToolbar($massDelete, $editor, $readonly),
                     'columns' => [
                         'attributes' => [
                             'name' => $column,
@@ -198,19 +212,7 @@ class UiComponent extends Common
                                     ]
                                 ]
                             ],
-                        ], $columns, [
-                            'actionsColumn' => [
-                                'attributes' => [
-                                    'name' => 'actions',
-                                    'class' => $actions
-                                ],
-                                'value' => [
-                                    'settings' => [
-                                        'indexField' => 'id'
-                                    ]
-                                ]
-                            ]
-                        ])
+                        ], $columns, $actionColumn)
                     ]
                 ]
             ]);
@@ -667,8 +669,67 @@ class UiComponent extends Common
         return $namespace;
     }
 
-    private function getToolbar($massDelete, $editor)
+    private function getToolbar($massDelete, $editor, $readonly)
     {
+        $massActions = $readonly ? [] : [
+            [
+                'name' => 'action',
+                'attributes' => [
+                    'name' => 'delete',
+                ],
+                'value' => [
+                    'settings' => [
+                        'confirm' => [
+                            'message' => [
+                                'attributes' => [
+                                    'translate' => 'true',
+                                ],
+                                'value' => 'Are you sure you want to delete selected items?',
+                            ],
+                            'title' => [
+                                'attributes' => [
+                                    'translate' => 'true',
+                                ],
+                                'value' => 'Delete items',
+                            ]
+                        ],
+                        'url' => [
+                            'attributes' => [
+                                'path' => $massDelete,
+                            ],
+                        ],
+                        'type' => 'delete',
+                        'label' => [
+                            'attributes' => [
+                                'translate' => 'true',
+                            ],
+                            'value' => 'Delete',
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'name' => 'action',
+                'attributes' => [
+                    'name' => 'edit',
+                ],
+                'value' => [
+                    'settings' => [
+                        'callback' => [
+                            'target' => 'editSelected',
+                            'provider' => $editor,
+                        ],
+                        'type' => 'edit',
+                        'label' => [
+                            'attributes' => [
+                                'translate' => 'true',
+                            ],
+                            'value' => 'Edit',
+                        ]
+                    ]
+                ]
+            ],
+        ];
         return [
             'attributes' => [
                 'name' => 'listing_top',
@@ -727,65 +788,7 @@ class UiComponent extends Common
                     'attributes' => [
                         'name' => 'listing_massaction',
                     ],
-                    'value' => [
-                        [
-                            'name' => 'action',
-                            'attributes' => [
-                                'name' => 'delete',
-                            ],
-                            'value' => [
-                                'settings' => [
-                                    'confirm' => [
-                                        'message' => [
-                                            'attributes' => [
-                                                'translate' => 'true',
-                                            ],
-                                            'value' => 'Are you sure you want to delete selected items?',
-                                        ],
-                                        'title' => [
-                                            'attributes' => [
-                                                'translate' => 'true',
-                                            ],
-                                            'value' => 'Delete items',
-                                        ]
-                                    ],
-                                    'url' => [
-                                        'attributes' => [
-                                            'path' => $massDelete,
-                                        ],
-                                    ],
-                                    'type' => 'delete',
-                                    'label' => [
-                                        'attributes' => [
-                                            'translate' => 'true',
-                                        ],
-                                        'value' => 'Delete',
-                                    ]
-                                ]
-                            ]
-                        ],
-                        [
-                            'name' => 'action',
-                            'attributes' => [
-                                'name' => 'edit',
-                            ],
-                            'value' => [
-                                'settings' => [
-                                    'callback' => [
-                                        'target' => 'editSelected',
-                                        'provider' => $editor,
-                                    ],
-                                    'type' => 'edit',
-                                    'label' => [
-                                        'attributes' => [
-                                            'translate' => 'true',
-                                        ],
-                                        'value' => 'Edit',
-                                    ]
-                                ]
-                            ]
-                        ],
-                    ]
+                    'value' => $massActions,
                 ],
                 'paging' => [
                     'attributes' => [

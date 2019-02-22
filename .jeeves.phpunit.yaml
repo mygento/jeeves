@@ -33,6 +33,7 @@ Mygento:
           columns: ['city']
     Banner:
       api: true
+      readonly: true
       columns:
         id:
           type: int
