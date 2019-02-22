@@ -6,13 +6,7 @@
         </item>
     </argument>
     <settings>
-        <buttons>
-            <button name="add">
-                <url path="*/*/new"/>
-                <class>primary</class>
-                <label translate="true">Add New Banner</label>
-            </button>
-        </buttons>
+        <buttons/>
         <spinner>sample_module_banner_columns</spinner>
         <deps>
             <dep>sample_module_banner_listing.sample_module_banner_listing_data_source</dep>
@@ -52,58 +46,9 @@
                 </templates>
             </settings>
         </filters>
-        <massaction name="listing_massaction">
-            <action name="delete">
-                <settings>
-                    <confirm>
-                        <message translate="true">Are you sure you want to delete selected items?</message>
-                        <title translate="true">Delete items</title>
-                    </confirm>
-                    <url path="sample_module/banner/massDelete"/>
-                    <type>delete</type>
-                    <label translate="true">Delete</label>
-                </settings>
-            </action>
-            <action name="edit">
-                <settings>
-                    <callback>
-                        <target>editSelected</target>
-                        <provider>sample_module_banner_listing.sample_module_banner_listing.sample_module_banner_columns_editor</provider>
-                    </callback>
-                    <type>edit</type>
-                    <label translate="true">Edit</label>
-                </settings>
-            </action>
-        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="sample_module_banner_columns">
-        <settings>
-            <editorConfig>
-                <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="sample_module/banner/inlineEdit"/>
-                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                </param>
-                <param name="indexField" xsi:type="string">id</param>
-                <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">sample_module_banner_listing.sample_module_banner_listing.sample_module_banner_columns.ids</param>
-            </editorConfig>
-            <childDefaults>
-                <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">sample_module_banner_listing.sample_module_banner_listing.sample_module_banner_columns_editor</item>
-                    <item name="target" xsi:type="string">startEdit</item>
-                    <item name="params" xsi:type="array">
-                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                        <item name="1" xsi:type="boolean">true</item>
-                    </item>
-                </param>
-            </childDefaults>
-        </settings>
-        <selectionsColumn name="ids">
-            <settings>
-                <indexField>id</indexField>
-            </settings>
-        </selectionsColumn>
         <column name="id">
             <settings>
                 <filter>textRange</filter>
@@ -153,10 +98,5 @@
                 <label translate="true">Product Id</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Mygento\SampleModule\Ui\Component\Listing\BannerActions">
-            <settings>
-                <indexField>id</indexField>
-            </settings>
-        </actionsColumn>
     </columns>
 </listing>

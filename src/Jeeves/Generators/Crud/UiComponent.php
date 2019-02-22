@@ -90,6 +90,7 @@ class UiComponent extends Common
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
             );
+
             $actionColumn = $readonly ? [] : [
                 'actionsColumn' => [
                     'attributes' => [
@@ -103,6 +104,7 @@ class UiComponent extends Common
                     ]
                 ]
             ];
+
             $addNewButton = $readonly ? [] : [
                 'button' => [
                     'attributes' => [
@@ -124,6 +126,21 @@ class UiComponent extends Common
                     ]
                 ]
             ];
+
+            $gridColumns = array_merge($readonly ? [] : [
+                'settings' => $this->getListingSettings($inline, $select, $editor),
+                'selectionsColumn' => [
+                    'attributes' => [
+                        'name' => 'ids'
+                    ],
+                    'value' => [
+                        'settings' => [
+                            'indexField' => 'id'
+                        ]
+                    ]
+                ],
+            ], $columns, $actionColumn);
+
             $writer->write([
                 [
                     'argument' => [
@@ -200,19 +217,7 @@ class UiComponent extends Common
                         'attributes' => [
                             'name' => $column,
                         ],
-                        'value' => array_merge([
-                            'settings' => $this->getListingSettings($inline, $select, $editor),
-                            'selectionsColumn' => [
-                                'attributes' => [
-                                    'name' => 'ids'
-                                ],
-                                'value' => [
-                                    'settings' => [
-                                        'indexField' => 'id'
-                                    ]
-                                ]
-                            ],
-                        ], $columns, $actionColumn)
+                        'value' => $gridColumns,
                     ]
                 ]
             ]);
@@ -672,63 +677,70 @@ class UiComponent extends Common
     private function getToolbar($massDelete, $editor, $readonly)
     {
         $massActions = $readonly ? [] : [
-            [
-                'name' => 'action',
+            'massaction' => [
                 'attributes' => [
-                    'name' => 'delete',
+                    'name' => 'listing_massaction',
                 ],
                 'value' => [
-                    'settings' => [
-                        'confirm' => [
-                            'message' => [
-                                'attributes' => [
-                                    'translate' => 'true',
+                    [
+                        'name' => 'action',
+                        'attributes' => [
+                            'name' => 'delete',
+                        ],
+                        'value' => [
+                            'settings' => [
+                                'confirm' => [
+                                    'message' => [
+                                        'attributes' => [
+                                            'translate' => 'true',
+                                        ],
+                                        'value' => 'Are you sure you want to delete selected items?',
+                                    ],
+                                    'title' => [
+                                        'attributes' => [
+                                            'translate' => 'true',
+                                        ],
+                                        'value' => 'Delete items',
+                                    ]
                                 ],
-                                'value' => 'Are you sure you want to delete selected items?',
-                            ],
-                            'title' => [
-                                'attributes' => [
-                                    'translate' => 'true',
+                                'url' => [
+                                    'attributes' => [
+                                        'path' => $massDelete,
+                                    ],
                                 ],
-                                'value' => 'Delete items',
+                                'type' => 'delete',
+                                'label' => [
+                                    'attributes' => [
+                                        'translate' => 'true',
+                                    ],
+                                    'value' => 'Delete',
+                                ]
                             ]
-                        ],
-                        'url' => [
-                            'attributes' => [
-                                'path' => $massDelete,
-                            ],
-                        ],
-                        'type' => 'delete',
-                        'label' => [
-                            'attributes' => [
-                                'translate' => 'true',
-                            ],
-                            'value' => 'Delete',
                         ]
-                    ]
-                ]
-            ],
-            [
-                'name' => 'action',
-                'attributes' => [
-                    'name' => 'edit',
+                    ],
+                    [
+                        'name' => 'action',
+                        'attributes' => [
+                            'name' => 'edit',
+                        ],
+                        'value' => [
+                            'settings' => [
+                                'callback' => [
+                                    'target' => 'editSelected',
+                                    'provider' => $editor,
+                                ],
+                                'type' => 'edit',
+                                'label' => [
+                                    'attributes' => [
+                                        'translate' => 'true',
+                                    ],
+                                    'value' => 'Edit',
+                                ]
+                            ]
+                        ]
+                    ],
                 ],
-                'value' => [
-                    'settings' => [
-                        'callback' => [
-                            'target' => 'editSelected',
-                            'provider' => $editor,
-                        ],
-                        'type' => 'edit',
-                        'label' => [
-                            'attributes' => [
-                                'translate' => 'true',
-                            ],
-                            'value' => 'Edit',
-                        ]
-                    ]
-                ]
-            ],
+            ]
         ];
         return [
             'attributes' => [
@@ -784,12 +796,7 @@ class UiComponent extends Common
                         ]
                     ]
                 ],
-                'massaction' => [
-                    'attributes' => [
-                        'name' => 'listing_massaction',
-                    ],
-                    'value' => $massActions,
-                ],
+                $massActions,
                 'paging' => [
                     'attributes' => [
                         'name' => 'listing_paging',

@@ -78,13 +78,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkFile('Controller/Adminhtml/CustomerAddress/Save.php');
 
         $this->checkFile('Controller/Adminhtml/Banner.php');
-        $this->checkFile('Controller/Adminhtml/Banner/Delete.php');
-        $this->checkFile('Controller/Adminhtml/Banner/Edit.php');
         $this->checkFile('Controller/Adminhtml/Banner/Index.php');
-        $this->checkFile('Controller/Adminhtml/Banner/InlineEdit.php');
-        $this->checkFile('Controller/Adminhtml/Banner/MassDelete.php');
-        $this->checkFile('Controller/Adminhtml/Banner/NewAction.php');
-        $this->checkFile('Controller/Adminhtml/Banner/Save.php');
     }
 
     private function checkLayout()
@@ -93,9 +87,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkXml('view/adminhtml/layout/sample_module_customer_address_index.xml');
         $this->checkXml('view/adminhtml/layout/sample_module_customer_address_new.xml');
 
-        $this->checkXml('view/adminhtml/layout/sample_module_banner_edit.xml');
         $this->checkXml('view/adminhtml/layout/sample_module_banner_index.xml');
-        $this->checkXml('view/adminhtml/layout/sample_module_banner_new.xml');
     }
 
     private function checkUi()
@@ -106,10 +98,8 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkXml('view/adminhtml/ui_component/sample_module_customer_address_edit.xml');
         $this->checkFile('Model/ResourceModel/CustomerAddress/Grid/Collection.php');
 
-        $this->checkFile('Ui/Component/Listing/BannerActions.php');
         $this->checkFile('Model/Banner/DataProvider.php');
         $this->checkXml('view/adminhtml/ui_component/sample_module_banner_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_banner_edit.xml');
         $this->checkFile('Model/ResourceModel/Banner/Grid/Collection.php');
     }
 

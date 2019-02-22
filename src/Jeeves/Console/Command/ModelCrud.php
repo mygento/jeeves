@@ -200,7 +200,7 @@ EOT
             $controllerGenerator = new \Mygento\Jeeves\Generators\Crud\AdminController();
             $this->genAdminAbstractController($controllerGenerator, $entity);
             $this->genAdminViewController($controllerGenerator, ucfirst($entity));
-            if(!$this->readonly) {
+            if (!$this->readonly) {
                 $this->genAdminEditController($controllerGenerator, ucfirst($entity));
                 $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
                 $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
@@ -516,7 +516,7 @@ EOT
             $generator->generateAdminLayoutIndex($uiComponent)
         );
 
-        if(!$this->readonly) {
+        if (!$this->readonly) {
             $editUiComponent = $parent . '_edit';
             $path = $parent . '_edit';
             $this->writeFile(
@@ -535,7 +535,7 @@ EOT
 
     protected function genAdminUI($generator, $entity, $routepath, $fields)
     {
-        if(!$this->readonly) {
+        if (!$this->readonly) {
             $filePath = $this->path . '/Ui/Component/Listing/';
             $fileName = ucfirst($entity) . 'Actions';
             $this->writeFile(
@@ -591,7 +591,7 @@ EOT
             )
         );
 
-        if(!$this->readonly) {
+        if (!$this->readonly) {
             $uiComponent = $parent . '_edit';
             $dataSource = $uiComponent . '_data_source';
             $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
