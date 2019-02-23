@@ -35,6 +35,10 @@ class UiComponent extends Common
                         $filter = 'text';
                         $dataType = 'text';
                 }
+                if (isset($param['source'])) {
+                    $filter = 'select';
+                    $dataType = 'select';
+                }
                 $col = [
                     'name' => 'column',
                     'attributes' => [
@@ -78,6 +82,14 @@ class UiComponent extends Common
                         break;
                     default:
                         break;
+                }
+                if (isset($param['source'])) {
+                    $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
+                    $col['value']['settings']['options'] = [
+                        'attributes' => [
+                            'class' => $param['source'],
+                        ]
+                    ];
                 }
                 return $col;
             },
@@ -245,6 +257,9 @@ class UiComponent extends Common
                         $dataType = 'text';
                         $formElement = 'input';
                 }
+                if (isset($param['source'])) {
+                    $formElement = 'select';
+                }
                 $field = [
                     'name' => 'field',
                     'attributes' => [
@@ -323,6 +338,25 @@ class UiComponent extends Common
                         break;
                     default:
                         break;
+                }
+                if (isset($param['source'])) {
+                    $field['value']['formElements'] = [
+                        'select' => [
+                            'settings' => [
+                                'options' => [
+                                    'attributes' => [
+                                        'class' => $param['source'],
+                                    ],
+                                ],
+                                'caption' => [
+                                    'attributes' => [
+                                        'translate' => 'true',
+                                    ],
+                                    'value' => '-- Please Select --',
+                                ]
+                            ]
+                        ]
+                    ];
                 }
                 return $field;
             },

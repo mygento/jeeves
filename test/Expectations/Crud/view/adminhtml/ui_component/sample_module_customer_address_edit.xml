@@ -67,6 +67,27 @@
                 <dataScope>city</dataScope>
             </settings>
         </field>
+        <field name="customer_group" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer_address</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Customer Group</label>
+                <visible>true</visible>
+                <dataScope>customer_group</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Customer\Model\Customer\Source\Group"/>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
         <field name="created_at" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

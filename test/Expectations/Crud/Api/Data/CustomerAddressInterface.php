@@ -6,6 +6,7 @@ interface CustomerAddressInterface
 {
     const ID = 'id';
     const CITY = 'city';
+    const CUSTOMER_GROUP = 'customer_group';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const PRICE = 'price';
@@ -35,6 +36,19 @@ interface CustomerAddressInterface
      * @return $this
      */
     public function setCity($city);
+
+    /**
+     * Get customer group
+     * @return int|null
+     */
+    public function getCustomerGroup();
+
+    /**
+     * Set customer group
+     * @param int $customerGroup
+     * @return $this
+     */
+    public function setCustomerGroup($customerGroup);
 
     /**
      * Get created at
