@@ -53,6 +53,25 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     }
 
     /**
+     * Get customer group
+     * @return int|null
+     */
+    public function getCustomerGroup()
+    {
+        return $this->getData(self::CUSTOMER_GROUP);
+    }
+
+    /**
+     * Set customer group
+     * @param int $customerGroup
+     * @return $this
+     */
+    public function setCustomerGroup($customerGroup)
+    {
+        return $this->setData(self::CUSTOMER_GROUP, $customerGroup);
+    }
+
+    /**
      * Get created at
      * @return string|null
      */

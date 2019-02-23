@@ -17,7 +17,7 @@ Mygento:
         customer_group:
           type: int
           unsigned: false
-          comment: 'City'
+          comment: 'Customer Group'
           length: 6
           nullable: false
           source: 'Magento\Customer\Model\Customer\Source\Group'
