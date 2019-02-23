@@ -14,6 +14,7 @@ class ModelCrud extends BaseCommand
     private $path;
     private $api = false;
     private $gui = true;
+    private $readonly = false;
 
     private $menu = [];
     private $acl = [];
@@ -37,6 +38,7 @@ class ModelCrud extends BaseCommand
                 new InputOption('adminhtml', false, InputOption::VALUE_OPTIONAL, 'create adminhtml or not'),
                 new InputOption('gui', null, InputOption::VALUE_OPTIONAL, 'GRID ui component', true),
                 new InputOption('api', null, InputOption::VALUE_OPTIONAL, 'API', false),
+                new InputOption('readonly', null, InputOption::VALUE_OPTIONAL, 'read only', false),
             ])
             ->setHelp(
                 <<<EOT
@@ -99,6 +101,7 @@ EOT
             $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $v . '_' . $m . '_' . $e;
             $api = (bool) $input->getOption('api');
             $gui = (bool) $input->getOption('gui');
+            $readonly = (bool) $input->getOption('readonly');
 
             $config = [
                 $v => [
@@ -106,6 +109,7 @@ EOT
                         $e => [
                             'gui' => $gui,
                             'api' => $api,
+                            'readonly' => $readonly,
                             'columns' => [
                                 'id' => [
                                     'type' => 'int',
@@ -157,6 +161,7 @@ EOT
         $this->module = $module;
         $this->api = $config['api'] ?? false;
         $this->gui = $config['gui'] ?? true;
+        $this->readonly = $config['readonly'] ?? false;
 
         $tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->vendor)
@@ -195,18 +200,20 @@ EOT
             $controllerGenerator = new \Mygento\Jeeves\Generators\Crud\AdminController();
             $this->genAdminAbstractController($controllerGenerator, $entity);
             $this->genAdminViewController($controllerGenerator, ucfirst($entity));
-            $this->genAdminEditController($controllerGenerator, ucfirst($entity));
-            $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
-            $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
-            $this->genAdminNewController($controllerGenerator, ucfirst($entity));
-            $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
-            $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+            if (!$this->readonly) {
+                $this->genAdminEditController($controllerGenerator, ucfirst($entity));
+                $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
+                $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
+                $this->genAdminNewController($controllerGenerator, ucfirst($entity));
+                $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
+                $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+            }
         }
 
         // Layout
         if ($this->gui) {
             $layoutGenerator = new \Mygento\Jeeves\Generators\Crud\Layout();
-            $this->genAdminLayouts($layoutGenerator, $entity);
+            $this->genAdminLayouts($layoutGenerator, $entity, $this->readonly);
         }
 
         //UI
@@ -509,36 +516,40 @@ EOT
             $generator->generateAdminLayoutIndex($uiComponent)
         );
 
-        $editUiComponent = $parent . '_edit';
-        $path = $parent . '_edit';
-        $this->writeFile(
-            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutEdit($editUiComponent)
-        );
+        if (!$this->readonly) {
+            $editUiComponent = $parent . '_edit';
+            $path = $parent . '_edit';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+                $generator->generateAdminLayoutEdit($editUiComponent)
+            );
 
-        $uiComponent = $parent . '_new';
-        $path = $parent . '_new';
-        $this->writeFile(
-            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
-        );
+            $uiComponent = $parent . '_new';
+            $path = $parent . '_new';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+                $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
+            );
+        }
     }
 
     protected function genAdminUI($generator, $entity, $routepath, $fields)
     {
-        $filePath = $this->path . '/Ui/Component/Listing/';
-        $fileName = ucfirst($entity) . 'Actions';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->getActions(
-                $entity,
-                $routepath,
-                $this->getConverter()->camelCaseToSnakeCase($entity),
-                $this->getNamespace(),
-                ucfirst($entity) . 'Actions'
-            )
-        );
+        if (!$this->readonly) {
+            $filePath = $this->path . '/Ui/Component/Listing/';
+            $fileName = ucfirst($entity) . 'Actions';
+            $this->writeFile(
+                $filePath . $fileName . '.php',
+                '<?php' . PHP_EOL . PHP_EOL .
+                $generator->getActions(
+                    $entity,
+                    $routepath,
+                    $this->getConverter()->camelCaseToSnakeCase($entity),
+                    $this->getNamespace(),
+                    ucfirst($entity) . 'Actions'
+                )
+            );
+        }
 
         $filePath = $this->path . '/Model/' . ucfirst($entity) . '/';
         $fileName = 'DataProvider';
@@ -575,24 +586,27 @@ EOT
                 $url . '/massDelete',
                 $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns.ids',
                 $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns_editor',
-                $fields
+                $fields,
+                $this->readonly
             )
         );
 
-        $uiComponent = $parent . '_edit';
-        $dataSource = $uiComponent . '_data_source';
-        $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
-        $this->writeFile(
-            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
-            $generator->generateAdminUiForm(
-                $uiComponent,
-                $dataSource,
-                $url . '/save',
-                $provider,
-                $entity,
-                $fields
-            )
-        );
+        if (!$this->readonly) {
+            $uiComponent = $parent . '_edit';
+            $dataSource = $uiComponent . '_data_source';
+            $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+                $generator->generateAdminUiForm(
+                    $uiComponent,
+                    $dataSource,
+                    $url . '/save',
+                    $provider,
+                    $entity,
+                    $fields
+                )
+            );
+        }
     }
 
     protected function genGridCollection($generator, $entity)
