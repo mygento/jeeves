@@ -1,98 +1,112 @@
 <?php
+
 namespace Mygento\Jeeves\IO;
 
 class NullIO extends BaseIO
 {
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function isInteractive()
     {
         return false;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function isVerbose()
     {
         return false;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function isVeryVerbose()
     {
         return false;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function isDebug()
     {
         return false;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function isDecorated()
     {
         return false;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function write($messages, $newline = true, $verbosity = self::NORMAL)
     {
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function writeError($messages, $newline = true, $verbosity = self::NORMAL)
     {
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function overwrite($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
     {
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function overwriteError($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
     {
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function ask($question, $default = null)
     {
         return $default;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function askConfirmation($question, $default = true)
     {
         return $default;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function askAndValidate($question, $validator, $attempts = false, $default = null)
     {
         return $default;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function askAndHideAnswer($question)
     {
         return null;
     }
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritdoc}
+     */
     public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
     {
         return $default;

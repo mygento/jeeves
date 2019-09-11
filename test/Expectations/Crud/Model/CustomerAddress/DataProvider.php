@@ -58,6 +58,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->loadedData[$model->getId()] = $model->getData();
             $this->dataPersistor->clear('sample_module_customer_address');
         }
+
         return $this->loadedData;
     }
 }

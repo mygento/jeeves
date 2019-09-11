@@ -47,6 +47,7 @@ class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddr
         );
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         return $resultRedirect->setPath('*/*/');
     }
 }

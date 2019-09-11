@@ -32,6 +32,7 @@ class NewAction extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddre
     {
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
+
         return $resultForward->forward('edit');
     }
 }

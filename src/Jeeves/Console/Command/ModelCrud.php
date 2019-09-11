@@ -1,4 +1,5 @@
 <?php
+
 namespace Mygento\Jeeves\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -10,18 +11,36 @@ use Symfony\Component\Yaml\Yaml;
 class ModelCrud extends BaseCommand
 {
     private $vendor;
+
     private $module;
+
     private $path;
+
     private $api = false;
+
     private $gui = true;
+
     private $readonly = false;
 
     private $menu = [];
+
     private $acl = [];
+
     private $admin;
+
     private $guiList = [];
+
     private $di = [];
+
     private $db = [];
+
+    public function genAdminAcl($entities)
+    {
+        $this->writeFile(
+            $this->path . '/etc/acl.xml',
+            $this->getXmlManager()->generateAdminAcl($entities, $this->getFullname(), $this->module)
+        );
+    }
 
     protected function configure()
     {
@@ -44,8 +63,7 @@ class ModelCrud extends BaseCommand
                 <<<EOT
 <info>php jeeves.phar generate-model-crud</info>
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -73,6 +91,7 @@ EOT
                             . 'and a package name'
                         );
                     }
+
                     return $value;
                 },
                 null,
@@ -91,6 +110,7 @@ EOT
                             'The entity name ' . $value . ' is invalid'
                         );
                     }
+
                     return $value;
                 },
                 null,
@@ -116,15 +136,15 @@ EOT
                                     'identity' => true,
                                     'unsigned' => true,
                                     'comment' => $e . ' ID',
-                                ]
+                                ],
                             ],
                             'tablename' => strtolower($tablename),
                             'route' => [
-                                'admin' => strtolower($routepath)
-                            ]
-                        ]
-                    ]
-                ]
+                                'admin' => strtolower($routepath),
+                            ],
+                        ],
+                    ],
+                ],
             ];
         }
 
@@ -152,6 +172,194 @@ EOT
 
         // CS
         $this->runCodeStyleFixer();
+    }
+
+    protected function genAdminLayouts($generator, $entity)
+    {
+        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
+            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $uiComponent = $parent . '_listing';
+        $path = $parent . '_index';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+            $generator->generateAdminLayoutIndex($uiComponent)
+        );
+
+        if (!$this->readonly) {
+            $editUiComponent = $parent . '_edit';
+            $path = $parent . '_edit';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+                $generator->generateAdminLayoutEdit($editUiComponent)
+            );
+
+            $uiComponent = $parent . '_new';
+            $path = $parent . '_new';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+                $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
+            );
+        }
+    }
+
+    protected function genAdminUI($generator, $entity, $routepath, $fields)
+    {
+        if (!$this->readonly) {
+            $filePath = $this->path . '/Ui/Component/Listing/';
+            $fileName = ucfirst($entity) . 'Actions';
+            $this->writeFile(
+                $filePath . $fileName . '.php',
+                '<?php' . PHP_EOL . PHP_EOL .
+                $generator->getActions(
+                    $entity,
+                    $routepath,
+                    $this->getConverter()->camelCaseToSnakeCase($entity),
+                    $this->getNamespace(),
+                    ucfirst($entity) . 'Actions'
+                )
+            );
+        }
+
+        $filePath = $this->path . '/Model/' . ucfirst($entity) . '/';
+        $fileName = 'DataProvider';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->getProvider(
+                $entity,
+                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
+                $this->getNamespace(),
+                $fileName,
+                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity)
+            )
+        );
+
+        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
+            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $url = $this->getConverter()->camelCaseToSnakeCase($this->module) . '/' . $this->getConverter()->camelCaseToSnakeCase($entity);
+
+        $uiComponent = $parent . '_listing';
+        $common = $parent . '_listing' . '.' . $parent . '_listing.';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $generator->generateAdminUiIndex(
+                $uiComponent,
+                $uiComponent . '_data_source',
+                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns',
+                'Add New ' . $this->getConverter()->getEntityName($entity),
+                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
+                $url . '/inlineEdit',
+                $url . '/massDelete',
+                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns.ids',
+                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns_editor',
+                $fields,
+                $this->readonly
+            )
+        );
+
+        if (!$this->readonly) {
+            $uiComponent = $parent . '_edit';
+            $dataSource = $uiComponent . '_data_source';
+            $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
+            $this->writeFile(
+                $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+                $generator->generateAdminUiForm(
+                    $uiComponent,
+                    $dataSource,
+                    $url . '/save',
+                    $provider,
+                    $entity,
+                    $fields
+                )
+            );
+        }
+    }
+
+    protected function genGridCollection($generator, $entity)
+    {
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
+        $fileName = 'Collection';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->generateGridCollection(
+                $entity,
+                $this->getNamespace(),
+                $fileName,
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection'
+            )
+        );
+    }
+
+    protected function genAdminRoute($path)
+    {
+        if (!$path) {
+            return;
+        }
+        $this->writeFile(
+            $this->path . '/etc/adminhtml/routes.xml',
+            $this->getXmlManager()->generateAdminRoute($path, $this->getFullname(), $this->module)
+        );
+    }
+
+    protected function genAdminMenu($entities)
+    {
+        $this->writeFile(
+            $this->path . '/etc/adminhtml/menu.xml',
+            $this->getXmlManager()->generateAdminMenu(
+                $entities,
+                $this->getFullname(),
+                $this->module
+            )
+        );
+    }
+
+    protected function genDI($entities)
+    {
+        $this->writeFile(
+            $this->path . '/etc/di.xml',
+            $this->getXmlManager()->generateDI(
+                $this->guiList,
+                $entities,
+                $this->getNamespace(),
+                $this->module
+            )
+        );
+    }
+
+    protected function genDBSchema($db)
+    {
+        $this->writeFile(
+            $this->path . '/etc/db_schema.xml',
+            $this->getXmlManager()->generateSchema($db)
+        );
+    }
+
+    protected function genAPI($generator, $entity)
+    {
+        $this->writeFile(
+            $this->path . '/etc/webapi.xml',
+            $generator->generateAPI(
+                $entity,
+                $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
+                $this->getFullname() . '::' . $this->module . '_' . $entity,
+                $this->module . ucfirst($entity)
+            )
+        );
+    }
+
+    protected function getNamespace()
+    {
+        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
+    }
+
+    protected function getFullname()
+    {
+        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
     }
 
     private function genModule($input, $vendor, $module, $entity, $config)
@@ -500,201 +708,5 @@ EOT
                 $this->getNamespace()
             )
         );
-    }
-
-    protected function genAdminLayouts($generator, $entity)
-    {
-        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
-            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
-
-        $uiComponent = $parent . '_listing';
-        $path = $parent . '_index';
-        $this->writeFile(
-            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutIndex($uiComponent)
-        );
-
-        if (!$this->readonly) {
-            $editUiComponent = $parent . '_edit';
-            $path = $parent . '_edit';
-            $this->writeFile(
-                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
-                $generator->generateAdminLayoutEdit($editUiComponent)
-            );
-
-            $uiComponent = $parent . '_new';
-            $path = $parent . '_new';
-            $this->writeFile(
-                $this->path . '/view/adminhtml/layout/' . $path . '.xml',
-                $generator->generateAdminLayoutNew($uiComponent, $editUiComponent)
-            );
-        }
-    }
-
-    protected function genAdminUI($generator, $entity, $routepath, $fields)
-    {
-        if (!$this->readonly) {
-            $filePath = $this->path . '/Ui/Component/Listing/';
-            $fileName = ucfirst($entity) . 'Actions';
-            $this->writeFile(
-                $filePath . $fileName . '.php',
-                '<?php' . PHP_EOL . PHP_EOL .
-                $generator->getActions(
-                    $entity,
-                    $routepath,
-                    $this->getConverter()->camelCaseToSnakeCase($entity),
-                    $this->getNamespace(),
-                    ucfirst($entity) . 'Actions'
-                )
-            );
-        }
-
-        $filePath = $this->path . '/Model/' . ucfirst($entity) . '/';
-        $fileName = 'DataProvider';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->getProvider(
-                $entity,
-                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
-                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
-                $this->getNamespace(),
-                $fileName,
-                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity)
-            )
-        );
-
-        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
-            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
-
-        $url = $this->getConverter()->camelCaseToSnakeCase($this->module) . '/' . $this->getConverter()->camelCaseToSnakeCase($entity);
-
-        $uiComponent = $parent . '_listing';
-        $common = $parent . '_listing' . '.' . $parent . '_listing.';
-        $this->writeFile(
-            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
-            $generator->generateAdminUiIndex(
-                $uiComponent,
-                $uiComponent . '_data_source',
-                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns',
-                'Add New ' . $this->getConverter()->getEntityName($entity),
-                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
-                $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
-                $url . '/inlineEdit',
-                $url . '/massDelete',
-                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns.ids',
-                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns_editor',
-                $fields,
-                $this->readonly
-            )
-        );
-
-        if (!$this->readonly) {
-            $uiComponent = $parent . '_edit';
-            $dataSource = $uiComponent . '_data_source';
-            $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
-            $this->writeFile(
-                $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
-                $generator->generateAdminUiForm(
-                    $uiComponent,
-                    $dataSource,
-                    $url . '/save',
-                    $provider,
-                    $entity,
-                    $fields
-                )
-            );
-        }
-    }
-
-    protected function genGridCollection($generator, $entity)
-    {
-        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
-        $fileName = 'Collection';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->generateGridCollection(
-                $entity,
-                $this->getNamespace(),
-                $fileName,
-                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection'
-            )
-        );
-    }
-
-    protected function genAdminRoute($path)
-    {
-        if (!$path) {
-            return;
-        }
-        $this->writeFile(
-            $this->path . '/etc/adminhtml/routes.xml',
-            $this->getXmlManager()->generateAdminRoute($path, $this->getFullname(), $this->module)
-        );
-    }
-
-    public function genAdminAcl($entities)
-    {
-        $this->writeFile(
-            $this->path . '/etc/acl.xml',
-            $this->getXmlManager()->generateAdminAcl($entities, $this->getFullname(), $this->module)
-        );
-    }
-
-    protected function genAdminMenu($entities)
-    {
-        $this->writeFile(
-            $this->path . '/etc/adminhtml/menu.xml',
-            $this->getXmlManager()->generateAdminMenu(
-                $entities,
-                $this->getFullname(),
-                $this->module
-            )
-        );
-    }
-
-    protected function genDI($entities)
-    {
-        $this->writeFile(
-            $this->path . '/etc/di.xml',
-            $this->getXmlManager()->generateDI(
-                $this->guiList,
-                $entities,
-                $this->getNamespace(),
-                $this->module
-            )
-        );
-    }
-
-    protected function genDBSchema($db)
-    {
-        $this->writeFile(
-            $this->path . '/etc/db_schema.xml',
-            $this->getXmlManager()->generateSchema($db)
-        );
-    }
-
-    protected function genAPI($generator, $entity)
-    {
-        $this->writeFile(
-            $this->path . '/etc/webapi.xml',
-            $generator->generateAPI(
-                $entity,
-                $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                $this->getFullname() . '::' . $this->module . '_' . $entity,
-                $this->module . ucfirst($entity)
-            )
-        );
-    }
-
-    protected function getNamespace()
-    {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
-    }
-
-    protected function getFullname()
-    {
-        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
     }
 }

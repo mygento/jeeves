@@ -14,6 +14,7 @@ class Helper
 
         $class->addProperty('code', $method)
             ->setVisibility('protected')->addComment('@var string');
+
         return $namespace;
     }
 }

@@ -39,6 +39,7 @@ EOT
                 if (null === $value) {
                     return $name;
                 }
+
                 return $value;
             },
             null,
@@ -52,6 +53,7 @@ EOT
                 if (null === $value) {
                     return $repo;
                 }
+
                 return $value;
             },
             null,

@@ -57,9 +57,10 @@ class InlineEdit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddr
                 continue;
             }
         }
+
         return $resultJson->setData([
             'messages' => $messages,
-            'error' => $error
+            'error' => $error,
         ]);
     }
 }

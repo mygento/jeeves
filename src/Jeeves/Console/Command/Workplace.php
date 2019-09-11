@@ -17,13 +17,12 @@ class Workplace extends BaseCommand
             ->setDefinition([
                 new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
                 new InputArgument('repo', InputArgument::OPTIONAL, 'Project repository url'),
-              ])
+            ])
             ->setHelp(
                 <<<EOT
 <info>php jeeves.phar new-workplace</info>
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,6 +36,7 @@ EOT
                 if (null === $value) {
                     return $folder;
                 }
+
                 return $value;
             },
             null,
@@ -49,6 +49,7 @@ EOT
                 if (null === $value) {
                     return $repo;
                 }
+
                 return $value;
             },
             null,
@@ -58,6 +59,7 @@ EOT
             mkdir($folder . '-project');
         }
         $workplaceFolder = $folder . '-project' . DIRECTORY_SEPARATOR . $folder . '-workplace';
+
         try {
             $io->write(sprintf('Cloning: <info>%s</info>.', 'workplace'));
             $repository = \Gitonomy\Git\Admin::cloneTo(
@@ -68,6 +70,7 @@ EOT
         } catch (\Gitonomy\Git\Exception\RuntimeException $e) {
             $io->writeError($e->getMessage());
         }
+
         try {
             $io->write(sprintf('Cloning: <info>%s</info>.', $repo));
             $repository = \Gitonomy\Git\Admin::cloneTo(
@@ -82,6 +85,7 @@ EOT
         if (!is_dir($srcFolder)) {
             $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
             symlink('../' . $folder, $srcFolder);
+
             return;
         }
         if (!is_link($srcFolder) &&

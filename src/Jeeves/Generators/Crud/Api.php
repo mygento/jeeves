@@ -9,6 +9,7 @@ class Api
     public function generateAPI($entity, $repository, $acl, $prefix)
     {
         $service = $this->getService();
+
         return $service->write('routes', function ($writer) use ($entity, $repository, $acl, $prefix) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
@@ -20,120 +21,120 @@ class Api
                     'name' => 'route',
                     'attributes' => [
                         'url' => self::VERSION . $prefix . '/:' . $entity . 'Id',
-                        'method' => 'GET'
+                        'method' => 'GET',
                     ],
                     'value' => [
                         'service' => [
                             'attributes' => [
                                 'class' => $repository,
-                                'method' => 'getById'
+                                'method' => 'getById',
                             ],
                         ],
                         'resources' => [
                             'resource' => [
                                 'attributes' => [
-                                    'ref' => $acl
+                                    'ref' => $acl,
                                 ],
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ]);
             $writer->write([
                 [
                     'name' => 'route',
                     'attributes' => [
                         'url' => self::VERSION . $prefix . '/search',
-                        'method' => 'GET'
+                        'method' => 'GET',
                     ],
                     'value' => [
                         'service' => [
                             'attributes' => [
                                 'class' => $repository,
-                                'method' => 'getList'
+                                'method' => 'getList',
                             ],
                         ],
                         'resources' => [
                             'resource' => [
                                 'attributes' => [
-                                    'ref' => $acl
+                                    'ref' => $acl,
                                 ],
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ]);
             $writer->write([
                 [
                     'name' => 'route',
                     'attributes' => [
                         'url' => self::VERSION . $prefix,
-                        'method' => 'POST'
+                        'method' => 'POST',
                     ],
                     'value' => [
                         'service' => [
                             'attributes' => [
                                 'class' => $repository,
-                                'method' => 'save'
+                                'method' => 'save',
                             ],
                         ],
                         'resources' => [
                             'resource' => [
                                 'attributes' => [
-                                    'ref' => $acl
+                                    'ref' => $acl,
                                 ],
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ]);
             $writer->write([
                 [
                     'name' => 'route',
                     'attributes' => [
                         'url' => self::VERSION . $prefix . '/:id',
-                        'method' => 'PUT'
+                        'method' => 'PUT',
                     ],
                     'value' => [
                         'service' => [
                             'attributes' => [
                                 'class' => $repository,
-                                'method' => 'save'
+                                'method' => 'save',
                             ],
                         ],
                         'resources' => [
                             'resource' => [
                                 'attributes' => [
-                                    'ref' => $acl
+                                    'ref' => $acl,
                                 ],
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ]);
             $writer->write([
                 [
                     'name' => 'route',
                     'attributes' => [
                         'url' => self::VERSION . $prefix . '/:' . $entity . 'Id',
-                        'method' => 'DELETE'
+                        'method' => 'DELETE',
                     ],
                     'value' => [
                         'service' => [
                             'attributes' => [
                                 'class' => $repository,
-                                'method' => 'deleteById'
+                                'method' => 'deleteById',
                             ],
                         ],
                         'resources' => [
                             'resource' => [
                                 'attributes' => [
-                                    'ref' => $acl
+                                    'ref' => $acl,
                                 ],
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ]);
         });
     }
@@ -142,6 +143,7 @@ class Api
     {
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+
         return $service;
     }
 }

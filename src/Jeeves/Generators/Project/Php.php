@@ -19,40 +19,40 @@ class Php
                 'etws/magento-language-ru_ru' => 'dev-develop',
             ],
             'require-dev' => [
-                'mygento/coding-standard' => '~2.2'
+                'mygento/coding-standard' => '~2.2',
             ],
             'replace' => [
-              'magento/module-marketplace' => '*',
-              'magento/module-cybersource' => '*',
-              'magento/module-authorizenet' => '*',
-              'magento/module-signifyd' => '*',
-              'amzn/amazon-pay-module' => '*',
-              'amzn/amazon-pay-and-login-magento-2-module' => '*',
-              'amzn/amazon-pay-and-login-with-amazon-core-module' => '*',
-              'amzn/login-with-amazon-module' => '*',
-              'dotmailer/dotmailer-magento2-extension' => '*',
-              'klarna/module-core' => '*',
-              'klarna/module-kp' => '*',
-              'klarna/module-ordermanagement' => '*',
-              'shopialfb/facebook-module' => '*',
-              'temando/module-shipping-m2' => '*',
-              'vertex/module-tax' => '*',
+                'magento/module-marketplace' => '*',
+                'magento/module-cybersource' => '*',
+                'magento/module-authorizenet' => '*',
+                'magento/module-signifyd' => '*',
+                'amzn/amazon-pay-module' => '*',
+                'amzn/amazon-pay-and-login-magento-2-module' => '*',
+                'amzn/amazon-pay-and-login-with-amazon-core-module' => '*',
+                'amzn/login-with-amazon-module' => '*',
+                'dotmailer/dotmailer-magento2-extension' => '*',
+                'klarna/module-core' => '*',
+                'klarna/module-kp' => '*',
+                'klarna/module-ordermanagement' => '*',
+                'shopialfb/facebook-module' => '*',
+                'temando/module-shipping-m2' => '*',
+                'vertex/module-tax' => '*',
             ],
             'autoload' => [
-                    'psr-4' => [
-                        'Magento\\Framework\\' => 'lib/internal/Magento/Framework/',
-                        'Magento\\Setup\\' => 'setup/src/Magento/Setup/',
-                        'Magento\\' => 'app/code/Magento/',
-                    ],
-                    'psr-0' => [
-                        '' => ['app/code/'],
-                    ],
-                    'files' => ['app/etc/NonComposerComponentRegistration.php'],
-                    'exclude-from-classmap' => [
-                        '**/dev/**',
-                        '**/update/**',
-                        '**/Test/**'
-                    ]
+                'psr-4' => [
+                    'Magento\\Framework\\' => 'lib/internal/Magento/Framework/',
+                    'Magento\\Setup\\' => 'setup/src/Magento/Setup/',
+                    'Magento\\' => 'app/code/Magento/',
+                ],
+                'psr-0' => [
+                    '' => ['app/code/'],
+                ],
+                'files' => ['app/etc/NonComposerComponentRegistration.php'],
+                'exclude-from-classmap' => [
+                    '**/dev/**',
+                    '**/update/**',
+                    '**/Test/**',
+                ],
             ],
             'autoload-dev' => [
                 'psr-4' => [
@@ -60,7 +60,7 @@ class Php
                     'Magento\\Tools\\' => 'dev/tools/Magento/Tools/',
                     'Magento\\Tools\\Sanity\\' => 'dev/build/publication/sanity/Magento/Tools/Sanity/',
                     'Magento\\TestFramework\\Inspection\\' => 'dev/tests/static/framework/Magento/TestFramework/Inspection/',
-                    'Magento\\TestFramework\\Utility\\' =>'dev/tests/static/framework/Magento/TestFramework/Utility/'
+                    'Magento\\TestFramework\\Utility\\' => 'dev/tests/static/framework/Magento/TestFramework/Utility/',
                 ],
             ],
             'minimum-stability' => 'stable',
@@ -74,7 +74,7 @@ class Php
             'extra' => [
                 'magento-force' => 'override',
             ],
-        ], JSON_PRETTY_PRINT |  JSON_UNESCAPED_SLASHES);
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
     public function generateLint()
@@ -82,31 +82,32 @@ class Php
         $d = 'd' . 'ie';
         $v = 'var' . '_dump';
         $e = 'e' . 'xit';
-        $grum = <<<CONFIG
+
+        return <<<CONFIG
 parameters:
   git_dir: .
   bin_dir: vendor/bin
   tasks:
     git_blacklist:
       keywords:
-        - "$d("
-        - "$v("
-        - "$e;"
+        - "${d}("
+        - "${v}("
+        - "${e};"
     phplint:
     phpcsfixer2:
       config: '.php_cs'
     xmllint:
 
 CONFIG;
-        return $grum;
     }
 
     public function generateFixer()
     {
         $finder = '$finder';
-        $config = <<<CONFIG
+
+        return <<<CONFIG
 <?php
-$finder = PhpCsFixer\Finder::create()
+${finder} = PhpCsFixer\Finder::create()
     ->in('app')
     ->name('*.phtml')
     ->exclude('dev/tests/functional/generated')
@@ -124,7 +125,7 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('var');
 
 return PhpCsFixer\Config::create()
-    ->setFinder($finder)
+    ->setFinder(${finder})
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -160,12 +161,11 @@ return PhpCsFixer\Config::create()
     ]);
 
 CONFIG;
-        return $config;
     }
 
     public function generateConfig()
     {
-        $config = <<<CONFIG
+        return <<<CONFIG
 <?php
 return array (
   'modules' =>
@@ -290,6 +290,5 @@ return array (
   ),
 );
 CONFIG;
-        return $config;
     }
 }

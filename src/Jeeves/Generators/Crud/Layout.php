@@ -4,13 +4,6 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 class Layout
 {
-    private function getService()
-    {
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-        return $service;
-    }
-
     public function generateAdminLayoutIndex($uiComponent)
     {
         $service = $this->getService();
@@ -25,22 +18,23 @@ class Layout
                     'body' => [
                         'referenceContainer' => [
                             'attributes' => [
-                              'name' => 'content',
+                                'name' => 'content',
                             ],
                             'value' => [
                                 [
                                     'uiComponent' => [
                                         'attributes' => [
-                                          'name' => $uiComponent,
+                                            'name' => $uiComponent,
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
-                ]
+                ],
             ]);
         });
+
         return $xml;
     }
 
@@ -57,28 +51,29 @@ class Layout
                 [
                     'update' => [
                         'attributes' => [
-                          'handle' => 'editor',
+                            'handle' => 'editor',
                         ],
                     ],
                     'body' => [
                         'referenceContainer' => [
                             'attributes' => [
-                              'name' => 'content',
+                                'name' => 'content',
                             ],
                             'value' => [
                                 [
                                     'uiComponent' => [
                                         'attributes' => [
-                                          'name' => $uiComponent,
+                                            'name' => $uiComponent,
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
-                ]
+                ],
             ]);
         });
+
         return $xml;
     }
 
@@ -95,12 +90,21 @@ class Layout
                 [
                     'update' => [
                         'attributes' => [
-                          'handle' => $handle,
+                            'handle' => $handle,
                         ],
                     ],
-                ]
+                ],
             ]);
         });
+
         return $xml;
+    }
+
+    private function getService()
+    {
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+
+        return $service;
     }
 }

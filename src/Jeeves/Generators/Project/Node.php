@@ -8,28 +8,28 @@ class Node
     {
         return json_encode(
             [
-            'name' => $name,
-            'private' => true,
-            'version' => '1.0.0',
-            'description' => '',
-            'main' => 'gulpfile.js',
-            'dependencies' => [
-                'font-awesome' => '^4.7.0',
-                'gulp' => '4.0.0',
-                'gulp-changed' => '^3.2.0',
-                'gulp-cssnano' => '^2.1.3',
-                'gulp-eslint' => '^5.0.0',
-                'gulp-sass' => '^4.0.2',
-                'gulp-scss-lint' => '^0.7.1',
-                'node-normalize-scss' => '^8.0.0',
-                'node-reset-scss' => '^1.0.1',
-                'sassime' => '^1.1.6',
-            ],
-            'devDependencies' => [
-                'gulp-notify' => '^3.2.0',
-                'gulp-sourcemaps' => '^2.6.4',
-                'guppy-pre-commit' => '^0.4.0',
-            ],
+                'name' => $name,
+                'private' => true,
+                'version' => '1.0.0',
+                'description' => '',
+                'main' => 'gulpfile.js',
+                'dependencies' => [
+                    'font-awesome' => '^4.7.0',
+                    'gulp' => '4.0.0',
+                    'gulp-changed' => '^3.2.0',
+                    'gulp-cssnano' => '^2.1.3',
+                    'gulp-eslint' => '^5.0.0',
+                    'gulp-sass' => '^4.0.2',
+                    'gulp-scss-lint' => '^0.7.1',
+                    'node-normalize-scss' => '^8.0.0',
+                    'node-reset-scss' => '^1.0.1',
+                    'sassime' => '^1.1.6',
+                ],
+                'devDependencies' => [
+                    'gulp-notify' => '^3.2.0',
+                    'gulp-sourcemaps' => '^2.6.4',
+                    'guppy-pre-commit' => '^0.4.0',
+                ],
             ],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
@@ -39,46 +39,46 @@ class Node
     {
         return json_encode(
             [
-            'env' => [
-                'node' => true,
-                'browser' => true,
-                'jquery' => true,
-                'amd' => true,
-                'prototypejs' => true,
-            ],
-            'globals' => new \ArrayObject(),
-            'parserOptions' => [
-                'ecmaVersion' => 6
-            ],
-            'extends' => 'eslint:recommended',
-            'rules' => [
-                'indent' => ['error', 2],
-                'keyword-spacing' => [
-                  'error',
-                  [
-                    'before' => true,
-                    'after' => true,
-                  ]
+                'env' => [
+                    'node' => true,
+                    'browser' => true,
+                    'jquery' => true,
+                    'amd' => true,
+                    'prototypejs' => true,
                 ],
-                'linebreak-style' => [
-                  'error',
-                  'unix',
+                'globals' => new \ArrayObject(),
+                'parserOptions' => [
+                    'ecmaVersion' => 6,
                 ],
-                'no-multiple-empty-lines' => 'error',
-                'no-unused-vars' => 'warn',
-                'quotes' => [
-                  'error',
-                  'single',
+                'extends' => 'eslint:recommended',
+                'rules' => [
+                    'indent' => ['error', 2],
+                    'keyword-spacing' => [
+                        'error',
+                        [
+                            'before' => true,
+                            'after' => true,
+                        ],
+                    ],
+                    'linebreak-style' => [
+                        'error',
+                        'unix',
+                    ],
+                    'no-multiple-empty-lines' => 'error',
+                    'no-unused-vars' => 'warn',
+                    'quotes' => [
+                        'error',
+                        'single',
+                    ],
+                    'semi' => [
+                        'error',
+                        'always',
+                    ],
+                    'space-before-blocks' => [
+                        'error',
+                        'always',
+                    ],
                 ],
-                'semi' => [
-                  'error',
-                  'always',
-                ],
-                'space-before-blocks' => [
-                  'error',
-                  'always',
-                ],
-            ],
             ],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
@@ -88,7 +88,8 @@ class Node
     {
         $theme_folder = '${theme_folder}';
         $scss_folder = '${scss_folder}';
-        $config = <<<CONFIG
+
+        return <<<CONFIG
 const notProduction = process.env.NODE_ENV !== 'production';
 
 const gulp = require('gulp');
@@ -161,6 +162,5 @@ gulp.task('build', gulp.series('scss'));
 gulp.task('default', gulp.parallel('serve', 'pre-commit'));
 
 CONFIG;
-        return $config;
     }
 }

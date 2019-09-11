@@ -45,6 +45,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
                 $this->messageManager->addErrorMessage(__('This Customer Address no longer exists'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
+
                 return $resultRedirect->setPath('*/*/');
             }
         }
@@ -60,6 +61,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         $resultPage->getConfig()->getTitle()->prepend(
             $entity->getId() ? $entity->getTitle() : __('New Customer Address')
         );
+
         return $resultPage;
     }
 }

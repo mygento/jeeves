@@ -15,8 +15,9 @@ class Factory
             'warning' => new OutputFormatterStyle('black', 'yellow'),
         ];
     }
+
     /**
-     * Creates a ConsoleOutput instance
+     * Creates a ConsoleOutput instance.
      *
      * @return ConsoleOutput
      */
@@ -24,6 +25,7 @@ class Factory
     {
         $styles = self::createAdditionalStyles();
         $formatter = new OutputFormatter(null, $styles);
+
         return new ConsoleOutput(ConsoleOutput::VERBOSITY_NORMAL, null, $formatter);
     }
 }

@@ -54,6 +54,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
                 __('Sample Module Banner with id "%1" does not exist.', $entityId)
             );
         }
+
         return $entity;
     }
 
@@ -71,6 +72,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
                 __($exception->getMessage())
             );
         }
+
         return $entity;
     }
 
@@ -88,6 +90,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
                 __($exception->getMessage())
             );
         }
+
         return true;
     }
 
@@ -143,6 +146,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
         $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
+
         return $searchResults;
     }
 }

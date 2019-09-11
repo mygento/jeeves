@@ -1,4 +1,5 @@
 <?php
+
 namespace Mygento\Jeeves\Generators\Crud;
 
 use Nette\PhpGenerator\PhpNamespace;
@@ -12,27 +13,23 @@ class AdminController extends Common
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
         $class = $namespace->addClass($className)
             ->setAbstract()
-            ->setExtends('\Magento\Backend\App\Action')
-        ;
+            ->setExtends('\Magento\Backend\App\Action');
         $class->addConstant('ADMIN_RESOURCE', $acl)
             ->addComment('Authorization level')
             ->addComment('')
-            ->addComment('@see _isAllowed()')
-        ;
+            ->addComment('@see _isAllowed()');
 
         $class->addProperty('coreRegistry')
             ->setVisibility('protected')
             ->addComment('Core registry')
             ->addComment('')
-            ->addComment('@var \Magento\Framework\Registry')
-        ;
+            ->addComment('@var \Magento\Framework\Registry');
 
         $class->addProperty('repository')
             ->setVisibility('protected')
             ->addComment($className . ' repository')
             ->addComment('')
-            ->addComment('@var ' . $repository)
-        ;
+            ->addComment('@var ' . $repository);
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param ' . $repository . ' $repository')
@@ -56,6 +53,7 @@ class AdminController extends Common
             . '//->addBreadcrumb(__(\'' . $entityName . '\'), __(\'' . $entityName . '\'));' . PHP_EOL
             . 'return $resultPage;');
         $init->addParameter('resultPage');
+
         return $namespace;
     }
 
@@ -64,12 +62,10 @@ class AdminController extends Common
         $entityName = $this->getEntityName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Index')
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class->addProperty('resultPageFactory')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Framework\View\Result\PageFactory')
-        ;
+            ->addComment('@var \Magento\Framework\View\Result\PageFactory');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Framework\View\Result\PageFactory $resultPageFactory')
@@ -95,6 +91,7 @@ class AdminController extends Common
                 . '//$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);' . PHP_EOL
                 . '//$dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . 'return $resultPage;');
+
         return $namespace;
     }
 
@@ -109,17 +106,14 @@ class AdminController extends Common
 
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Edit')
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class->addProperty('entityFactory')
             ->setVisibility('private')
-            ->addComment('@var ' . $entityClass . 'Factory')
-        ;
+            ->addComment('@var ' . $entityClass . 'Factory');
         $class->addProperty('resultPageFactory')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Framework\View\Result\PageFactory')
-        ;
+            ->addComment('@var \Magento\Framework\View\Result\PageFactory');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param ' . $entityClass . 'Factory $entityFactory')
@@ -181,18 +175,15 @@ class AdminController extends Common
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
         $class = $namespace->addClass('Save')
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class->addProperty('dataPersistor')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface')
-        ;
+            ->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
 
         $class->addProperty('entityFactory')
             ->setVisibility('private')
-            ->addComment('@var ' . $entityClass . 'Factory')
-        ;
+            ->addComment('@var ' . $entityClass . 'Factory');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor')
@@ -268,8 +259,7 @@ class AdminController extends Common
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Delete')
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $entityName = $this->getEntityName($entity);
 
         $class->addMethod('execute')
@@ -303,13 +293,11 @@ class AdminController extends Common
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass($className)
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class->addProperty('resultForwardFactory')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Backend\Model\View\Result\ForwardFactory')
-        ;
+            ->addComment('@var \Magento\Backend\Model\View\Result\ForwardFactory');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory')
@@ -345,13 +333,11 @@ class AdminController extends Common
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass($className)
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class->addProperty('jsonFactory')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Framework\Controller\Result\JsonFactory')
-        ;
+            ->addComment('@var \Magento\Framework\Controller\Result\JsonFactory');
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory')
@@ -416,18 +402,15 @@ class AdminController extends Common
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass($className)
-            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity)
-        ;
+            ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class->addProperty('filter')
             ->setVisibility('private')
-            ->addComment('@var \Magento\Ui\Component\MassAction\Filter')
-        ;
+            ->addComment('@var \Magento\Ui\Component\MassAction\Filter');
 
         $class->addProperty('collectionFactory')
             ->setVisibility('private')
-            ->addComment('@var ' . $collection)
-        ;
+            ->addComment('@var ' . $collection);
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param ' . $collection . ' $collectionFactory')

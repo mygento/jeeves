@@ -149,6 +149,7 @@ class Repository extends Common
         . '$searchResults->setItems($collection->getItems());' . PHP_EOL
         . '$searchResults->setTotalCount($collection->getSize());' . PHP_EOL
         . 'return $searchResults;');
+
         return $namespace;
     }
 }

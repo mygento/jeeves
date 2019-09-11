@@ -1,4 +1,5 @@
 <?php
+
 namespace Mygento\Jeeves\Util;
 
 class XmlManager
@@ -12,8 +13,8 @@ class XmlManager
                     'name' => 'preference',
                     'attributes' => [
                         'for' => $namespace . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                        'type' => $namespace . '\\Model\\' . ucfirst($entity) . 'Repository'
-                    ]
+                        'type' => $namespace . '\\Model\\' . ucfirst($entity) . 'Repository',
+                    ],
                 ];
             },
             $entities
@@ -25,7 +26,7 @@ class XmlManager
                     'attributes' => [
                         'for' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
                         'type' => $namespace . '\\Model\\' . ucfirst($entity),
-                    ]
+                    ],
                 ];
             },
             $entities
@@ -36,39 +37,39 @@ class XmlManager
                     'name' => 'preference',
                     'attributes' => [
                         'for' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
-                        'type' => 'Magento\Framework\Api\SearchResults'
-                    ]
+                        'type' => 'Magento\Framework\Api\SearchResults',
+                    ],
                 ];
             },
             $entities
         );
-        $repoFactoryList  = array_map(
+        $repoFactoryList = array_map(
             function ($entity) use ($namespace) {
                 return [
                     'name' => 'item',
                     'attributes' => [
                         'name' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
-                        'xsi:type' => 'string'
+                        'xsi:type' => 'string',
                     ],
                     'value' => $namespace . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 ];
             },
             $entities
         );
-        $gridList  = array_map(
+        $gridList = array_map(
             function ($entity) use ($namespace, $module) {
                 return [
                     'name' => 'item',
                     'attributes' => [
                         'name' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_listing_data_source',
-                        'xsi:type' => 'string'
+                        'xsi:type' => 'string',
                     ],
                     'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
                 ];
             },
             array_keys($guiList)
         );
-        $gridCollections  = array_map(
+        $gridCollections = array_map(
             function ($entity, $tablename) use ($namespace, $module) {
                 return [
                     'name' => 'type',
@@ -81,15 +82,15 @@ class XmlManager
                                 'name' => 'argument',
                                 'attributes' => [
                                     'name' => 'mainTable',
-                                    'xsi:type' => 'string'
+                                    'xsi:type' => 'string',
                                 ],
-                                'value' => $tablename
+                                'value' => $tablename,
                             ],
                             [
                                 'name' => 'argument',
                                 'attributes' => [
                                     'name' => 'eventPrefix',
-                                    'xsi:type' => 'string'
+                                    'xsi:type' => 'string',
                                 ],
                                 'value' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
                             ],
@@ -97,7 +98,7 @@ class XmlManager
                                 'name' => 'argument',
                                 'attributes' => [
                                     'name' => 'eventObject',
-                                    'xsi:type' => 'string'
+                                    'xsi:type' => 'string',
                                 ],
                                 'value' => $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
                             ],
@@ -105,17 +106,18 @@ class XmlManager
                                 'name' => 'argument',
                                 'attributes' => [
                                     'name' => 'resourceModel',
-                                    'xsi:type' => 'string'
+                                    'xsi:type' => 'string',
                                 ],
-                                'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity)
-                            ]
-                        ]
-                    ]
+                                'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity),
+                            ],
+                        ],
+                    ],
                 ];
             },
             array_keys($guiList),
             $guiList
         );
+
         return $service->write('config', function ($writer) use ($guiList, $repositoriesList, $modelList, $searchList, $repoFactoryList, $gridList, $gridCollections) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
@@ -127,7 +129,7 @@ class XmlManager
                     [
                         'name' => 'type',
                         'attributes' => [
-                            'name' => 'Magento\Framework\Model\Entity\RepositoryFactory'
+                            'name' => 'Magento\Framework\Model\Entity\RepositoryFactory',
                         ],
                         'value' => [
                             'arguments' => [
@@ -135,13 +137,13 @@ class XmlManager
                                     'argument' => [
                                         'attributes' => [
                                             'name' => 'entities',
-                                            'xsi:type' => 'array'
+                                            'xsi:type' => 'array',
                                         ],
                                         'value' => $repoFactoryList,
-                                    ]
-                                ]
-                            ]
-                        ]
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             ));
@@ -154,7 +156,7 @@ class XmlManager
                         [
                             'name' => 'type',
                             'attributes' => [
-                                'name' => 'Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory'
+                                'name' => 'Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory',
                             ],
                             'value' => [
                                 'arguments' => [
@@ -162,17 +164,17 @@ class XmlManager
                                         'argument' => [
                                             'attributes' => [
                                                 'name' => 'collections',
-                                                'xsi:type' => 'array'
+                                                'xsi:type' => 'array',
                                             ],
-                                            'value' => $gridList
-                                        ]
-                                    ]
-                                ]
-                            ]
+                                            'value' => $gridList,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     $gridCollections
-                )
+                ),
             ]);
         });
     }
@@ -180,30 +182,31 @@ class XmlManager
     public function generateAdminRoute($path, $fullname, $module)
     {
         $service = $this->getService();
+
         return $service->write('config', function ($writer) use ($path, $fullname, $module) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:App/etc/routes.xsd');
             $writer->write([
-              'name' => 'router',
-              'attributes' => [
-                'id' => 'admin'
-              ],
-              'value' => [
-                  [
-                    'name' => 'route',
-                    'attributes' => [
-                      'id' => $this->getConverter()->camelCaseToSnakeCase($module),
-                      'frontName' => $path,
+                'name' => 'router',
+                'attributes' => [
+                    'id' => 'admin',
+                ],
+                'value' => [
+                    [
+                        'name' => 'route',
+                        'attributes' => [
+                            'id' => $this->getConverter()->camelCaseToSnakeCase($module),
+                            'frontName' => $path,
+                        ],
+                        'value' => [
+                            'name' => 'module',
+                            'attributes' => [
+                                'name' => $fullname,
+                                'before' => 'Magento_Backend',
+                            ],
+                        ],
                     ],
-                    'value' => [
-                      'name' => 'module',
-                      'attributes' => [
-                        'name' => $fullname,
-                        'before' => 'Magento_Backend',
-                      ],
-                    ]
-                  ]
-              ]
+                ],
             ]);
         });
     }
@@ -213,16 +216,16 @@ class XmlManager
         $entityList = array_map(
             function ($entity, $path) use ($fullname, $module) {
                 return [
-                    'name'=> 'add',
+                    'name' => 'add',
                     'attributes' => [
-                      'id' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
-                      'title' => $this->getConverter()->splitAtUpperCase($entity),
-                      'translate' => 'title',
-                      'module' => $fullname,
-                      'sortOrder' => '90',
-                      'parent' => $fullname . '::root',
-                      'action' => $path . '/' . $this->getConverter()->camelCaseToSnakeCase($entity),
-                      'resource' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'id' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'title' => $this->getConverter()->splitAtUpperCase($entity),
+                        'translate' => 'title',
+                        'module' => $fullname,
+                        'sortOrder' => '90',
+                        'parent' => $fullname . '::root',
+                        'action' => $path . '/' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'resource' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
                     ],
                 ];
             },
@@ -231,17 +234,18 @@ class XmlManager
         );
         $service = $this->getService();
         $common = [
-            'name'=> 'add',
+            'name' => 'add',
             'attributes' => [
-              'id' => $fullname . '::root',
-              'title' => $this->getConverter()->splitAtUpperCase($module),
-              'translate' => 'title',
-              'module' => $fullname,
-              'sortOrder' => '90',
-              'parent' => 'Magento_Backend::stores',
-              'resource' => $fullname . '::root',
+                'id' => $fullname . '::root',
+                'title' => $this->getConverter()->splitAtUpperCase($module),
+                'translate' => 'title',
+                'module' => $fullname,
+                'sortOrder' => '90',
+                'parent' => 'Magento_Backend::stores',
+                'resource' => $fullname . '::root',
             ],
         ];
+
         return $service->write('config', function ($writer) use ($common, $entityList) {
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:module:Magento_Backend:etc/menu.xsd');
             $writer->setIndentString('    ');
@@ -263,12 +267,13 @@ class XmlManager
                           . $this->getConverter()->camelCaseToSnakeCase($entity),
                         'title' => $this->getConverter()->splitAtUpperCase($module)
                             . ' ' . $this->getConverter()->splitAtUpperCase($entity),
-                        'translate' => 'title'
+                        'translate' => 'title',
                     ],
                 ];
             },
             $entities
         );
+
         return $service->write('config', function ($writer) use ($entityList, $fullname, $module) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Acl/etc/acl.xsd');
@@ -277,7 +282,7 @@ class XmlManager
                     'resources' => [
                         'resource' => [
                             'attributes' => [
-                                'id' => 'Magento_Backend::admin'
+                                'id' => 'Magento_Backend::admin',
                             ],
                             'value' => [
                                 [
@@ -285,7 +290,7 @@ class XmlManager
                                     'attributes' => [
                                         'id' => $fullname . '::root',
                                         'title' => $this->getConverter()->splitAtUpperCase($module),
-                                        'translate' => 'title'
+                                        'translate' => 'title',
                                     ],
                                     'value' => $entityList,
                                 ],
@@ -309,19 +314,19 @@ class XmlManager
                                                             'attributes' => [
                                                                 'id' => $fullname . '::config',
                                                                 'title' => $this->getConverter()->getEntityName($fullname),
-                                                                'translate' => 'title'
+                                                                'translate' => 'title',
                                                             ],
                                                         ],
-                                                    ]
+                                                    ],
                                                 ],
-                                            ]
+                                            ],
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ]);
         });
     }
@@ -343,17 +348,18 @@ class XmlManager
                         if (!isset($param['pk']) && !isset($param['identity'])) {
                             return [];
                         }
-                        if (isset($param['pk']) && $param['pk'] == false) {
+                        if (isset($param['pk']) && false == $param['pk']) {
                             return [];
                         }
-                        if (isset($param['identity']) && $param['identity'] == false) {
+                        if (isset($param['identity']) && false == $param['identity']) {
                             return [];
                         }
+
                         return [
                             'name' => 'column',
-                            'attributes' =>  [
+                            'attributes' => [
                                 'name' => $column,
-                            ]
+                            ],
                         ];
                     },
                     array_keys($entity['columns']),
@@ -363,7 +369,7 @@ class XmlManager
                 if (!empty($primaryContraintList)) {
                     $primaryContraint = [
                         'name' => 'constraint',
-                        'attributes' =>  [
+                        'attributes' => [
                             'xsi:type' => 'primary',
                             'referenceId' => 'PRIMARY',
                         ],
@@ -374,7 +380,7 @@ class XmlManager
                     function ($name, $param) use ($tablename) {
                         return [
                             'name' => 'constraint',
-                            'attributes' =>  [
+                            'attributes' => [
                                 'xsi:type' => 'foreign',
                                 'referenceId' => $name,
                                 'table' => $tablename,
@@ -391,10 +397,10 @@ class XmlManager
                 $indexList = array_map(
                     function ($name, $param) {
                         $param['type'] = $param['type'] ?? 'btree';
-                        if ($param['type'] === 'unique') {
+                        if ('unique' === $param['type']) {
                             return [
                                 'name' => 'constraint',
-                                'attributes' =>  [
+                                'attributes' => [
                                     'xsi:type' => 'unique',
                                     'referenceId' => $name,
                                 ],
@@ -404,9 +410,10 @@ class XmlManager
                                 ),
                             ];
                         }
+
                         return [
                             'name' => 'index',
-                            'attributes' =>  [
+                            'attributes' => [
                                 'referenceId' => $name,
                                 'indexType' => $param['type'],
                             ],
@@ -424,6 +431,7 @@ class XmlManager
                         if (count($indx['columns']) > 1) {
                             return null;
                         }
+
                         return $indx['columns'][0];
                     },
                     array_values($entity['indexes'])
@@ -433,9 +441,10 @@ class XmlManager
                         if (in_array($param['column'], $indexColumn)) {
                             return [];
                         }
+
                         return [
                             'name' => 'index',
-                            'attributes' =>  [
+                            'attributes' => [
                                 'indexType' => 'btree',
                                 'referenceId' => $param['indexName'],
                             ],
@@ -448,6 +457,7 @@ class XmlManager
                     array_keys($entity['fk']),
                     $entity['fk']
                 ));
+
                 return [
                     'name' => 'table',
                     'attributes' => [
@@ -462,12 +472,13 @@ class XmlManager
                         $indexList,
                         $constraintList,
                         $indexFKList
-                    )
+                    ),
                 ];
             },
             array_keys($db),
             $db
         );
+
         return $service->write('schema', function ($writer) use ($entityList) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd');
@@ -481,7 +492,7 @@ class XmlManager
             'name' => 'column',
             'attributes' => [
                 'name' => $name,
-            ]
+            ],
         ];
     }
 
@@ -531,14 +542,15 @@ class XmlManager
                 break;
         }
         if (isset($param['default'])) {
-            $optional['default'] =  (string) $param['default'];
+            $optional['default'] = (string) $param['default'];
         }
         if (isset($param['on_update'])) {
-            $optional['on_update'] =  var_export($param['on_update'], true);
+            $optional['on_update'] = var_export($param['on_update'], true);
         }
+
         return [
             'name' => 'column',
-            'attributes' =>  array_merge([
+            'attributes' => array_merge([
                 'xsi:type' => $param['type'],
                 'name' => $column,
                 'nullable' => var_export($param['nullable'] ?? false, true),
@@ -550,11 +562,13 @@ class XmlManager
     {
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+
         return $service;
     }
 
     /**
-     * Get Converter
+     * Get Converter.
+     *
      * @return \Mygento\Jeeves\Generators\Crud\Common
      */
     private function getConverter()

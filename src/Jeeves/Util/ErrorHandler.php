@@ -9,14 +9,15 @@ class ErrorHandler
     private static $io;
 
     /**
-     * Error handler
+     * Error handler.
      *
-     * @param int    $level   Level of the error raised
+     * @param int $level Level of the error raised
      * @param string $message Error message
-     * @param string $file    Filename that the error was raised in
-     * @param int    $line    Line number the error was raised at
+     * @param string $file Filename that the error was raised in
+     * @param int $line Line number the error was raised at
      *
      * @static
+     *
      * @throws \ErrorException
      */
     public static function handle($level, $message, $file, $line)
@@ -31,7 +32,7 @@ class ErrorHandler
             "\na legitimately suppressed error that you were not supposed to see.";
         }
 
-        if ($level !== E_DEPRECATED && $level !== E_USER_DEPRECATED) {
+        if (E_DEPRECATED !== $level && E_USER_DEPRECATED !== $level) {
             throw new \ErrorException($message, 0, $level, $file, $line);
         }
 

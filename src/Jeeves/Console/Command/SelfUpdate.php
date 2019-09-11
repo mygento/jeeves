@@ -4,7 +4,6 @@ namespace Mygento\Jeeves\Console\Command;
 
 use Humbug\SelfUpdate\Updater;
 use Symfony\Component\Console\Input\InputInterface;
-
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SelfUpdate extends BaseCommand
@@ -19,8 +18,7 @@ class SelfUpdate extends BaseCommand
                 <<<EOT
 <info>php jeeves.phar self-update</info>
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,6 +29,7 @@ EOT
         $updater->getStrategy()->setPackageName('mygento/jeeves');
         $updater->getStrategy()->setPharName('jeeves.phar');
         $updater->getStrategy()->setCurrentLocalVersion(\Mygento\Jeeves\Console\Application::VERSION);
+
         try {
             $result = $updater->update();
             if ($result) {

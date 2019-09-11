@@ -7,14 +7,6 @@ use Magento\Framework\Model\AbstractModel;
 class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\BannerInterface
 {
     /**
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_init(\Mygento\SampleModule\Model\ResourceModel\Banner::class);
-    }
-
-    /**
      * Get id
      * @return int|null
      */
@@ -126,5 +118,13 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     public function setProductId($productId)
     {
         return $this->setData(self::PRODUCT_ID, $productId);
+    }
+
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init(\Mygento\SampleModule\Model\ResourceModel\Banner::class);
     }
 }

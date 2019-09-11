@@ -4,7 +4,6 @@ namespace Mygento\Jeeves\Console\Command;
 
 use Mygento\Jeeves\Console\Application;
 use Mygento\Jeeves\IO\NullIO;
-
 use Mygento\Jeeves\Util\XmlManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Filesystem\Filesystem;
@@ -32,14 +31,15 @@ abstract class BaseCommand extends Command
     public function getIO()
     {
         if (null === $this->io) {
+            /** @var $application Application */
             $application = $this->getApplication();
             if ($application instanceof Application) {
-                /* @var $application    Application */
                 $this->io = $application->getIO();
             } else {
                 $this->io = new NullIO();
             }
         }
+
         return $this->io;
     }
 
@@ -51,6 +51,7 @@ abstract class BaseCommand extends Command
         if (null === $this->xmlManager) {
             $this->xmlManager = new XmlManager();
         }
+
         return $this->xmlManager;
     }
 
@@ -59,6 +60,7 @@ abstract class BaseCommand extends Command
         $fs = new Filesystem();
         $io = $this->getIO();
         $io->write(sprintf('Creating: <info>%s</info>.', $path));
+
         return $fs->dumpFile($path, $content);
     }
 
@@ -169,7 +171,8 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * get Converter
+     * get Converter.
+     *
      * @return \Mygento\Jeeves\Generators\Crud\Common
      */
     protected function getConverter()
@@ -177,6 +180,7 @@ abstract class BaseCommand extends Command
         if (null === $this->converter) {
             $this->converter = new \Mygento\Jeeves\Generators\Crud\Common();
         }
+
         return $this->converter;
     }
 }

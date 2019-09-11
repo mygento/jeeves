@@ -19,26 +19,31 @@ class ConsoleIO extends BaseIO
 {
     /** @var InputInterface */
     protected $input;
+
     /** @var OutputInterface */
     protected $output;
+
     /** @var HelperSet */
     protected $helperSet;
+
     /** @var string */
     protected $lastMessage;
+
     /** @var string */
     protected $lastMessageErr;
 
     /** @var float */
     private $startTime;
+
     /** @var array<int, int> */
     private $verbosityMap;
 
     /**
      * Constructor.
      *
-     * @param InputInterface  $input     The input instance
-     * @param OutputInterface $output    The output instance
-     * @param HelperSet       $helperSet The helperSet instance
+     * @param InputInterface $input The input instance
+     * @param OutputInterface $output The output instance
+     * @param HelperSet $helperSet The helperSet instance
      */
     public function __construct(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
@@ -63,7 +68,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isInteractive()
     {
@@ -71,7 +76,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDecorated()
     {
@@ -79,7 +84,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVerbose()
     {
@@ -87,7 +92,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVeryVerbose()
     {
@@ -95,7 +100,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDebug()
     {
@@ -103,7 +108,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($messages, $newline = true, $verbosity = self::NORMAL)
     {
@@ -111,7 +116,7 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function writeError($messages, $newline = true, $verbosity = self::NORMAL)
     {
@@ -119,10 +124,86 @@ class ConsoleIO extends BaseIO
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function overwrite($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
+    {
+        $this->doOverwrite($messages, $newline, $size, false, $verbosity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function overwriteError($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
+    {
+        $this->doOverwrite($messages, $newline, $size, true, $verbosity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ask($question, $default = null)
+    {
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
+        $helper = $this->helperSet->get('question');
+        $question = new Question($question, $default);
+
+        return $helper->ask($this->input, $this->getErrorOutput(), $question);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askConfirmation($question, $default = true)
+    {
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
+        $helper = $this->helperSet->get('question');
+        $question = new StrictConfirmationQuestion($question, $default);
+
+        return $helper->ask($this->input, $this->getErrorOutput(), $question);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askAndValidate($question, $validator, $attempts = null, $default = null)
+    {
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
+        $helper = $this->helperSet->get('question');
+        $question = new Question($question, $default);
+        $question->setValidator($validator);
+        $question->setMaxAttempts($attempts);
+
+        return $helper->ask($this->input, $this->getErrorOutput(), $question);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askAndHideAnswer($question)
+    {
+        $this->writeError($question, false);
+
+        return \Seld\CliPrompt\CliPrompt::hiddenPrompt(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
+    {
+        if ($this->isInteractive()) {
+            return $this->helperSet->get('dialog')->select($this->getErrorOutput(), $question, $choices, $default, $attempts, $errorMessage, $multiselect);
+        }
+
+        return $default;
+    }
+
+    /**
      * @param array|string $messages
-     * @param bool         $newline
-     * @param bool         $stderr
-     * @param int          $verbosity
+     * @param bool $newline
+     * @param bool $stderr
+     * @param int $verbosity
      */
     private function doWrite($messages, $newline, $stderr, $verbosity)
     {
@@ -158,27 +239,11 @@ class ConsoleIO extends BaseIO
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function overwrite($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
-    {
-        $this->doOverwrite($messages, $newline, $size, false, $verbosity);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function overwriteError($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
-    {
-        $this->doOverwrite($messages, $newline, $size, true, $verbosity);
-    }
-
-    /**
      * @param array|string $messages
-     * @param bool         $newline
-     * @param int|null     $size
-     * @param bool         $stderr
-     * @param int          $verbosity
+     * @param bool $newline
+     * @param int|null $size
+     * @param bool $stderr
+     * @param int $verbosity
      */
     private function doOverwrite($messages, $newline, $size, $stderr, $verbosity)
     {
@@ -216,66 +281,6 @@ class ConsoleIO extends BaseIO
         } else {
             $this->lastMessage = $messages;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function ask($question, $default = null)
-    {
-        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
-        $helper = $this->helperSet->get('question');
-        $question = new Question($question, $default);
-
-        return $helper->ask($this->input, $this->getErrorOutput(), $question);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function askConfirmation($question, $default = true)
-    {
-        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
-        $helper = $this->helperSet->get('question');
-        $question = new StrictConfirmationQuestion($question, $default);
-
-        return $helper->ask($this->input, $this->getErrorOutput(), $question);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function askAndValidate($question, $validator, $attempts = null, $default = null)
-    {
-        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
-        $helper = $this->helperSet->get('question');
-        $question = new Question($question, $default);
-        $question->setValidator($validator);
-        $question->setMaxAttempts($attempts);
-
-        return $helper->ask($this->input, $this->getErrorOutput(), $question);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function askAndHideAnswer($question)
-    {
-        $this->writeError($question, false);
-
-        return \Seld\CliPrompt\CliPrompt::hiddenPrompt(true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
-    {
-        if ($this->isInteractive()) {
-            return $this->helperSet->get('dialog')->select($this->getErrorOutput(), $question, $choices, $default, $attempts, $errorMessage, $multiselect);
-        }
-
-        return $default;
     }
 
     /**

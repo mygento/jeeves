@@ -18,9 +18,9 @@ class ProjectTest extends \PHPUnit\Framework\TestCase
     public function testProjectBasic()
     {
         $this->commandTester->execute([
-            'name'=>'Sample',
-            'repo'=>'',
-            'path' => \Mygento\Jeeves\Console\Application::GEN
+            'name' => 'Sample',
+            'repo' => '',
+            'path' => \Mygento\Jeeves\Console\Application::GEN,
         ]);
         $this->checkJson('composer.json');
         $this->checkFile('app/etc/config.php');
@@ -40,24 +40,24 @@ class ProjectTest extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Project/'.$file
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Project/' . $file
         );
     }
 
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Project/'.$file
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Project/' . $file
         );
     }
 
     private function checkJson($file)
     {
         $this->assertJsonFileEqualsJsonFile(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Project/'.$file
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Project/' . $file
         );
     }
 }

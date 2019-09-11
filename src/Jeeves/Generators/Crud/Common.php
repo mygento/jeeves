@@ -7,22 +7,24 @@ class Common
     const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
 
     /**
-    * Converts an input string from snake_case to upper CamelCase.
-    *
-    * @param string $input
-    * @return string
-    */
+     * Converts an input string from snake_case to upper CamelCase.
+     *
+     * @param string $input
+     *
+     * @return string
+     */
     public function snakeCaseToUpperCamelCase($input)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $input)));
     }
 
     /**
-    * Converts an input string from snake_case to upper CamelCase.
-    *
-    * @param string $input
-    * @return string
-    */
+     * Converts an input string from snake_case to upper CamelCase.
+     *
+     * @param string $input
+     *
+     * @return string
+     */
     public function snakeCaseToUpperCamelCaseWithSpace($input)
     {
         return ucwords(str_replace('_', ' ', $input));
@@ -32,6 +34,7 @@ class Common
      * Converts an input string from snake_case to camelCase.
      *
      * @param string $input
+     *
      * @return string
      */
     public function snakeCaseToCamelCase($input)
@@ -40,11 +43,12 @@ class Common
     }
 
     /**
-     * Convert a CamelCase string read from method into field key in snake_case
+     * Convert a CamelCase string read from method into field key in snake_case.
      *
      * For example [DefaultShipping => default_shipping, Postcode => postcode]
      *
      * @param string $name
+     *
      * @return string
      */
     public function camelCaseToSnakeCase($name)
@@ -53,8 +57,10 @@ class Common
     }
 
     /**
-     * Split At UpperCase
-     * @param  string $s
+     * Split At UpperCase.
+     *
+     * @param string $s
+     *
      * @return string
      */
     public function splitAtUpperCase($s)
@@ -63,7 +69,8 @@ class Common
     }
 
     /**
-     * @param  string $entity
+     * @param string $entity
+     *
      * @return string
      */
     public function getEntityName($entity)
@@ -72,10 +79,11 @@ class Common
     }
 
     /**
-    * @param string $name
-    * @param mixed $type
-    * @return string
-    */
+     * @param string $name
+     * @param mixed $type
+     *
+     * @return string
+     */
     public function convertType($type)
     {
         switch ($type) {

@@ -33,6 +33,7 @@ class Model extends Common
             $setter->addParameter($this->snakeCaseToCamelCase($name));
             $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');
         }
+
         return $namespace;
     }
 
@@ -47,6 +48,7 @@ class Model extends Common
             ->addComment('@return void')
             ->setVisibility('protected')
             ->setBody('$this->_init(\'' . $table . '\', \'' . $key . '\');');
+
         return $namespace;
     }
 
@@ -63,8 +65,9 @@ class Model extends Common
             '   ' . $resourceClass . '::class' . PHP_EOL .
             ');');
         $class->addProperty('_idFieldName', 'id')
-              ->setVisibility('protected')
-              ->addComment('@var string');
+            ->setVisibility('protected')
+            ->addComment('@var string');
+
         return $namespace;
     }
 }

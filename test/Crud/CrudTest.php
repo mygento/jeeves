@@ -106,8 +106,8 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Crud/'.$file,
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Crud/' . $file,
             '',
             false,
             false
@@ -117,12 +117,12 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Crud/'.$file
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Crud/' . $file
         );
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN.'/'.$file,
-            'test/Expectations/Crud/'.$file,
+            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
+            'test/Expectations/Crud/' . $file,
             '',
             false,
             false

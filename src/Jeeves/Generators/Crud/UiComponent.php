@@ -42,7 +42,7 @@ class UiComponent extends Common
                 $col = [
                     'name' => 'column',
                     'attributes' => [
-                        'name' => $name
+                        'name' => $name,
                     ],
                     'value' => [
                         'settings' => [
@@ -57,10 +57,10 @@ class UiComponent extends Common
                                 ],
                                 'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
-                        ]
-                    ]
+                        ],
+                    ],
                 ];
-                if ($name === 'id') {
+                if ('id' === $name) {
                     unset($col['value']['settings']['editor']);
                     $col['value']['settings']['sorting'] = 'asc';
                 }
@@ -71,7 +71,7 @@ class UiComponent extends Common
                         $col['value']['settings']['options'] = [
                             'attributes' => [
                                 'class' => $options,
-                            ]
+                            ],
                         ];
                         break;
                     case 'date':
@@ -88,14 +88,16 @@ class UiComponent extends Common
                     $col['value']['settings']['options'] = [
                         'attributes' => [
                             'class' => $param['source'],
-                        ]
+                        ],
                     ];
                 }
+
                 return $col;
             },
             array_keys($fields),
             $fields
         );
+
         return $service->write('listing', function ($writer) use ($columns, $uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $readonly) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
@@ -107,49 +109,49 @@ class UiComponent extends Common
                 'actionsColumn' => [
                     'attributes' => [
                         'name' => 'actions',
-                        'class' => $actions
+                        'class' => $actions,
                     ],
                     'value' => [
                         'settings' => [
-                            'indexField' => 'id'
-                        ]
-                    ]
-                ]
+                            'indexField' => 'id',
+                        ],
+                    ],
+                ],
             ];
 
             $addNewButton = $readonly ? [] : [
                 'button' => [
                     'attributes' => [
-                      'name' => 'add',
+                        'name' => 'add',
                     ],
                     'value' => [
                         'url' => [
                             'attributes' => [
-                                'path' => '*/*/new'
-                            ]
+                                'path' => '*/*/new',
+                            ],
                         ],
                         'class' => 'primary',
                         'label' => [
                             'attributes' => [
-                                'translate' => 'true'
+                                'translate' => 'true',
                             ],
-                            'value' => $addNew
-                        ]
-                    ]
-                ]
+                            'value' => $addNew,
+                        ],
+                    ],
+                ],
             ];
 
             $gridColumns = array_merge($readonly ? [] : [
                 'settings' => $this->getListingSettings($inline, $select, $editor),
                 'selectionsColumn' => [
                     'attributes' => [
-                        'name' => 'ids'
+                        'name' => 'ids',
                     ],
                     'value' => [
                         'settings' => [
-                            'indexField' => 'id'
-                        ]
-                    ]
+                            'indexField' => 'id',
+                        ],
+                    ],
                 ],
             ], $columns, $actionColumn);
 
@@ -157,40 +159,40 @@ class UiComponent extends Common
                 [
                     'argument' => [
                         'attributes' => [
-                          'name' => 'data',
-                          'xsi:type' => 'array',
+                            'name' => 'data',
+                            'xsi:type' => 'array',
                         ],
                         'value' => [
                             [
                                 'item' => [
                                     'attributes' => [
-                                      'name' => 'js_config',
-                                      'xsi:type' => 'array',
+                                        'name' => 'js_config',
+                                        'xsi:type' => 'array',
                                     ],
                                     'value' => [
                                         'item' => [
                                             'attributes' => [
-                                              'name' => 'provider',
-                                              'xsi:type' => 'string',
+                                                'name' => 'provider',
+                                                'xsi:type' => 'string',
                                             ],
-                                            'value' => $uiComponent . '.' . $dataSource
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
+                                            'value' => $uiComponent . '.' . $dataSource,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'settings' => [
                         'buttons' => $addNewButton,
                         'spinner' => $column,
                         'deps' => [
-                            'dep' => $uiComponent . '.' . $dataSource
-                        ]
+                            'dep' => $uiComponent . '.' . $dataSource,
+                        ],
                     ],
                     'dataSource' => [
                         'attributes' => [
                             'name' => $dataSource,
-                            'component' => 'Magento_Ui/js/grid/provider'
+                            'component' => 'Magento_Ui/js/grid/provider',
                         ],
                         'value' => [
                             'settings' => [
@@ -200,14 +202,14 @@ class UiComponent extends Common
                                             'name' => 'indexField',
                                             'xsi:type' => 'string',
                                         ],
-                                        'value' => 'id'
+                                        'value' => 'id',
                                     ],
                                 ],
                                 'updateUrl' => [
                                     'attributes' => [
-                                        'path' => 'mui/index/render'
+                                        'path' => 'mui/index/render',
                                     ],
-                                ]
+                                ],
                             ],
                             'aclResource' => $acl,
                             'dataProvider' => [
@@ -219,10 +221,10 @@ class UiComponent extends Common
                                     'settings' => [
                                         'requestFieldName' => 'id',
                                         'primaryFieldName' => 'id',
-                                    ]
-                                ]
-                            ]
-                        ]
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'listingToolbar' => $this->getToolbar($massDelete, $editor, $readonly),
                     'columns' => [
@@ -230,8 +232,8 @@ class UiComponent extends Common
                             'name' => $column,
                         ],
                         'value' => $gridColumns,
-                    ]
-                ]
+                    ],
+                ],
             ]);
         });
     }
@@ -292,10 +294,10 @@ class UiComponent extends Common
                                                 'xsi:type' => 'string',
                                             ],
                                             'value' => $this->camelCaseToSnakeCase($entity),
-                                        ]
-                                    ]
-                                ]
-                            ]
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                         'settings' => [
                             'dataType' => $dataType,
@@ -305,10 +307,10 @@ class UiComponent extends Common
                                 ],
                                 'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
-                            'visible' => $this->camelCaseToSnakeCase($name) === 'id' ? 'false' : 'true',
+                            'visible' => 'id' === $this->camelCaseToSnakeCase($name) ? 'false' : 'true',
                             'dataScope' => $this->camelCaseToSnakeCase($name),
-                        ]
-                    ]
+                        ],
+                    ],
                 ];
                 switch ($param['type']) {
                     case 'bool':
@@ -325,7 +327,7 @@ class UiComponent extends Common
                                                         'xsi:type' => 'number',
                                                     ],
                                                     'value' => 0,
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'map' => [
@@ -334,13 +336,13 @@ class UiComponent extends Common
                                                         'xsi:type' => 'number',
                                                     ],
                                                     'value' => 1,
-                                                ]
-                                            ]
-                                        ]
+                                                ],
+                                            ],
+                                        ],
                                     ],
-                                    'prefer' => 'toggle'
-                                ]
-                            ]
+                                    'prefer' => 'toggle',
+                                ],
+                            ],
                         ];
                         break;
                     default:
@@ -360,16 +362,18 @@ class UiComponent extends Common
                                         'translate' => 'true',
                                     ],
                                     'value' => '-- Please Select --',
-                                ]
-                            ]
-                        ]
+                                ],
+                            ],
+                        ],
                     ];
                 }
+
                 return $field;
             },
             array_keys($fields),
             $fields
         );
+
         return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider, $fieldset) {
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -380,15 +384,15 @@ class UiComponent extends Common
                 [
                     'argument' => [
                         'attributes' => [
-                          'name' => 'data',
-                          'xsi:type' => 'array',
+                            'name' => 'data',
+                            'xsi:type' => 'array',
                         ],
                         'value' => [
                             [
                                 'item' => [
                                     'attributes' => [
-                                      'name' => 'js_config',
-                                      'xsi:type' => 'array',
+                                        'name' => 'js_config',
+                                        'xsi:type' => 'array',
                                     ],
                                     'value' => [
                                         [
@@ -397,18 +401,18 @@ class UiComponent extends Common
                                                 'name' => 'provider',
                                                 'xsi:type' => 'string',
                                             ],
-                                            'value' => $uiComponent . '.' . $dataSource
+                                            'value' => $uiComponent . '.' . $dataSource,
                                         ],
-                                    ]
+                                    ],
                                 ],
                                 [
                                     'name' => 'item',
                                     'attributes' => [
                                         'name' => 'label',
                                         'xsi:type' => 'string',
-                                        'translate' =>'true'
+                                        'translate' => 'true',
                                     ],
-                                    'value' => 'General Information'
+                                    'value' => 'General Information',
                                 ],
                                 [
                                     'name' => 'item',
@@ -416,10 +420,10 @@ class UiComponent extends Common
                                         'name' => 'template',
                                         'xsi:type' => 'string',
                                     ],
-                                    'value' => 'templates/form/collapsible'
-                                ]
-                            ]
-                        ]
+                                    'value' => 'templates/form/collapsible',
+                                ],
+                            ],
+                        ],
                     ],
                     'settings' => [
                         'buttons' => [
@@ -462,8 +466,8 @@ class UiComponent extends Common
                         'namespace' => $uiComponent,
                         'dataScope' => 'data',
                         'deps' => [
-                            'dep' => $uiComponent . '.' . $dataSource
-                        ]
+                            'dep' => $uiComponent . '.' . $dataSource,
+                        ],
                     ],
                     'dataSource' => [
                         'attributes' => [
@@ -489,20 +493,20 @@ class UiComponent extends Common
                                                             'name' => 'component',
                                                             'xsi:type' => 'string',
                                                         ],
-                                                        'value' => 'Magento_Ui/js/form/provider'
-                                                    ]
-                                                ]
+                                                        'value' => 'Magento_Ui/js/form/provider',
+                                                    ],
+                                                ],
                                             ],
-                                        ]
-                                    ]
-                                ]
+                                        ],
+                                    ],
+                                ],
                             ],
                             'settings' => [
                                 'submitUrl' => [
                                     'attributes' => [
                                         'path' => $submit,
                                     ],
-                                ]
+                                ],
                             ],
                             'dataProvider' => [
                                 'attributes' => [
@@ -513,10 +517,10 @@ class UiComponent extends Common
                                     'settings' => [
                                         'requestFieldName' => 'id',
                                         'primaryFieldName' => 'id',
-                                    ]
-                                ]
-                            ]
-                        ]
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'fieldset' => [
                         'attributes' => [
@@ -524,11 +528,11 @@ class UiComponent extends Common
                         ],
                         'value' => array_merge([
                             'settings' => [
-                                'label' => ''
+                                'label' => '',
                             ],
                         ], $fieldset),
-                    ]
-                ]
+                    ],
+                ],
             ]);
         });
     }
@@ -542,6 +546,7 @@ class UiComponent extends Common
             ->setVisibility('protected')->addComment('@var string');
         $class->addProperty('controller', $controller)
             ->setVisibility('protected')->addComment('@var string');
+
         return $namespace;
     }
 
@@ -601,6 +606,7 @@ class UiComponent extends Common
             . '    $this->dataPersistor->clear(\'' . $persistor . '\');' . PHP_EOL
             . '}' . PHP_EOL
             . 'return $this->loadedData;');
+
         return $namespace;
     }
 
@@ -735,7 +741,7 @@ class UiComponent extends Common
                                             'translate' => 'true',
                                         ],
                                         'value' => 'Delete items',
-                                    ]
+                                    ],
                                 ],
                                 'url' => [
                                     'attributes' => [
@@ -748,9 +754,9 @@ class UiComponent extends Common
                                         'translate' => 'true',
                                     ],
                                     'value' => 'Delete',
-                                ]
-                            ]
-                        ]
+                                ],
+                            ],
+                        ],
                     ],
                     [
                         'name' => 'action',
@@ -769,13 +775,14 @@ class UiComponent extends Common
                                         'translate' => 'true',
                                     ],
                                     'value' => 'Edit',
-                                ]
-                            ]
-                        ]
+                                ],
+                            ],
+                        ],
                     ],
                 ],
-            ]
+            ],
         ];
+
         return [
             'attributes' => [
                 'name' => 'listing_top',
@@ -824,19 +831,19 @@ class UiComponent extends Common
                                             ],
                                             'value' => 'Magento_Ui/js/form/element/ui-select',
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 $massActions,
                 'paging' => [
                     'attributes' => [
                         'name' => 'listing_paging',
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -856,7 +863,7 @@ class UiComponent extends Common
                             'attributes' => [
                                 'name' => 'saveUrl',
                                 'xsi:type' => 'url',
-                                'path' => $inline
+                                'path' => $inline,
                             ],
                         ],
                         [
@@ -865,9 +872,9 @@ class UiComponent extends Common
                                 'name' => 'validateBeforeSave',
                                 'xsi:type' => 'boolean',
                             ],
-                            'value' => 'false'
-                        ]
-                    ]
+                            'value' => 'false',
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'param',
@@ -891,8 +898,8 @@ class UiComponent extends Common
                         'name' => 'selectProvider',
                         'xsi:type' => 'string',
                     ],
-                    'value' => $select
-                ]
+                    'value' => $select,
+                ],
             ],
             'childDefaults' => [
                 'param' => [
@@ -907,7 +914,7 @@ class UiComponent extends Common
                                 'name' => 'provider',
                                 'xsi:type' => 'string',
                             ],
-                            'value' => $editor
+                            'value' => $editor,
                         ],
                         [
                             'name' => 'item',
@@ -915,7 +922,7 @@ class UiComponent extends Common
                                 'name' => 'target',
                                 'xsi:type' => 'string',
                             ],
-                            'value' => 'startEdit'
+                            'value' => 'startEdit',
                         ],
                         [
                             'name' => 'item',
@@ -930,7 +937,7 @@ class UiComponent extends Common
                                         'name' => '0',
                                         'xsi:type' => 'string',
                                     ],
-                                    'value' => '${ $.$data.rowIndex }'
+                                    'value' => '${ $.$data.rowIndex }',
                                 ],
                                 [
                                     'name' => 'item',
@@ -938,13 +945,13 @@ class UiComponent extends Common
                                         'name' => '1',
                                         'xsi:type' => 'boolean',
                                     ],
-                                    'value' => 'true'
-                                ]
-                            ]
-                        ]
-                    ]
+                                    'value' => 'true',
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -952,6 +959,7 @@ class UiComponent extends Common
     {
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+
         return $service;
     }
 }

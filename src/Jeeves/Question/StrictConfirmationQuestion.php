@@ -8,21 +8,22 @@ use Symfony\Component\Console\Question\Question;
 /**
  * Represents a yes/no question
  * Enforces strict responses rather than non-standard answers counting as default
- * Based on Symfony\Component\Console\Question\ConfirmationQuestion
+ * Based on Symfony\Component\Console\Question\ConfirmationQuestion.
  *
  * @author Theo Tonge <theo@theotonge.co.uk>
  */
 class StrictConfirmationQuestion extends Question
 {
     private $trueAnswerRegex;
+
     private $falseAnswerRegex;
 
     /**
-     * Constructor.s
+     * Constructor.s.
      *
-     * @param string $question         The question to ask to the user
-     * @param bool   $default          The default answer to return, true or false
-     * @param string $trueAnswerRegex  A regex to match the "yes" answer
+     * @param string $question The question to ask to the user
+     * @param bool $default The default answer to return, true or false
+     * @param string $trueAnswerRegex A regex to match the "yes" answer
      * @param string $falseAnswerRegex A regex to match the "no" answer
      */
     public function __construct($question, $default = true, $trueAnswerRegex = '/^y(?:es)?$/i', $falseAnswerRegex = '/^no?$/i')

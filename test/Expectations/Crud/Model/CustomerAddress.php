@@ -7,14 +7,6 @@ use Magento\Framework\Model\AbstractModel;
 class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api\Data\CustomerAddressInterface
 {
     /**
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_init(\Mygento\SampleModule\Model\ResourceModel\CustomerAddress::class);
-    }
-
-    /**
      * Get id
      * @return int|null
      */
@@ -126,5 +118,13 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     public function setPrice($price)
     {
         return $this->setData(self::PRICE, $price);
+    }
+
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init(\Mygento\SampleModule\Model\ResourceModel\CustomerAddress::class);
     }
 }

@@ -26,18 +26,19 @@ class Application extends BaseApplication
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
         if (null === $output) {
             $output = Factory::createOutput();
         }
+
         return parent::run($input, $output);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -47,27 +48,13 @@ class Application extends BaseApplication
         try {
             $result = parent::doRun($input, $output);
             restore_error_handler();
+
             return $result;
         } catch (\Exception $e) {
             restore_error_handler();
+
             throw $e;
         }
-    }
-
-    /**
-     * Initializes all commands.
-     */
-    protected function getDefaultCommands()
-    {
-        $commands = array_merge(parent::getDefaultCommands(), [
-            //new Command\PaymentGateway(),
-            new Command\ModelCrud(),
-            new Command\SelfUpdate(),
-            new Command\Workplace(),
-            new Command\EmptyProject(),
-            new Command\ShippingModule(),
-        ]);
-        return $commands;
     }
 
     /**
@@ -76,5 +63,20 @@ class Application extends BaseApplication
     public function getIO()
     {
         return $this->io;
+    }
+
+    /**
+     * Initializes all commands.
+     */
+    protected function getDefaultCommands()
+    {
+        return array_merge(parent::getDefaultCommands(), [
+            //new Command\PaymentGateway(),
+            new Command\ModelCrud(),
+            new Command\SelfUpdate(),
+            new Command\Workplace(),
+            new Command\EmptyProject(),
+            new Command\ShippingModule(),
+        ]);
     }
 }

@@ -158,6 +158,7 @@ class Carrier
 
         $class->addProperty('helper')
             ->setVisibility('private')->addComment($helper);
+
         return $namespace;
     }
 }

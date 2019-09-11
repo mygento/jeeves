@@ -25,6 +25,7 @@ class Interfaces extends Common
                 ->setVisibility('public')
                 ->addParameter($this->snakeCaseToCamelCase($name));
         }
+
         return $namespace;
     }
 
@@ -97,6 +98,7 @@ class Interfaces extends Common
             ->addComment('Set list of ' . $entity)
             ->addComment('@param ' . $entInterface . '[] $items')
             ->addParameter('items')->setTypeHint('array');
+
         return $namespace;
     }
 }

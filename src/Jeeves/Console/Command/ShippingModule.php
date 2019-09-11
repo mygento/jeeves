@@ -1,4 +1,5 @@
 <?php
+
 namespace Mygento\Jeeves\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,7 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ShippingModule extends BaseCommand
 {
     private $vendor;
+
     private $module;
+
     private $entity;
 
     protected function configure()
@@ -26,8 +29,7 @@ class ShippingModule extends BaseCommand
                 <<<EOT
 <info>php jeeves.phar generate-shipping</info>
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -51,6 +53,7 @@ EOT
                         . 'and a package name'
                     );
                 }
+
                 return $value;
             },
             null,
@@ -69,6 +72,7 @@ EOT
                         'The method name ' . $value . ' is invalid'
                     );
                 }
+
                 return $value;
             },
             null,
@@ -90,6 +94,11 @@ EOT
 
         // CS
         $this->runCodeStyleFixer();
+    }
+
+    protected function getNamespace()
+    {
+        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
     }
 
     private function genHelper($generator)
@@ -152,10 +161,5 @@ EOT
                 $this->getNamespace()
             )
         );
-    }
-
-    protected function getNamespace()
-    {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
     }
 }

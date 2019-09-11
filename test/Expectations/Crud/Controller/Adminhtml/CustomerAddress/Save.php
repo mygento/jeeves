@@ -57,6 +57,7 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
                     $this
                         ->messageManager
                         ->addErrorMessage(__('This Customer Address no longer exists'));
+
                     return $resultRedirect->setPath('*/*/');
                 }
             }
@@ -65,6 +66,7 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
             $data['id'] = null;
         }
         $entity->setData($data);
+
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(__('You saved the Customer Address'));
@@ -72,6 +74,7 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
             }
+
             return $resultRedirect->setPath('*/*/');
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -79,6 +82,7 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
             $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Customer Address'));
         }
         $this->dataPersistor->set('sample_module_customeraddress', $data);
+
         return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
     }
 }
