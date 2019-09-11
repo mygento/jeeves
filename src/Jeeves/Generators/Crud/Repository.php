@@ -60,7 +60,7 @@ class Repository extends Common
         $getById->setBody('$entity = $this->entityFactory->create();' . PHP_EOL
             . '$this->resource->load($entity, $entityId);' . PHP_EOL
             . 'if (!$entity->getId()) {' . PHP_EOL
-            . 'throw new \Magento\Framework\Exception\NoSuchEntityException(' . PHP_EOL
+            . '    throw new \Magento\Framework\Exception\NoSuchEntityException(' . PHP_EOL
             . '        __(\'' . $entityName . ' with id "%1" does not exist.\', $entityId)' . PHP_EOL
             . '    );' . PHP_EOL
             . '}' . PHP_EOL
@@ -76,7 +76,7 @@ class Repository extends Common
         $save->setBody('try {' . PHP_EOL
             . '$this->resource->save($entity);' . PHP_EOL
             . '} catch (\Exception $exception) {' . PHP_EOL
-            . 'throw new \Magento\Framework\Exception\CouldNotSaveException(' . PHP_EOL
+            . '    throw new \Magento\Framework\Exception\CouldNotSaveException(' . PHP_EOL
             . '        __($exception->getMessage())' . PHP_EOL
             . '    );' . PHP_EOL
             . '}' . PHP_EOL
@@ -92,7 +92,7 @@ class Repository extends Common
         $delete->setBody('try {' . PHP_EOL
             . '$this->resource->delete($entity);' . PHP_EOL
             . '} catch (\Exception $exception) {' . PHP_EOL
-            . 'throw new \Magento\Framework\Exception\CouldNotDeleteException(' . PHP_EOL
+            . '    throw new \Magento\Framework\Exception\CouldNotDeleteException(' . PHP_EOL
             . '        __($exception->getMessage())' . PHP_EOL
             . '    );' . PHP_EOL
             . '}' . PHP_EOL

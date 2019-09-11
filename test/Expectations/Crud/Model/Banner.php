@@ -72,6 +72,25 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     }
 
     /**
+     * Get family
+     * @return string|null
+     */
+    public function getFamily()
+    {
+        return $this->getData(self::FAMILY);
+    }
+
+    /**
+     * Set family
+     * @param string $family
+     * @return $this
+     */
+    public function setFamily($family)
+    {
+        return $this->setData(self::FAMILY, $family);
+    }
+
+    /**
      * Get is active
      * @return bool|null
      */

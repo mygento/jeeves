@@ -77,6 +77,16 @@
                 <label translate="true">Subname</label>
             </settings>
         </column>
+        <column name="family">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Family</label>
+            </settings>
+        </column>
         <column name="is_active" component="Magento_Ui/js/grid/columns/select">
             <settings>
                 <filter>select</filter>

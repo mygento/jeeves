@@ -51,6 +51,8 @@ Mygento:
           type: varchar
         subname:
           type: varchar
+        family:
+          type: varchar
         is_active:
           type: boolean
         product_id:
@@ -59,7 +61,7 @@ Mygento:
       indexes:
         IX_NAME:
           type: 'unique'
-          columns: ['name', 'subname']
+          columns: ['family', 'subname']
         IX_PRD_U:
           type: 'unique'
           columns: ['product_id']
