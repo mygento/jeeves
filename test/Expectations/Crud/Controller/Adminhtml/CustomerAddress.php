@@ -9,7 +9,7 @@ abstract class CustomerAddress extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Mygento_SampleModule::sample_module_customer_address';
+    const ADMIN_RESOURCE = 'Mygento_SampleModule::customer_address';
 
     /**
      * Core registry

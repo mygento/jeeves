@@ -495,9 +495,7 @@ EOT
             $generator->genAdminAbstractController(
                 $fileName,
                 $this->getFullname(),
-                $this->getFullname()
-                    . '::' . $this->getConverter()->camelCaseToSnakeCase($this->module)
-                    . '_' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
                 $namePath . 'Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 $this->getNamespace()
             )
