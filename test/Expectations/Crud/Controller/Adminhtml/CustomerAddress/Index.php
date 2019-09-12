@@ -7,9 +7,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
-    /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface
-     */
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
     private $dataPersistor;
 
     /**

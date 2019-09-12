@@ -7,9 +7,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Banner
     /** @var \Magento\Framework\View\Result\PageFactory */
     private $resultPageFactory;
 
-    /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface
-     */
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
     private $dataPersistor;
 
     /**
@@ -42,7 +40,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Banner
         $resultPage = $this->resultPageFactory->create();
         $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Banner'));
 
-        $this->dataPersistor->clear('sample_module_customeraddress');
+        $this->dataPersistor->clear('sample_module_banner');
 
         return $resultPage;
     }

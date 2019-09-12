@@ -50,7 +50,6 @@ class AdminController extends Common
             ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
             ->addComment('@return \Magento\Backend\Model\View\Result\Page')
             ->setBody('$resultPage->setActiveMenu(\'' . $acl . '\');' . PHP_EOL
-            . '//->addBreadcrumb(__(\'' . $entityName . '\'), __(\'' . $entityName . '\'));' . PHP_EOL
             . 'return $resultPage;');
         $init->addParameter('resultPage');
 
@@ -66,16 +65,22 @@ class AdminController extends Common
         $class->addProperty('resultPageFactory')
             ->setVisibility('private')
             ->addComment('@var \Magento\Framework\View\Result\PageFactory');
+        $class->addProperty('dataPersistor')
+            ->setVisibility('private')
+            ->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
 
         $construct = $class->addMethod('__construct')
+            ->addComment('@param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor')
             ->addComment('@param \Magento\Framework\View\Result\PageFactory $resultPageFactory')
             ->addComment('@param ' . $repository . ' $repository')
             ->addComment('@param \Magento\Framework\Registry $coreRegistry')
             ->addComment('@param \Magento\Backend\App\Action\Context $context')
             ->setBody('$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
+            . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
             . 'parent::__construct($repository, $coreRegistry, $context);
           ');
 
+        $construct->addParameter('dataPersistor')->setTypeHint('\Magento\Framework\App\Request\DataPersistorInterface');
         $construct->addParameter('resultPageFactory')->setTypeHint('\Magento\Framework\View\Result\PageFactory');
         $construct->addParameter('repository')->setTypeHint($repository);
         $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
@@ -88,8 +93,7 @@ class AdminController extends Common
             ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
                 . '$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL . PHP_EOL
-                . '//$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);' . PHP_EOL
-                . '//$dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
+                . '$this->dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . 'return $resultPage;');
 
         return $namespace;
