@@ -8,18 +8,26 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
     private $resultPageFactory;
 
     /**
+     * @var \Magento\Framework\App\Request\DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
+     * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
+        \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Mygento\SampleModule\Api\CustomerAddressRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\App\Action\Context $context
     ) {
         $this->resultPageFactory = $resultPageFactory;
+        $this->dataPersistor = $dataPersistor;
         parent::__construct($repository, $coreRegistry, $context);
     }
 
@@ -34,8 +42,8 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         $resultPage = $this->resultPageFactory->create();
         $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Customer Address'));
 
-        //$dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
-        //$dataPersistor->clear('sample_module_customeraddress');
+        $this->dataPersistor->clear('sample_module_customeraddress');
+
         return $resultPage;
     }
 }

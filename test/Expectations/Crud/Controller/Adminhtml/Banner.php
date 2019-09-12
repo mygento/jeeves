@@ -49,7 +49,7 @@ abstract class Banner extends \Magento\Backend\App\Action
     protected function initPage($resultPage)
     {
         $resultPage->setActiveMenu('Mygento_SampleModule::banner');
-        //->addBreadcrumb(__('Banner'), __('Banner'));
+
         return $resultPage;
     }
 }
