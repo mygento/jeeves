@@ -3,31 +3,31 @@
     <route url="/V1/SampleModuleBanner/:BannerId" method="GET">
         <service class="Mygento\SampleModule\Api\BannerRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="Mygento_SampleModule::SampleModule_Banner"/>
+            <resource ref="Mygento_SampleModule::banner"/>
         </resources>
     </route>
     <route url="/V1/SampleModuleBanner/search" method="GET">
         <service class="Mygento\SampleModule\Api\BannerRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Mygento_SampleModule::SampleModule_Banner"/>
+            <resource ref="Mygento_SampleModule::banner"/>
         </resources>
     </route>
     <route url="/V1/SampleModuleBanner" method="POST">
         <service class="Mygento\SampleModule\Api\BannerRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Mygento_SampleModule::SampleModule_Banner"/>
+            <resource ref="Mygento_SampleModule::banner"/>
         </resources>
     </route>
     <route url="/V1/SampleModuleBanner/:id" method="PUT">
         <service class="Mygento\SampleModule\Api\BannerRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Mygento_SampleModule::SampleModule_Banner"/>
+            <resource ref="Mygento_SampleModule::banner"/>
         </resources>
     </route>
     <route url="/V1/SampleModuleBanner/:BannerId" method="DELETE">
         <service class="Mygento\SampleModule\Api\BannerRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Mygento_SampleModule::SampleModule_Banner"/>
+            <resource ref="Mygento_SampleModule::banner"/>
         </resources>
     </route>
 </routes>

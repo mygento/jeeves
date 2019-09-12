@@ -151,7 +151,7 @@ EOT
         foreach ($config as $vendor => $mod) {
             foreach ($mod as $module => $ent) {
                 foreach ($ent as $entity => $config) {
-                    $this->genModule($input, $vendor, $module, $entity, $config);
+                    $this->genModule($vendor, $module, $entity, $config);
                 }
             }
         }
@@ -179,8 +179,7 @@ EOT
 
     private function genAdminLayouts($generator, $entity)
     {
-        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
-            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entity);
 
         $uiComponent = $parent . '_listing';
         $path = $parent . '_index';
@@ -215,9 +214,8 @@ EOT
                 $filePath . $fileName . '.php',
                 '<?php' . PHP_EOL . PHP_EOL .
                 $generator->getActions(
-                    $entity,
                     $routepath,
-                    $this->getConverter()->camelCaseToSnakeCase($entity),
+                    $this->getEntityLowercase($entity),
                     $this->getNamespace(),
                     ucfirst($entity) . 'Actions'
                 )
@@ -235,14 +233,13 @@ EOT
                 $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\CollectionFactory',
                 $this->getNamespace(),
                 $fileName,
-                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity)
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entity)
             )
         );
 
-        $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
-            . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entity);
 
-        $url = $this->getConverter()->camelCaseToSnakeCase($this->module) . '/' . $this->getConverter()->camelCaseToSnakeCase($entity);
+        $url = $this->getModuleLowercase() . '/' . $this->getEntityLowercase($entity);
 
         $uiComponent = $parent . '_listing';
         $common = $parent . '_listing' . '.' . $parent . '_listing.';
@@ -251,14 +248,14 @@ EOT
             $generator->generateAdminUiIndex(
                 $uiComponent,
                 $uiComponent . '_data_source',
-                $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns',
+                $parent . '_columns',
                 'Add New ' . $this->getConverter()->getEntityName($entity),
-                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                $this->getEntityAcl($entity),
                 $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
                 $url . '/inlineEdit',
                 $url . '/massDelete',
-                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns.ids',
-                $common . $this->getConverter()->camelCaseToSnakeCase($this->module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_columns_editor',
+                $common . $parent . '_columns.ids',
+                $common . $parent . '_columns_editor',
                 $fields,
                 $this->readonly
             )
@@ -371,25 +368,14 @@ EOT
             $generator->generateAPI(
                 $entity,
                 $this->getNamespace() . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                $this->getFullname() . '::' . $this->module . '_' . $entity,
+                $this->getEntityAcl($entity),
                 $this->module . ucfirst($entity)
             )
         );
     }
 
-    private function getNamespace()
+    private function genModule($vendor, $module, $entity, $config)
     {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
-    }
-
-    private function getFullname()
-    {
-        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
-    }
-
-    private function genModule($input, $vendor, $module, $entity, $config)
-    {
-        $io = $this->getIO();
         $this->vendor = $vendor;
         $this->module = $module;
         $this->api = $config['api'] ?? false;
@@ -398,15 +384,15 @@ EOT
 
         $tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->vendor)
-                . '_' . $this->getConverter()->camelCaseToSnakeCase($module)
-                . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
+                . '_' . $this->getModuleLowercase()
+                . '_' . $this->getEntityLowercase($entity);
 
         if (!isset($config['route'])) {
             $config['route'] = [];
         }
 
         if (!isset($config['route']['admin']) || !$config['route']['admin']) {
-            $config['route']['admin'] = $this->getConverter()->camelCaseToSnakeCase($this->module);
+            $config['route']['admin'] = $this->getModuleLowercase();
         }
 
         $routepath = $config['route']['admin'];
@@ -608,7 +594,7 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminViewController(
                 $entityName,
-                $this->module . '_' . strtolower($entityName),
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $this->getNamespace()
             )
@@ -625,7 +611,7 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminEditController(
                 $entityName,
-                $this->module . '_' . strtolower($entityName),
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $namePath . 'Api\\Data\\' . $entityName . 'Interface',
                 $this->getNamespace()
@@ -643,7 +629,7 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminSaveController(
                 $entityName,
-                $this->module . '_' . strtolower($entityName),
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entityName),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $namePath . 'Api\\Data\\' . $entityName . 'Interface',
                 $this->getNamespace()
@@ -728,10 +714,35 @@ EOT
             $generator->genAdminAbstractController(
                 $fileName,
                 $this->getFullname(),
-                $this->getFullname() . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                $this->getEntityAcl($entity),
                 $namePath . 'Api\\' . ucfirst($entity) . 'RepositoryInterface',
                 $this->getNamespace()
             )
         );
+    }
+
+    private function getNamespace()
+    {
+        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
+    }
+
+    private function getFullname()
+    {
+        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
+    }
+
+    private function getEntityAcl($entity)
+    {
+        return $this->getFullname() . '::' . $this->getEntityLowercase($entity);
+    }
+
+    private function getModuleLowercase()
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->module);
+    }
+
+    private function getEntityLowercase($entity)
+    {
+        return $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity);
     }
 }

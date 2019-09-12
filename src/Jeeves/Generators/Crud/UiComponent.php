@@ -293,7 +293,7 @@ class UiComponent extends Common
                                                 'name' => 'source',
                                                 'xsi:type' => 'string',
                                             ],
-                                            'value' => $this->camelCaseToSnakeCase($entity),
+                                            'value' => str_replace('_', '', $this->camelCaseToSnakeCase($entity)),
                                         ],
                                     ],
                                 ],
@@ -537,7 +537,7 @@ class UiComponent extends Common
         });
     }
 
-    public function getActions($entity, $route, $controller, $rootNamespace, $className)
+    public function getActions($route, $controller, $rootNamespace, $className)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Ui\Component\Listing');
         $class = $namespace->addClass($className);

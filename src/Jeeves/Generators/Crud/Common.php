@@ -19,7 +19,7 @@ class Common
     }
 
     /**
-     * Converts an input string from snake_case to upper CamelCase.
+     * Converts an input string from snake_case to upper Camel Case.
      *
      * @param string $input
      *
@@ -54,6 +54,16 @@ class Common
     public function camelCaseToSnakeCase($name)
     {
         return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));
+    }
+
+    public function camelCaseToSnakeCaseNoUnderscore($name)
+    {
+        return str_replace('_', '', $this->camelCaseToSnakeCase($name));
+    }
+
+    public function getLowerCaseModuleEntity($module, $entity)
+    {
+        return $this->camelCaseToSnakeCase($module) . '_' . str_replace('_', '', $this->camelCaseToSnakeCase($entity));
     }
 
     /**

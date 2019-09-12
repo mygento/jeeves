@@ -49,7 +49,7 @@ class AdminController extends Common
             ->addComment('')
             ->addComment('@param \Magento\Backend\Model\View\Result\Page $resultPage')
             ->addComment('@return \Magento\Backend\Model\View\Result\Page')
-            ->setBody('$resultPage->setActiveMenu(\'' . $fullName . '::' . $this->camelCaseToSnakeCase($className) . '\');' . PHP_EOL
+            ->setBody('$resultPage->setActiveMenu(\'' . $acl . '\');' . PHP_EOL
             . '//->addBreadcrumb(__(\'' . $entityName . '\'), __(\'' . $entityName . '\'));' . PHP_EOL
             . 'return $resultPage;');
         $init->addParameter('resultPage');

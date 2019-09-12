@@ -61,7 +61,7 @@ class XmlManager
                 return [
                     'name' => 'item',
                     'attributes' => [
-                        'name' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_listing_data_source',
+                        'name' => $this->getConverter()->getLowerCaseModuleEntity($module, $entity) . '_listing_data_source',
                         'xsi:type' => 'string',
                     ],
                     'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
@@ -92,7 +92,7 @@ class XmlManager
                                     'name' => 'eventPrefix',
                                     'xsi:type' => 'string',
                                 ],
-                                'value' => $this->getConverter()->camelCaseToSnakeCase($module) . '_' . $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
+                                'value' => $this->getConverter()->getLowerCaseModuleEntity($module, $entity) . '_grid_collection',
                             ],
                             [
                                 'name' => 'argument',
@@ -100,7 +100,7 @@ class XmlManager
                                     'name' => 'eventObject',
                                     'xsi:type' => 'string',
                                 ],
-                                'value' => $this->getConverter()->camelCaseToSnakeCase($entity) . '_grid_collection',
+                                'value' => $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity) . '_grid_collection',
                             ],
                             [
                                 'name' => 'argument',
@@ -218,14 +218,14 @@ class XmlManager
                 return [
                     'name' => 'add',
                     'attributes' => [
-                        'id' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'id' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity),
                         'title' => $this->getConverter()->splitAtUpperCase($entity),
                         'translate' => 'title',
                         'module' => $fullname,
                         'sortOrder' => '90',
                         'parent' => $fullname . '::root',
-                        'action' => $path . '/' . $this->getConverter()->camelCaseToSnakeCase($entity),
-                        'resource' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCase($entity),
+                        'action' => $path . '/' . $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity),
+                        'resource' => $fullname . '::' . $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity),
                     ],
                 ];
             },
@@ -264,7 +264,7 @@ class XmlManager
                     'name' => 'resource',
                     'attributes' => [
                         'id' => $fullname . '::'
-                          . $this->getConverter()->camelCaseToSnakeCase($entity),
+                          . $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity),
                         'title' => $this->getConverter()->splitAtUpperCase($module)
                             . ' ' . $this->getConverter()->splitAtUpperCase($entity),
                         'translate' => 'title',
