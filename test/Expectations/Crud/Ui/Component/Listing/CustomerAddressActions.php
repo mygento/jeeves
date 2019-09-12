@@ -8,5 +8,5 @@ class CustomerAddressActions extends \Mygento\Base\Ui\Component\Listing\Actions
     protected $route = 'sample_module';
 
     /** @var string */
-    protected $controller = 'customer_address';
+    protected $controller = 'customeraddress';
 }

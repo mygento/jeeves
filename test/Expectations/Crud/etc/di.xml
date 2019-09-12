@@ -17,16 +17,16 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="sample_module_customer_address_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection</item>
+                <item name="sample_module_customeraddress_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection</item>
                 <item name="sample_module_banner_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Banner\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
     <type name="Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">mygento_sample_module_customer_address</argument>
-            <argument name="eventPrefix" xsi:type="string">sample_module_customer_address_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">customer_address_grid_collection</argument>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_customeraddress</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_customeraddress_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customeraddress_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress</argument>
         </arguments>
     </type>

@@ -2,7 +2,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sample_module_customer_address_edit.sample_module_customer_address_edit_data_source</item>
+            <item name="provider" xsi:type="string">sample_module_customeraddress_edit.sample_module_customeraddress_edit_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">General Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -15,22 +15,22 @@
             <button name="delete" class="Mygento\Base\Block\Adminhtml\Component\Edit\DeleteButton"/>
             <button name="back" class="Mygento\Base\Block\Adminhtml\Component\Edit\BackButton"/>
         </buttons>
-        <namespace>sample_module_customer_address_edit</namespace>
+        <namespace>sample_module_customeraddress_edit</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>sample_module_customer_address_edit.sample_module_customer_address_edit_data_source</dep>
+            <dep>sample_module_customeraddress_edit.sample_module_customeraddress_edit_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="sample_module_customer_address_edit_data_source">
+    <dataSource name="sample_module_customeraddress_edit_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
         <settings>
-            <submitUrl path="sample_module/customer_address/save"/>
+            <submitUrl path="sample_module/customeraddress/save"/>
         </settings>
-        <dataProvider name="sample_module_customer_address_edit_data_source" class="Mygento\SampleModule\Model\CustomerAddress\DataProvider">
+        <dataProvider name="sample_module_customeraddress_edit_data_source" class="Mygento\SampleModule\Model\CustomerAddress\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
@@ -44,7 +44,7 @@
         <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>
@@ -57,7 +57,7 @@
         <field name="city" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>
@@ -70,7 +70,7 @@
         <field name="customer_group" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>
@@ -91,7 +91,7 @@
         <field name="created_at" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>
@@ -104,7 +104,7 @@
         <field name="updated_at" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>
@@ -117,7 +117,7 @@
         <field name="price" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">customer_address</item>
+                    <item name="source" xsi:type="string">customeraddress</item>
                 </item>
             </argument>
             <settings>

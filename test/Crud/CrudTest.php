@@ -85,9 +85,9 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkLayout()
     {
-        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_edit.xml');
-        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_index.xml');
-        $this->checkXml('view/adminhtml/layout/sample_module_customer_address_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_edit.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_new.xml');
 
         $this->checkXml('view/adminhtml/layout/sample_module_banner_index.xml');
     }
@@ -96,8 +96,8 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     {
         $this->checkFile('Ui/Component/Listing/CustomerAddressActions.php');
         $this->checkFile('Model/CustomerAddress/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_customer_address_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_customer_address_edit.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_customeraddress_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_customeraddress_edit.xml');
         $this->checkFile('Model/ResourceModel/CustomerAddress/Grid/Collection.php');
 
         $this->checkFile('Model/Banner/DataProvider.php');

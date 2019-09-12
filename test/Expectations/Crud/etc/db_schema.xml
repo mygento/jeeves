@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="mygento_sample_module_customer_address" resource="default" engine="innodb" comment="Table for Customer Address">
+    <table name="mygento_sample_module_customeraddress" resource="default" engine="innodb" comment="Table for Customer Address">
         <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" padding="10" comment="Address ID"/>
         <column xsi:type="varchar" name="city" nullable="true" length="100" comment="City"/>
         <column xsi:type="int" name="customer_group" nullable="false" identity="false" unsigned="false" padding="10" comment="Customer Group"/>

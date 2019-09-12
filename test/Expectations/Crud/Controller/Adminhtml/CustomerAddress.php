@@ -9,7 +9,7 @@ abstract class CustomerAddress extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Mygento_SampleModule::customer_address';
+    const ADMIN_RESOURCE = 'Mygento_SampleModule::customeraddress';
 
     /**
      * Core registry
@@ -48,7 +48,7 @@ abstract class CustomerAddress extends \Magento\Backend\App\Action
      */
     protected function initPage($resultPage)
     {
-        $resultPage->setActiveMenu('Mygento_SampleModule::customer_address');
+        $resultPage->setActiveMenu('Mygento_SampleModule::customeraddress');
         //->addBreadcrumb(__('Customer Address'), __('Customer Address'));
         return $resultPage;
     }

@@ -51,12 +51,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($items as $model) {
             $this->loadedData[$model->getId()] = $model->getData();
         }
-        $data = $this->dataPersistor->get('sample_module_customer_address');
+        $data = $this->dataPersistor->get('sample_module_customeraddress');
         if (!empty($data)) {
             $model = $this->collection->getNewEmptyItem();
             $model->setData($data);
             $this->loadedData[$model->getId()] = $model->getData();
-            $this->dataPersistor->clear('sample_module_customer_address');
+            $this->dataPersistor->clear('sample_module_customeraddress');
         }
 
         return $this->loadedData;
