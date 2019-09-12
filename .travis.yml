@@ -32,4 +32,4 @@ deploy:
   on:
     repo: mygento/jeeves
     tags: true
-    php: '7.0'
+    php: '7.1'
