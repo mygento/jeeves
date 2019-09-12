@@ -486,6 +486,23 @@ class XmlManager
         });
     }
 
+    public function generateModule($fullname)
+    {
+        $service = $this->getService();
+
+        return $service->write('config', function ($writer) use ($fullname) {
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Module/etc/module.xsd');
+            $writer->setIndentString('    ');
+            $writer->write([
+                'module' => [
+                    'attributes' => [
+                        'name' => $fullname,
+                    ],
+                ],
+            ]);
+        });
+    }
+
     private function getIndexColumn($name)
     {
         return [

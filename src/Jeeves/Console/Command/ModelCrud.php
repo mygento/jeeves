@@ -34,14 +34,6 @@ class ModelCrud extends BaseCommand
 
     private $db = [];
 
-    public function genAdminAcl($entities)
-    {
-        $this->writeFile(
-            $this->path . '/etc/acl.xml',
-            $this->getXmlManager()->generateAdminAcl($entities, $this->getFullname(), $this->module)
-        );
-    }
-
     protected function configure()
     {
         $this
@@ -169,12 +161,23 @@ EOT
         $this->genAdminMenu($this->menu);
         $this->genDBSchema($this->db);
         $this->genDI($this->di);
+        $this->genModuleXml();
+
+        $this->genRegistration();
 
         // CS
         $this->runCodeStyleFixer();
     }
 
-    protected function genAdminLayouts($generator, $entity)
+    private function genAdminAcl($entities)
+    {
+        $this->writeFile(
+            $this->path . '/etc/acl.xml',
+            $this->getXmlManager()->generateAdminAcl($entities, $this->getFullname(), $this->module)
+        );
+    }
+
+    private function genAdminLayouts($generator, $entity)
     {
         $parent = $this->getConverter()->camelCaseToSnakeCase($this->module)
             . '_' . $this->getConverter()->camelCaseToSnakeCase($entity);
@@ -203,7 +206,7 @@ EOT
         }
     }
 
-    protected function genAdminUI($generator, $entity, $routepath, $fields)
+    private function genAdminUI($generator, $entity, $routepath, $fields)
     {
         if (!$this->readonly) {
             $filePath = $this->path . '/Ui/Component/Listing/';
@@ -279,7 +282,7 @@ EOT
         }
     }
 
-    protected function genGridCollection($generator, $entity)
+    private function genGridCollection($generator, $entity)
     {
         $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
         $fileName = 'Collection';
@@ -295,7 +298,7 @@ EOT
         );
     }
 
-    protected function genAdminRoute($path)
+    private function genAdminRoute($path)
     {
         if (!$path) {
             return;
@@ -306,7 +309,7 @@ EOT
         );
     }
 
-    protected function genAdminMenu($entities)
+    private function genAdminMenu($entities)
     {
         $this->writeFile(
             $this->path . '/etc/adminhtml/menu.xml',
@@ -318,7 +321,7 @@ EOT
         );
     }
 
-    protected function genDI($entities)
+    private function genDI($entities)
     {
         $this->writeFile(
             $this->path . '/etc/di.xml',
@@ -331,7 +334,7 @@ EOT
         );
     }
 
-    protected function genDBSchema($db)
+    private function genDBSchema($db)
     {
         $this->writeFile(
             $this->path . '/etc/db_schema.xml',
@@ -339,7 +342,29 @@ EOT
         );
     }
 
-    protected function genAPI($generator, $entity)
+    private function genModuleXml()
+    {
+        $this->writeFile(
+            $this->path . '/etc/module.xml',
+            $this->getXmlManager()->generateModule($this->getFullname())
+        );
+    }
+
+    private function genRegistration()
+    {
+        $filePath = $this->path . '/';
+        $fileName = 'registration';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            '\Magento\Framework\Component\ComponentRegistrar::register(' . PHP_EOL .
+            '   \Magento\Framework\Component\ComponentRegistrar::MODULE,' . PHP_EOL .
+            '   \'' . $this->getFullname() . '\',' . PHP_EOL .
+            '   __DIR__' . PHP_EOL . ');'
+        );
+    }
+
+    private function genAPI($generator, $entity)
     {
         $this->writeFile(
             $this->path . '/etc/webapi.xml',
@@ -352,12 +377,12 @@ EOT
         );
     }
 
-    protected function getNamespace()
+    private function getNamespace()
     {
         return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
     }
 
-    protected function getFullname()
+    private function getFullname()
     {
         return ucfirst($this->vendor) . '_' . ucfirst($this->module);
     }
