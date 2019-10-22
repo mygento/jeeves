@@ -405,6 +405,7 @@ class AdminController extends Common
         $rootNamespace
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
+        $namespace->addUse('Magento\Framework\Controller\ResultFactory');
         $class = $namespace->addClass($className)
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 

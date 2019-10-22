@@ -2,6 +2,8 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\CustomerAddress;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
 {
     /** @var \Magento\Ui\Component\MassAction\Filter */
