@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.17';
+    const VERSION = '0.0.18';
     const GEN = 'generate';
 
     /**
