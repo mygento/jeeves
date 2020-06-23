@@ -532,7 +532,6 @@ class XmlManager
                 $type = [
                     'identity' => var_export($param['identity'] ?? false, true), //autoinrement
                     'unsigned' => var_export($param['unsigned'] ?? false, true),
-                    'padding' => var_export($param['padding'] ?? 10, true),
                 ];
                 break;
             case 'real':
