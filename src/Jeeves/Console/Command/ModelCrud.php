@@ -397,10 +397,11 @@ EOT
 
         $routepath = $config['route']['admin'];
         $fields = $config['columns'];
+        $entityTag = $config['cache_tag'] ?? strtolower(substr($module, 0, 3) . '_' . substr($entity, 0, 1));
 
         // interface
         $interGenerator = new \Mygento\Jeeves\Generators\Crud\Interfaces();
-        $this->genModelInterface($interGenerator, $entity, $fields);
+        $this->genModelInterface($interGenerator, $entity, $entityTag, $fields);
         $this->genModelRepositoryInterface($interGenerator, $entity);
         $this->genModelSearchInterface($interGenerator, $entity);
 
@@ -481,7 +482,7 @@ EOT
         );
     }
 
-    private function genModelInterface($generator, $entityName, $fields)
+    private function genModelInterface($generator, $entityName, $tag, $fields)
     {
         $filePath = $this->path . '/Api/Data/';
         $fileName = ucfirst($entityName) . 'Interface';
@@ -491,6 +492,7 @@ EOT
             $generator->genModelInterface(
                 $fileName,
                 $this->getNamespace(),
+                $tag,
                 $fields
             )
         );

@@ -19,6 +19,11 @@ class Model extends Common
             ->setVisibility('protected')
             ->setBody('$this->_init(' . $resource . '::class);');
 
+        $class->addMethod('getIdentities')
+            ->addComment('@return string[]')
+            ->setVisibility('public')
+            ->setBody('return [self::CACHE_TAG . \'_\' . $this->getId()];');
+
         foreach ($fields as $name => $value) {
             $method = $this->snakeCaseToUpperCamelCase($name);
             $class->addMethod('get' . $method)

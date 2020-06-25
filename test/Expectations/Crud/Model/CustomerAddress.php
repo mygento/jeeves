@@ -7,6 +7,14 @@ use Magento\Framework\Model\AbstractModel;
 class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api\Data\CustomerAddressInterface
 {
     /**
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
      * Get id
      * @return int|null
      */

@@ -41,6 +41,7 @@ Mygento:
     Banner:
       api: true
       readonly: true
+      cache_tag: samp_ban
       columns:
         id:
           type: int

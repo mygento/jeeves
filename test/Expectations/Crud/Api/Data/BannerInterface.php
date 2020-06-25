@@ -2,8 +2,9 @@
 
 namespace Mygento\SampleModule\Api\Data;
 
-interface BannerInterface
+interface BannerInterface extends \Magento\Framework\DataObject\IdentityInterface
 {
+    const CACHE_TAG = 'samp_ban';
     const ID = 'id';
     const NAME = 'name';
     const SUBNAME = 'subname';

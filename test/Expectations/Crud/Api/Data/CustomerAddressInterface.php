@@ -2,8 +2,9 @@
 
 namespace Mygento\SampleModule\Api\Data;
 
-interface CustomerAddressInterface
+interface CustomerAddressInterface extends \Magento\Framework\DataObject\IdentityInterface
 {
+    const CACHE_TAG = 'sam_c';
     const ID = 'id';
     const CITY = 'city';
     const CUSTOMER_GROUP = 'customer_group';

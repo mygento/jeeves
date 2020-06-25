@@ -8,3 +8,8 @@ go to ```https://github.com/mygento/jeeves/releases/latest``` download phar and 
 ```
 sudo mv jeeves.phar /usr/local/bin/jeeves
 ```
+
+
+sample
+
+look in ```.jeeves.phpunit.yaml```

@@ -7,6 +7,14 @@ use Magento\Framework\Model\AbstractModel;
 class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\BannerInterface
 {
     /**
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
      * Get id
      * @return int|null
      */
