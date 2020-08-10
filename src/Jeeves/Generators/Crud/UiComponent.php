@@ -25,6 +25,10 @@ class UiComponent extends Common
                         $filter = 'textRange';
                         $dataType = 'text';
                         break;
+                    case 'price':
+                        $filter = 'textRange';
+                        $dataType = 'text';
+                        break;
                     case 'date':
                     case 'datetime':
                     case 'timestamp':
@@ -73,6 +77,9 @@ class UiComponent extends Common
                                 'class' => $options,
                             ],
                         ];
+                        break;
+                    case 'price':
+                        $col['attributes']['class'] = 'Magento\Catalog\Ui\Component\Listing\Columns\Price';
                         break;
                     case 'date':
                     case 'datetime':

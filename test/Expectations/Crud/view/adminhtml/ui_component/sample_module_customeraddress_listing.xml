@@ -153,9 +153,19 @@
                 <label translate="true">Updated At</label>
             </settings>
         </column>
-        <column name="price">
+        <column name="discount">
             <settings>
                 <filter>text</filter>
+                <dataType>text</dataType>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Discount</label>
+            </settings>
+        </column>
+        <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
+            <settings>
+                <filter>textRange</filter>
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>

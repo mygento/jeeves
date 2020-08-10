@@ -113,6 +113,7 @@ class Common
             case 'mediumtext':
             case 'longtext':
                 return 'string';
+            case 'price':
             case 'decimal':
             case 'real':
             case 'double':

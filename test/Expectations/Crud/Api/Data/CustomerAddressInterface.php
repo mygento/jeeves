@@ -10,6 +10,7 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
     const CUSTOMER_GROUP = 'customer_group';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const DISCOUNT = 'discount';
     const PRICE = 'price';
 
     /**
@@ -76,6 +77,19 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
      * @return $this
      */
     public function setUpdatedAt($updatedAt);
+
+    /**
+     * Get discount
+     * @return float|null
+     */
+    public function getDiscount();
+
+    /**
+     * Set discount
+     * @param float $discount
+     * @return $this
+     */
+    public function setDiscount($discount);
 
     /**
      * Get price

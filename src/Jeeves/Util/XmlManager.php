@@ -534,6 +534,7 @@ class XmlManager
                     'unsigned' => var_export($param['unsigned'] ?? false, true),
                 ];
                 break;
+            case 'price':
             case 'real':
             case 'decimal':
             case 'float':
@@ -557,6 +558,10 @@ class XmlManager
                 throw new \Exception('Error column type');
                 break;
         }
+        $columnType = $param['type'];
+        if ($param['type'] === 'price') {
+            $columnType = 'decimal';
+        }
         if (isset($param['default'])) {
             $optional['default'] = (string) $param['default'];
         }
@@ -567,7 +572,7 @@ class XmlManager
         return [
             'name' => 'column',
             'attributes' => array_merge([
-                'xsi:type' => $param['type'],
+                'xsi:type' => $columnType,
                 'name' => $column,
                 'nullable' => var_export($param['nullable'] ?? false, true),
             ], $type, $optional, ['comment' => $param['comment'] ?? ucfirst($column)]),

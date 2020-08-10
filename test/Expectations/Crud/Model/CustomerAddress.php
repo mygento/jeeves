@@ -110,6 +110,25 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
     }
 
     /**
+     * Get discount
+     * @return float|null
+     */
+    public function getDiscount()
+    {
+        return $this->getData(self::DISCOUNT);
+    }
+
+    /**
+     * Set discount
+     * @param float $discount
+     * @return $this
+     */
+    public function setDiscount($discount)
+    {
+        return $this->setData(self::DISCOUNT, $discount);
+    }
+
+    /**
      * Get price
      * @return float|null
      */
