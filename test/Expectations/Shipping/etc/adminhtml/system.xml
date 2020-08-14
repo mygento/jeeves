@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers">
+            <group id="banan" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Banan</label>
+                <field id="active" type="select" sortOrder="10" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" type="text" sortOrder="20" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Method Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="sort_order" type="text" sortOrder="89" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sort Order</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="test" type="select" sortOrder="90" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Test mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="debug" type="select" sortOrder="99" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <group id="auth" type="text" sortOrder="100" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Authentication</label>
+                </group>
+                <group id="options" type="text" sortOrder="110" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping Options</label>
+                </group>
+                <group id="package" type="text" sortOrder="120" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Packaging</label>
+                    <field id="weight_unit" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Weight Unit</label>
+                        <source_model>Mygento\Shipment\Model\Source\Weightunits</source_model>
+                        <config_path>carriers/banan/weight_unit</config_path>
+                    </field>
+                    <field id="dimension_unit" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Dimension Unit</label>
+                        <source_model>Mygento\Shipment\Model\Source\Dimensionunits</source_model>
+                        <config_path>carriers/banan/dimension_unit</config_path>
+                    </field>
+                    <field id="width" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Width Attribute</label>
+                        <source_model>Mygento\Base\Model\Source\Attributes</source_model>
+                        <config_path>carriers/banan/width</config_path>
+                    </field>
+                    <field id="width_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Width default</label>
+                        <validate>validate-number</validate>
+                        <config_path>carriers/banan/width_default</config_path>
+                        <depends>
+                            <field id="width">0</field>
+                        </depends>
+                    </field>
+                    <field id="length" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Length Attribute</label>
+                        <source_model>Mygento\Base\Model\Source\Attributes</source_model>
+                        <config_path>carriers/banan/length</config_path>
+                    </field>
+                    <field id="length_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Length default</label>
+                        <validate>validate-number</validate>
+                        <config_path>carriers/banan/length_default</config_path>
+                        <depends>
+                            <field id="length">0</field>
+                        </depends>
+                    </field>
+                    <field id="height" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Height Attribute</label>
+                        <source_model>Mygento\Base\Model\Source\Attributes</source_model>
+                        <config_path>carriers/banan/height</config_path>
+                    </field>
+                    <field id="height_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Height default</label>
+                        <validate>validate-number</validate>
+                        <config_path>carriers/banan/height_default</config_path>
+                        <depends>
+                            <field id="height">0</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="tax_options" type="text" sortOrder="130" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tax</label>
+                    <field id="tax" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="tax_same" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Same tax for all products</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="tax">1</field>
+                        </depends>
+                    </field>
+                    <field id="tax_products" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Tax value for all products</label>
+                        <source_model>Mygento\Banan\Model\Source\Tax</source_model>
+                        <depends>
+                            <field id="tax">1</field>
+                            <field id="tax_same">1</field>
+                        </depends>
+                    </field>
+                    <field id="tax_product_attr" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product Tax Attribute</label>
+                        <source_model>Mygento\Base\Model\Source\Attributes</source_model>
+                        <depends>
+                            <field id="tax">1</field>
+                            <field id="tax_same">0</field>
+                        </depends>
+                    </field>
+                    <field id="tax_shipping" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Shipping Tax</label>
+                        <source_model>Mygento\Banan\Model\Source\Tax</source_model>
+                        <depends>
+                            <field id="tax">1</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="order_statuses" type="text" sortOrder="140" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Order Statuses</label>
+                    <field id="autoshipping" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable autoship by status</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="autoshipping_statuses" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable autoship by status</label>
+                        <source_model>Mygento\Base\Model\Source\Status</source_model>
+                        <depends>
+                            <field id="autoshipping">1</field>
+                        </depends>
+                    </field>
+                    <field id="shipment_success_status" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Order status after successful shipment</label>
+                        <source_model>Mygento\Base\Model\Source\Status</source_model>
+                    </field>
+                    <field id="shipment_fail_status" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Order status after failed shipment</label>
+                        <source_model>Mygento\Base\Model\Source\Status</source_model>
+                    </field>
+                    <field id="track_check" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Track Check</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="track_cron" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Track Check Cron</label>
+                        <depends>
+                            <field id="track_check">1</field>
+                        </depends>
+                    </field>
+                    <field id="track_statuses" type="multiselect" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Track Check Statuses</label>
+                        <source_model>Mygento\Base\Model\Source\Status</source_model>
+                        <depends>
+                            <field id="track_check">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

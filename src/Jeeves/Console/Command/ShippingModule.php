@@ -92,6 +92,9 @@ EOT
         $this->genClient($generator);
         $this->genService($generator);
 
+        //xml
+        $this->genSystemXml();
+
         // CS
         $this->runCodeStyleFixer();
     }
@@ -158,6 +161,18 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genService(
                 $namePath . 'Model\\Client',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genSystemXml()
+    {
+        $this->writeFile(
+            $this->path . '/etc/adminhtml/system.xml',
+            $this->getXmlManager()->generateShippingSystem(
+                strtolower($this->entity),
+                ucfirst($this->module),
                 $this->getNamespace()
             )
         );
