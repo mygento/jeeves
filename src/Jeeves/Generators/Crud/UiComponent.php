@@ -245,12 +245,21 @@ class UiComponent extends Common
         });
     }
 
-    public function generateAdminUiForm($uiComponent, $dataSource, $submit, $provider, $entity, $fields = self::DEFAULT_FIELDS)
+    public function generateAdminUiForm($uiComponent, $dataSource, $submit, $provider, $entity, $fields = self::DEFAULT_FIELDS, $withStore = false)
     {
         $service = $this->getService();
+        if ($withStore) {
+            $fields['store_id'] = [
+                'type' => 'store',
+            ];
+        }
         $fieldset = array_map(
             function ($name, $param) use ($entity) {
                 switch ($param['type']) {
+                    case 'store':
+                        $dataType = 'int';
+                        $formElement = 'multiselect';
+                        break;
                     case 'smallint':
                     case 'bigint':
                     case 'tinyint':
@@ -348,6 +357,20 @@ class UiComponent extends Common
                                         ],
                                     ],
                                     'prefer' => 'toggle',
+                                ],
+                            ],
+                        ];
+                        break;
+                    case 'store':
+                        $field['attributes']['class'] = 'Magento\Store\Ui\Component\Form\Field\StoreView';
+                        $field['value']['formElements'] = [
+                            'multiselect' => [
+                                'settings' => [
+                                    'options' => [
+                                        'attributes' => [
+                                            'class' => 'Magento\Store\Ui\Component\Listing\Column\Store\Options',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ];
@@ -617,7 +640,7 @@ class UiComponent extends Common
         return $namespace;
     }
 
-    public function generateGridCollection($entity, $rootNamespace, $className, $collection)
+    public function generateGridCollection($entity, $rootNamespace, $className, $collection, $withStore = false)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
         $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
@@ -630,7 +653,11 @@ class UiComponent extends Common
         $class->addProperty('aggregations')
             ->setVisibility('protected')->addComment('@var \Magento\Framework\Api\Search\AggregationInterface');
 
-        $construct = $class->addMethod('__construct')
+        $construct = $class->addMethod('__construct');
+        if ($withStore) {
+            $construct->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool');
+        }
+        $construct
             ->addComment('@param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory')
             ->addComment('@param \Psr\Log\LoggerInterface $logger')
             ->addComment('@param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy')
@@ -645,6 +672,9 @@ class UiComponent extends Common
             ->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)')
             ->setVisibility('public');
 
+        if ($withStore) {
+            $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
+        }
         $construct->addParameter('entityFactory')->setTypeHint('\Magento\Framework\Data\Collection\EntityFactoryInterface');
         $construct->addParameter('logger')->setTypeHint('\Psr\Log\LoggerInterface');
         $construct->addParameter('fetchStrategy')->setTypeHint('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
@@ -658,6 +688,7 @@ class UiComponent extends Common
         $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 
         $construct->setBody('parent::__construct(' . PHP_EOL
+            . ($withStore ? '$metadataPool,' . PHP_EOL : '')
             . '    $entityFactory,' . PHP_EOL
             . '    $logger,' . PHP_EOL
             . '    $fetchStrategy,' . PHP_EOL

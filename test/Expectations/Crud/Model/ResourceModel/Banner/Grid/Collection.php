@@ -12,6 +12,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -26,6 +27,7 @@ class Collection extends ParentCollection implements SearchResultInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
@@ -39,6 +41,7 @@ class Collection extends ParentCollection implements SearchResultInterface
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
+            $metadataPool,
             $entityFactory,
             $logger,
             $fetchStrategy,

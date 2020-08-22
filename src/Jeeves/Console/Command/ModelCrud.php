@@ -22,6 +22,8 @@ class ModelCrud extends BaseCommand
 
     private $readonly = false;
 
+    private $withStore = false;
+
     private $menu = [];
 
     private $acl = [];
@@ -50,6 +52,7 @@ class ModelCrud extends BaseCommand
                 new InputOption('gui', null, InputOption::VALUE_OPTIONAL, 'GRID ui component', true),
                 new InputOption('api', null, InputOption::VALUE_OPTIONAL, 'API', false),
                 new InputOption('readonly', null, InputOption::VALUE_OPTIONAL, 'read only', false),
+                new InputOption('per_store', null, InputOption::VALUE_OPTIONAL, 'per store', false),
             ])
             ->setHelp(
                 <<<EOT
@@ -114,6 +117,7 @@ EOT
             $api = (bool) $input->getOption('api');
             $gui = (bool) $input->getOption('gui');
             $readonly = (bool) $input->getOption('readonly');
+            $withStore = (bool) $input->getOption('per_store');
 
             $config = [
                 $v => [
@@ -122,6 +126,7 @@ EOT
                             'gui' => $gui,
                             'api' => $api,
                             'readonly' => $readonly,
+                            'per_store' => $withStore,
                             'columns' => [
                                 'id' => [
                                     'type' => 'int',
@@ -273,7 +278,8 @@ EOT
                     $url . '/save',
                     $provider,
                     $entity,
-                    $fields
+                    $fields,
+                    $this->withStore
                 )
             );
         }
@@ -290,7 +296,8 @@ EOT
                 $entity,
                 $this->getNamespace(),
                 $fileName,
-                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection'
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
+                $this->withStore
             )
         );
     }
@@ -381,6 +388,7 @@ EOT
         $this->api = $config['api'] ?? false;
         $this->gui = $config['gui'] ?? true;
         $this->readonly = $config['readonly'] ?? false;
+        $this->withStore = $config['per_store'] ?? false;
 
         $tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->vendor)
@@ -410,6 +418,11 @@ EOT
         $this->genModel($modelGenerator, ucfirst($entity), $fields);
         $this->genResourceModel($modelGenerator, ucfirst($entity), $tablename);
         $this->genResourceCollection($modelGenerator, ucfirst($entity));
+
+        if ($this->withStore) {
+            $this->genReadHandler($modelGenerator, ucfirst($entity), $fields);
+            $this->genSaveHandler($modelGenerator, ucfirst($entity), $fields);
+        }
 
         // repository
         $repoGenerator = new \Mygento\Jeeves\Generators\Crud\Repository();
@@ -454,9 +467,53 @@ EOT
             $apiGenerator = new \Mygento\Jeeves\Generators\Crud\Api();
             $this->genAPI($apiGenerator, $entity);
         }
-        $this->di[] = $entity;
+        $this->di[$entity] = [
+            'store' => $this->withStore,
+            'table' => $tablename,
+            'id' => 'id',
+        ];
         if (!empty($config) && $tablename) {
             $this->db[$tablename] = $config;
+            if ($this->withStore) {
+                $this->db[$tablename . '_store'] = [
+                    'columns' => [
+                        'entity_id' => [
+                            'type' => 'int',
+                            'unsigned' => true,
+                            'nullable' => false,
+                            'pk' => true,
+                            'comment' => 'Entity ID',
+                        ],
+                        'store_id' => [
+                            'type' => 'smallint',
+                            'unsigned' => true,
+                            'nullable' => false,
+                            'pk' => true,
+                            'comment' => 'Store ID',
+                        ],
+                    ],
+                    'fk' => [
+                        'FK_' . strtoupper($entity) . '_STORE_ID' => [
+                            'column' => 'store_id',
+                            'referenceTable' => 'store',
+                            'referenceColumn' => 'store_id',
+                        ],
+                        'FK_' . strtoupper($entity) . '_ENT_ID' => [
+                            'column' => 'entity_id',
+                            'referenceTable' => $tablename,
+                            'referenceColumn' => 'id',
+                            'indexName' => 'IX_ENT_ID',
+                        ],
+                    ],
+                    'indexes' => [
+                        'IX_' . strtoupper($entity) . '_STORE_ID' => [
+                            'columns' => [
+                                'store_id',
+                            ],
+                        ],
+                    ],
+                ];
+            }
         }
     }
 
@@ -474,10 +531,10 @@ EOT
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $namePath . 'Model\\ResourceModel\\' . $entityName,
                 $namePath . 'Model\\ResourceModel\\' . $entityName . '\\Collection',
-                $namePath . 'Model\\' . $entityName,
                 $namePath . 'Api\\Data\\' . $entityName . 'SearchResultsInterface',
                 $namePath . 'Api\\Data\\' . $entityName . 'Interface',
-                $this->getNamespace()
+                $this->getNamespace(),
+                $this->withStore
             )
         );
     }
@@ -493,7 +550,8 @@ EOT
                 $fileName,
                 $this->getNamespace(),
                 $tag,
-                $fields
+                $fields,
+                $this->withStore
             )
         );
     }
@@ -547,7 +605,41 @@ EOT
                 $namePath . $entityName . 'Interface',
                 '\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $entityName,
                 $this->getNamespace(),
-                $fields
+                $fields,
+                $this->withStore
+            )
+        );
+    }
+
+    private function genReadHandler($generator, $entity)
+    {
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Relation/Store/';
+        $fileName = 'ReadHandler';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genReadHandler(
+                $entity,
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($entity),
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genSaveHandler($generator, $entity)
+    {
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Relation/Store/';
+        $fileName = 'SaveHandler';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genSaveHandler(
+                $entity,
+                ucfirst($entity) . 'Interface',
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($entity),
+                $this->getNamespace()
             )
         );
     }
@@ -563,7 +655,9 @@ EOT
                 $fileName,
                 $table,
                 $key,
-                $this->getNamespace()
+                $this->getNamespace(),
+                ucfirst($entityName) . 'Interface',
+                $this->withStore
             )
         );
     }
@@ -580,7 +674,9 @@ EOT
                 $entityName,
                 '\\' . $this->getNamespace() . '\\Model' . '\\' . $entityName,
                 '\\' . $this->getNamespace() . '\\Model\\ResourceModel' . '\\' . $entityName,
-                $this->getNamespace()
+                $this->getNamespace(),
+                ucfirst($entityName) . 'Interface',
+                $this->withStore
             )
         );
     }

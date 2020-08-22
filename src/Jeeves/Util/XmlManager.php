@@ -10,6 +10,10 @@ class XmlManager
 
     private $shipping;
 
+    private $di;
+
+    private $db;
+
     public function generateShippingSystem($module, $entity, $namespace)
     {
         $service = $this->getService();
@@ -58,118 +62,28 @@ class XmlManager
     public function generateDI($guiList, $entities, $namespace, $module)
     {
         $service = $this->getService();
-        $repositoriesList = array_map(
-            function ($entity) use ($namespace) {
-                return [
-                    'name' => 'preference',
-                    'attributes' => [
-                        'for' => $namespace . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                        'type' => $namespace . '\\Model\\' . ucfirst($entity) . 'Repository',
-                    ],
-                ];
-            },
-            $entities
-        );
-        $modelList = array_map(
-            function ($entity) use ($namespace) {
-                return [
-                    'name' => 'preference',
-                    'attributes' => [
-                        'for' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
-                        'type' => $namespace . '\\Model\\' . ucfirst($entity),
-                    ],
-                ];
-            },
-            $entities
-        );
-        $searchList = array_map(
-            function ($entity) use ($namespace) {
-                return [
-                    'name' => 'preference',
-                    'attributes' => [
-                        'for' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'SearchResultsInterface',
-                        'type' => 'Magento\Framework\Api\SearchResults',
-                    ],
-                ];
-            },
-            $entities
-        );
-        $repoFactoryList = array_map(
-            function ($entity) use ($namespace) {
-                return [
-                    'name' => 'item',
-                    'attributes' => [
-                        'name' => $namespace . '\\Api\\Data\\' . ucfirst($entity) . 'Interface',
-                        'xsi:type' => 'string',
-                    ],
-                    'value' => $namespace . '\\Api\\' . ucfirst($entity) . 'RepositoryInterface',
-                ];
-            },
-            $entities
-        );
-        $gridList = array_map(
-            function ($entity) use ($namespace, $module) {
-                return [
-                    'name' => 'item',
-                    'attributes' => [
-                        'name' => $this->getConverter()->getLowerCaseModuleEntity($module, $entity) . '_listing_data_source',
-                        'xsi:type' => 'string',
-                    ],
-                    'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
-                ];
-            },
-            array_keys($guiList)
-        );
-        $gridCollections = array_map(
-            function ($entity, $tablename) use ($namespace, $module) {
-                return [
-                    'name' => 'type',
-                    'attributes' => [
-                        'name' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid\\Collection',
-                    ],
-                    'value' => [
-                        'arguments' => [
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'mainTable',
-                                    'xsi:type' => 'string',
-                                ],
-                                'value' => $tablename,
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'eventPrefix',
-                                    'xsi:type' => 'string',
-                                ],
-                                'value' => $this->getConverter()->getLowerCaseModuleEntity($module, $entity) . '_grid_collection',
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'eventObject',
-                                    'xsi:type' => 'string',
-                                ],
-                                'value' => $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity) . '_grid_collection',
-                            ],
-                            [
-                                'name' => 'argument',
-                                'attributes' => [
-                                    'name' => 'resourceModel',
-                                    'xsi:type' => 'string',
-                                ],
-                                'value' => $namespace . '\\Model\\ResourceModel\\' . ucfirst($entity),
-                            ],
-                        ],
-                    ],
-                ];
-            },
-            array_keys($guiList),
-            $guiList
-        );
+        $repositoriesList = $this->getDi()->getRepositories($entities, $namespace);
+        $modelList = $this->getDi()->getModels($entities, $namespace);
+        $searchList = $this->getDi()->getSearch($entities, $namespace);
+        $repoFactoryList = $this->getDi()->getRepoFactory($entities, $namespace);
+        $gridList = $this->getDi()->getGrid($module, $namespace, $guiList);
+        $gridCollections = $this->getDi()->getGridCollections($module, $namespace, $guiList);
+        $entityManager = $this->getDi()->getEntityManager($entities, $namespace);
+        $entityExt = $this->getDi()->getEntityExtension($entities, $namespace);
+        $entityHydrator = $this->getDi()->getEntityHydrator($entities, $namespace);
 
-        return $service->write('config', function ($writer) use ($guiList, $repositoriesList, $modelList, $searchList, $repoFactoryList, $gridList, $gridCollections) {
+        return $service->write('config', function ($writer) use (
+            $guiList,
+            $repositoriesList,
+            $modelList,
+            $searchList,
+            $repoFactoryList,
+            $gridList,
+            $gridCollections,
+            $entityManager,
+            $entityExt,
+            $entityHydrator
+        ) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
             $writer->write(array_merge(
@@ -178,11 +92,11 @@ class XmlManager
                 $searchList,
                 [
                     [
-                        'name' => 'type',
-                        'attributes' => [
+                        self::N => 'type',
+                        self::A => [
                             'name' => 'Magento\Framework\Model\Entity\RepositoryFactory',
                         ],
-                        'value' => [
+                        self::V => [
                             'arguments' => [
                                 [
                                     'argument' => [
@@ -198,6 +112,63 @@ class XmlManager
                     ],
                 ]
             ));
+            if (!empty($entityManager)) {
+                $writer->write([
+                    self::N => 'type',
+                    self::A => [
+                        'name' => 'Magento\Framework\EntityManager\MetadataPool',
+                    ],
+                    self::V => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'metadata',
+                                    'xsi:type' => 'array',
+                                ],
+                                'value' => $entityManager,
+                            ],
+                        ],
+                    ],
+                ]);
+            }
+            if (!empty($entityExt)) {
+                $writer->write([
+                    self::N => 'type',
+                    self::A => [
+                        'name' => 'Magento\Framework\EntityManager\Operation\ExtensionPool',
+                    ],
+                    self::V => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'extensionActions',
+                                    'xsi:type' => 'array',
+                                ],
+                                'value' => $entityExt,
+                            ],
+                        ],
+                    ],
+                ]);
+            }
+            if (!empty($entityHydrator)) {
+                $writer->write([
+                    self::N => 'type',
+                    self::A => [
+                        'name' => 'Magento\Framework\EntityManager\HydratorPool',
+                    ],
+                    self::V => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'hydrators',
+                                    'xsi:type' => 'array',
+                                ],
+                                'value' => $entityHydrator,
+                            ],
+                        ],
+                    ],
+                ]);
+            }
             if (empty($guiList)) {
                 return;
             }
@@ -394,28 +365,7 @@ class XmlManager
                     array_keys($entity['columns']),
                     $entity['columns']
                 );
-                $primaryContraintList = array_map(
-                    function ($column, $param) {
-                        if (!isset($param['pk']) && !isset($param['identity'])) {
-                            return [];
-                        }
-                        if (isset($param['pk']) && false == $param['pk']) {
-                            return [];
-                        }
-                        if (isset($param['identity']) && false == $param['identity']) {
-                            return [];
-                        }
-
-                        return [
-                            'name' => 'column',
-                            'attributes' => [
-                                'name' => $column,
-                            ],
-                        ];
-                    },
-                    array_keys($entity['columns']),
-                    $entity['columns']
-                );
+                $primaryContraintList = $this->getDb()->getPrimary($entity);
                 $primaryContraint = [];
                 if (!empty($primaryContraintList)) {
                     $primaryContraint = [
@@ -427,87 +377,9 @@ class XmlManager
                         'value' => $primaryContraintList,
                     ];
                 }
-                $constraintList = array_map(
-                    function ($name, $param) use ($tablename) {
-                        return [
-                            'name' => 'constraint',
-                            'attributes' => [
-                                'xsi:type' => 'foreign',
-                                'referenceId' => $name,
-                                'table' => $tablename,
-                                'column' => $param['column'],
-                                'referenceTable' => $param['referenceTable'],
-                                'referenceColumn' => $param['referenceColumn'],
-                                'onDelete' => $param['onDelete'] ?? 'CASCADE',
-                            ],
-                        ];
-                    },
-                    array_keys($entity['fk']),
-                    $entity['fk']
-                );
-                $indexList = array_map(
-                    function ($name, $param) {
-                        $param['type'] = $param['type'] ?? 'btree';
-                        if ('unique' === $param['type']) {
-                            return [
-                                'name' => 'constraint',
-                                'attributes' => [
-                                    'xsi:type' => 'unique',
-                                    'referenceId' => $name,
-                                ],
-                                'value' => array_map(
-                                    [$this, 'getIndexColumn'],
-                                    $param['columns']
-                                ),
-                            ];
-                        }
-
-                        return [
-                            'name' => 'index',
-                            'attributes' => [
-                                'referenceId' => $name,
-                                'indexType' => $param['type'],
-                            ],
-                            'value' => array_map(
-                                [$this, 'getIndexColumn'],
-                                $param['columns']
-                            ),
-                        ];
-                    },
-                    array_keys($entity['indexes']),
-                    $entity['indexes']
-                );
-                $indexColumn = array_filter(array_map(
-                    function ($indx) {
-                        if (count($indx['columns']) > 1) {
-                            return null;
-                        }
-
-                        return $indx['columns'][0];
-                    },
-                    array_values($entity['indexes'])
-                ));
-                $indexFKList = array_filter(array_map(
-                    function ($column, $param) use ($indexColumn) {
-                        if (in_array($param['column'], $indexColumn)) {
-                            return [];
-                        }
-
-                        return [
-                            'name' => 'index',
-                            'attributes' => [
-                                'indexType' => 'btree',
-                                'referenceId' => $param['indexName'],
-                            ],
-                            'value' => array_map(
-                                [$this, 'getIndexColumn'],
-                                [$param['column']]
-                            ),
-                        ];
-                    },
-                    array_keys($entity['fk']),
-                    $entity['fk']
-                ));
+                $constraintList = $this->getDb()->getConstraint($entity, $tablename);
+                $indexList = $this->getDb()->getIndexes($entity, $tablename);
+                $indexFKList = $this->getDb()->getIndexFK($entity);
 
                 return [
                     'name' => 'table',
@@ -552,16 +424,6 @@ class XmlManager
                 ],
             ]);
         });
-    }
-
-    private function getIndexColumn($name)
-    {
-        return [
-            'name' => 'column',
-            'attributes' => [
-                'name' => $name,
-            ],
-        ];
     }
 
     private function getColumn($column, $param)
@@ -645,6 +507,24 @@ class XmlManager
         }
 
         return $this->shipping;
+    }
+
+    private function getDi()
+    {
+        if (!$this->di) {
+            $this->di = new Xml\Di();
+        }
+
+        return $this->di;
+    }
+
+    private function getDb()
+    {
+        if (!$this->db) {
+            $this->db = new Xml\DbSchema();
+        }
+
+        return $this->db;
     }
 
     /**

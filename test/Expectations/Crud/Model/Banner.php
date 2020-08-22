@@ -129,6 +129,25 @@ class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\Ban
     }
 
     /**
+     * Get store id
+     * @return array|null
+     */
+    public function getStoreId()
+    {
+        return $this->getData(self::STORE_ID);
+    }
+
+    /**
+     * Set store id
+     * @param array $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        return $this->setData(self::STORE_ID, $storeId);
+    }
+
+    /**
      * @return void
      */
     protected function _construct()

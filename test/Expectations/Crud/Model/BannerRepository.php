@@ -22,22 +22,28 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /** @var \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory */
     private $searchResultsFactory;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner $resource
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
      * @param \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         ResourceModel\Banner $resource,
         ResourceModel\Banner\CollectionFactory $collectionFactory,
         \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory,
-        \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
+        \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
         $this->entityFactory = $entityFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -65,6 +71,10 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
      */
     public function save(\Mygento\SampleModule\Api\Data\BannerInterface $entity)
     {
+        if (empty($entity->getStoreId())) {
+            $entity->setStoreId($this->storeManager->getStore()->getId());
+        }
+
         try {
             $this->resource->save($entity);
         } catch (\Exception $exception) {
@@ -138,6 +148,12 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
                 );
             }
         }
+
+        $collection->addFilter(
+            'store_id',
+            ['in' => $this->storeManager->getStore()->getId()]
+        );
+
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
 

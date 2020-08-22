@@ -6,13 +6,18 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class Interfaces extends Common
 {
-    public function genModelInterface($className, $rootNamespace, $cacheTag, $fields = self::DEFAULT_FIELDS)
+    public function genModelInterface($className, $rootNamespace, $cacheTag, $fields = self::DEFAULT_FIELDS, $withStore = false)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
         $interface->setExtends('\Magento\Framework\DataObject\IdentityInterface');
 
         $interface->addConstant('CACHE_TAG', $cacheTag);
+        if ($withStore) {
+            $fields['store_id'] = [
+                'type' => 'store',
+            ];
+        }
 
         foreach ($fields as $name => $value) {
             $interface->addConstant(strtoupper($name), strtolower($name));

@@ -12,10 +12,10 @@ class Repository extends Common
         $repoInterface,
         $resource,
         $collection,
-        $entity,
         $results,
         $entityInterface,
-        $rootNamespace
+        $rootNamespace,
+        $withStore = false
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Api\SortOrder');
@@ -33,22 +33,34 @@ class Repository extends Common
         $class->addProperty('searchResultsFactory')
             ->setVisibility('private')->addComment('@var ' . $results . 'Factory');
 
-        $construct = $class->addMethod('__construct')
+        $construct = $class->addMethod('__construct')->setVisibility('public');
+        $construct
             ->addComment('@param ' . $resource . ' $resource')
             ->addComment('@param ' . $collection . 'Factory $collectionFactory')
             ->addComment('@param ' . $entityInterface . 'Factory $entityFactory')
-            ->addComment('@param ' . $results . 'Factory $searchResultsFactory')
-            ->setVisibility('public');
+            ->addComment('@param ' . $results . 'Factory $searchResultsFactory');
 
-        $construct->addParameter('resource')->setTypeHint($resource);
-        $construct->addParameter('collectionFactory')->setTypeHint($collection . 'Factory');
-        $construct->addParameter('entityFactory')->setTypeHint($entityInterface . 'Factory');
-        $construct->addParameter('searchResultsFactory')->setTypeHint($results . 'Factory');
+        $construct->addParameter('resource')->setType($resource);
+        $construct->addParameter('collectionFactory')->setType($collection . 'Factory');
+        $construct->addParameter('entityFactory')->setType($entityInterface . 'Factory');
+        $construct->addParameter('searchResultsFactory')->setType($results . 'Factory');
+
+        if ($withStore) {
+            $class->addProperty('storeManager')
+                ->setVisibility('private')
+                ->addComment('@var \Magento\Store\Model\StoreManagerInterface');
+            $construct
+                ->addComment('@param \Magento\Store\Model\StoreManagerInterface $storeManager');
+            $construct
+                ->addParameter('storeManager')
+                ->setType('\Magento\Store\Model\StoreManagerInterface');
+        }
 
         $construct->setBody('$this->resource = $resource;' . PHP_EOL
             . '$this->collectionFactory = $collectionFactory;' . PHP_EOL
             . '$this->entityFactory = $entityFactory;' . PHP_EOL
-            . '$this->searchResultsFactory = $searchResultsFactory;');
+            . '$this->searchResultsFactory = $searchResultsFactory;'
+            . ($withStore ? PHP_EOL . '$this->storeManager = $storeManager;' : ''));
 
         $getById = $class->addMethod('getById')
             ->addComment('@param int $entityId')
@@ -72,15 +84,20 @@ class Repository extends Common
             ->addComment('@throws \Magento\Framework\Exception\CouldNotSaveException')
             ->setVisibility('public');
 
-        $save->addParameter('entity')->setTypeHint($entityInterface);
-        $save->setBody('try {' . PHP_EOL
-            . '$this->resource->save($entity);' . PHP_EOL
+        $save->addParameter('entity')->setType($entityInterface);
+        $save->setBody(
+            ($withStore ? 'if (empty($entity->getStoreId())) {' . PHP_EOL
+            . self::TAB . '$entity->setStoreId($this->storeManager->getStore()->getId());' . PHP_EOL
+            . '}' . PHP_EOL : '')
+            . 'try {' . PHP_EOL
+            . self::TAB . '$this->resource->save($entity);' . PHP_EOL
             . '} catch (\Exception $exception) {' . PHP_EOL
-            . '    throw new \Magento\Framework\Exception\CouldNotSaveException(' . PHP_EOL
-            . '        __($exception->getMessage())' . PHP_EOL
-            . '    );' . PHP_EOL
+            . self::TAB . 'throw new \Magento\Framework\Exception\CouldNotSaveException(' . PHP_EOL
+            . self::TAB . self::TAB . '__($exception->getMessage())' . PHP_EOL
+            . self::TAB . ');' . PHP_EOL
             . '}' . PHP_EOL
-            . 'return $entity;');
+            . 'return $entity;'
+        );
 
         $delete = $class->addMethod('delete')
             ->addComment('@param ' . $entityInterface . ' $entity')
@@ -141,6 +158,11 @@ class Repository extends Common
         . '        );' . PHP_EOL
         . '    }' . PHP_EOL
         . '}' . PHP_EOL
+        . ($withStore ?
+            PHP_EOL . '$collection->addFilter(' . PHP_EOL
+            . self::TAB . '\'store_id\',' . PHP_EOL
+            . self::TAB . '[\'in\' => $this->storeManager->getStore()->getId()]'
+            . ');' . PHP_EOL . PHP_EOL : '')
         . '$collection->setCurPage($criteria->getCurrentPage());' . PHP_EOL
         . '$collection->setPageSize($criteria->getPageSize());' . PHP_EOL . PHP_EOL
         . '/** @var ' . $results . ' $searchResults */' . PHP_EOL

@@ -11,6 +11,7 @@ interface BannerInterface extends \Magento\Framework\DataObject\IdentityInterfac
     const FAMILY = 'family';
     const IS_ACTIVE = 'is_active';
     const PRODUCT_ID = 'product_id';
+    const STORE_ID = 'store_id';
 
     /**
      * Get id
@@ -89,4 +90,17 @@ interface BannerInterface extends \Magento\Framework\DataObject\IdentityInterfac
      * @return $this
      */
     public function setProductId($productId);
+
+    /**
+     * Get store id
+     * @return array|null
+     */
+    public function getStoreId();
+
+    /**
+     * Set store id
+     * @param array $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId);
 }

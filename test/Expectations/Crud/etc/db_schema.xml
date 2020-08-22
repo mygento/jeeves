@@ -34,4 +34,20 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_module_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
+    <table name="mygento_sample_module_banner_store" resource="default" engine="innodb" comment="mygento_sample_module_banner_store Table">
+        <column xsi:type="int" name="entity_id" nullable="false" identity="false" unsigned="true" comment="Entity ID"/>
+        <column xsi:type="smallint" name="store_id" nullable="false" identity="false" unsigned="true" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <index referenceId="IX_BANNER_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="FK_BANNER_STORE_ID" table="mygento_sample_module_banner_store" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_BANNER_ENT_ID" table="mygento_sample_module_banner_store" column="entity_id" referenceTable="mygento_sample_module_banner" referenceColumn="id" onDelete="CASCADE"/>
+        <index indexType="btree" referenceId="IX_ENT_ID">
+            <column name="entity_id"/>
+        </index>
+    </table>
 </schema>

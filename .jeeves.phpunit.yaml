@@ -44,6 +44,7 @@ Mygento:
       api: true
       readonly: true
       cache_tag: samp_ban
+      per_store: true
       columns:
         id:
           type: int

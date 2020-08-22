@@ -5,6 +5,7 @@ namespace Mygento\Jeeves\Generators\Crud;
 class Common
 {
     const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
+    const TAB = '    ';
 
     /**
      * Converts an input string from snake_case to upper CamelCase.
@@ -97,6 +98,8 @@ class Common
     public function convertType($type)
     {
         switch ($type) {
+            case 'store':
+                return 'array';
             case 'smallint':
             case 'bigint':
             case 'tinyint':
