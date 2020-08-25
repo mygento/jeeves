@@ -419,14 +419,15 @@ EOT
         $this->genResourceModel($modelGenerator, ucfirst($entity), $tablename);
         $this->genResourceCollection($modelGenerator, ucfirst($entity));
 
-        if ($this->withStore) {
-            $this->genReadHandler($modelGenerator, ucfirst($entity), $fields);
-            $this->genSaveHandler($modelGenerator, ucfirst($entity), $fields);
-        }
-
         // repository
         $repoGenerator = new \Mygento\Jeeves\Generators\Crud\Repository();
         $this->genRepo($repoGenerator, ucfirst($entity));
+
+        if ($this->withStore) {
+            $this->genReadHandler($modelGenerator, ucfirst($entity), $fields);
+            $this->genSaveHandler($modelGenerator, ucfirst($entity), $fields);
+            $this->getRepoFilter($repoGenerator, ucfirst($entity));
+        }
 
         if ($this->gui) {
             // controllers
@@ -517,7 +518,7 @@ EOT
         }
     }
 
-    private function genRepo($generator, $entityName)
+    private function genRepo(\Mygento\Jeeves\Generators\Crud\Repository $generator, $entityName)
     {
         $filePath = $this->path . '/Model/';
         $fileName = $entityName . 'Repository';
@@ -639,6 +640,21 @@ EOT
                 $entity,
                 ucfirst($entity) . 'Interface',
                 $namePath . 'Model\\ResourceModel\\' . ucfirst($entity),
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function getRepoFilter(\Mygento\Jeeves\Generators\Crud\Repository $generator, $entity)
+    {
+        $filePath = $this->path . '/Model/SearchCriteria/';
+        $fileName = ucfirst($entity) . 'StoreFilter';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->getRepoFilter(
+                $fileName,
+                $entity,
                 $this->getNamespace()
             )
         );

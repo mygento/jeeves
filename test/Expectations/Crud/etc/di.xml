@@ -14,6 +14,41 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\BannerFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\BannerStoreFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\CustomerAddressCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\BannerCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\BannerFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Mygento\SampleModule\Model\CustomerAddressRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CustomerAddressCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\BannerRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\BannerCollectionProcessor</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">

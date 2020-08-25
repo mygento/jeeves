@@ -6,6 +6,30 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class Repository extends Common
 {
+    public function getRepoFilter($className, $entityName, $rootNamespace)
+    {
+        $namespace = new PhpNamespace($rootNamespace . '\Model\SearchCriteria');
+        $namespace->addUse('Magento\Framework\Api\Filter');
+        $namespace->addUse('Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface');
+        $namespace->addUse('Magento\Framework\Data\Collection\AbstractDb');
+        $class = $namespace->addClass($className);
+        $class->setImplements(['Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface']);
+
+        $apply = $class->addMethod('apply')->setVisibility('public')->addComment('@inheritDoc');
+        $apply->addParameter('filter')->setType('Magento\Framework\Api\Filter');
+        $apply->addParameter('collection')->setType('Magento\Framework\Data\Collection\AbstractDb');
+
+        $apply->setBody(
+            '$collection->addFilter(' . PHP_EOL
+            . self::TAB . '\'store_id\',' . PHP_EOL
+            . self::TAB . '[\'in\' => $filter->getValue()]' . PHP_EOL
+            . ');' . PHP_EOL . PHP_EOL
+            . 'return true;'
+        );
+
+        return $namespace;
+    }
+
     public function genRepository(
         $className,
         $entityName,
@@ -18,8 +42,7 @@ class Repository extends Common
         $withStore = false
     ) {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
-        $namespace->addUse('Magento\Framework\Api\SortOrder');
-        $namespace->addUse('Magento\Framework\Data\Collection');
+        $namespace->addUse('Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
         $class = $namespace->addClass($className);
         $class->setImplements([$repoInterface]);
         $class->setComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)');
@@ -46,20 +69,28 @@ class Repository extends Common
         $construct->addParameter('searchResultsFactory')->setType($results . 'Factory');
 
         if ($withStore) {
+            $namespace->addUse('Magento\Store\Model\StoreManagerInterface');
             $class->addProperty('storeManager')
                 ->setVisibility('private')
-                ->addComment('@var \Magento\Store\Model\StoreManagerInterface');
+                ->addComment('@var StoreManagerInterface');
             $construct
-                ->addComment('@param \Magento\Store\Model\StoreManagerInterface $storeManager');
+                ->addComment('@param StoreManagerInterface $storeManager');
             $construct
                 ->addParameter('storeManager')
                 ->setType('\Magento\Store\Model\StoreManagerInterface');
         }
+        $class->addProperty('collectionProcessor')
+            ->setVisibility('private')->addComment('@var CollectionProcessorInterface');
+        $construct->addComment('@param CollectionProcessorInterface|null $collectionProcessor');
+        $construct->addParameter('collectionProcessor')
+            ->setType('Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface')
+            ->setDefaultValue(null);
 
         $construct->setBody('$this->resource = $resource;' . PHP_EOL
             . '$this->collectionFactory = $collectionFactory;' . PHP_EOL
             . '$this->entityFactory = $entityFactory;' . PHP_EOL
-            . '$this->searchResultsFactory = $searchResultsFactory;'
+            . '$this->searchResultsFactory = $searchResultsFactory;' . PHP_EOL
+            . '$this->collectionProcessor = $collectionProcessor;'
             . ($withStore ? PHP_EOL . '$this->storeManager = $storeManager;' : ''));
 
         $getById = $class->addMethod('getById')
@@ -132,39 +163,8 @@ class Repository extends Common
 
         $getList->addParameter('criteria')->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
         $getList->setBody('/** @var ' . $collection . ' $collection */' . PHP_EOL
-        . '$collection = $this->collectionFactory->create();' . PHP_EOL
-        . 'foreach ($criteria->getFilterGroups() as $filterGroup) {' . PHP_EOL
-        . '    $fields = [];' . PHP_EOL
-        . '    $conditions = [];' . PHP_EOL
-        . '    foreach ($filterGroup->getFilters() as $filter) {' . PHP_EOL
-        . '        $condition = $filter->getConditionType() ? $filter->getConditionType() : \'eq\';' . PHP_EOL
-        . '        $fields[] = $filter->getField();' . PHP_EOL
-        . '        $conditions[] = [$condition => $filter->getValue()];' . PHP_EOL
-        . '    }' . PHP_EOL
-        . '    if ($fields) {' . PHP_EOL
-        . '        $collection->addFieldToFilter($fields, $conditions);' . PHP_EOL
-        . '    }' . PHP_EOL
-        . '}' . PHP_EOL
-        . '$sortOrders = $criteria->getSortOrders();' . PHP_EOL
-        . '$sortAsc = SortOrder::SORT_ASC;'
-        . '$orderAsc = Collection::SORT_ORDER_ASC;'
-        . '$orderDesc = Collection::SORT_ORDER_DESC;'
-        . 'if ($sortOrders) {' . PHP_EOL
-        . '    /** @var SortOrder $sortOrder */' . PHP_EOL
-        . '    foreach ($sortOrders as $sortOrder) {' . PHP_EOL
-        . '        $collection->addOrder(' . PHP_EOL
-        . '            $sortOrder->getField(),' . PHP_EOL
-        . '            ($sortOrder->getDirection() == $sortAsc) ? $orderAsc: $orderDesc' . PHP_EOL
-        . '        );' . PHP_EOL
-        . '    }' . PHP_EOL
-        . '}' . PHP_EOL
-        . ($withStore ?
-            PHP_EOL . '$collection->addFilter(' . PHP_EOL
-            . self::TAB . '\'store_id\',' . PHP_EOL
-            . self::TAB . '[\'in\' => $this->storeManager->getStore()->getId()]'
-            . ');' . PHP_EOL . PHP_EOL : '')
-        . '$collection->setCurPage($criteria->getCurrentPage());' . PHP_EOL
-        . '$collection->setPageSize($criteria->getPageSize());' . PHP_EOL . PHP_EOL
+        . '$collection = $this->collectionFactory->create();' . PHP_EOL . PHP_EOL
+        . '$this->collectionProcessor->process($criteria, $collection);' . PHP_EOL . PHP_EOL
         . '/** @var ' . $results . ' $searchResults */' . PHP_EOL
         . '$searchResults = $this->searchResultsFactory->create();' . PHP_EOL
         . '$searchResults->setSearchCriteria($criteria);' . PHP_EOL

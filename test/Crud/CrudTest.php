@@ -56,8 +56,8 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     private function checkRepository()
     {
         $this->checkFile('Model/CustomerAddressRepository.php');
-
         $this->checkFile('Model/BannerRepository.php');
+        $this->checkFile('Model/SearchCriteria/BannerStoreFilter.php');
     }
 
     private function checkGui()
@@ -110,7 +110,6 @@ class CrudTest extends \PHPUnit\Framework\TestCase
 
     private function checkFile($file)
     {
-        echo $file.PHP_EOL;
         $this->assertFileEquals(
             \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
             'test/Expectations/Crud/' . $file,

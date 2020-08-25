@@ -63,6 +63,9 @@ class XmlManager
     {
         $service = $this->getService();
         $repositoriesList = $this->getDi()->getRepositories($entities, $namespace);
+        $repoProcessor = $this->getDi()->getRepoProcessors($entities, $namespace);
+        $repoProcessorList = $this->getDi()->getRepoProcessorList($entities, $namespace);
+        $filterProcessors = $this->getDi()->getFilterProcessors($entities, $namespace);
         $modelList = $this->getDi()->getModels($entities, $namespace);
         $searchList = $this->getDi()->getSearch($entities, $namespace);
         $repoFactoryList = $this->getDi()->getRepoFactory($entities, $namespace);
@@ -82,7 +85,10 @@ class XmlManager
             $gridCollections,
             $entityManager,
             $entityExt,
-            $entityHydrator
+            $entityHydrator,
+            $repoProcessor,
+            $repoProcessorList,
+            $filterProcessors
         ) {
             $writer->setIndentString('    ');
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:ObjectManager/etc/config.xsd');
@@ -110,7 +116,10 @@ class XmlManager
                             ],
                         ],
                     ],
-                ]
+                ],
+                $filterProcessors,
+                $repoProcessorList,
+                $repoProcessor
             ));
             if (!empty($entityManager)) {
                 $writer->write([
@@ -509,7 +518,7 @@ class XmlManager
         return $this->shipping;
     }
 
-    private function getDi()
+    private function getDi(): Xml\Di
     {
         if (!$this->di) {
             $this->di = new Xml\Di();

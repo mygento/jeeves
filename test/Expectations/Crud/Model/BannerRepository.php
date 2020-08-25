@@ -2,8 +2,8 @@
 
 namespace Mygento\SampleModule\Model;
 
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Data\Collection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,27 +22,33 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     /** @var \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory */
     private $searchResultsFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     private $storeManager;
+
+    /** @var CollectionProcessorInterface */
+    private $collectionProcessor;
 
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner $resource
      * @param \Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory $collectionFactory
      * @param \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         ResourceModel\Banner $resource,
         ResourceModel\Banner\CollectionFactory $collectionFactory,
         \Mygento\SampleModule\Api\Data\BannerInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\Data\BannerSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
         $this->entityFactory = $entityFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor;
         $this->storeManager = $storeManager;
     }
 
@@ -123,39 +129,8 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     {
         /** @var \Mygento\SampleModule\Model\ResourceModel\Banner\Collection $collection */
         $collection = $this->collectionFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $fields = [];
-            $conditions = [];
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $fields[] = $filter->getField();
-                $conditions[] = [$condition => $filter->getValue()];
-            }
-            if ($fields) {
-                $collection->addFieldToFilter($fields, $conditions);
-            }
-        }
-        $sortOrders = $criteria->getSortOrders();
-        $sortAsc = SortOrder::SORT_ASC;
-        $orderAsc = Collection::SORT_ORDER_ASC;
-        $orderDesc = Collection::SORT_ORDER_DESC;
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($sortOrders as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == $sortAsc) ? $orderAsc : $orderDesc
-                );
-            }
-        }
 
-        $collection->addFilter(
-            'store_id',
-            ['in' => $this->storeManager->getStore()->getId()]
-        );
-
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $this->collectionProcessor->process($criteria, $collection);
 
         /** @var \Mygento\SampleModule\Api\Data\BannerSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();

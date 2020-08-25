@@ -2,8 +2,7 @@
 
 namespace Mygento\SampleModule\Model;
 
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Data\Collection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,22 +21,28 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     /** @var \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory */
     private $searchResultsFactory;
 
+    /** @var CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\CustomerAddress $resource
      * @param \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\CollectionFactory $collectionFactory
      * @param \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory
      * @param \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         ResourceModel\CustomerAddress $resource,
         ResourceModel\CustomerAddress\CollectionFactory $collectionFactory,
         \Mygento\SampleModule\Api\Data\CustomerAddressInterfaceFactory $entityFactory,
-        \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory $searchResultsFactory
+        \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterfaceFactory $searchResultsFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
         $this->entityFactory = $entityFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -113,33 +118,8 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
     {
         /** @var \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Collection $collection */
         $collection = $this->collectionFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $fields = [];
-            $conditions = [];
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $fields[] = $filter->getField();
-                $conditions[] = [$condition => $filter->getValue()];
-            }
-            if ($fields) {
-                $collection->addFieldToFilter($fields, $conditions);
-            }
-        }
-        $sortOrders = $criteria->getSortOrders();
-        $sortAsc = SortOrder::SORT_ASC;
-        $orderAsc = Collection::SORT_ORDER_ASC;
-        $orderDesc = Collection::SORT_ORDER_DESC;
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($sortOrders as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == $sortAsc) ? $orderAsc : $orderDesc
-                );
-            }
-        }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+
+        $this->collectionProcessor->process($criteria, $collection);
 
         /** @var \Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();

@@ -20,6 +20,136 @@ class Di
         );
     }
 
+    public function getRepoProcessors($entities, $namespace): array
+    {
+        return array_map(
+            function ($entity) use ($namespace) {
+                return [
+                    'name' => 'type',
+                    'attributes' => [
+                        'name' => $namespace . '\\Model\\' . ucfirst($entity) . 'Repository',
+                    ],
+                    'value' => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'collectionProcessor',
+                                    'xsi:type' => 'object',
+                                ],
+                                'value' => $namespace . '\\Model\\SearchCriteria\\' . ucfirst($entity) . 'CollectionProcessor',
+                            ],
+                        ],
+                    ],
+                ];
+            },
+            array_keys($entities)
+        );
+    }
+
+    public function getFilterProcessors($entities, $namespace): array
+    {
+        return array_filter(array_map(
+            function ($entity, $value) use ($namespace) {
+                $name = $namespace . '\\Model\SearchCriteria\\' . ucfirst($entity) . 'FilterProcessor';
+                $filter = $namespace . '\\Model\SearchCriteria\\' . ucfirst($entity) . 'StoreFilter';
+                if (!$value['store']) {
+                    return [];
+                }
+
+                return [
+                    'name' => 'virtualType',
+                    'attributes' => [
+                        'name' => $name,
+                        'type' => 'Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor',
+                    ],
+                    'value' => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'customFilters',
+                                    'xsi:type' => 'array',
+                                ],
+                                'value' => [
+                                    'item' => [
+                                        'attributes' => [
+                                            'name' => 'store_id',
+                                            'xsi:type' => 'object',
+                                        ],
+                                        'value' => $filter,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ];
+            },
+            array_keys($entities),
+            $entities
+        ));
+    }
+
+    public function getRepoProcessorList($entities, $namespace): array
+    {
+        $processors = [
+            'filter' => 'Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor',
+            'sort' => 'Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor',
+            'page' => 'Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor',
+        ];
+
+        return array_map(
+            function ($entity, $value) use ($namespace, $processors) {
+                $name = $namespace . '\\Model\\SearchCriteria\\' . ucfirst($entity) . 'CollectionProcessor';
+                $filter = $namespace . '\\Model\SearchCriteria\\' . ucfirst($entity) . 'FilterProcessor';
+
+                return [
+                    'name' => 'virtualType',
+                    'attributes' => [
+                        'name' => $name,
+                        'type' => 'Magento\Framework\Api\SearchCriteria\CollectionProcessor',
+                    ],
+                    'value' => [
+                        'arguments' => [
+                            'argument' => [
+                                'attributes' => [
+                                    'name' => 'processors',
+                                    'xsi:type' => 'array',
+                                ],
+                                'value' => [
+                                    [
+                                        'name' => 'item',
+                                        'attributes' => [
+                                            'name' => 'filters',
+                                            'xsi:type' => 'object',
+                                        ],
+                                        'value' => $value['store'] ? $filter : $processors['filter'],
+                                    ],
+                                    [
+                                        'name' => 'item',
+                                        'attributes' => [
+                                            'name' => 'sorting',
+                                            'xsi:type' => 'object',
+                                        ],
+                                        'value' => $processors['sort'],
+                                    ],
+                                    [
+                                        'name' => 'item',
+                                        'attributes' => [
+                                            'name' => 'pagination',
+                                            'xsi:type' => 'object',
+                                        ],
+                                        'value' => $processors['page'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ];
+            },
+            array_keys($entities),
+            $entities
+        );
+    }
+
     public function getModels($entities, $namespace)
     {
         return array_map(
