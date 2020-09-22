@@ -50,6 +50,7 @@ class XmlManager
                                     $this->getShipping()->getPackageGroup($module),
                                     $this->getShipping()->getTaxGroup($namespace),
                                     $this->getShipping()->getOrderStatusGroup(),
+                                    $this->getShipping()->getMarkingGroup(),
                                 ],
                             ],
                         ],

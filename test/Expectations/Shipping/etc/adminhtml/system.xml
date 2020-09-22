@@ -19,9 +19,6 @@
                 <field id="test" type="select" sortOrder="90" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Test mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="active">1</field>
-                    </depends>
                 </field>
                 <field id="debug" type="select" sortOrder="99" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Debug</label>
@@ -158,6 +155,27 @@
                         <source_model>Mygento\Base\Model\Source\Status</source_model>
                         <depends>
                             <field id="track_check">1</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="marking" type="text" sortOrder="150" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Marking</label>
+                    <field id="enabled" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="marking_flag" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Field to flag marking need</label>
+                        <source_model>Mygento\Base\Model\Source\OrderItem</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="marking_field" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Field with mark</label>
+                        <source_model>Mygento\Base\Model\Source\OrderItem</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
                         </depends>
                     </field>
                 </group>

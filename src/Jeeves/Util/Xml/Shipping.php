@@ -16,7 +16,7 @@ class Shipping
 
     public function getTest(): array
     {
-        return $this->dropdown('test', 'Test mode', self::YN, ['active' => 1], ['sortOrder' => '90']);
+        return $this->dropdown('test', 'Test mode', self::YN, [], ['sortOrder' => '90']);
     }
 
     public function getSort(): array
@@ -79,6 +79,34 @@ class Shipping
                 'sortOrder' => '110',
             ]),
             self::V => array_merge(['label' => 'Shipping Options'], $child),
+        ];
+    }
+
+    public function getMarkingGroup(): array
+    {
+        return [
+            self::N => 'group',
+            self::A => $this->field([
+                'id' => 'marking',
+                'type' => 'text',
+                'sortOrder' => '150',
+            ]),
+            self::V => [
+                ['label' => 'Marking'],
+                $this->dropdown('enabled', 'Enabled', self::YN),
+                $this->dropdown(
+                    'marking_flag',
+                    'Field to flag marking need',
+                    'Mygento\Base\Model\Source\OrderItem',
+                    ['enabled' => 1]
+                ),
+                $this->dropdown(
+                    'marking_field',
+                    'Field with mark',
+                    'Mygento\Base\Model\Source\OrderItem',
+                    ['enabled' => 1]
+                ),
+            ],
         ];
     }
 
