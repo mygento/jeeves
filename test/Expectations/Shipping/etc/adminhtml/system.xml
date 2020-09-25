@@ -178,6 +178,13 @@
                             <field id="enabled">1</field>
                         </depends>
                     </field>
+                    <field id="marking_refund" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Field with refund mark</label>
+                        <source_model>Mygento\Base\Model\Source\OrderItem</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
                 </group>
             </group>
         </section>

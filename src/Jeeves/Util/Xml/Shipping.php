@@ -106,6 +106,12 @@ class Shipping
                     'Mygento\Base\Model\Source\OrderItem',
                     ['enabled' => 1]
                 ),
+                $this->dropdown(
+                    'marking_refund',
+                    'Field with refund mark',
+                    'Mygento\Base\Model\Source\OrderItem',
+                    ['enabled' => 1]
+                ),
             ],
         ];
     }
