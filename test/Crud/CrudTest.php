@@ -24,6 +24,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkGui();
         $this->checkXml('etc/di.xml');
         $this->checkXml('etc/webapi.xml');
+        $this->checkXml('etc/events.xml');
         $this->checkXml('etc/module.xml');
         $this->checkFile('registration.php');
     }

@@ -28,6 +28,8 @@ class ModelCrud extends BaseCommand
 
     private $acl = [];
 
+    private $events = [];
+
     private $admin;
 
     private $guiList = [];
@@ -165,6 +167,7 @@ EOT
         $this->genAdminRoute($this->admin);
         $this->genAdminMenu($this->menu);
         $this->genDBSchema($this->db);
+        $this->genEvents($this->events);
         $this->genDI($this->di);
         $this->genModuleXml();
 
@@ -346,6 +349,16 @@ EOT
         );
     }
 
+    private function genEvents($events)
+    {
+        if (count($events) > 0) {
+            $this->writeFile(
+                $this->path . '/etc/events.xml',
+                $this->getXmlManager()->generateEvents($events)
+            );
+        }
+    }
+
     private function genModuleXml()
     {
         $this->writeFile(
@@ -427,6 +440,59 @@ EOT
             $this->genReadHandler($modelGenerator, ucfirst($entity), $fields);
             $this->genSaveHandler($modelGenerator, ucfirst($entity), $fields);
             $this->getRepoFilter($repoGenerator, ucfirst($entity));
+            $interface = implode('\\', [
+                $this->getNamespace(),
+                'Api',
+                'Data',
+                ucfirst($entity) . 'Interface',
+            ]);
+            $event = strtolower(str_replace('\\', '_', $interface));
+            $eventName = implode('_', [
+                'legacy',
+                $this->getVendorLowercase(),
+                $this->getModuleLowercase(),
+                $this->getEntityLowercase($entity),
+            ]);
+            $this->events[] = [
+                'event' => $event . '_save_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntitySave',
+                ]],
+            ];
+            $this->events[] = [
+                'event' => $event . '_save_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntitySave',
+                ]],
+            ];
+            $this->events[] = [
+                'event' => $event . '_delete_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntityDelete',
+                ]],
+            ];
+            $this->events[] = [
+                'event' => $event . '_delete_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntityDelete',
+                ]],
+            ];
         }
 
         if ($this->gui) {
@@ -606,6 +672,7 @@ EOT
                 $namePath . $entityName . 'Interface',
                 '\\' . $this->getNamespace() . '\\Model\ResourceModel' . '\\' . $entityName,
                 $this->getNamespace(),
+                $this->getEventName($entityName),
                 $fields,
                 $this->withStore
             )
@@ -855,8 +922,22 @@ EOT
         return $this->getConverter()->camelCaseToSnakeCase($this->module);
     }
 
+    private function getVendorLowercase()
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->vendor);
+    }
+
     private function getEntityLowercase($entity)
     {
         return $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($entity);
+    }
+
+    private function getEventName($entity)
+    {
+        return implode('_', [
+            $this->getVendorLowercase(),
+            $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->module),
+            $this->getConverter()->camelCaseToSnakeCase($entity),
+        ]);
     }
 }

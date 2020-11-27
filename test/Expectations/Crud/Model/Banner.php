@@ -6,6 +6,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class Banner extends AbstractModel implements \Mygento\SampleModule\Api\Data\BannerInterface
 {
+    /** @inheritDoc */
+    protected $_eventPrefix = 'mygento_samplemodule_banner';
+
     /**
      * @return string[]
      */

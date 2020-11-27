@@ -6,13 +6,18 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class Model extends Common
 {
-    public function genModel($className, $entInterface, $resource, $rootNamespace, $fields = self::DEFAULT_FIELDS, $withStore = false)
+    public function genModel($className, $entInterface, $resource, $rootNamespace, $event, $fields = self::DEFAULT_FIELDS, $withStore = false)
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Model\AbstractModel');
         $class = $namespace->addClass($className);
         $class->setExtends('\Magento\Framework\Model\AbstractModel');
         $class->setImplements([$entInterface]);
+
+        $class->addProperty('_eventPrefix')
+            ->setVisibility('protected')
+            ->setValue($event)
+            ->addComment('@inheritDoc');
 
         $class->addMethod('_construct')
             ->addComment('@return void')

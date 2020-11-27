@@ -6,6 +6,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api\Data\CustomerAddressInterface
 {
+    /** @inheritDoc */
+    protected $_eventPrefix = 'mygento_samplemodule_customer_address';
+
     /**
      * @return string[]
      */

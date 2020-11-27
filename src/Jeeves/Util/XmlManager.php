@@ -363,6 +363,38 @@ class XmlManager
         });
     }
 
+    public function generateEvents($events)
+    {
+        $eventList = array_map(function ($entity) {
+            return [
+                [
+                    'name' => 'event',
+                    'attributes' => [
+                        'name' => $entity['event'],
+                    ],
+                    'value' => array_map(function ($observer) {
+                        return [
+                            [
+                                'name' => 'observer',
+                                'attributes' => [
+                                    'instance' => $observer['instance'],
+                                    'name' => $observer['name'],
+                                ],
+                            ],
+                        ];
+                    }, $entity['observer']),
+                ],
+            ];
+        }, $events);
+        $service = $this->getService();
+
+        return $service->write('config', function ($writer) use ($eventList) {
+            $writer->setIndentString('    ');
+            $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Event/etc/events.xsd');
+            $writer->write($eventList);
+        });
+    }
+
     public function generateSchema($db)
     {
         $service = $this->getService();
