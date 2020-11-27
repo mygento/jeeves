@@ -594,7 +594,10 @@ EOT
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genRepository(
                 $fileName,
-                $this->getConverter()->getEntityName($this->module) . ' ' . $this->getConverter()->getEntityName($entityName),
+                implode(' ', [
+                    $this->getConverter()->getEntityName($this->module),
+                    $this->getConverter()->getEntityName($entityName),
+                ]),
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $namePath . 'Model\\ResourceModel\\' . $entityName,
                 $namePath . 'Model\\ResourceModel\\' . $entityName . '\\Collection',

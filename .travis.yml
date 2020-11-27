@@ -10,7 +10,7 @@ before_install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
 
 before_script:
-    - composer selfupdate
+    - composer selfupdate --1
     - composer install --no-interaction --prefer-dist
     - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
     - mv .jeeves.phpunit.yaml .jeeves.yaml
