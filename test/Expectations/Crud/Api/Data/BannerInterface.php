@@ -4,14 +4,14 @@ namespace Mygento\SampleModule\Api\Data;
 
 interface BannerInterface extends \Magento\Framework\DataObject\IdentityInterface
 {
-    const CACHE_TAG = 'samp_ban';
-    const ID = 'id';
-    const NAME = 'name';
-    const SUBNAME = 'subname';
-    const FAMILY = 'family';
-    const IS_ACTIVE = 'is_active';
-    const PRODUCT_ID = 'product_id';
-    const STORE_ID = 'store_id';
+    public const CACHE_TAG = 'samp_ban';
+    public const ID = 'id';
+    public const NAME = 'name';
+    public const SUBNAME = 'subname';
+    public const FAMILY = 'family';
+    public const IS_ACTIVE = 'is_active';
+    public const PRODUCT_ID = 'product_id';
+    public const STORE_ID = 'store_id';
 
     /**
      * Get id

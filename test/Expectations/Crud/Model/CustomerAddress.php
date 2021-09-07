@@ -38,7 +38,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
 
     /**
      * Get city
-     * @return string|null
+     * @return string
      */
     public function getCity()
     {
@@ -57,7 +57,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
 
     /**
      * Get customer group
-     * @return int|null
+     * @return int
      */
     public function getCustomerGroup()
     {
@@ -76,7 +76,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
 
     /**
      * Get created at
-     * @return string|null
+     * @return string
      */
     public function getCreatedAt()
     {
@@ -95,7 +95,7 @@ class CustomerAddress extends AbstractModel implements \Mygento\SampleModule\Api
 
     /**
      * Get updated at
-     * @return string|null
+     * @return string
      */
     public function getUpdatedAt()
     {

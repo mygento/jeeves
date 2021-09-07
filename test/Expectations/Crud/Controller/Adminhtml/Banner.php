@@ -9,7 +9,7 @@ abstract class Banner extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Mygento_SampleModule::banner';
+    public const ADMIN_RESOURCE = 'Mygento_SampleModule::banner';
 
     /**
      * Core registry

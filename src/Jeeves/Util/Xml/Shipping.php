@@ -4,10 +4,10 @@ namespace Mygento\Jeeves\Util\Xml;
 
 class Shipping
 {
-    const A = 'attributes';
-    const N = 'name';
-    const V = 'value';
-    const YN = 'Magento\Config\Model\Config\Source\Yesno';
+    public const A = 'attributes';
+    public const N = 'name';
+    public const V = 'value';
+    public const YN = 'Magento\Config\Model\Config\Source\Yesno';
 
     public function getEnabled(): array
     {

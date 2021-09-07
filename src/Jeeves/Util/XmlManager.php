@@ -4,9 +4,9 @@ namespace Mygento\Jeeves\Util;
 
 class XmlManager
 {
-    const A = 'attributes';
-    const N = 'name';
-    const V = 'value';
+    public const A = 'attributes';
+    public const N = 'name';
+    public const V = 'value';
 
     private $shipping;
 

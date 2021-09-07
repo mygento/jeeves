@@ -65,6 +65,9 @@
                 <label translate="true">City</label>
                 <visible>true</visible>
                 <dataScope>city</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="customer_group" formElement="select">

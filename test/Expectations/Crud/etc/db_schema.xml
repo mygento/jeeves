@@ -2,7 +2,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="mygento_sample_module_customeraddress" resource="default" engine="innodb" comment="Table for Customer Address">
         <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" comment="Address ID"/>
-        <column xsi:type="varchar" name="city" nullable="true" length="100" comment="City"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="100" comment="City"/>
         <column xsi:type="int" name="customer_group" nullable="false" identity="false" unsigned="false" comment="Customer Group"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Create time"/>
         <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Modify time"/>

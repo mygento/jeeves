@@ -17,20 +17,17 @@
         "nette/php-generator": "^3.0",
         "padraic/phar-updater": "^1.0",
         "gitonomy/gitlib": "^1.0",
-        "mygento/coding-standard": "~2.13.0"
+        "mygento/coding-standard": "~2.14.0-beta1"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "3.*",
-        "phpro/grumphp": "^0.15.0",
-        "jakub-onderka/php-parallel-lint": "^1.0.0",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }
     },
     "config": {
         "platform": {
-            "php": "7.1.32"
+            "php": "7.3.20"
         }
     },
     "bin": ["bin/jeeves"]

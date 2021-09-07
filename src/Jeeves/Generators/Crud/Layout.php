@@ -7,7 +7,8 @@ class Layout
     public function generateAdminLayoutIndex($uiComponent)
     {
         $service = $this->getService();
-        $xml = $service->write('page', function ($writer) use ($uiComponent) {
+
+        return $service->write('page', function ($writer) use ($uiComponent) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -34,14 +35,13 @@ class Layout
                 ],
             ]);
         });
-
-        return $xml;
     }
 
     public function generateAdminLayoutEdit($uiComponent)
     {
         $service = $this->getService();
-        $xml = $service->write('page', function ($writer) use ($uiComponent) {
+
+        return $service->write('page', function ($writer) use ($uiComponent) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -73,14 +73,13 @@ class Layout
                 ],
             ]);
         });
-
-        return $xml;
     }
 
     public function generateAdminLayoutNew($uiComponent, $handle)
     {
         $service = $this->getService();
-        $xml = $service->write('page', function ($writer) use ($uiComponent, $handle) {
+
+        return $service->write('page', function ($writer) use ($uiComponent, $handle) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
@@ -96,8 +95,6 @@ class Layout
                 ],
             ]);
         });
-
-        return $xml;
     }
 
     private function getService()

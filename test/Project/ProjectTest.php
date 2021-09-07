@@ -7,7 +7,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class ProjectTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $application = new \Symfony\Component\Console\Application();
         $application->add(new EmptyProject());

@@ -12,8 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.21';
-    const GEN = 'generate';
+    public const GEN = 'generate';
+    private const VERSION = '0.0.21';
 
     /**
      * @var IOInterface

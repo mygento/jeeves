@@ -11,6 +11,7 @@ class UiComponent extends Common
         $service = $this->getService();
         $columns = array_map(
             function ($name, $param) {
+                $notNullable = isset($param['nullable']) && $param['nullable'] === false;
                 switch ($param['type']) {
                     case 'bool':
                     case 'boolean':
@@ -69,6 +70,17 @@ class UiComponent extends Common
                     $col['value']['settings']['sorting'] = 'asc';
                 }
                 switch ($param['type']) {
+                    case 'varchar':
+                        if ($notNullable) {
+                            $col['value']['settings']['editor']['validation']['rule'] = [
+                                'attributes' => [
+                                    'name' => 'required-entry',
+                                    'xsi:type' => 'boolean',
+                                ],
+                                'value' => 'true',
+                            ];
+                        }
+                        break;
                     case 'bool':
                     case 'boolean':
                         $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
@@ -255,6 +267,7 @@ class UiComponent extends Common
         }
         $fieldset = array_map(
             function ($name, $param) use ($entity) {
+                $notNullable = isset($param['nullable']) && $param['nullable'] === false;
                 switch ($param['type']) {
                     case 'store':
                         $dataType = 'int';
@@ -329,6 +342,17 @@ class UiComponent extends Common
                     ],
                 ];
                 switch ($param['type']) {
+                    case 'varchar':
+                        if ($notNullable) {
+                            $field['value']['settings']['validation']['rule'] = [
+                                'attributes' => [
+                                    'name' => 'required-entry',
+                                    'xsi:type' => 'boolean',
+                                ],
+                                'value' => 'true',
+                            ];
+                        }
+                        break;
                     case 'bool':
                     case 'boolean':
                         $field['value']['formElements'] = [

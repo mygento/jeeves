@@ -4,14 +4,14 @@ namespace Mygento\SampleModule\Api\Data;
 
 interface CustomerAddressInterface extends \Magento\Framework\DataObject\IdentityInterface
 {
-    const CACHE_TAG = 'sam_c';
-    const ID = 'id';
-    const CITY = 'city';
-    const CUSTOMER_GROUP = 'customer_group';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const DISCOUNT = 'discount';
-    const PRICE = 'price';
+    public const CACHE_TAG = 'sam_c';
+    public const ID = 'id';
+    public const CITY = 'city';
+    public const CUSTOMER_GROUP = 'customer_group';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
+    public const DISCOUNT = 'discount';
+    public const PRICE = 'price';
 
     /**
      * Get id
@@ -28,7 +28,7 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
 
     /**
      * Get city
-     * @return string|null
+     * @return string
      */
     public function getCity();
 
@@ -41,7 +41,7 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
 
     /**
      * Get customer group
-     * @return int|null
+     * @return int
      */
     public function getCustomerGroup();
 
@@ -54,7 +54,7 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
 
     /**
      * Get created at
-     * @return string|null
+     * @return string
      */
     public function getCreatedAt();
 
@@ -67,7 +67,7 @@ interface CustomerAddressInterface extends \Magento\Framework\DataObject\Identit
 
     /**
      * Get updated at
-     * @return string|null
+     * @return string
      */
     public function getUpdatedAt();
 

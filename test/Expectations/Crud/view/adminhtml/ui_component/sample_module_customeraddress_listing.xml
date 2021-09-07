@@ -118,6 +118,9 @@
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">City</label>
             </settings>

@@ -1,6 +1,4 @@
-parameters:
-    git_dir: .
-    bin_dir: vendor/bin
+grumphp:
     tasks:
         composer:
             no_check_lock: true
@@ -12,8 +10,8 @@ parameters:
         phplint:
         phpunit:
             testsuite: 'Test'
-        phpcsfixer2:
+        phpcsfixer:
             config: '.php_cs'
         phpcs:
-            warning_severity: null
+            warning_severity: 0
         xmllint:

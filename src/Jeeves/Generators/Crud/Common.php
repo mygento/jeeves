@@ -4,8 +4,8 @@ namespace Mygento\Jeeves\Generators\Crud;
 
 class Common
 {
-    const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
-    const TAB = '    ';
+    protected const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
+    protected const TAB = '    ';
 
     /**
      * Converts an input string from snake_case to upper CamelCase.

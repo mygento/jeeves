@@ -36,10 +36,11 @@ class Model extends Common
         }
 
         foreach ($fields as $name => $value) {
+            $notNullable = isset($value['nullable']) && $value['nullable'] === false;
             $method = $this->snakeCaseToUpperCamelCase($name);
             $class->addMethod('get' . $method)
                 ->addComment('Get ' . str_replace('_', ' ', $name))
-                ->addComment('@return ' . $this->convertType($value['type']) . '|null')
+                ->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'))
                 ->setVisibility('public')->setBody('return $this->getData(self::' . strtoupper($name) . ');');
             $setter = $class->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))

@@ -20,11 +20,12 @@ class Interfaces extends Common
         }
 
         foreach ($fields as $name => $value) {
-            $interface->addConstant(strtoupper($name), strtolower($name));
+            $notNullable = isset($value['nullable']) && $value['nullable'] === false;
+            $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
             $method = $this->snakeCaseToUpperCamelCase($name);
             $interface->addMethod('get' . $method)
                 ->addComment('Get ' . str_replace('_', ' ', $name))
-                ->addComment('@return ' . $this->convertType($value['type']) . '|null')
+                ->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'))
                 ->setVisibility('public');
             $interface->addMethod('set' . $method)
                 ->addComment('Set ' . str_replace('_', ' ', $name))
