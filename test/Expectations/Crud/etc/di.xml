@@ -93,7 +93,7 @@
     </type>
     <type name="Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">mygento_sample_module_customeraddress</argument>
+            <argument name="mainTable" xsi:type="string">mygento_sample_custom_table_name</argument>
             <argument name="eventPrefix" xsi:type="string">sample_module_customeraddress_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customeraddress_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress</argument>

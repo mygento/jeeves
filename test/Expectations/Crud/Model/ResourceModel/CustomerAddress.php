@@ -10,6 +10,6 @@ class CustomerAddress extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      */
     protected function _construct()
     {
-        $this->_init('mygento_sample_module_customeraddress', 'id');
+        $this->_init('mygento_sample_custom_table_name', 'id');
     }
 }
