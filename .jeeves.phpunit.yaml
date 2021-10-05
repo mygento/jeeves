@@ -1,6 +1,7 @@
 Mygento:
   SampleModule:
     CustomerAddress:
+      tablename: mygento_sample_custom_table_name
       comment: 'Table for Customer Address'
       columns:
         id:
