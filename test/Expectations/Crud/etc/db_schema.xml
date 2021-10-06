@@ -6,8 +6,8 @@
         <column xsi:type="int" name="customer_group" nullable="false" identity="false" unsigned="false" comment="Customer Group"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Create time"/>
         <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Modify time"/>
-        <column xsi:type="decimal" name="discount" nullable="false" precision="10" scale="4" comment="Discount"/>
-        <column xsi:type="decimal" name="price" nullable="false" precision="10" scale="4" comment="Price"/>
+        <column xsi:type="decimal" name="discount" nullable="true" precision="10" scale="4" comment="Discount"/>
+        <column xsi:type="decimal" name="price" nullable="true" precision="10" scale="4" comment="Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
@@ -17,11 +17,11 @@
     </table>
     <table name="mygento_sample_module_banner" resource="default" engine="innodb" comment="mygento_sample_module_banner Table">
         <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
-        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name"/>
-        <column xsi:type="varchar" name="subname" nullable="false" length="255" comment="Subname"/>
-        <column xsi:type="varchar" name="family" nullable="false" length="255" comment="Family"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
+        <column xsi:type="varchar" name="subname" nullable="true" length="255" comment="Subname"/>
+        <column xsi:type="varchar" name="family" nullable="true" length="255" comment="Family"/>
         <column xsi:type="boolean" name="is_active" nullable="false" comment="Is_active"/>
-        <column xsi:type="int" name="product_id" nullable="false" identity="false" unsigned="true" comment="Product_id"/>
+        <column xsi:type="int" name="product_id" nullable="true" identity="false" unsigned="true" comment="Product_id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

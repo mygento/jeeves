@@ -471,9 +471,13 @@ class XmlManager
     private function getColumn($column, $param)
     {
         $optional = [];
+        $nullable = $param['nullable'] ?? true;
         switch ($param['type']) {
-            case 'blob':
             case 'boolean':
+                $type = [];
+                $nullable = false;
+                break;
+            case 'blob':
             case 'date':
             case 'datetime':
             case 'timestamp':
@@ -523,12 +527,16 @@ class XmlManager
             $optional['on_update'] = var_export($param['on_update'], true);
         }
 
+        if (isset($param['pk']) && true == $param['pk']) {
+            $nullable = false;
+        }
+
         return [
             'name' => 'column',
             'attributes' => array_merge([
                 'xsi:type' => $columnType,
                 'name' => $column,
-                'nullable' => var_export($param['nullable'] ?? false, true),
+                'nullable' => var_export($nullable, true),
             ], $type, $optional, ['comment' => $param['comment'] ?? ucfirst($column)]),
         ];
     }
