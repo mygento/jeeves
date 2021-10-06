@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     public const GEN = 'generate';
-    private const VERSION = '0.0.21';
+    public const VERSION = '0.0.21';
 
     /**
      * @var IOInterface
