@@ -156,8 +156,20 @@ EOT
         $this->db = [];
 
         foreach ($config as $vendor => $mod) {
+            if ($vendor === 'settings') {
+                $io = $this->getIO();
+                $io->write('<warning>Please update to v1 or later</warning>');
+
+                return 1;
+            }
             foreach ($mod as $module => $ent) {
                 foreach ($ent as $entity => $config) {
+                    if ($entity === 'settings') {
+                        $io = $this->getIO();
+                        $io->write('<warning>Please update to v1 or later</warning>');
+
+                        return 1;
+                    }
                     $this->genModule($vendor, $module, $entity, $config);
                 }
             }
