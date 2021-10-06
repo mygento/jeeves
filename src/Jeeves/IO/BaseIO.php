@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\IO;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 abstract class BaseIO implements IOInterface, LoggerInterface
 {

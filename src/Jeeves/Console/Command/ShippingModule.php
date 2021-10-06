@@ -10,6 +10,8 @@ class ShippingModule extends BaseCommand
 {
     private $vendor;
 
+    private $path;
+
     private $module;
 
     private $entity;
