@@ -17,4 +17,5 @@ grumphp:
         xmllint:
         phpstan:
             level: 5
+            memory_limit: "-1"
             ignore_patterns: ['test', 'vendor']

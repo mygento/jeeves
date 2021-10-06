@@ -15,7 +15,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function emergency($message, array $context = [])
     {
-        return $this->log(LogLevel::EMERGENCY, $message, $context);
+        $this->log(LogLevel::EMERGENCY, $message, $context);
     }
 
     /**
@@ -29,7 +29,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function alert($message, array $context = [])
     {
-        return $this->log(LogLevel::ALERT, $message, $context);
+        $this->log(LogLevel::ALERT, $message, $context);
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function critical($message, array $context = [])
     {
-        return $this->log(LogLevel::CRITICAL, $message, $context);
+        $this->log(LogLevel::CRITICAL, $message, $context);
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function error($message, array $context = [])
     {
-        return $this->log(LogLevel::ERROR, $message, $context);
+        $this->log(LogLevel::ERROR, $message, $context);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function warning($message, array $context = [])
     {
-        return $this->log(LogLevel::WARNING, $message, $context);
+        $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function notice($message, array $context = [])
     {
-        return $this->log(LogLevel::NOTICE, $message, $context);
+        $this->log(LogLevel::NOTICE, $message, $context);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function info($message, array $context = [])
     {
-        return $this->log(LogLevel::INFO, $message, $context);
+        $this->log(LogLevel::INFO, $message, $context);
     }
 
     /**
@@ -103,7 +103,7 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      */
     public function debug($message, array $context = [])
     {
-        return $this->log(LogLevel::DEBUG, $message, $context);
+        $this->log(LogLevel::DEBUG, $message, $context);
     }
 
     /**
