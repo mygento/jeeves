@@ -89,9 +89,9 @@ class NullIO extends BaseIO
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function askAndValidate($question, $validator, $attempts = false, $default = null)
+    public function askAndValidate($question, $validator, $attempts = null, $default = null)
     {
         return $default;
     }

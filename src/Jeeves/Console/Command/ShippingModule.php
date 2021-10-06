@@ -99,6 +99,8 @@ EOT
 
         // CS
         $this->runCodeStyleFixer();
+
+        return 0;
     }
 
     protected function getNamespace()

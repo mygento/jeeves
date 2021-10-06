@@ -15,3 +15,6 @@ grumphp:
         phpcs:
             warning_severity: 0
         xmllint:
+        phpstan:
+            level: 5
+            ignore_patterns: ['test', 'vendor']

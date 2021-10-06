@@ -12,6 +12,7 @@ class UiComponent extends Common
         $columns = array_map(
             function ($name, $param) {
                 $notNullable = isset($param['nullable']) && $param['nullable'] === false;
+                $options = null;
                 switch ($param['type']) {
                     case 'bool':
                     case 'boolean':
@@ -25,6 +26,7 @@ class UiComponent extends Common
                     case 'int':
                         $filter = 'textRange';
                         $dataType = 'text';
+
                         break;
                     case 'price':
                         $filter = 'textRange';
@@ -707,7 +709,9 @@ class UiComponent extends Common
         $construct->addParameter('eventPrefix')->setTypeHint('string');
         $construct->addParameter('eventObject')->setTypeHint('string');
         $construct->addParameter('resourceModel')->setTypeHint('string');
-        $construct->addParameter('model')->setTypeHint('string')->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class);
+        $construct->addParameter('model')
+            ->setTypeHint('string')
+            ->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class); /** @phpstan-ignore-line */
         $construct->addParameter('connection')->setTypeHint('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
         $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 

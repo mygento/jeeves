@@ -50,7 +50,7 @@ class ModelCrud extends BaseCommand
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
                 new InputOption('tablename', null, InputOption::VALUE_OPTIONAL, 'route path of the module'),
                 new InputOption('routepath', null, InputOption::VALUE_OPTIONAL, 'tablename of the entity'),
-                new InputOption('adminhtml', false, InputOption::VALUE_OPTIONAL, 'create adminhtml or not'),
+                new InputOption('adminhtml', null, InputOption::VALUE_OPTIONAL, 'create adminhtml or not'),
                 new InputOption('gui', null, InputOption::VALUE_OPTIONAL, 'GRID ui component', true),
                 new InputOption('api', null, InputOption::VALUE_OPTIONAL, 'API', false),
                 new InputOption('readonly', null, InputOption::VALUE_OPTIONAL, 'read only', false),
@@ -175,6 +175,8 @@ EOT
 
         // CS
         $this->runCodeStyleFixer();
+
+        return 0;
     }
 
     private function genAdminAcl($entities)
@@ -437,8 +439,8 @@ EOT
         $this->genRepo($repoGenerator, ucfirst($entity));
 
         if ($this->withStore) {
-            $this->genReadHandler($modelGenerator, ucfirst($entity), $fields);
-            $this->genSaveHandler($modelGenerator, ucfirst($entity), $fields);
+            $this->genReadHandler($modelGenerator, ucfirst($entity));
+            $this->genSaveHandler($modelGenerator, ucfirst($entity));
             $this->getRepoFilter($repoGenerator, ucfirst($entity));
             $interface = implode('\\', [
                 $this->getNamespace(),
@@ -513,7 +515,7 @@ EOT
         // Layout
         if ($this->gui) {
             $layoutGenerator = new \Mygento\Jeeves\Generators\Crud\Layout();
-            $this->genAdminLayouts($layoutGenerator, $entity, $this->readonly);
+            $this->genAdminLayouts($layoutGenerator, $entity);
         }
 
         //UI

@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\Console\Command;
 
 use Mygento\Jeeves\Console\Application;
+use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\IO\NullIO;
 use Mygento\Jeeves\Util\XmlManager;
 use Symfony\Component\Console\Command\Command;
@@ -31,7 +32,6 @@ abstract class BaseCommand extends Command
     public function getIO()
     {
         if (null === $this->io) {
-            /** @var $application Application */
             $application = $this->getApplication();
             if ($application instanceof Application) {
                 $this->io = $application->getIO();

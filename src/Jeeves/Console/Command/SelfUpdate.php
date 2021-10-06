@@ -41,6 +41,10 @@ EOT
             }
         } catch (\Exception $e) {
             $io->writeError($e->getMessage());
+
+            return 1;
         }
+
+        return 0;
     }
 }

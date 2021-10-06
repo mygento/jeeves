@@ -246,7 +246,7 @@ class XmlManager
     public function generateAdminMenu($entities, $fullname, $module)
     {
         $entityList = array_map(
-            function ($entity, $path) use ($fullname, $module) {
+            function ($entity, $path) use ($fullname) {
                 return [
                     'name' => 'add',
                     'attributes' => [
@@ -511,7 +511,6 @@ class XmlManager
                 break;
             default:
                 throw new \Exception('Error column type');
-                break;
         }
         $columnType = $param['type'];
         if ($param['type'] === 'price') {

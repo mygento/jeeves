@@ -90,8 +90,7 @@ class Common
     }
 
     /**
-     * @param string $name
-     * @param mixed $type
+     * @param string $type
      *
      * @return string
      */

@@ -130,7 +130,7 @@ interface IOInterface
      *
      * @param string $question The question to ask
      *
-     * @return string The answer
+     * @return string|null The answer
      */
     public function askAndHideAnswer($question);
 

@@ -86,7 +86,7 @@ EOT
             $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
             symlink('../' . $folder, $srcFolder);
 
-            return;
+            return 0;
         }
         if (!is_link($srcFolder) &&
             (
@@ -99,5 +99,7 @@ EOT
             rmdir($srcFolder);
             symlink('../' . $folder, $srcFolder);
         }
+
+        return 0;
     }
 }

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
@@ -182,9 +183,12 @@ class ConsoleIO extends BaseIO
      */
     public function askAndHideAnswer($question)
     {
-        $this->writeError($question, false);
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
+        $helper = $this->helperSet->get('question');
+        $question = new Question($question);
+        $question->setHidden(true);
 
-        return \Seld\CliPrompt\CliPrompt::hiddenPrompt(true);
+        return $helper->ask($this->input, $this->getErrorOutput(), $question);
     }
 
     /**
@@ -192,11 +196,27 @@ class ConsoleIO extends BaseIO
      */
     public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
     {
-        if ($this->isInteractive()) {
-            return $this->helperSet->get('dialog')->select($this->getErrorOutput(), $question, $choices, $default, $attempts, $errorMessage, $multiselect);
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
+        $helper = $this->helperSet->get('question');
+        $question = new ChoiceQuestion($question, $choices, $default);
+        $question->setMaxAttempts($attempts ?: null); // IOInterface requires false, and Question requires null or int
+        $question->setErrorMessage($errorMessage);
+        $question->setMultiselect($multiselect);
+
+        $result = $helper->ask($this->input, $this->getErrorOutput(), $question);
+
+        if (!is_array($result)) {
+            return (string) array_search($result, $choices, true);
         }
 
-        return $default;
+        $results = [];
+        foreach ($choices as $index => $choice) {
+            if (in_array($choice, $result, true)) {
+                $results[] = (string) $index;
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -210,13 +230,6 @@ class ConsoleIO extends BaseIO
         $sfVerbosity = $this->verbosityMap[$verbosity];
         if ($sfVerbosity > $this->output->getVerbosity()) {
             return;
-        }
-
-        // hack to keep our usage BC with symfony<2.8 versions
-        // this removes the quiet output but there is no way around it
-        // see https://github.com/composer/composer/pull/4913
-        if (OutputInterface::VERBOSITY_QUIET === 0) {
-            $sfVerbosity = OutputInterface::OUTPUT_NORMAL;
         }
 
         if (null !== $this->startTime) {

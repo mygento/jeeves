@@ -79,7 +79,7 @@ class Layout
     {
         $service = $this->getService();
 
-        return $service->write('page', function ($writer) use ($uiComponent, $handle) {
+        return $service->write('page', function ($writer) use ($handle) {
             $writer->setIndentString('    ');
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',

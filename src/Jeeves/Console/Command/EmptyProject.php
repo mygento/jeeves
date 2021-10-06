@@ -378,5 +378,7 @@ linters:
 CONFIG;
 
         $this->writeFile($path . '.scss-lint.yml', $scss);
+
+        return 0;
     }
 }
