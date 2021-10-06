@@ -10,6 +10,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class ModelCrud extends BaseCommand
 {
+    private const NEW_CONFIG = ['entities', 'shipping', 'settings'];
+
     private $vendor;
 
     private $module;
@@ -156,8 +158,20 @@ EOT
         $this->db = [];
 
         foreach ($config as $vendor => $mod) {
+            if (in_array($vendor, self::NEW_CONFIG)) {
+                $io = $this->getIO();
+                $io->write('<warning>Please update to v1 or later</warning>');
+
+                return 1;
+            }
             foreach ($mod as $module => $ent) {
                 foreach ($ent as $entity => $config) {
+                    if (in_array($entity, self::NEW_CONFIG)) {
+                        $io = $this->getIO();
+                        $io->write('<warning>Please update to v1 or later</warning>');
+
+                        return 1;
+                    }
                     $this->genModule($vendor, $module, $entity, $config);
                 }
             }
