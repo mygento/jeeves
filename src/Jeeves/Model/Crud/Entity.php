@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Generators\Crud\Interfaces;
 use Mygento\Jeeves\Generators\Crud\Models;
+use Mygento\Jeeves\Generators\Crud\Repositories;
 use Mygento\Jeeves\Model\Generator;
 
 class Entity extends Generator
@@ -44,8 +45,8 @@ class Entity extends Generator
             return;
         }
         $this->generateInterfaces();
-
         $this->generateModels();
+        $this->generateRepository();
     }
 
     public function setTypeHint(bool $hint)
@@ -112,7 +113,7 @@ class Entity extends Generator
         $this->vendor = $vendor;
     }
 
-    public function generateModels()
+    private function generateModels()
     {
         $this->genModel();
         $this->genResourceModel();
@@ -277,6 +278,33 @@ class Entity extends Generator
                 $this->getNamespace(),
                 ucfirst($this->name) . 'Interface',
                 $this->primaryKey,
+                $this->withStore,
+                $this->typehint
+            )
+        );
+    }
+
+    private function generateRepository()
+    {
+        $generator = new Repositories\Repository();
+        $filePath = $this->path . '/Model/';
+        $fileName = ucfirst($this->name) . 'Repository';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genRepository(
+                $fileName,
+                implode(' ', [
+                    $this->getConverter()->getEntityName($this->module),
+                    $this->getConverter()->getEntityName(ucfirst($this->name)),
+                ]),
+                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name) . '\\Collection',
+                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'SearchResultsInterface',
+                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'Interface',
+                $this->getNamespace(),
                 $this->withStore,
                 $this->typehint
             )
