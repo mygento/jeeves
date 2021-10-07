@@ -47,6 +47,12 @@ class Entity extends Generator
         $this->generateInterfaces();
         $this->generateModels();
         $this->generateRepository();
+
+        if ($this->withStore) {
+            $this->genReadHandler();
+            $this->genSaveHandler();
+            $this->getRepoFilter();
+        }
     }
 
     public function setTypeHint(bool $hint)
@@ -122,7 +128,7 @@ class Entity extends Generator
 
     private function generateCacheTag(): string
     {
-        return ''; //strtolower(substr($module, 0, 3) . '_' . substr($entity, 0, 1));
+        return strtolower(substr($this->module, 0, 3) . '_' . substr($this->name, 0, 1));
     }
 
     private function getNamespace(): string
@@ -306,6 +312,59 @@ class Entity extends Generator
                 $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'Interface',
                 $this->getNamespace(),
                 $this->withStore,
+                $this->typehint
+            )
+        );
+    }
+
+    private function genReadHandler()
+    {
+        $generator = new Models\Read();
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($this->name) . '/Relation/Store/';
+        $fileName = 'ReadHandler';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genReadHandler(
+                ucfirst($this->name),
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
+    private function genSaveHandler()
+    {
+        $generator = new Models\Save();
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($this->name) . '/Relation/Store/';
+        $fileName = 'SaveHandler';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genSaveHandler(
+                ucfirst($this->name),
+                ucfirst($this->name) . 'Interface',
+                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
+    private function getRepoFilter()
+    {
+        $generator = new Repositories\Filter();
+        $filePath = $this->path . '/Model/SearchCriteria/';
+        $fileName = ucfirst($this->name) . 'StoreFilter';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->getRepoFilter(
+                $fileName,
+                $this->getNamespace(),
                 $this->typehint
             )
         );

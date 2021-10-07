@@ -104,6 +104,7 @@ EOT
                 }
             }
         }
+
         //xml
         $this->genAdminAcl($this->acl);
         $this->genAdminRoute($this->admin);
