@@ -1,13 +1,15 @@
+settings:
+    typehint: true
 Mygento:
   SampleModule:
     settings:
       typehint: true
     shipping:
       code: 'slowcourier'
-    entity:
+    entities:
       CustomerAddress:
         settings:
-          typehint: true
+          typehint: false
           version: 2.3
         tablename: mygento_sample_custom_table_name
         comment: 'Table for Customer Address'
@@ -51,8 +53,9 @@ Mygento:
             columns: ['city']
       Banner:
         settings:
-          typehint: false
+          typehint: true
         api: true
+        cacheable: true
         readonly: true
         cache_tag: samp_ban
         per_store: true

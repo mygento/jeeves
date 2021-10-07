@@ -2,11 +2,12 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
+use Mygento\Jeeves\Console\Application;
+use Mygento\Jeeves\Model\Crud;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class ModelCrud extends BaseCommand
 {
@@ -67,87 +68,14 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->path = \Mygento\Jeeves\Console\Application::GEN;
+        $executor = new Crud($this->getIO());
+        $this->path = Application::GEN;
         $filename = '.jeeves.yaml';
         if (file_exists($filename)) {
-            $config = Yaml::parseFile($filename);
-        } else {
-            $io = $this->getIO();
-            $v = strtolower($input->getArgument('vendor'));
-            $m = strtolower($input->getArgument('module'));
-            $e = strtolower($input->getArgument('name'));
-            $fullname = $v . '/' . $m;
-            $fullname = $io->askAndValidate(
-                'Package name (<vendor>/<name>) [<comment>' . $fullname . '</comment>]: ',
-                function ($value) use ($fullname) {
-                    if (null === $value) {
-                        return $fullname;
-                    }
-                    if (!preg_match('{^[a-zA-Z]+/[a-zA-Z]+$}', $value)) {
-                        throw new \InvalidArgumentException(
-                            'The package name ' . $value . ' is invalid'
-                            . 'and have a vendor name, a forward slash, '
-                            . 'and a package name'
-                        );
-                    }
-
-                    return $value;
-                },
-                null,
-                $fullname
-            );
-            list($v, $m) = explode('/', $fullname);
-
-            $e = $io->askAndValidate(
-                'Entity name (<entity>) [<comment>' . $e . '</comment>]: ',
-                function ($value) use ($e) {
-                    if (null === $value) {
-                        return $e;
-                    }
-                    if (!preg_match('{^[a-zA-Z]+$}', $value)) {
-                        throw new \InvalidArgumentException(
-                            'The entity name ' . $value . ' is invalid'
-                        );
-                    }
-
-                    return $value;
-                },
-                null,
-                $e
-            );
-
-            $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $m;
-            $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $v . '_' . $m . '_' . $e;
-            $api = (bool) $input->getOption('api');
-            $gui = (bool) $input->getOption('gui');
-            $readonly = (bool) $input->getOption('readonly');
-            $withStore = (bool) $input->getOption('per_store');
-
-            $config = [
-                $v => [
-                    $m => [
-                        $e => [
-                            'gui' => $gui,
-                            'api' => $api,
-                            'readonly' => $readonly,
-                            'per_store' => $withStore,
-                            'columns' => [
-                                'id' => [
-                                    'type' => 'int',
-                                    'identity' => true,
-                                    'unsigned' => true,
-                                    'comment' => $e . ' ID',
-                                ],
-                            ],
-                            'tablename' => strtolower($tablename),
-                            'route' => [
-                                'admin' => strtolower($routepath),
-                            ],
-                        ],
-                    ],
-                ],
-            ];
+            $config = $executor->readConfig($filename);
         }
+
+        $executor->execute($this->path, $config);
 
         //reset
         $this->acl = [];
@@ -191,6 +119,91 @@ EOT
         $this->runCodeStyleFixer();
 
         return 0;
+    }
+
+    private function getConfig(InputInterface $input): array
+    {
+        $executor = new Crud();
+        $filename = '.jeeves.yaml';
+        if (file_exists($filename)) {
+            return $executor->readConfig($filename);
+        }
+
+        $io = $this->getIO();
+        $v = strtolower($input->getArgument('vendor'));
+        $m = strtolower($input->getArgument('module'));
+        $e = strtolower($input->getArgument('name'));
+        $fullname = $v . '/' . $m;
+        $fullname = $io->askAndValidate(
+            'Package name (<vendor>/<name>) [<comment>' . $fullname . '</comment>]: ',
+            function ($value) use ($fullname) {
+                if (null === $value) {
+                    return $fullname;
+                }
+                if (!preg_match('{^[a-zA-Z]+/[a-zA-Z]+$}', $value)) {
+                    throw new \InvalidArgumentException(
+                        'The package name ' . $value . ' is invalid'
+                            . 'and have a vendor name, a forward slash, '
+                            . 'and a package name'
+                    );
+                }
+
+                return $value;
+            },
+            null,
+            $fullname
+        );
+        list($v, $m) = explode('/', $fullname);
+
+        $e = $io->askAndValidate(
+            'Entity name (<entity>) [<comment>' . $e . '</comment>]: ',
+            function ($value) use ($e) {
+                if (null === $value) {
+                    return $e;
+                }
+                if (!preg_match('{^[a-zA-Z]+$}', $value)) {
+                    throw new \InvalidArgumentException(
+                        'The entity name ' . $value . ' is invalid'
+                    );
+                }
+
+                return $value;
+            },
+            null,
+            $e
+        );
+
+        $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $m;
+        $tablename = $input->getOption('tablename') ? $input->getOption('tablename') : $v . '_' . $m . '_' . $e;
+        $api = (bool) $input->getOption('api');
+        $gui = (bool) $input->getOption('gui');
+        $readonly = (bool) $input->getOption('readonly');
+        $withStore = (bool) $input->getOption('per_store');
+
+        return [
+            $v => [
+                $m => [
+                    $e => [
+                        'gui' => $gui,
+                        'api' => $api,
+                        'readonly' => $readonly,
+                        'per_store' => $withStore,
+                        'columns' => [
+                            'id' => [
+                                'type' => 'int',
+                                'identity' => true,
+                                'unsigned' => true,
+                                'comment' => $e . ' ID',
+                            ],
+                        ],
+                        'tablename' => strtolower($tablename),
+                        'route' => [
+                            'admin' => strtolower($routepath),
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     private function genAdminAcl($entities)
