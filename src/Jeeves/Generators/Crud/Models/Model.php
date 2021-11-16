@@ -53,8 +53,14 @@ class Model extends Common
             ];
         }
 
+        $pk = [];
+
         foreach ($fields as $name => $value) {
-            $notNullable = isset($value['nullable']) && $value['nullable'] === false;
+            $notNullable = $this->isNullable($value);
+            if (isset($value['pk']) && $value['pk'] === true) {
+                $pk[$name] = $value;
+                $pk[$name]['nullable'] = !$notNullable;
+            }
             $method = $this->snakeCaseToUpperCamelCase($name);
             $getter = $class->addMethod('get' . $method)
                 ->addComment('Get ' . str_replace('_', ' ', $name))
@@ -79,6 +85,35 @@ class Model extends Common
                 $setter
                     ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
                     ->addComment('@return $this');
+            }
+        }
+
+        if (count($pk) === 1 && !in_array('id', array_keys($pk))) {
+            $item = current($pk);
+            $itemName = current(array_keys($pk));
+
+            $getId = $class
+                ->addMethod('getId')
+                ->addComment('Get ID')
+                ->setVisibility('public')
+                ->setBody('return $this->getData(self::' . strtoupper($itemName) . ');');
+            if ($typehint) {
+                $getId->setReturnType($this->convertType($item['type']));
+                $getId->setReturnNullable($item['nullable']);
+            }
+
+            $setId = $class
+                ->addMethod('setId')
+                ->addComment('Set ID')
+                ->setVisibility('public')
+                ->setBody('return $this->setData(self::' . strtoupper($itemName) . ', $id);');
+            $setIdParam = $setId->addParameter('id');
+
+            if ($typehint) {
+                $setId->setReturnType('self');
+
+                $setIdParam->setType($this->convertType($item['type']));
+                $setIdParam->setNullable($item['nullable']);
             }
         }
 

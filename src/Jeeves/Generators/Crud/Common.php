@@ -6,6 +6,7 @@ class Common
 {
     protected const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
     protected const TAB = '    ';
+    protected const DEFAULT_KEY = 'id';
 
     /**
      * Converts an input string from snake_case to upper CamelCase.
@@ -123,5 +124,14 @@ class Common
             default:
                 return $type;
         }
+    }
+
+    protected function isNullable(array $value): bool
+    {
+        if ($value['type'] === 'boolean' && !isset($value['nullable'])) {
+            return true;
+        }
+
+        return isset($value['nullable']) && $value['nullable'] === false;
     }
 }

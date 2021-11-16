@@ -12,6 +12,7 @@ class Model extends Common
         string $rootNamespace,
         string $cacheTag = null,
         array $fields = self::DEFAULT_FIELDS,
+        string $primary,
         bool $withStore = false,
         bool $typehint = false
     ): PhpNamespace {
@@ -30,8 +31,14 @@ class Model extends Common
             ];
         }
 
+        $pk = [];
+
         foreach ($fields as $name => $value) {
-            $notNullable = isset($value['nullable']) && $value['nullable'] === false;
+            $notNullable = $this->isNullable($value);
+            if (isset($value['pk']) && $value['pk'] === true) {
+                $pk[$name] = $value;
+                $pk[$name]['nullable'] = !$notNullable;
+            }
             $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
             $method = $this->snakeCaseToUpperCamelCase($name);
             $get = $interface->addMethod('get' . $method)
@@ -53,6 +60,33 @@ class Model extends Common
                 $get->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'));
                 $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
                     ->addComment('@return $this');
+            }
+        }
+
+        if ($primary !== self::DEFAULT_KEY && count($pk) === 1) {
+            $item = current($pk);
+
+            $getId = $interface
+                ->addMethod('getId')
+                ->addComment('Get ID')
+                ->setVisibility('public');
+
+            if ($typehint) {
+                $getId->setReturnType($this->convertType($item['type']));
+                $getId->setReturnNullable($item['nullable']);
+            }
+
+            $setId = $interface
+                ->addMethod('setId')
+                ->addComment('Set ID')
+                ->setVisibility('public');
+
+            $setIdParam = $setId->addParameter(self::DEFAULT_KEY);
+
+            if ($typehint) {
+                $setId->setReturnType('self');
+                $setIdParam->setType($this->convertType($item['type']));
+                $setIdParam->setNullable($item['nullable']);
             }
         }
 

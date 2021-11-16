@@ -2,6 +2,7 @@
 
 namespace Mygento\Jeeves\Model\Crud;
 
+use Mygento\Jeeves\Generators\Crud\Controllers;
 use Mygento\Jeeves\Generators\Crud\Interfaces;
 use Mygento\Jeeves\Generators\Crud\Models;
 use Mygento\Jeeves\Generators\Crud\Repositories;
@@ -9,6 +10,8 @@ use Mygento\Jeeves\Model\Generator;
 
 class Entity extends Generator
 {
+    private const DEFAULT_KEY = 'id';
+
     private $typehint;
 
     private $version;
@@ -47,11 +50,16 @@ class Entity extends Generator
         $this->generateInterfaces();
         $this->generateModels();
         $this->generateRepository();
+        $this->generateSearchResults();
 
         if ($this->withStore) {
             $this->genReadHandler();
             $this->genSaveHandler();
             $this->getRepoFilter();
+        }
+
+        if ($this->gui) {
+            $this->generateControllers();
         }
     }
 
@@ -83,7 +91,7 @@ class Entity extends Generator
                 . '_' . $this->getEntityLowercase();
         $cacheable = $config['cacheable'] ?? false;
 
-        $this->primaryKey = 'id';
+        $this->primaryKey = self::DEFAULT_KEY;
 
         if ($cacheable) {
             $this->cacheTag = $config['cache_tag'] ?? $this->generateCacheTag();
@@ -101,6 +109,12 @@ class Entity extends Generator
         $fields = $config['columns'] ?? [];
         if (empty($fields)) {
             return;
+        }
+
+        foreach ($fields as $name => $value) {
+            if (isset($value['pk']) && $value['pk'] === true) {
+                $this->primaryKey = $name;
+            }
         }
     }
 
@@ -134,6 +148,16 @@ class Entity extends Generator
     private function getNamespace(): string
     {
         return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
+    }
+
+    private function getFullname()
+    {
+        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
+    }
+
+    private function getEntityAcl()
+    {
+        return $this->getFullname() . '::' . $this->getEntityLowercase();
     }
 
     private function getEventName($entity)
@@ -180,6 +204,7 @@ class Entity extends Generator
                 $this->getNamespace(),
                 $this->cacheTag,
                 $this->config['columns'],
+                $this->primaryKey,
                 $this->withStore,
                 $this->typehint
             )
@@ -208,7 +233,7 @@ class Entity extends Generator
 
     private function genModelSearchInterface()
     {
-        $generator = new Interfaces();
+        $generator = new Interfaces\Search();
         $filePath = $this->path . '/Api/Data/';
         $fileName = ucfirst($this->name) . 'SearchResultsInterface';
         $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
@@ -219,7 +244,8 @@ class Entity extends Generator
                 $this->name,
                 $fileName,
                 $namePath . ucfirst($this->name) . 'Interface',
-                $this->getNamespace()
+                $this->getNamespace(),
+                $this->typehint
             )
         );
     }
@@ -317,6 +343,24 @@ class Entity extends Generator
         );
     }
 
+    private function generateSearchResults()
+    {
+        $generator = new Repositories\Search();
+        $filePath = $this->path . '/Model/';
+        $fileName = ucfirst($this->name) . 'SearchResults';
+        $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genModelSearch(
+                $fileName,
+                $namePath . ucfirst($this->name) . 'SearchResultsInterface',
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
     private function genReadHandler()
     {
         $generator = new Models\Read();
@@ -366,6 +410,162 @@ class Entity extends Generator
                 $fileName,
                 $this->getNamespace(),
                 $this->typehint
+            )
+        );
+    }
+
+    private function generateControllers()
+    {
+        $this->genAdminAbstractController();
+        $this->genAdminViewController();
+
+        if (!$this->readonly) {
+//            $this->genAdminEditController($controllerGenerator, ucfirst($entity));
+//            $this->genAdminSaveController($controllerGenerator, ucfirst($entity));
+//            $this->genAdminDeleteController($controllerGenerator, ucfirst($entity));
+//            $this->genAdminNewController($controllerGenerator, ucfirst($entity));
+//            $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
+//            $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+        }
+    }
+
+    private function genAdminAbstractController()
+    {
+        $generator = new Controllers\Shared();
+        $filePath = $this->path . '/Controller/Adminhtml/';
+        $fileName = ucfirst($this->name);
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminAbstractController(
+                $fileName,
+                $this->getEntityAcl(),
+                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
+    private function genAdminViewController()
+    {
+        $generator = new Controllers\View();
+        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $fileName = 'Index';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminViewController(
+                ucfirst($this->name),
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
+                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
+    private function genAdminEditController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Edit';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminEditController(
+                $entityName,
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entityName),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Api\\Data\\' . $entityName . 'Interface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminSaveController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Save';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminSaveController(
+                $entityName,
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entityName),
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Api\\Data\\' . $entityName . 'Interface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminDeleteController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'Delete';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminDeleteController(
+                $entityName,
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminNewController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'NewAction';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminNewController(
+                $entityName,
+                $fileName,
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminInlineController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'InlineEdit';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminInlineController(
+                $entityName,
+                $fileName,
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
+            )
+        );
+    }
+
+    private function genAdminMassController($generator, $entityName)
+    {
+        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $fileName = 'MassDelete';
+        $namePath = '\\' . $this->getNamespace() . '\\';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->genAdminMassController(
+                $entityName,
+                $fileName,
+                $namePath . 'Model\\ResourceModel\\' . $entityName . '\\CollectionFactory',
+                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $this->getNamespace()
             )
         );
     }

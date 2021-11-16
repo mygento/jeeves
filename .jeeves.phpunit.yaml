@@ -8,18 +8,23 @@ Mygento:
       code: 'slowcourier'
     entities:
       CustomerAddress:
-        settings:
-          typehint: false
-          version: 2.3
         tablename: mygento_sample_custom_table_name
         comment: 'Table for Customer Address'
         columns:
-          id:
+          address_id:
             type: int
             pk: true
             identity: true
             unsigned: true
             comment: 'Address ID'
+          is_active:
+            type: boolean
+          has_flag:
+            type: boolean
+            nullable: true
+          merge_date:
+            type: date
+            nullable: true
           city:
             type: varchar
             nullable: false
@@ -32,6 +37,10 @@ Mygento:
             length: 6
             nullable: false
             source: 'Magento\Customer\Model\Customer\Source\Group'
+          description:
+            type: text
+            nullable: false
+            comment: 'Description'
           created_at:
             type: timestamp
             nullable: false
@@ -51,9 +60,12 @@ Mygento:
         indexes:
           IX_CITY:
             columns: ['city']
+          IX_ACTIVE:
+            columns: ['is_active']
       Banner:
         settings:
-          typehint: true
+          typehint: false
+          version: 2.3
         api: true
         cacheable: true
         readonly: true
