@@ -11,6 +11,7 @@ class View extends Common
         string $entity,
         string $shortName,
         string $repository,
+        string $acl,
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
@@ -65,7 +66,10 @@ class View extends Common
             ->addComment('Index action')
             ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
-                . '$this->initPage($resultPage)->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL . PHP_EOL
+                . '$resultPage' . PHP_EOL
+                . self::TAB . '->setActiveMenu(\'' . $acl . '\')' . PHP_EOL
+                . self::TAB . '->getConfig()' . PHP_EOL
+                . self::TAB . '->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL . PHP_EOL
                 . '$this->dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . 'return $resultPage;');
 
