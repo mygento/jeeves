@@ -37,7 +37,7 @@ class Delete extends Common
                 . '    return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
                 . '    $this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL
-                . '}' . PHP_EOL. PHP_EOL
+                . '}' . PHP_EOL . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $entityId]);');
 
         if ($typehint) {

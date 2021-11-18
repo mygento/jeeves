@@ -2,6 +2,8 @@
 
 namespace Mygento\Jeeves\Generators\Crud;
 
+use Sabre\Xml\Service;
+
 class Common
 {
     protected const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
@@ -133,5 +135,13 @@ class Common
         }
 
         return isset($value['nullable']) && $value['nullable'] === false;
+    }
+
+    protected function getService(): Service
+    {
+        $service = new Service();
+        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
+
+        return $service;
     }
 }

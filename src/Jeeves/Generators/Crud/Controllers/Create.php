@@ -23,7 +23,7 @@ class Create extends Common
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);'.PHP_EOL.
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL .
                 '$this->resultForwardFactory = $resultForwardFactory;' . PHP_EOL
             );
 

@@ -4,8 +4,10 @@ namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Generators\Crud\Controllers;
 use Mygento\Jeeves\Generators\Crud\Interfaces;
+use Mygento\Jeeves\Generators\Crud\Layouts;
 use Mygento\Jeeves\Generators\Crud\Models;
 use Mygento\Jeeves\Generators\Crud\Repositories;
+use Mygento\Jeeves\Generators\Crud\Ui;
 use Mygento\Jeeves\Model\Generator;
 
 class Entity extends Generator
@@ -60,6 +62,10 @@ class Entity extends Generator
 
         if ($this->gui) {
             $this->generateControllers();
+            $this->genAdminLayouts();
+
+            $this->genAdminUI();
+            $this->genGridCollection();
         }
     }
 
@@ -580,6 +586,165 @@ class Entity extends Generator
                 $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
                 $this->getNamespace(),
                 $this->typehint
+            )
+        );
+    }
+
+    private function genAdminLayouts()
+    {
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase();
+        $this->genAdminLayoutIndex($parent);
+
+        if (!$this->readonly) {
+            $editUiComponent = $parent . '_edit';
+            $this->genAdminLayoutEdit($parent, $editUiComponent);
+            $this->genAdminLayoutNew($parent, $editUiComponent);
+        }
+    }
+
+    private function genAdminLayoutIndex(string $parent)
+    {
+        $generator = new Layouts\Index();
+
+        $uiComponent = $parent . '_listing';
+        $path = $parent . '_index';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+            $generator->generateAdminLayoutIndex($uiComponent)
+        );
+    }
+
+    private function genAdminLayoutEdit(string $parent, string $editUiComponent)
+    {
+        $generator = new Layouts\Edit();
+
+        $path = $parent . '_edit';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+            $generator->generateAdminLayoutEdit($editUiComponent)
+        );
+    }
+
+    private function genAdminLayoutNew(string $parent, string $editUiComponent)
+    {
+        $generator = new Layouts\Create();
+        $path = $parent . '_new';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/layout/' . $path . '.xml',
+            $generator->generateAdminLayoutNew($editUiComponent)
+        );
+    }
+
+    private function genAdminUI()
+    {
+        $this->genAdminUiDataProvider();
+        $this->genAdminUiListing();
+
+        if (!$this->readonly) {
+            $this->genAdminUIActions();
+            $this->genAdminUiEdit();
+        }
+    }
+
+    private function genAdminUIActions()
+    {
+        return;
+        $filePath = $this->path . '/Ui/Component/Listing/';
+        $fileName = ucfirst($entity) . 'Actions';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+                $generator->getActions(
+                    $routepath,
+                    $this->getEntityLowercase($entity),
+                    $this->getNamespace(),
+                    ucfirst($entity) . 'Actions'
+                )
+        );
+    }
+
+    private function genAdminUiDataProvider()
+    {
+        $generator = new Ui\DataProvider();
+        $filePath = $this->path . '/Model/' . ucfirst($this->name) . '/';
+        $fileName = 'DataProvider';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->getProvider(
+                $this->name,
+                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($this->name) . '\\Collection',
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($this->name) . '\\CollectionFactory',
+                $fileName,
+                $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
+                $this->getNamespace(),
+                $this->typehint
+            )
+        );
+    }
+
+    private function genAdminUiListing()
+    {
+        return;
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entity);
+
+        $url = $this->getModuleLowercase() . '/' . $this->getEntityLowercase($entity);
+
+        $uiComponent = $parent . '_listing';
+        $common = $parent . '_listing' . '.' . $parent . '_listing.';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $generator->generateAdminUiIndex(
+                $uiComponent,
+                $uiComponent . '_data_source',
+                $parent . '_columns',
+                'Add New ' . $this->getConverter()->getEntityName($entity),
+                $this->getEntityAcl($entity),
+                $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
+                $url . '/inlineEdit',
+                $url . '/massDelete',
+                $common . $parent . '_columns.ids',
+                $common . $parent . '_columns_editor',
+                $fields,
+                $this->readonly
+            )
+        );
+    }
+
+    private function genAdminUiEdit()
+    {
+        return;
+        $uiComponent = $parent . '_edit';
+        $dataSource = $uiComponent . '_data_source';
+        $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
+        $this->writeFile(
+            $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
+            $generator->generateAdminUiForm(
+                $uiComponent,
+                $dataSource,
+                $url . '/save',
+                $provider,
+                $entity,
+                $fields,
+                $this->withStore
+            )
+        );
+    }
+
+    private function genGridCollection()
+    {
+        return;
+        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
+        $fileName = 'Collection';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            $generator->generateGridCollection(
+                $entity,
+                $this->getNamespace(),
+                $fileName,
+                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
+                $this->withStore
             )
         );
     }
