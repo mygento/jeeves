@@ -16,7 +16,7 @@ class Edit extends Common
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
-        $entityName = $this->getEntityName($entity);
+        $entityName = $this->getEntityPrintName($entity);
 
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Edit')
@@ -99,7 +99,6 @@ class Edit extends Common
 
         if ($typehint) {
             $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
-
             $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
         } else {
             $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');

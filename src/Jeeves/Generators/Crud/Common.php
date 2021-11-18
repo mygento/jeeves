@@ -72,24 +72,20 @@ class Common
 
     /**
      * Split At UpperCase.
-     *
-     * @param string $s
-     *
-     * @return string
      */
-    public function splitAtUpperCase($s)
+    public function splitAtUpperCase(string $s): string
     {
         return implode(' ', preg_split('/(?=[A-Z])/', $s, -1, PREG_SPLIT_NO_EMPTY));
     }
 
-    /**
-     * @param string $entity
-     *
-     * @return string
-     */
-    public function getEntityName($entity)
+    public function getEntityPrintName(string $entity): string
     {
         return $this->splitAtUpperCase($this->snakeCaseToUpperCamelCase($entity));
+    }
+
+    public function getEntityName(string $entity): string
+    {
+        return $this->snakeCaseToUpperCamelCase($entity);
     }
 
     /**

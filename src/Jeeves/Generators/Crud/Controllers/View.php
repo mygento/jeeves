@@ -15,7 +15,7 @@ class View extends Common
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
-        $entityName = $this->getEntityName($entity);
+        $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Index')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);

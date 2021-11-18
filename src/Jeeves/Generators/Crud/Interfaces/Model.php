@@ -9,10 +9,10 @@ class Model extends Common
 {
     public function genModelInterface(
         string $className,
+        string $primary,
         string $rootNamespace,
         string $cacheTag = null,
         array $fields = self::DEFAULT_FIELDS,
-        string $primary,
         bool $withStore = false,
         bool $typehint = false
     ): PhpNamespace {

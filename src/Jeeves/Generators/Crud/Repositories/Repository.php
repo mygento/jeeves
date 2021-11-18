@@ -9,7 +9,7 @@ class Repository extends Common
 {
     public function genRepository(
         string $className,
-        string $entityName,
+        string $print,
         string $repoInterface,
         string $resource,
         string $collection,
@@ -126,7 +126,7 @@ class Repository extends Common
             . '$this->resource->load($entity, $entityId);' . PHP_EOL
             . 'if (!$entity->getId()) {' . PHP_EOL
             . '    throw new NoSuchEntityException(' . PHP_EOL
-            . '        __(\'' . $entityName . ' with id "%1" does not exist.\', $entityId)' . PHP_EOL
+            . '        __(\'' . $print . ' with id "%1" does not exist.\', $entityId)' . PHP_EOL
             . '    );' . PHP_EOL
             . '}' . PHP_EOL
             . 'return $entity;');

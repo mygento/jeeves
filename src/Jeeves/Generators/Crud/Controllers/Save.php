@@ -15,7 +15,7 @@ class Save extends Common
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
-        $entityName = $this->getEntityName($entity);
+        $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
         $class = $namespace->addClass('Save')

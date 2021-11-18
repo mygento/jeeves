@@ -10,6 +10,7 @@ class Search extends Common
     public function genModelSearchInterface(
         string $entity,
         string $className,
+        string $print,
         string $entInterface,
         string $rootNamespace,
         bool $typehint = false
@@ -22,7 +23,7 @@ class Search extends Common
 
         $get = $interface->addMethod('getItems')
             ->setVisibility('public')
-            ->addComment('Get list of ' . $entity);
+            ->addComment('Get list of ' . $print);
         if ($typehint) {
             // $get->setReturnType('array');
         }
@@ -30,7 +31,7 @@ class Search extends Common
 
         $set = $interface->addMethod('setItems')
             ->setVisibility('public')
-            ->addComment('Set list of ' . $entity)
+            ->addComment('Set list of ' . $print)
             ->addComment('@param ' . $entInterface . '[] $items');
         $set->addParameter('items')->setTypeHint('array');
 

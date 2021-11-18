@@ -8,10 +8,10 @@ use Nette\PhpGenerator\PhpNamespace;
 class Repository extends Common
 {
     public function genModelRepositoryInterface(
-        string $entity,
         string $entInterface,
         string $resultInterface,
         string $className,
+        string $print,
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
@@ -23,7 +23,7 @@ class Repository extends Common
         }
 
         $save = $interface->addMethod('save');
-        $save->addComment('Save ' . $entity)
+        $save->addComment('Save ' . $print)
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
         $save->addParameter('entity')->setTypeHint($entInterface);
@@ -37,7 +37,7 @@ class Repository extends Common
         }
 
         $get = $interface->addMethod('getById');
-        $get->addComment('Retrieve ' . $entity)
+        $get->addComment('Retrieve ' . $print)
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
             ->setVisibility('public');
         $getParam = $get->addParameter('entityId');
@@ -51,7 +51,7 @@ class Repository extends Common
         }
 
         $getList = $interface->addMethod('getList');
-        $getList->addComment('Retrieve ' . $entity . ' entities matching the specified criteria');
+        $getList->addComment('Retrieve ' . $print . ' entities matching the specified criteria');
 
         $getList
             ->setVisibility('public')
@@ -68,7 +68,7 @@ class Repository extends Common
 
         $del = $interface->addMethod('delete');
         $del
-            ->addComment('Delete ' . $entity)
+            ->addComment('Delete ' . $print)
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
             ->setVisibility('public')
             ->addParameter('entity')->setTypeHint($entInterface);
@@ -80,7 +80,7 @@ class Repository extends Common
         }
 
         $delId = $interface->addMethod('deleteById');
-        $delId->addComment('Delete ' . $entity)
+        $delId->addComment('Delete ' . $print)
             ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
             ->setVisibility('public');

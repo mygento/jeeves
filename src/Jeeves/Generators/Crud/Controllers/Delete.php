@@ -16,7 +16,7 @@ class Delete extends Common
 
         $class = $namespace->addClass('Delete')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-        $entityName = $this->getEntityName($entity);
+        $entityName = $this->getEntityPrintName($entity);
 
         if ($typehint) {
             $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);

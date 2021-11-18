@@ -108,7 +108,7 @@ class Entity extends Generator
         }
 
         if (!isset($config['route']['admin']) || !$config['route']['admin']) {
-            // $config['route']['admin'] = $this->getModuleLowercase();
+            $this->config['route']['admin'] = $this->getModuleLowercase();
         }
 
         //$routepath = $config['route']['admin'];
@@ -175,6 +175,11 @@ class Entity extends Generator
         ]);
     }
 
+    private function getEntityName()
+    {
+        return $this->getConverter()->getEntityName($this->name);
+    }
+
     private function getModuleLowercase()
     {
         return $this->getConverter()->camelCaseToSnakeCase($this->module);
@@ -201,16 +206,16 @@ class Entity extends Generator
     {
         $generator = new Interfaces\Model();
         $filePath = $this->path . '/Api/Data/';
-        $fileName = ucfirst($this->name) . 'Interface';
+        $fileName = $this->getEntityName() . 'Interface';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genModelInterface(
                 $fileName,
+                $this->primaryKey,
                 $this->getNamespace(),
                 $this->cacheTag,
                 $this->config['columns'],
-                $this->primaryKey,
                 $this->withStore,
                 $this->typehint
             )
@@ -221,16 +226,16 @@ class Entity extends Generator
     {
         $generator = new Interfaces\Repository();
         $filePath = $this->path . '/Api/';
-        $fileName = ucfirst($this->name) . 'RepositoryInterface';
+        $fileName = $this->getEntityName() . 'RepositoryInterface';
         $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genModelRepositoryInterface(
-                $this->name,
-                $namePath . ucfirst($this->name) . 'Interface',
-                $namePath . ucfirst($this->name) . 'SearchResultsInterface',
+                $namePath . $this->getEntityName() . 'Interface',
+                $namePath . $this->getEntityName() . 'SearchResultsInterface',
                 $fileName,
+                $this->getConverter()->getEntityPrintName($this->name),
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -241,15 +246,16 @@ class Entity extends Generator
     {
         $generator = new Interfaces\Search();
         $filePath = $this->path . '/Api/Data/';
-        $fileName = ucfirst($this->name) . 'SearchResultsInterface';
+        $fileName = $this->getEntityName() . 'SearchResultsInterface';
         $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genModelSearchInterface(
-                $this->name,
+                $this->getEntityName(),
                 $fileName,
-                $namePath . ucfirst($this->name) . 'Interface',
+                $this->getConverter()->getEntityPrintName($this->name),
+                $namePath . $this->getEntityName() . 'Interface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -260,7 +266,7 @@ class Entity extends Generator
     {
         $generator = new Models\Model();
         $filePath = $this->path . '/Model/';
-        $fileName = ucfirst($this->name);
+        $fileName = $this->getEntityName();
         $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
 
         $this->writeFile(
@@ -268,10 +274,10 @@ class Entity extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genModel(
                 $fileName,
-                $namePath . ucfirst($this->name) . 'Interface',
-                'ResourceModel' . '\\' . ucfirst($this->name),
+                $namePath . $this->getEntityName() . 'Interface',
+                'ResourceModel' . '\\' . $this->getEntityName(),
                 $this->getNamespace(),
-                $this->getEventName(ucfirst($this->name)),
+                $this->getEventName($this->name),
                 $this->cacheTag,
                 $this->config['columns'],
                 $this->withStore,
@@ -284,7 +290,7 @@ class Entity extends Generator
     {
         $generator = new Models\Resource();
         $filePath = $this->path . '/Model/ResourceModel/';
-        $fileName = ucfirst($this->name);
+        $fileName = $this->getEntityName();
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
@@ -293,7 +299,7 @@ class Entity extends Generator
                 $this->tablename,
                 $this->primaryKey,
                 $this->getNamespace(),
-                ucfirst($this->name) . 'Interface',
+                $this->getEntityName() . 'Interface',
                 $this->withStore,
                 $this->typehint
             )
@@ -303,18 +309,18 @@ class Entity extends Generator
     private function genResourceCollection()
     {
         $generator = new Models\Collection();
-        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Model/ResourceModel/' . $this->getEntityName() . '/';
         $fileName = 'Collection';
 
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genResourceCollection(
-                ucfirst($this->name),
-                '\\' . $this->getNamespace() . '\\Model' . '\\' . ucfirst($this->name),
-                '\\' . $this->getNamespace() . '\\Model\\ResourceModel' . '\\' . ucfirst($this->name),
+                $this->getEntityName(),
+                '\\' . $this->getNamespace() . '\\Model' . '\\' . $this->getEntityName(),
+                '\\' . $this->getNamespace() . '\\Model\\ResourceModel' . '\\' . $this->getEntityName(),
                 $this->getNamespace(),
-                ucfirst($this->name) . 'Interface',
+                $this->getEntityName() . 'Interface',
                 $this->primaryKey,
                 $this->withStore,
                 $this->typehint
@@ -326,7 +332,7 @@ class Entity extends Generator
     {
         $generator = new Repositories\Repository();
         $filePath = $this->path . '/Model/';
-        $fileName = ucfirst($this->name) . 'Repository';
+        $fileName = $this->getEntityName() . 'Repository';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
@@ -335,13 +341,13 @@ class Entity extends Generator
                 $fileName,
                 implode(' ', [
                     $this->getConverter()->getEntityName($this->module),
-                    $this->getConverter()->getEntityName(ucfirst($this->name)),
+                    $this->getConverter()->getEntityName($this->name),
                 ]),
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
-                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
-                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name) . '\\Collection',
-                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'SearchResultsInterface',
-                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'Interface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
+                $namePath . 'Model\\ResourceModel\\' . $this->getEntityName(),
+                $namePath . 'Model\\ResourceModel\\' . $this->getEntityName() . '\\Collection',
+                $namePath . 'Api\\Data\\' . $this->getEntityName() . 'SearchResultsInterface',
+                $namePath . 'Api\\Data\\' . $this->getEntityName() . 'Interface',
                 $this->getNamespace(),
                 $this->withStore,
                 $this->typehint
@@ -353,14 +359,14 @@ class Entity extends Generator
     {
         $generator = new Repositories\Search();
         $filePath = $this->path . '/Model/';
-        $fileName = ucfirst($this->name) . 'SearchResults';
+        $fileName = $this->getEntityName() . 'SearchResults';
         $namePath = '\\' . $this->getNamespace() . '\\Api\\Data\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genModelSearch(
                 $fileName,
-                $namePath . ucfirst($this->name) . 'SearchResultsInterface',
+                $namePath . $this->getEntityName() . 'SearchResultsInterface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -370,15 +376,15 @@ class Entity extends Generator
     private function genReadHandler()
     {
         $generator = new Models\Read();
-        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($this->name) . '/Relation/Store/';
+        $filePath = $this->path . '/Model/ResourceModel/' . $this->getEntityName() . '/Relation/Store/';
         $fileName = 'ReadHandler';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genReadHandler(
-                ucfirst($this->name),
-                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
+                $this->getEntityName(),
+                $namePath . 'Model\\ResourceModel\\' . $this->getEntityName(),
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -388,16 +394,16 @@ class Entity extends Generator
     private function genSaveHandler()
     {
         $generator = new Models\Save();
-        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($this->name) . '/Relation/Store/';
+        $filePath = $this->path . '/Model/ResourceModel/' . $this->getEntityName() . '/Relation/Store/';
         $fileName = 'SaveHandler';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genSaveHandler(
-                ucfirst($this->name),
-                ucfirst($this->name) . 'Interface',
-                $namePath . 'Model\\ResourceModel\\' . ucfirst($this->name),
+                $this->getEntityName(),
+                $this->getEntityName() . 'Interface',
+                $namePath . 'Model\\ResourceModel\\' . $this->getEntityName(),
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -408,7 +414,7 @@ class Entity extends Generator
     {
         $generator = new Repositories\Filter();
         $filePath = $this->path . '/Model/SearchCriteria/';
-        $fileName = ucfirst($this->name) . 'StoreFilter';
+        $fileName = $this->getEntityName() . 'StoreFilter';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
@@ -430,8 +436,8 @@ class Entity extends Generator
             $this->genAdminSaveController();
             $this->genAdminDeleteController();
             $this->genAdminNewController();
-//            $this->genAdminInlineController($controllerGenerator, ucfirst($entity));
-//            $this->genAdminMassController($controllerGenerator, ucfirst($entity));
+            $this->genAdminInlineController();
+            $this->genAdminMassController();
         }
     }
 
@@ -439,7 +445,7 @@ class Entity extends Generator
     {
         $generator = new Controllers\Shared();
         $filePath = $this->path . '/Controller/Adminhtml/';
-        $fileName = ucfirst($this->name);
+        $fileName = $this->getEntityName();
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
@@ -447,7 +453,7 @@ class Entity extends Generator
             $generator->genAdminAbstractController(
                 $fileName,
                 $this->getEntityAcl(),
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -457,7 +463,7 @@ class Entity extends Generator
     private function genAdminViewController()
     {
         $generator = new Controllers\View();
-        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'Index';
         $namePath = '\\' . $this->getNamespace() . '\\';
 
@@ -465,9 +471,9 @@ class Entity extends Generator
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminViewController(
-                ucfirst($this->name),
+                $this->getEntityName(),
                 $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
                 $this->getEntityAcl(),
                 $this->getNamespace(),
                 $this->typehint
@@ -478,17 +484,17 @@ class Entity extends Generator
     private function genAdminEditController()
     {
         $generator = new Controllers\Edit();
-        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'Edit';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminEditController(
-                ucfirst($this->name),
+                $this->getEntityName(),
                 $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
-                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'Interface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
+                $namePath . 'Api\\Data\\' . $this->getEntityName() . 'Interface',
                 $this->getEntityAcl(),
                 $this->getNamespace(),
                 $this->typehint
@@ -499,17 +505,17 @@ class Entity extends Generator
     private function genAdminSaveController()
     {
         $generator = new Controllers\Save();
-        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'Save';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminSaveController(
-                ucfirst($this->name),
+                $this->getEntityName(),
                 $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
-                $namePath . 'Api\\Data\\' . ucfirst($this->name) . 'Interface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
+                $namePath . 'Api\\Data\\' . $this->getEntityName() . 'Interface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -519,13 +525,13 @@ class Entity extends Generator
     private function genAdminDeleteController()
     {
         $generator = new Controllers\Delete();
-        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'Delete';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminDeleteController(
-                ucfirst($this->name),
+                $this->getEntityName(),
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -535,16 +541,16 @@ class Entity extends Generator
     private function genAdminNewController()
     {
         $generator = new Controllers\Create();
-        $filePath = $this->path . '/Controller/Adminhtml/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'NewAction';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminNewController(
-                ucfirst($this->name),
+                $this->getEntityName(),
                 $fileName,
-                $namePath . 'Api\\' . ucfirst($this->name) . 'RepositoryInterface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -554,16 +560,16 @@ class Entity extends Generator
     private function genAdminInlineController()
     {
         $generator = new Controllers\Inline();
-        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'InlineEdit';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminInlineController(
-                $entityName,
+                $this->getEntityName(),
                 $fileName,
-                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -573,17 +579,17 @@ class Entity extends Generator
     private function genAdminMassController()
     {
         $generator = new Controllers\Mass();
-        $filePath = $this->path . '/Controller/Adminhtml/' . $entityName . '/';
+        $filePath = $this->path . '/Controller/Adminhtml/' . $this->getEntityName() . '/';
         $fileName = 'MassDelete';
         $namePath = '\\' . $this->getNamespace() . '\\';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminMassController(
-                $entityName,
+                $this->getEntityName(),
                 $fileName,
-                $namePath . 'Model\\ResourceModel\\' . $entityName . '\\CollectionFactory',
-                $namePath . 'Api\\' . $entityName . 'RepositoryInterface',
+                $namePath . 'Model\\ResourceModel\\' . $this->getEntityName() . '\\CollectionFactory',
+                $namePath . 'Api\\' . $this->getEntityName() . 'RepositoryInterface',
                 $this->getNamespace(),
                 $this->typehint
             )
@@ -648,17 +654,18 @@ class Entity extends Generator
 
     private function genAdminUIActions()
     {
-        return;
+        $generator = new Ui\Actions();
         $filePath = $this->path . '/Ui/Component/Listing/';
-        $fileName = ucfirst($entity) . 'Actions';
+        $fileName = $this->getEntityName() . 'Actions';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
                 $generator->getActions(
-                    $routepath,
-                    $this->getEntityLowercase($entity),
+                    $this->config['route']['admin'],
+                    $this->getEntityLowercase(),
+                    $this->getEntityName() . 'Actions',
                     $this->getNamespace(),
-                    ucfirst($entity) . 'Actions'
+                    $this->typehint
                 )
         );
     }
@@ -666,15 +673,15 @@ class Entity extends Generator
     private function genAdminUiDataProvider()
     {
         $generator = new Ui\DataProvider();
-        $filePath = $this->path . '/Model/' . ucfirst($this->name) . '/';
+        $filePath = $this->path . '/Model/' . $this->getEntityName() . '/';
         $fileName = 'DataProvider';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->getProvider(
                 $this->name,
-                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($this->name) . '\\Collection',
-                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($this->name) . '\\CollectionFactory',
+                '\\' . $this->getNamespace() . '\Model\\ResourceModel\\' . $this->getEntityName() . '\\Collection',
+                $this->getNamespace() . '\Model\\ResourceModel\\' . $this->getEntityName() . '\\CollectionFactory',
                 $fileName,
                 $this->getModuleLowercase() . '_' . $this->getEntityLowercase(),
                 $this->getNamespace(),
@@ -685,10 +692,9 @@ class Entity extends Generator
 
     private function genAdminUiListing()
     {
-        return;
-        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase($entity);
-
-        $url = $this->getModuleLowercase() . '/' . $this->getEntityLowercase($entity);
+        $generator = new Ui\Listing();
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase();
+        $url = $this->getModuleLowercase() . '/' . $this->getEntityLowercase();
 
         $uiComponent = $parent . '_listing';
         $common = $parent . '_listing' . '.' . $parent . '_listing.';
@@ -698,14 +704,14 @@ class Entity extends Generator
                 $uiComponent,
                 $uiComponent . '_data_source',
                 $parent . '_columns',
-                'Add New ' . $this->getConverter()->getEntityName($entity),
-                $this->getEntityAcl($entity),
-                $this->getNamespace() . '\Ui\Component\Listing\\' . ucfirst($entity) . 'Actions',
+                'Add New ' . $this->getConverter()->getEntityPrintName($this->name),
+                $this->getEntityAcl(),
+                $this->getNamespace() . '\Ui\Component\Listing\\' . $this->getEntityName() . 'Actions',
                 $url . '/inlineEdit',
                 $url . '/massDelete',
                 $common . $parent . '_columns.ids',
                 $common . $parent . '_columns_editor',
-                $fields,
+                $this->config['columns'],
                 $this->readonly
             )
         );
@@ -713,10 +719,13 @@ class Entity extends Generator
 
     private function genAdminUiEdit()
     {
-        return;
+        $generator = new Ui\Edit();
+        $parent = $this->getModuleLowercase() . '_' . $this->getEntityLowercase();
+        $url = $this->getModuleLowercase() . '/' . $this->getEntityLowercase();
+
         $uiComponent = $parent . '_edit';
         $dataSource = $uiComponent . '_data_source';
-        $provider = $this->getNamespace() . '\Model\\' . ucfirst($entity) . '\DataProvider';
+        $provider = $this->getNamespace() . '\Model\\' . $this->getEntityName() . '\DataProvider';
         $this->writeFile(
             $this->path . '/view/adminhtml/ui_component/' . $uiComponent . '.xml',
             $generator->generateAdminUiForm(
@@ -724,8 +733,8 @@ class Entity extends Generator
                 $dataSource,
                 $url . '/save',
                 $provider,
-                $entity,
-                $fields,
+                $this->getEntityName(),
+                $this->config['columns'],
                 $this->withStore
             )
         );
@@ -733,18 +742,19 @@ class Entity extends Generator
 
     private function genGridCollection()
     {
-        return;
-        $filePath = $this->path . '/Model/ResourceModel/' . ucfirst($entity) . '/Grid/';
+        $generator = new Ui\Grid();
+        $filePath = $this->path . '/Model/ResourceModel/' . $this->getEntityName() . '/Grid/';
         $fileName = 'Collection';
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->generateGridCollection(
-                $entity,
-                $this->getNamespace(),
+                $this->getEntityName(),
                 $fileName,
-                $this->getNamespace() . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Collection',
-                $this->withStore
+                $this->getNamespace() . '\Model\\ResourceModel\\' . $this->getEntityName() . '\\Collection',
+                $this->getNamespace(),
+                $this->withStore,
+                $this->typehint
             )
         );
     }
