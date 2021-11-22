@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Model\Generator;
+use Mygento\Jeeves\Model\Module;
 
 class Entity extends Generator
 {
@@ -16,8 +17,7 @@ class Entity extends Generator
 
     private $name;
 
-    private $vendor;
-
+    /** @var Module */
     private $module;
 
     private $api;
@@ -101,7 +101,7 @@ class Entity extends Generator
         $this->withStore = $config['per_store'] ?? false;
 
         $this->tablename = $config['tablename'] ??
-            $this->getConverter()->camelCaseToSnakeCase($this->vendor)
+            $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor())
                 . '_' . $this->getModuleLowercase()
                 . '_' . $this->getEntityLowercase();
         $cacheable = $config['cacheable'] ?? false;
@@ -138,19 +138,9 @@ class Entity extends Generator
         $this->name = $entityName;
     }
 
-    public function setModule(string $module)
-    {
-        $this->module = $module;
-    }
-
-    public function setVendor(string $vendor)
-    {
-        $this->vendor = $vendor;
-    }
-
     public function getNamespace(): string
     {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
+        return $this->getModule()->getNamespace();
     }
 
     public function getTablename(): string
@@ -158,7 +148,12 @@ class Entity extends Generator
         return $this->tablename;
     }
 
-    public function getModule(): string
+    public function setModule(Module $module)
+    {
+        $this->module = $module;
+    }
+
+    public function getModule(): Module
     {
         return $this->module;
     }
@@ -177,7 +172,7 @@ class Entity extends Generator
     {
         return implode('_', [
             $this->getVendorLowercase(),
-            $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->module),
+            $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->module->getModule()),
             $this->getConverter()->camelCaseToSnakeCase($entity),
         ]);
     }
@@ -189,7 +184,7 @@ class Entity extends Generator
 
     public function getModuleLowercase(): string
     {
-        return $this->getConverter()->camelCaseToSnakeCase($this->module);
+        return $this->getConverter()->camelCaseToSnakeCase($this->module->getModule());
     }
 
     public function getEntityLowercase(): string
@@ -207,43 +202,26 @@ class Entity extends Generator
         return $this->config['route']['admin'];
     }
 
-    private function generate()
+    public function getFullname()
     {
-        if (empty($this->config)) {
-            return;
-        }
-        $this->generateInterfaces();
-        $this->generateModels();
-        $this->generateRepository();
-        $this->generateSearchResults();
+        return $this->module->getFullname();
+    }
 
-        if ($this->withStore) {
-            $this->genReadHandler();
-            $this->genSaveHandler();
-            $this->getRepoFilter();
-        }
-
-        if ($this->gui) {
-            $this->generateControllers();
-            $this->genAdminLayouts();
-
-            $this->genAdminUI();
-            $this->genGridCollection();
-        }
+    public function getEntityAclTitle()
+    {
+        return
+            $this->getConverter()->splitAtUpperCase($this->module->getModule())
+                . ' '
+                . $this->getConverter()->splitAtUpperCase($this->name);
     }
 
     private function generateCacheTag(): string
     {
-        return strtolower(substr($this->module, 0, 3) . '_' . substr($this->name, 0, 1));
-    }
-
-    private function getFullname()
-    {
-        return ucfirst($this->vendor) . '_' . ucfirst($this->module);
+        return strtolower(substr($this->module->getModule(), 0, 3) . '_' . substr($this->name, 0, 1));
     }
 
     private function getVendorLowercase()
     {
-        return $this->getConverter()->camelCaseToSnakeCase($this->vendor);
+        return $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor());
     }
 }

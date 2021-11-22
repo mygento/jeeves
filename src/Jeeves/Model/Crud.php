@@ -15,9 +15,16 @@ class Crud
 
     private $io;
 
+    private $global = false;
+
     public function __construct(IOInterface $io)
     {
         $this->io = $io;
+    }
+
+    public function setGlobal(bool $status)
+    {
+        $this->global = $status;
     }
 
     public function readConfig(string $filename): array
@@ -29,24 +36,40 @@ class Crud
     {
         $this->path = $path;
         $this->setGlobalSettings($config);
+        $result = new Crud\Result();
+        $result->setPath($path);
 
         foreach ($config as $vendor => $mod) {
             if ($vendor === 'settings') {
                 continue;
             }
-            // var_dump($vendor);
             foreach ($mod as $module => $ent) {
-                // var_dump($module);
                 foreach ($ent as $type => $entities) {
-                    // var_dump($type);
                     if ($type !== 'entities') {
                         continue;
                     }
-                    $this->generateEntities($entities, $vendor, $module);
+
+                    $moduleResult = $this->generateEntities($entities, $vendor, $module);
+                    $result->updateAcl($moduleResult->getAcl());
                 }
             }
         }
+        // $this->genModuleXml();
+        // $this->genAdminRoute($this->admin);
+
+        if ($this->global) {
+            return $result;
+        }
+
+        $this->generateConfigs($result);
+
         die();
+    }
+
+    public function generateConfigs(Crud\Result $result)
+    {
+        $generator = new Crud\Configs($this->io);
+        $generator->generate($result);
     }
 
     private function setGlobalSettings(array $config)
@@ -55,27 +78,42 @@ class Crud
         $this->typehint = $config['settings']['typehint'] ?? false;
     }
 
-    private function generateEntities(array $entities, string $vendor, string $module)
+    private function generateEntities(array $entities, string $vendor, string $module): Crud\Result
     {
+        $result = new Crud\Result();
+        $acl = [];
+        $mod = new Module($vendor, $module);
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
             $entity->setIO($this->io);
             $entity->setPath($this->path);
             $entity->setVersion($this->version);
             $entity->setTypeHint($this->typehint);
-            $entity->setVendor($vendor);
-            $entity->setModule($module);
+            $entity->setModule($mod);
             $entity->setName($entityName);
             $entity->setConfig($config);
 
-            $this->generate($entity);
+            $entityResult = $this->generate($entity);
+            $acl = array_merge($acl, $entityResult->getAcl());
         }
+
+        $result->updateAcl(
+            [
+                $mod->getFullname() => new Acl(
+                    $mod->getFullname() . '::root',
+                    $mod->getPrintName(),
+                    $acl
+                ),
+            ]
+        );
+
+        return $result;
     }
 
-    private function generate(Crud\Entity $entity)
+    private function generate(Crud\Entity $entity): Crud\Result
     {
         if (empty($entity->getConfig())) {
-            return;
+            return new Crud\Result();
         }
 
         $this->generateInterfaces($entity);
@@ -88,6 +126,22 @@ class Crud
 
             $this->generateAdminUI($entity);
         }
+
+        $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
+        $dbschema = [];
+        $di = [];
+        $events = [];
+        $menu = [];
+
+        $result = new Crud\Result();
+
+        $result->updateAcl($acl);
+        $result->updateDbSchema($dbschema);
+        $result->updateDi($di);
+        $result->updateEvents($events);
+        $result->updateMenu($menu);
+
+        return $result;
     }
 
     private function generateInterfaces(Crud\Entity $entity)
