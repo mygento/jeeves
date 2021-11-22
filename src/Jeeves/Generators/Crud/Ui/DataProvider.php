@@ -21,7 +21,7 @@ class DataProvider extends Common
         $namespace->addUse($collectionFactory);
 
         $class = $namespace->addClass($className);
-        $class->setExtends('\Magento\Ui\DataProvider\AbstractDataProvider');
+        $class->setExtends('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
         $collect = $class->addProperty('collection')
             ->setVisibility('private');
         $persist = $class->addProperty('dataPersistor')
@@ -29,8 +29,10 @@ class DataProvider extends Common
         $loaded = $class->addProperty('loadedData')
             ->setVisibility('private');
 
+        $namespace->addUse('\Magento\Ui\DataProvider\Modifier\PoolInterface');
+
         if ($typehint) {
-            $namespace->addUse('\Magento\Ui\DataProvider\AbstractDataProvider');
+            $namespace->addUse('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
             $namespace->addUse($collection);
             $collect->setType($collection);
             $persist->setType('\Magento\Framework\App\Request\DataPersistorInterface');
@@ -51,7 +53,7 @@ class DataProvider extends Common
                 ->addComment('@param string $primaryFieldName')
                 ->addComment('@param string $requestFieldName')
                 ->addComment('@param array $meta')
-                ->addComment('@param array $data');
+                ->addComment('@param \Magento\Ui\DataProvider\Modifier\PoolInterface|null $pool');
         }
 
         $construct->addParameter('collectionFactory')->setTypeHint($collectionFactory);
@@ -61,8 +63,9 @@ class DataProvider extends Common
         $construct->addParameter('requestFieldName')->setType('string');
         $construct->addParameter('meta')->setTypeHint('array')->setDefaultValue([]);
         $construct->addParameter('data')->setTypeHint('array')->setDefaultValue([]);
+        $construct->addParameter('pool')->setTypeHint('\Magento\Ui\DataProvider\Modifier\PoolInterface')->setDefaultValue(null);
 
-        $construct->setBody('parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);' . PHP_EOL
+        $construct->setBody('parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);' . PHP_EOL . PHP_EOL
             . '$this->collection = $collectionFactory->create();' . PHP_EOL
             . '$this->dataPersistor = $dataPersistor;');
 
