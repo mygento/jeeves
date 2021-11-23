@@ -59,7 +59,7 @@ class Controllers extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminViewController(
                 $entity->getEntityName(),
-                $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
+                $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getEntityAcl(),
                 $entity->getNamespace(),
@@ -79,7 +79,7 @@ class Controllers extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminEditController(
                 $entity->getEntityName(),
-                $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
+                $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getEntityAcl(),
@@ -100,7 +100,7 @@ class Controllers extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genAdminSaveController(
                 $entity->getEntityName(),
-                $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
+                $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),

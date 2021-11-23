@@ -74,7 +74,7 @@ class Ui extends Generator
                 '\\' . $entity->getNamespace() . '\Model\\ResourceModel\\' . $entity->getEntityName() . '\\Collection',
                 $entity->getNamespace() . '\Model\\ResourceModel\\' . $entity->getEntityName() . '\\CollectionFactory',
                 $fileName,
-                $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
+                $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $entity->getNamespace(),
                 $entity->hasTypeHint()
             )
@@ -84,8 +84,8 @@ class Ui extends Generator
     private function genAdminUiListing(Entity $entity)
     {
         $generator = new Generators\Listing();
-        $parent = $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase();
-        $url = $entity->getModuleLowercase() . '/' . $entity->getEntityLowercase();
+        $parent = $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase();
+        $url = $entity->getModule()->getModuleLowercase() . '/' . $entity->getEntityLowercase();
 
         $uiComponent = $parent . '_listing';
         $common = $parent . '_listing' . '.' . $parent . '_listing.';
@@ -111,8 +111,8 @@ class Ui extends Generator
     private function genAdminUiEdit(Entity $entity)
     {
         $generator = new Generators\Edit();
-        $parent = $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase();
-        $url = $entity->getModuleLowercase() . '/' . $entity->getEntityLowercase();
+        $parent = $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase();
+        $url = $entity->getModule()->getModuleLowercase() . '/' . $entity->getEntityLowercase();
 
         $uiComponent = $parent . '_edit';
         $dataSource = $uiComponent . '_data_source';

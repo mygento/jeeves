@@ -16,6 +16,8 @@ class Result
 
     private $menu = [];
 
+    private $adminRoute = [];
+
     private $path;
 
     public function getEvents(): array
@@ -53,6 +55,11 @@ class Result
         return $this->path;
     }
 
+    public function getAdminRoute(): array
+    {
+        return $this->adminRoute;
+    }
+
     public function setPath(string $path)
     {
         $this->path = $path;
@@ -86,5 +93,10 @@ class Result
     public function updateMenu(array $menu)
     {
         $this->menu = array_merge($this->menu, $menu);
+    }
+
+    public function updateAdminRoute(array $route)
+    {
+        $this->adminRoute = array_merge($this->adminRoute, $route);
     }
 }

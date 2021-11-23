@@ -44,14 +44,20 @@ class Crud
                 continue;
             }
             foreach ($mod as $module => $ent) {
+                $modEntity = new Module($vendor, $module);
+                if (isset($ent['settings'])) {
+                    $modEntity->setConfig($ent['settings']);
+                }
+
                 foreach ($ent as $type => $entities) {
                     if ($type !== 'entities') {
                         continue;
                     }
 
-                    $moduleResult = $this->generateEntities($entities, $vendor, $module);
+                    $moduleResult = $this->generateEntities($entities, $modEntity);
                     $result->updateAclEntities($moduleResult->getAclEntities());
                     $result->updateAclConfigs($moduleResult->getAclConfigs());
+                    $result->updateAdminRoute($moduleResult->getAdminRoute());
                 }
             }
         }
@@ -79,11 +85,11 @@ class Crud
         $this->typehint = $config['settings']['typehint'] ?? false;
     }
 
-    private function generateEntities(array $entities, string $vendor, string $module): Crud\Result
+    private function generateEntities(array $entities, Module $mod): Crud\Result
     {
         $result = new Crud\Result();
         $aclEntity = [];
-        $mod = new Module($vendor, $module);
+
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
             $entity->setIO($this->io);
@@ -112,6 +118,15 @@ class Crud
                 new Acl(
                     $mod->getFullname() . '::config',
                     $mod->getPrintName()
+                ),
+            ]
+        );
+        $result->updateAdminRoute(
+            [
+                $mod->getFullname() => new AdminRoute(
+                    $mod->getRouteName(),
+                    $mod->getFullname(),
+                    $mod->getAdminRoute()
                 ),
             ]
         );

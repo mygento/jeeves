@@ -10,12 +10,19 @@ class Module
 
     private $module;
 
+    private $route;
+
     private $converter;
 
     public function __construct(string $vendor, string $module)
     {
         $this->vendor = $vendor;
         $this->module = $module;
+    }
+
+    public function setConfig(array $config)
+    {
+        $this->route = $config['settings']['admin_route'] ?? $this->getModuleLowercase();
     }
 
     public function setModule(string $module)
@@ -43,12 +50,27 @@ class Module
         return $this->vendor;
     }
 
-    public function getFullname()
+    public function getFullname(): string
     {
         return ucfirst($this->vendor) . '_' . ucfirst($this->module);
     }
 
-    public function getPrintName()
+    public function getRouteName(): string
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->module);
+    }
+
+    public function getModuleLowercase(): string
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->module);
+    }
+
+    public function getAdminRoute(): string
+    {
+        return $this->route;
+    }
+
+    public function getPrintName(): string
     {
         return $this->getConverter()->splitAtUpperCase($this->getModule());
     }

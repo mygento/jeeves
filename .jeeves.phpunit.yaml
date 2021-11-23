@@ -4,6 +4,7 @@ Mygento:
   SampleModule:
     settings:
       typehint: true
+      admin_route: samplium
     shipping:
       code: 'slowcourier'
     entities:

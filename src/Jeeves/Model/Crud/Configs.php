@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Generators\Crud\Configs\Acl;
+use Mygento\Jeeves\Generators\Crud\Configs\AdminRoute;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
 use Mygento\Jeeves\Util\XmlManager;
@@ -22,11 +23,26 @@ class Configs extends Generator
     public function generate(Result $result)
     {
         $this->genAdminAcl($result);
+        $this->genAdminRoute($result);
 //        $this->genAdminMenu($result->getMenu());
 //        $this->genDBSchema($result->getDbSchema());
 //        $this->genEvents($result->getEvents());
 //        $this->genDI($result->getDi());
 //        $this->genModuleXml();
+    }
+
+    private function genAdminRoute(Result $result)
+    {
+        if (empty($result->getAdminRoute())) {
+            return;
+        }
+
+        $generator = new AdminRoute();
+
+        $this->writeFile(
+            $result->getPath() . '/etc/adminhtml/routes.xml',
+            $generator->generateAdminRoutes($result->getAdminRoute())
+        );
     }
 
     private function genAdminAcl(Result $result)

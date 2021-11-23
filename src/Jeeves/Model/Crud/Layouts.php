@@ -15,7 +15,7 @@ class Layouts extends Generator
 
     public function generateAdminLayouts(Entity $entity)
     {
-        $parent = $entity->getModuleLowercase() . '_' . $entity->getEntityLowercase();
+        $parent = $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase();
         $this->genAdminLayoutIndex($entity, $parent);
 
         if (!$entity->isReadOnly()) {

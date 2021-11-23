@@ -34,6 +34,8 @@ class Entity extends Generator
 
     private $primaryKey;
 
+    private $adminRoute;
+
     public function __construct()
     {
     }
@@ -102,7 +104,7 @@ class Entity extends Generator
 
         $this->tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor())
-                . '_' . $this->getModuleLowercase()
+                . '_' . $this->getModule()->getModuleLowercase()
                 . '_' . $this->getEntityLowercase();
         $cacheable = $config['cacheable'] ?? false;
 
@@ -116,11 +118,8 @@ class Entity extends Generator
             $config['route'] = [];
         }
 
-        if (!isset($config['route']['admin']) || !$config['route']['admin']) {
-            $this->config['route']['admin'] = $this->getModuleLowercase();
-        }
+        $this->adminRoute = $this->module->getAdminRoute();
 
-        //$routepath = $config['route']['admin'];
         $fields = $config['columns'] ?? [];
         if (empty($fields)) {
             return;
@@ -182,11 +181,6 @@ class Entity extends Generator
         return $this->getConverter()->getEntityName($this->name);
     }
 
-    public function getModuleLowercase(): string
-    {
-        return $this->getConverter()->camelCaseToSnakeCase($this->module->getModule());
-    }
-
     public function getEntityLowercase(): string
     {
         return $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->name);
@@ -199,7 +193,7 @@ class Entity extends Generator
 
     public function getAdminRoute(): string
     {
-        return $this->config['route']['admin'];
+        return $this->adminRoute;
     }
 
     public function getFullname()
