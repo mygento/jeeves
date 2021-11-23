@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Generators\Crud\Configs\Acl;
 use Mygento\Jeeves\Generators\Crud\Configs\AdminRoute;
+use Mygento\Jeeves\Generators\Crud\Configs\Menu;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
 use Mygento\Jeeves\Util\XmlManager;
@@ -24,7 +25,7 @@ class Configs extends Generator
     {
         $this->genAdminAcl($result);
         $this->genAdminRoute($result);
-//        $this->genAdminMenu($result->getMenu());
+        $this->genAdminMenu($result);
 //        $this->genDBSchema($result->getDbSchema());
 //        $this->genEvents($result->getEvents());
 //        $this->genDI($result->getDi());
@@ -59,15 +60,17 @@ class Configs extends Generator
         );
     }
 
-    private function genAdminMenu()
+    private function genAdminMenu(Result $result)
     {
+        if (empty($result->getMenu())) {
+            return;
+        }
+
+        $generator = new Menu();
+
         $this->writeFile(
-            $this->path . '/etc/adminhtml/menu.xml',
-            $this->getXmlManager()->generateAdminMenu(
-                $entities,
-                $this->getFullname(),
-                $this->module
-            )
+            $result->getPath() . '/etc/adminhtml/menu.xml',
+            $generator->generateAdminMenu($result->getMenu())
         );
     }
 

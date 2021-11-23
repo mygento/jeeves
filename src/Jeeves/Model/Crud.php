@@ -58,6 +58,7 @@ class Crud
                     $result->updateAclEntities($moduleResult->getAclEntities());
                     $result->updateAclConfigs($moduleResult->getAclConfigs());
                     $result->updateAdminRoute($moduleResult->getAdminRoute());
+                    $result->updateMenu($moduleResult->getMenu());
                 }
             }
         }
@@ -89,6 +90,7 @@ class Crud
     {
         $result = new Crud\Result();
         $aclEntity = [];
+        $menuEntity = [];
 
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
@@ -102,6 +104,7 @@ class Crud
 
             $entityResult = $this->generate($entity);
             $aclEntity = array_merge($aclEntity, $entityResult->getAclEntities());
+            $menuEntity = array_merge($menuEntity, $entityResult->getMenu());
         }
 
         $result->updateAclEntities(
@@ -131,6 +134,17 @@ class Crud
             ]
         );
 
+        $result->updateMenu([
+            new Menu(
+                $mod->getFullname() . '::root',
+                $mod->getPrintName(),
+                $mod->getFullname(),
+                'Magento_Backend::stores',
+                $mod->getFullname() . '::root'
+            ),
+        ]);
+        $result->updateMenu($menuEntity);
+
         return $result;
     }
 
@@ -155,7 +169,16 @@ class Crud
         $dbschema = [];
         $di = [];
         $events = [];
-        $menu = [];
+        $menu = [
+            new Menu(
+                $entity->getFullname() . '::' . $entity->getEntityLowercase(),
+                $entity->getPrintName(),
+                $entity->getFullname(),
+                $entity->getFullname() . '::root',
+                $entity->getFullname() . '::' . $entity->getEntityLowercase(),
+                $entity->getModule()->getAdminRoute() . '/' . $entity->getEntityLowercase()
+            ),
+        ];
 
         $result = new Crud\Result();
 

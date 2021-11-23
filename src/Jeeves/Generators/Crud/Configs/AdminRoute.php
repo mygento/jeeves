@@ -7,24 +7,6 @@ use Mygento\Jeeves\Model;
 
 class AdminRoute extends Common
 {
-    public function getAdminRoute(Model\AdminRoute $route): array
-    {
-        return [
-            'name' => 'route',
-            'attributes' => [
-                'id' => $route->getId(),
-                'frontName' => $route->getPath(),
-            ],
-            'value' => [
-                'name' => 'module',
-                'attributes' => [
-                    'name' => $route->getName(),
-                    'before' => 'Magento_Backend',
-                ],
-            ],
-        ];
-    }
-
     public function generateAdminRoutes(array $routes): string
     {
         $service = $this->getService();
@@ -47,5 +29,23 @@ class AdminRoute extends Common
                 'value' => $routeList,
             ]);
         });
+    }
+
+    private function getAdminRoute(Model\AdminRoute $route): array
+    {
+        return [
+            'name' => 'route',
+            'attributes' => [
+                'id' => $route->getId(),
+                'frontName' => $route->getPath(),
+            ],
+            'value' => [
+                'name' => 'module',
+                'attributes' => [
+                    'name' => $route->getName(),
+                    'before' => 'Magento_Backend',
+                ],
+            ],
+        ];
     }
 }

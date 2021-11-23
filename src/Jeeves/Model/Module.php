@@ -65,6 +65,11 @@ class Module
         return $this->getConverter()->camelCaseToSnakeCase($this->module);
     }
 
+    public function getVendorLowercase()
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->vendor);
+    }
+
     public function getAdminRoute(): string
     {
         return $this->route;

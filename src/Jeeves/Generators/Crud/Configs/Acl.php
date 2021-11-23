@@ -7,28 +7,6 @@ use Mygento\Jeeves\Model;
 
 class Acl extends Common
 {
-    public function generateAdminAcl(Model\Acl $acl): array
-    {
-        $result = [
-            'name' => 'resource',
-            'attributes' => [
-                'id' => $acl->getId(),
-                'title' => $acl->getTitle(),
-                'translate' => 'title',
-            ],
-        ];
-        if ($acl->getChildren()) {
-            $result['value'] = array_map(
-                function ($entity) {
-                    return $this->generateAdminAcl($entity);
-                },
-                $acl->getChildren()
-            );
-        }
-
-        return $result;
-    }
-
     public function generateAdminAcls(array $entities, array $configs): string
     {
         $service = $this->getService();
@@ -79,5 +57,27 @@ class Acl extends Common
                 ],
             ]);
         });
+    }
+
+    private function generateAdminAcl(Model\Acl $acl): array
+    {
+        $result = [
+            'name' => 'resource',
+            'attributes' => [
+                'id' => $acl->getId(),
+                'title' => $acl->getTitle(),
+                'translate' => 'title',
+            ],
+        ];
+        if ($acl->getChildren()) {
+            $result['value'] = array_map(
+                function ($entity) {
+                    return $this->generateAdminAcl($entity);
+                },
+                $acl->getChildren()
+            );
+        }
+
+        return $result;
     }
 }

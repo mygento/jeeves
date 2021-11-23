@@ -170,7 +170,7 @@ class Entity extends Generator
     public function getEventName(string $entity): string
     {
         return implode('_', [
-            $this->getVendorLowercase(),
+            $this->module->getVendorLowercase(),
             $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->module->getModule()),
             $this->getConverter()->camelCaseToSnakeCase($entity),
         ]);
@@ -196,9 +196,14 @@ class Entity extends Generator
         return $this->adminRoute;
     }
 
-    public function getFullname()
+    public function getFullname(): string
     {
         return $this->module->getFullname();
+    }
+
+    public function getPrintName(): string
+    {
+        return $this->getConverter()->getEntityPrintName($this->name);
     }
 
     public function getEntityAclTitle()
@@ -206,16 +211,11 @@ class Entity extends Generator
         return
             $this->getConverter()->splitAtUpperCase($this->module->getModule())
                 . ' '
-                . $this->getConverter()->getEntityPrintName($this->name);
+                . $this->getPrintName();
     }
 
     private function generateCacheTag(): string
     {
         return strtolower(substr($this->module->getModule(), 0, 3) . '_' . substr($this->name, 0, 1));
-    }
-
-    private function getVendorLowercase()
-    {
-        return $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor());
     }
 }
