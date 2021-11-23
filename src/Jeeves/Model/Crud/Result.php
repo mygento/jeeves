@@ -8,7 +8,9 @@ class Result
 
     private $di = [];
 
-    private $acl = [];
+    private $aclEntity = [];
+
+    private $aclConfig = [];
 
     private $db = [];
 
@@ -26,9 +28,14 @@ class Result
         return $this->di;
     }
 
-    public function getAcl(): array
+    public function getAclEntities(): array
     {
-        return $this->acl;
+        return $this->aclEntity;
+    }
+
+    public function getAclConfigs(): array
+    {
+        return $this->aclConfig;
     }
 
     public function getDbSchema(): array
@@ -61,9 +68,14 @@ class Result
         $this->di = array_merge($this->di, $di);
     }
 
-    public function updateAcl(array $acl)
+    public function updateAclConfigs(array $acl)
     {
-        $this->acl = array_merge($this->acl, $acl);
+        $this->aclConfig = array_merge($this->aclConfig, $acl);
+    }
+
+    public function updateAclEntities(array $acl)
+    {
+        $this->aclEntity = array_merge($this->aclEntity, $acl);
     }
 
     public function updateDbSchema(array $db)

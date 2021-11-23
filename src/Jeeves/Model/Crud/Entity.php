@@ -212,7 +212,7 @@ class Entity extends Generator
         return
             $this->getConverter()->splitAtUpperCase($this->module->getModule())
                 . ' '
-                . $this->getConverter()->splitAtUpperCase($this->name);
+                . $this->getConverter()->getEntityPrintName($this->name);
     }
 
     private function generateCacheTag(): string

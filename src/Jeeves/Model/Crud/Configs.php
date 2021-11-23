@@ -31,16 +31,15 @@ class Configs extends Generator
 
     private function genAdminAcl(Result $result)
     {
-        if (empty($result->getAcl())) {
+        if (empty($result->getAclEntities())) {
             return;
         }
 
-//        print_r($entities);
         $generator = new Acl();
 
         $this->writeFile(
             $result->getPath() . '/etc/acl.xml',
-            $generator->generateAdminAcls($result->getAcl())
+            $generator->generateAdminAcls($result->getAclEntities(), $result->getAclConfigs())
         );
     }
 

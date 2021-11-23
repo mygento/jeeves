@@ -50,7 +50,8 @@ class Crud
                     }
 
                     $moduleResult = $this->generateEntities($entities, $vendor, $module);
-                    $result->updateAcl($moduleResult->getAcl());
+                    $result->updateAclEntities($moduleResult->getAclEntities());
+                    $result->updateAclConfigs($moduleResult->getAclConfigs());
                 }
             }
         }
@@ -81,7 +82,7 @@ class Crud
     private function generateEntities(array $entities, string $vendor, string $module): Crud\Result
     {
         $result = new Crud\Result();
-        $acl = [];
+        $aclEntity = [];
         $mod = new Module($vendor, $module);
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
@@ -94,15 +95,23 @@ class Crud
             $entity->setConfig($config);
 
             $entityResult = $this->generate($entity);
-            $acl = array_merge($acl, $entityResult->getAcl());
+            $aclEntity = array_merge($aclEntity, $entityResult->getAclEntities());
         }
 
-        $result->updateAcl(
+        $result->updateAclEntities(
             [
                 $mod->getFullname() => new Acl(
                     $mod->getFullname() . '::root',
                     $mod->getPrintName(),
-                    $acl
+                    $aclEntity
+                ),
+            ]
+        );
+        $result->updateAclConfigs(
+            [
+                new Acl(
+                    $mod->getFullname() . '::config',
+                    $mod->getPrintName()
                 ),
             ]
         );
@@ -135,7 +144,7 @@ class Crud
 
         $result = new Crud\Result();
 
-        $result->updateAcl($acl);
+        $result->updateAclEntities($acl);
         $result->updateDbSchema($dbschema);
         $result->updateDi($di);
         $result->updateEvents($events);

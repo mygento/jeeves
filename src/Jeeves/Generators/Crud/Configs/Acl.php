@@ -29,16 +29,18 @@ class Acl extends Common
         return $result;
     }
 
-    public function generateAdminAcls(array $entities): string
+    public function generateAdminAcls(array $entities, array $configs): string
     {
         $service = $this->getService();
-        $entityList = ['xxx'];
+        $configList = array_map(function ($entity) {
+            return $this->generateAdminAcl($entity);
+        }, $configs);
 
         $entityResources = array_map(function ($entity) {
             return $this->generateAdminAcl($entity);
         }, array_values($entities));
 
-        return $service->write('config', function ($writer) use ($entityResources, $entityList) {
+        return $service->write('config', function ($writer) use ($entityResources, $configList) {
             $writer->setIndentString(self::TAB);
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:Acl/etc/acl.xsd');
             $writer->write([
@@ -65,7 +67,7 @@ class Acl extends Common
                                                     'attributes' => [
                                                         'id' => 'Magento_Config::config',
                                                     ],
-                                                    'value' => $entityList,
+                                                    'value' => $configList,
                                                 ],
                                             ],
                                         ],
