@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Model\Crud;
 
 use Mygento\Jeeves\Generators\Crud\Configs\Acl;
 use Mygento\Jeeves\Generators\Crud\Configs\AdminRoute;
+use Mygento\Jeeves\Generators\Crud\Configs\DbSchema;
 use Mygento\Jeeves\Generators\Crud\Configs\Menu;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
@@ -26,7 +27,7 @@ class Configs extends Generator
         $this->genAdminAcl($result);
         $this->genAdminRoute($result);
         $this->genAdminMenu($result);
-//        $this->genDBSchema($result->getDbSchema());
+        $this->genDBSchema($result);
 //        $this->genEvents($result->getEvents());
 //        $this->genDI($result->getDi());
 //        $this->genModuleXml();
@@ -87,11 +88,13 @@ class Configs extends Generator
         );
     }
 
-    private function genDBSchema()
+    private function genDBSchema(Result $result)
     {
+        $generator = new DbSchema();
+
         $this->writeFile(
-            $this->path . '/etc/db_schema.xml',
-            $this->getXmlManager()->generateSchema($db)
+            $result->getPath() . '/etc/db_schema.xml',
+            $generator->generateSchema($result->getDbSchema())
         );
     }
 

@@ -65,6 +65,16 @@ class Entity extends Generator
         return $this->config['columns'];
     }
 
+    public function getIndexes(): array
+    {
+        return $this->config['indexes'] ?? [];
+    }
+
+    public function getFk(): array
+    {
+        return $this->config['fk'] ?? [];
+    }
+
     public function withStore(): bool
     {
         return $this->withStore;

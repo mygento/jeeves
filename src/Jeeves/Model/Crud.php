@@ -59,6 +59,7 @@ class Crud
                     $result->updateAclConfigs($moduleResult->getAclConfigs());
                     $result->updateAdminRoute($moduleResult->getAdminRoute());
                     $result->updateMenu($moduleResult->getMenu());
+                    $result->updateDbSchema($moduleResult->getDbSchema());
                 }
             }
         }
@@ -91,6 +92,7 @@ class Crud
         $result = new Crud\Result();
         $aclEntity = [];
         $menuEntity = [];
+        $dbSchema = [];
 
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
@@ -105,6 +107,7 @@ class Crud
             $entityResult = $this->generate($entity);
             $aclEntity = array_merge($aclEntity, $entityResult->getAclEntities());
             $menuEntity = array_merge($menuEntity, $entityResult->getMenu());
+            $dbSchema = array_merge($dbSchema, $entityResult->getDbSchema());
         }
 
         $result->updateAclEntities(
@@ -144,6 +147,7 @@ class Crud
             ),
         ]);
         $result->updateMenu($menuEntity);
+        $result->updateDbSchema($dbSchema);
 
         return $result;
     }
@@ -166,7 +170,7 @@ class Crud
         }
 
         $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
-        $dbschema = [];
+        $dbschema = $this->generateDbSchema($entity);
         $di = [];
         $events = [];
         $menu = [
@@ -231,5 +235,32 @@ class Crud
         $generator = new Crud\Ui($this->io);
         $generator->generateAdminUI($entity);
         $generator->generateGridCollection($entity);
+    }
+
+    private function generateDbSchema(Crud\Entity $entity): array
+    {
+        $generator = new Crud\Database();
+
+        $columns = $generator->getColumns($entity);
+//        $constraints = [];
+
+        $comment = $entity->getPrintName() . ' Table';
+
+        $indexes = $entity->getIndexes();
+
+        $fk = $entity->getFk();
+
+        return [
+            new DbTable(
+                $entity->getTablename(),
+                $columns,
+                $comment,
+                $indexes,
+                $fk,
+                [
+                    $entity->getPrimaryKey(),
+                ]
+            ),
+        ];
     }
 }
