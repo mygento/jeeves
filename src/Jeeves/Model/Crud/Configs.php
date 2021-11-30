@@ -5,6 +5,7 @@ namespace Mygento\Jeeves\Model\Crud;
 use Mygento\Jeeves\Generators\Crud\Configs\Acl;
 use Mygento\Jeeves\Generators\Crud\Configs\AdminRoute;
 use Mygento\Jeeves\Generators\Crud\Configs\DbSchema;
+use Mygento\Jeeves\Generators\Crud\Configs\Event;
 use Mygento\Jeeves\Generators\Crud\Configs\Menu;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
@@ -28,7 +29,7 @@ class Configs extends Generator
         $this->genAdminRoute($result);
         $this->genAdminMenu($result);
         $this->genDBSchema($result);
-//        $this->genEvents($result->getEvents());
+        $this->genEvents($result);
 //        $this->genDI($result->getDi());
 //        $this->genModuleXml();
     }
@@ -98,14 +99,17 @@ class Configs extends Generator
         );
     }
 
-    private function genEvents()
+    private function genEvents(Result $result)
     {
-        if (count($events) > 0) {
-            $this->writeFile(
-                $this->path . '/etc/events.xml',
-                $this->getXmlManager()->generateEvents($events)
-            );
+        if (empty($result->getEvents())) {
+            return;
         }
+        $generator = new Event();
+
+        $this->writeFile(
+            $result->getPath() . '/etc/events.xml',
+            $generator->generateEvents($result->getEvents())
+        );
     }
 
     private function genModuleXml()

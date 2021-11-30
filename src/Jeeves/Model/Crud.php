@@ -60,6 +60,7 @@ class Crud
                     $result->updateAdminRoute($moduleResult->getAdminRoute());
                     $result->updateMenu($moduleResult->getMenu());
                     $result->updateDbSchema($moduleResult->getDbSchema());
+                    $result->updateEvents($moduleResult->getEvents());
                 }
             }
         }
@@ -81,6 +82,60 @@ class Crud
         $generator->generate($result);
     }
 
+    private function generateEvents(Crud\Entity $entity): array
+    {
+        $events = [];
+        if ($entity->withStore()) {
+            $event = $entity->getEntityLowercase();
+            $eventName = implode('_', [
+                'legacy',
+                $entity->getEventName($entity->getName()),
+            ]);
+            $events[] = [
+                'event' => $event . '_save_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntitySave',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_save_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntitySave',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_delete_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntityDelete',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_delete_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntityDelete',
+                ]],
+            ];
+        }
+
+        return $events;
+    }
+
     private function setGlobalSettings(array $config)
     {
         $this->version = $config['settings']['version'] ?? '2.3';
@@ -93,6 +148,7 @@ class Crud
         $aclEntity = [];
         $menuEntity = [];
         $dbSchema = [];
+        $events = [];
 
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
@@ -108,6 +164,7 @@ class Crud
             $aclEntity = array_merge($aclEntity, $entityResult->getAclEntities());
             $menuEntity = array_merge($menuEntity, $entityResult->getMenu());
             $dbSchema = array_merge($dbSchema, $entityResult->getDbSchema());
+            $events = array_merge($events, $entityResult->getEvents());
         }
 
         $result->updateAclEntities(
@@ -148,6 +205,7 @@ class Crud
         ]);
         $result->updateMenu($menuEntity);
         $result->updateDbSchema($dbSchema);
+        $result->updateEvents($events);
 
         return $result;
     }
@@ -172,7 +230,7 @@ class Crud
         $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
         $dbschema = $this->generateDbSchema($entity);
         $di = [];
-        $events = [];
+        $events = $this->generateEvents($entity);
         $menu = [
             new Menu(
                 $entity->getFullname() . '::' . $entity->getEntityLowercase(),
