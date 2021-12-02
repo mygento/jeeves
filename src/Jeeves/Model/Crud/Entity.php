@@ -196,6 +196,17 @@ class Entity extends Generator
         return $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->name);
     }
 
+    public function getLowerCaseWithModule()
+    {
+        return $this->getModule()->getModuleLowercase()
+            . '_'
+            . str_replace(
+                '_',
+                '',
+                $this->getConverter()->camelCaseToSnakeCase($this->name)
+            );
+    }
+
     public function isReadOnly(): bool
     {
         return $this->readonly;

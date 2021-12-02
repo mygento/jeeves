@@ -61,6 +61,7 @@ class Crud
                     $result->updateMenu($moduleResult->getMenu());
                     $result->updateDbSchema($moduleResult->getDbSchema());
                     $result->updateEvents($moduleResult->getEvents());
+                    $result->updateDi($moduleResult->getDi());
                 }
             }
         }
@@ -82,60 +83,6 @@ class Crud
         $generator->generate($result);
     }
 
-    private function generateEvents(Crud\Entity $entity): array
-    {
-        $events = [];
-        if ($entity->withStore()) {
-            $event = $entity->getEntityLowercase();
-            $eventName = implode('_', [
-                'legacy',
-                $entity->getEventName($entity->getName()),
-            ]);
-            $events[] = [
-                'event' => $event . '_save_before',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'before_save',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntitySave',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_save_after',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'after_save',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntitySave',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_delete_before',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'before_delete',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntityDelete',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_delete_after',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'after_delete',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntityDelete',
-                ]],
-            ];
-        }
-
-        return $events;
-    }
-
     private function setGlobalSettings(array $config)
     {
         $this->version = $config['settings']['version'] ?? '2.3';
@@ -150,6 +97,8 @@ class Crud
         $dbSchema = [];
         $events = [];
 
+        $entityList = [];
+
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
             $entity->setIO($this->io);
@@ -160,6 +109,8 @@ class Crud
             $entity->setName($entityName);
             $entity->setConfig($config);
 
+            $entityList[] = $entity;
+
             $entityResult = $this->generate($entity);
             $aclEntity = array_merge($aclEntity, $entityResult->getAclEntities());
             $menuEntity = array_merge($menuEntity, $entityResult->getMenu());
@@ -167,6 +118,7 @@ class Crud
             $events = array_merge($events, $entityResult->getEvents());
         }
 
+        $result->updateDi($this->generateDependency($entityList));
         $result->updateAclEntities(
             [
                 $mod->getFullname() => new Acl(
@@ -229,7 +181,6 @@ class Crud
 
         $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
         $dbschema = $this->generateDbSchema($entity);
-        $di = [];
         $events = $this->generateEvents($entity);
         $menu = [
             new Menu(
@@ -246,7 +197,6 @@ class Crud
 
         $result->updateAclEntities($acl);
         $result->updateDbSchema($dbschema);
-        $result->updateDi($di);
         $result->updateEvents($events);
         $result->updateMenu($menu);
 
@@ -300,12 +250,8 @@ class Crud
         $generator = new Crud\Database();
 
         $columns = $generator->getColumns($entity);
-//        $constraints = [];
-
         $comment = $entity->getPrintName() . ' Table';
-
         $indexes = $entity->getIndexes();
-
         $fk = $entity->getFk();
 
         return [
@@ -320,5 +266,66 @@ class Crud
                 ]
             ),
         ];
+    }
+
+    private function generateEvents(Crud\Entity $entity): array
+    {
+        $events = [];
+        if ($entity->withStore()) {
+            $event = $entity->getEntityLowercase();
+            $eventName = implode('_', [
+                'legacy',
+                $entity->getEventName($entity->getName()),
+            ]);
+            $events[] = [
+                'event' => $event . '_save_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntitySave',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_save_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_save',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntitySave',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_delete_before',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'before_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntityDelete',
+                ]],
+            ];
+            $events[] = [
+                'event' => $event . '_delete_after',
+                'observer' => [[
+                    'name' => implode('_', [
+                        $eventName,
+                        'after_delete',
+                    ]),
+                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntityDelete',
+                ]],
+            ];
+        }
+
+        return $events;
+    }
+
+    private function generateDependency(array $entities): array
+    {
+        $generator = new Crud\Dependency();
+
+        return $generator->generate($entities);
     }
 }

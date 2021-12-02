@@ -8,6 +8,10 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Generator
 {
+    public const A = 'attributes';
+    public const N = 'name';
+    public const V = 'value';
+
     protected $path;
 
     protected $io;
