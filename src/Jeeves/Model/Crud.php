@@ -62,6 +62,7 @@ class Crud
                     $result->updateDbSchema($moduleResult->getDbSchema());
                     $result->updateEvents($moduleResult->getEvents());
                     $result->updateDi($moduleResult->getDi());
+                    $result->setModule($modEntity->getFullname());
                 }
             }
         }

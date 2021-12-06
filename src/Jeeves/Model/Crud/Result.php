@@ -20,6 +20,8 @@ class Result
 
     private $path;
 
+    private $module;
+
     public function getEvents(): array
     {
         return $this->events;
@@ -55,6 +57,11 @@ class Result
         return $this->path;
     }
 
+    public function getModule(): string
+    {
+        return $this->module;
+    }
+
     public function getAdminRoute(): array
     {
         return $this->adminRoute;
@@ -63,6 +70,11 @@ class Result
     public function setPath(string $path)
     {
         $this->path = $path;
+    }
+
+    public function setModule(string $module)
+    {
+        $this->module = $module;
     }
 
     public function updateEvents(array $events)
