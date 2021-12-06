@@ -58,6 +58,7 @@ class ModelCrud extends BaseCommand
                 new InputOption('api', null, InputOption::VALUE_OPTIONAL, 'API', false),
                 new InputOption('readonly', null, InputOption::VALUE_OPTIONAL, 'read only', false),
                 new InputOption('per_store', null, InputOption::VALUE_OPTIONAL, 'per store', false),
+                new InputOption('config_file', null, InputOption::VALUE_OPTIONAL, 'config file', null),
             ])
             ->setHelp(
                 <<<EOT
@@ -71,12 +72,30 @@ EOT
         $executor = new Crud($this->getIO());
         $this->path = Application::GEN;
         $filename = '.jeeves.yaml';
+        $config = [];
+
+        if ($input->getOption('config_file')) {
+            $filename = $input->getOption('config_file');
+        }
+
         if (file_exists($filename)) {
             $config = $executor->readConfig($filename);
         }
 
+        if (empty($config)) {
+            $config = $this->getInputConfig($input);
+        }
+
+        if (empty($config)) {
+            $io = $this->getIO();
+            $io->write('<warning>Empty Config</warning>');
+
+            return 1;
+        }
+
         $executor->execute($this->path, $config);
 
+        return 0;
         //reset
         $this->acl = [];
         $this->admin = null;
@@ -122,14 +141,8 @@ EOT
         return 0;
     }
 
-    private function getConfig(InputInterface $input): array
+    private function getInputConfig(InputInterface $input): array
     {
-        $executor = new Crud();
-        $filename = '.jeeves.yaml';
-        if (file_exists($filename)) {
-            return $executor->readConfig($filename);
-        }
-
         $io = $this->getIO();
         $v = strtolower($input->getArgument('vendor'));
         $m = strtolower($input->getArgument('module'));
@@ -184,22 +197,24 @@ EOT
         return [
             $v => [
                 $m => [
-                    $e => [
-                        'gui' => $gui,
-                        'api' => $api,
-                        'readonly' => $readonly,
-                        'per_store' => $withStore,
-                        'columns' => [
-                            'id' => [
-                                'type' => 'int',
-                                'identity' => true,
-                                'unsigned' => true,
-                                'comment' => $e . ' ID',
+                    'settings' => [
+                        'admin_route' => strtolower($routepath),
+                    ],
+                    'entities' => [
+                        $e => [
+                            'gui' => $gui,
+                            'api' => $api,
+                            'readonly' => $readonly,
+                            'per_store' => $withStore,
+                            'columns' => [
+                                'id' => [
+                                    'type' => 'int',
+                                    'identity' => true,
+                                    'unsigned' => true,
+                                    'comment' => $e . ' ID',
+                                ],
                             ],
-                        ],
-                        'tablename' => strtolower($tablename),
-                        'route' => [
-                            'admin' => strtolower($routepath),
+                            'tablename' => strtolower($tablename),
                         ],
                     ],
                 ],

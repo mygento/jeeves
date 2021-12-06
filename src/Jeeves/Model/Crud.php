@@ -66,8 +66,6 @@ class Crud
                 }
             }
         }
-        // $this->genModuleXml();
-        // $this->genAdminRoute($this->admin);
 
         if ($this->global) {
             return $result;
