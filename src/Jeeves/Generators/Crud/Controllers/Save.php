@@ -18,6 +18,7 @@ class Save extends Common
         $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
+        $namespace->addUse('Magento\Framework\Exception\NoSuchEntityException');
         $class = $namespace->addClass('Save')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
@@ -38,7 +39,7 @@ class Save extends Common
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
             . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
             . '$this->entityFactory = $entityFactory;' . PHP_EOL
             );
@@ -67,7 +68,7 @@ class Save extends Common
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
-            ->addComment('Save ' . $entity . ' action')
+            ->addComment('Save ' . $entityName . ' action')
             ->addComment('')
             ->addComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)')
             ->addComment('@SuppressWarnings(PHPMD.CyclomaticComplexity)')
@@ -115,6 +116,7 @@ class Save extends Common
             $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
             $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
         } else {
+            $execute->addComment('');
             $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');
         }
 

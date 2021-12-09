@@ -29,20 +29,20 @@ class Menu extends Common
     private function getAdminMenuEntity(Model\Menu $menu): array
     {
         $result = [
-            'name' => 'add',
-            'attributes' => [
+            self::N => 'add',
+            self::A => [
                 'id' => $menu->getId(),
                 'title' => $menu->getName(),
                 'translate' => 'title',
                 'module' => $menu->getCode(),
                 'sortOrder' => '90',
                 'parent' => $menu->getParent(),
-                'resource' => $menu->getResource(),
             ],
         ];
         if ($menu->getAction()) {
-            $result['attributes']['action'] = $menu->getAction();
+            $result[self::A]['action'] = $menu->getAction();
         }
+        $result[self::A]['resource'] = $menu->getResource();
 
         return $result;
     }

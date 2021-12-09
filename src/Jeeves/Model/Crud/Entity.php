@@ -36,6 +36,8 @@ class Entity extends Generator
 
     private $adminRoute;
 
+    private $comment;
+
     public function __construct()
     {
     }
@@ -90,6 +92,11 @@ class Entity extends Generator
         return $this->name;
     }
 
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
     public function setTypeHint(bool $hint)
     {
         $this->typehint = $hint;
@@ -111,6 +118,7 @@ class Entity extends Generator
 
         $this->readonly = $config['readonly'] ?? false;
         $this->withStore = $config['per_store'] ?? false;
+        $this->comment = $config['comment'] ?? null;
 
         $this->tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor())

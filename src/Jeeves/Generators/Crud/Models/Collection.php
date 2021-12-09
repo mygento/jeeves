@@ -29,18 +29,27 @@ class Collection extends Common
 
         $class = $namespace->addClass('Collection');
         $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
-        $class->addMethod('_construct')
+        $construct = $class->addMethod('_construct')
             ->addComment('Define resource model')
-            ->setVisibility('protected')
-            ->setBody('$this->_init(' . PHP_EOL .
+            ->setVisibility('protected');
+
+        if ($typehint) {
+            $construct->setBody('$this->_init(' . PHP_EOL .
             self::TAB . $entity . '::class,' . PHP_EOL .
             self::TAB . $entity . 'Resource::class' . PHP_EOL .
             ');');
+        } else {
+            $construct->setBody('$this->_init(' . PHP_EOL .
+            self::TAB . $entityClass . '::class,' . PHP_EOL .
+            self::TAB . $resourceClass . '::class' . PHP_EOL .
+            ');');
+        }
         $idField = $class->addProperty('_idFieldName', $key)
             ->setVisibility('protected');
 
         if ($typehint) {
             $idField->setType('string');
+            $idField->setType($entity . 'Resource::TABLE_PRIMARY_KEY');
         } else {
             $idField->addComment('@var string');
         }
@@ -69,9 +78,7 @@ class Collection extends Common
             $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
         }
 
-        $construct = $class->addMethod('__construct')
-            ->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)')
-            ->setVisibility('public');
+        $construct = $class->addMethod('__construct')->setVisibility('public');
 
         if (!$typehint) {
             $construct->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool')
@@ -82,6 +89,7 @@ class Collection extends Common
                 ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
                 ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource');
         }
+        $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
 
         $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
         $construct->addParameter('entityFactory')->setType('\Magento\Framework\Data\Collection\EntityFactoryInterface');

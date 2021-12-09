@@ -2,24 +2,33 @@
 
 namespace Crud;
 
+use Mygento\Jeeves\Console\Application as App;
 use Mygento\Jeeves\Console\Command\ModelCrud;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class CrudV0Test extends \PHPUnit\Framework\TestCase
 {
+    private const V = 'v0';
+
+    private $commandTester;
+
+    private $path;
+
     protected function setUp(): void
     {
         $application = new Application();
         $application->add(new ModelCrud());
         $command = $application->find('generate-model-crud');
         $this->commandTester = new CommandTester($command);
+        $this->path = App::GEN . DIRECTORY_SEPARATOR . self::V;
     }
 
     public function testCrudV0()
     {
         $this->commandTester->execute([
-            '--config_file' => '.jeeves.phpunit_v0.yaml'
+            '--config_file' => '.jeeves.phpunit_' . self::V . '.yaml',
+            '--path' => $this->path,
         ]);
         $this->checkInterfaces();
         $this->checkModels();
@@ -115,8 +124,8 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
-            'test/Expectations/Crud/' . $file,
+            'test/Expectations/Crud/' . self::V . '/' . $file,
+            $this->path . '/' . $file,
             '',
             false,
             false
@@ -126,12 +135,12 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
-            'test/Expectations/Crud/' . $file
+            'test/Expectations/Crud/' . self::V . '/' . $file,
+            $this->path . '/' . $file,
         );
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
-            'test/Expectations/Crud/' . $file,
+            'test/Expectations/Crud/' . self::V . '/' . $file,
+            $this->path . '/' . $file,
             '',
             false,
             false

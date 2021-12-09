@@ -21,7 +21,7 @@
         "phpstan/phpstan": "0.12.99 as 0.12.23"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }

@@ -37,7 +37,7 @@ class DbColumn
         int $precision = null,
         int $scale = null,
         string $default = null,
-        string $onUpdate = null
+        bool $onUpdate = null
     ) {
         $this->name = $name;
         $this->type = $type;
@@ -97,7 +97,7 @@ class DbColumn
         return $this->precision;
     }
 
-    public function getOnUpdate(): ?string
+    public function getOnUpdate(): ?bool
     {
         return $this->onUpdate;
     }

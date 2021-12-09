@@ -7,7 +7,9 @@ use Symfony\Component\Yaml\Yaml;
 
 class Crud
 {
-    private $version;
+    private $magentoVersion;
+
+    private $configVersion;
 
     private $typehint;
 
@@ -40,7 +42,7 @@ class Crud
         $result->setPath($path);
 
         foreach ($config as $vendor => $mod) {
-            if ($vendor === 'settings') {
+            if ($vendor === 'settings' || $vendor === 'version') {
                 continue;
             }
             foreach ($mod as $module => $ent) {
@@ -49,21 +51,27 @@ class Crud
                     $modEntity->setConfig($ent['settings']);
                 }
 
-                foreach ($ent as $type => $entities) {
-                    if ($type !== 'entities') {
-                        continue;
-                    }
+                $entities = $ent['entities'] ?? null;
+                $configVersion = 1;
 
-                    $moduleResult = $this->generateEntities($entities, $modEntity);
-                    $result->updateAclEntities($moduleResult->getAclEntities());
-                    $result->updateAclConfigs($moduleResult->getAclConfigs());
-                    $result->updateAdminRoute($moduleResult->getAdminRoute());
-                    $result->updateMenu($moduleResult->getMenu());
-                    $result->updateDbSchema($moduleResult->getDbSchema());
-                    $result->updateEvents($moduleResult->getEvents());
-                    $result->updateDi($moduleResult->getDi());
-                    $result->setModule($modEntity->getFullname());
+                if ($entities === null) {
+                    $this->configVersion = 0;
+                    $entities = $ent;
                 }
+
+                if (empty($entities)) {
+                    continue;
+                }
+
+                $moduleResult = $this->generateEntities($entities, $modEntity);
+                $result->updateAclEntities($moduleResult->getAclEntities());
+                $result->updateAclConfigs($moduleResult->getAclConfigs());
+                $result->updateAdminRoute($moduleResult->getAdminRoute());
+                $result->updateMenu($moduleResult->getMenu());
+                $result->updateDbSchema($moduleResult->getDbSchema());
+                $result->updateEvents($moduleResult->getEvents());
+                $result->updateDi($moduleResult->getDi());
+                $result->setModule($modEntity->getFullname());
             }
         }
 
@@ -72,8 +80,6 @@ class Crud
         }
 
         $this->generateConfigs($result);
-
-        die();
     }
 
     public function generateConfigs(Crud\Result $result)
@@ -84,7 +90,7 @@ class Crud
 
     private function setGlobalSettings(array $config)
     {
-        $this->version = $config['settings']['version'] ?? '2.3';
+        $this->magentoVersion = $config['settings']['version'] ?? '2.3';
         $this->typehint = $config['settings']['typehint'] ?? false;
     }
 
@@ -102,10 +108,13 @@ class Crud
             $entity = new Crud\Entity();
             $entity->setIO($this->io);
             $entity->setPath($this->path);
-            $entity->setVersion($this->version);
+            $entity->setVersion($this->magentoVersion);
             $entity->setTypeHint($this->typehint);
             $entity->setModule($mod);
             $entity->setName($entityName);
+            if ($this->configVersion === 0) {
+                $config['cacheable'] = true;
+            }
             $entity->setConfig($config);
 
             $entityList[] = $entity;
@@ -122,7 +131,7 @@ class Crud
             [
                 $mod->getFullname() => new Acl(
                     $mod->getFullname() . '::root',
-                    $mod->getPrintName(),
+                    $mod->getFullPrintName(),
                     $aclEntity
                 ),
             ]
@@ -131,7 +140,7 @@ class Crud
             [
                 new Acl(
                     $mod->getFullname() . '::config',
-                    $mod->getPrintName()
+                    $mod->getFullPrintName()
                 ),
             ]
         );
@@ -249,7 +258,7 @@ class Crud
         $generator = new Crud\Database();
 
         $columns = $generator->getColumns($entity);
-        $comment = $entity->getPrintName() . ' Table';
+        $comment = $entity->getComment() ?: $entity->getPrintName() . ' Table';
         $indexes = $entity->getIndexes();
         $fk = $entity->getFk();
 

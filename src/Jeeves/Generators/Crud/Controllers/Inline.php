@@ -32,7 +32,7 @@ class Inline extends Common
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
                 . '$this->jsonFactory = $jsonFactory;'
             );
 
@@ -57,6 +57,7 @@ class Inline extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('Execute action')
+            ->addComment('')
             ->setBody('/** @var \Magento\Framework\Controller\Result\Json $resultJson */' . PHP_EOL
         . '$resultJson = $this->jsonFactory->create();' . PHP_EOL
         . '$error = false;' . PHP_EOL

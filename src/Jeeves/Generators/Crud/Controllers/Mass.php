@@ -67,6 +67,7 @@ class Mass extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('Execute action')
+            ->addComment('')
             ->setBody('$collection = $this->filter->getCollection($this->collectionFactory->create());' . PHP_EOL
         . '$collectionSize = $collection->getSize();' . PHP_EOL . PHP_EOL
 

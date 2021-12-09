@@ -53,6 +53,7 @@ class DataProvider extends Common
                 ->addComment('@param string $primaryFieldName')
                 ->addComment('@param string $requestFieldName')
                 ->addComment('@param array $meta')
+                ->addComment('@param array $data')
                 ->addComment('@param \Magento\Ui\DataProvider\Modifier\PoolInterface|null $pool');
         }
 

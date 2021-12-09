@@ -33,10 +33,14 @@ class Resource extends Common
         $class->addConstant('TABLE_NAME', $table)->setVisibility('public');
         $class->addConstant('TABLE_PRIMARY_KEY', $key)->setVisibility('public');
 
-        $class->addMethod('_construct')
+        $construct = $class->addMethod('_construct')
             ->addComment('Initialize resource model')
             ->setVisibility('protected')
             ->setBody('$this->_init(self::TABLE_NAME, self::TABLE_PRIMARY_KEY);');
+
+        if (!$typehint) {
+            $construct->addComment('@return void');
+        }
 
         if (!$withStore) {
             return $namespace;

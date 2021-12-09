@@ -38,7 +38,6 @@ class Grid extends Common
             $construct->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool');
         }
         $construct
-            ->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)')
             ->setVisibility('public');
 
         if ($withStore) {
@@ -81,6 +80,7 @@ class Grid extends Common
                 ->addComment('@param string $model')
                 ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
                 ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource');
+            $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
         }
 
         $construct->setBody('parent::__construct(' . PHP_EOL

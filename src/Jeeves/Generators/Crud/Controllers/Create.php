@@ -18,12 +18,14 @@ class Create extends Common
         $class = $namespace->addClass($className)
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
+        $entityName = $this->getEntityPrintName($entity);
+
         $forward = $class->addProperty('resultForwardFactory')
             ->setVisibility('private');
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL .
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL .
                 '$this->resultForwardFactory = $resultForwardFactory;' . PHP_EOL
             );
 
@@ -50,7 +52,8 @@ class Create extends Common
         $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
-            ->addComment('Create new ' . $entity)
+            ->addComment('Create new ' . $entityName)
+            ->addComment('')
             ->setBody('/** @var \Magento\Framework\Controller\Result\Forward $resultForward */' . PHP_EOL
                 . '$resultForward = $this->resultForwardFactory->create();' . PHP_EOL
                 . 'return $resultForward->forward(\'edit\');');

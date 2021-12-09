@@ -89,10 +89,10 @@ class DbSchema extends Common
             }
             if ($column->getPrecision() !== null) {
                 $type['precision'] = var_export($column->getPrecision(), true);
-                $type['unsigned'] = var_export($column->getScale(), true);
+                $type['scale'] = var_export($column->getScale(), true);
             }
             if ($column->getLength() !== null) {
-                $type['unsigned'] = var_export($column->getLength(), true);
+                $type['length'] = var_export($column->getLength(), true);
             }
 
             $optional = [];
@@ -100,7 +100,7 @@ class DbSchema extends Common
                 $optional['default'] = (string) $column->getDefault();
             }
             if ($column->getOnUpdate() !== null) {
-                $optional['on_update'] = (string) $column->getOnUpdate();
+                $optional['on_update'] = var_export($column->getOnUpdate(), true);
             }
 
             return [

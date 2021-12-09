@@ -9,6 +9,9 @@ class Common
     protected const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
     protected const TAB = '    ';
     protected const DEFAULT_KEY = 'id';
+    protected const A = 'attributes';
+    protected const N = 'name';
+    protected const V = 'value';
 
     /**
      * Converts an input string from snake_case to upper CamelCase.

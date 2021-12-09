@@ -26,8 +26,8 @@ class Repository extends Generator
             $generator->genRepository(
                 $fileName,
                 implode(' ', [
-                    $this->getConverter()->getEntityName($entity->getModule()->getModule()),
-                    $this->getConverter()->getEntityName($entity->getName()),
+                    $this->getConverter()->getEntityPrintName($entity->getModule()->getModule()),
+                    $this->getConverter()->getEntityPrintName($entity->getName()),
                 ]),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName(),

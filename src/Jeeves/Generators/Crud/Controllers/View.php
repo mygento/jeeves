@@ -38,7 +38,7 @@ class View extends Common
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
                 . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
                 . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
             );
@@ -64,6 +64,7 @@ class View extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('Index action')
+            ->addComment('')
             ->setBody(' /** @var \Magento\Backend\Model\View\Result\Page $resultPage */' . PHP_EOL
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
                 . '$resultPage' . PHP_EOL

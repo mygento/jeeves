@@ -15,18 +15,18 @@ class AdminRoute extends Common
             function (Model\AdminRoute $route) {
                 return $this->getAdminRoute($route);
             },
-            $routes
+            array_values($routes)
         );
 
         return $service->write('config', function ($writer) use ($routeList) {
             $writer->setIndentString(self::TAB);
             $writer->writeAttribute('xsi:noNamespaceSchemaLocation', 'urn:magento:framework:App/etc/routes.xsd');
             $writer->write([
-                'name' => 'router',
-                'attributes' => [
+                self::N => 'router',
+                self::A => [
                     'id' => 'admin',
                 ],
-                'value' => $routeList,
+                self::V => $routeList,
             ]);
         });
     }
@@ -34,15 +34,15 @@ class AdminRoute extends Common
     private function getAdminRoute(Model\AdminRoute $route): array
     {
         return [
-            'name' => 'route',
-            'attributes' => [
+            self::N => 'route',
+            self::A => [
                 'id' => $route->getId(),
                 'frontName' => $route->getPath(),
             ],
-            'value' => [
-                'name' => 'module',
-                'attributes' => [
-                    'name' => $route->getName(),
+            self::V => [
+                self::N => 'module',
+                self::A => [
+                    self::N => $route->getName(),
                     'before' => 'Magento_Backend',
                 ],
             ],

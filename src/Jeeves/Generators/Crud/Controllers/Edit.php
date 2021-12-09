@@ -44,7 +44,7 @@ class Edit extends Common
 
         $construct = $class->addMethod('__construct')
             ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL
+                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
                 . '$this->entityFactory = $entityFactory;' . PHP_EOL
                 . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
             );
@@ -70,6 +70,7 @@ class Edit extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('Edit ' . $entityName . ' action')
+            ->addComment('')
             ->setBody('$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . '$entity = $this->entityFactory->create();' . PHP_EOL
                 . 'if ($entityId) {' . PHP_EOL

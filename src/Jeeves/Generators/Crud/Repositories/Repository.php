@@ -24,7 +24,6 @@ class Repository extends Common
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
         $namespace->addUse('\Magento\Framework\Exception\CouldNotSaveException');
         $namespace->addUse('\Magento\Framework\Exception\CouldNotDeleteException');
-        $namespace->addUse($repoInterface);
 
         $class = $namespace->addClass($className);
         $class->setImplements([$repoInterface]);
@@ -40,6 +39,7 @@ class Repository extends Common
             ->setVisibility('private');
 
         if ($typehint) {
+            $namespace->addUse($repoInterface);
             $namespace->addUse($collection . 'Factory');
             $namespace->addUse($entityInterface . 'Factory');
             $namespace->addUse($results . 'Factory');

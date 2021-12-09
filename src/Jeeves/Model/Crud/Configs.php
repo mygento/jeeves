@@ -11,15 +11,9 @@ use Mygento\Jeeves\Generators\Crud\Configs\Menu;
 use Mygento\Jeeves\Generators\Crud\Configs\Module;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
-use Mygento\Jeeves\Util\XmlManager;
 
 class Configs extends Generator
 {
-    /**
-     * @var XmlManager
-     */
-    private $xmlManager;
-
     public function __construct(IOInterface $io)
     {
         $this->setIO($io);
@@ -119,14 +113,5 @@ class Configs extends Generator
             $result->getPath() . '/etc/module.xml',
             $generator->generateModule($result->getModule())
         );
-    }
-
-    private function getXmlManager()
-    {
-        if (null === $this->xmlManager) {
-            $this->xmlManager = new XmlManager();
-        }
-
-        return $this->xmlManager;
     }
 }

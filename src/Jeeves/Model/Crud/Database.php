@@ -64,7 +64,7 @@ class Database extends Generator
                 $default = (string) $param['default'];
             }
             if (isset($param['on_update'])) {
-                $onUpdate = $param['on_update'];
+                $onUpdate = (bool) $param['on_update'];
             }
 
             if (isset($param['pk']) && true == $param['pk']) {

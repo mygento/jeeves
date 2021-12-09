@@ -59,6 +59,7 @@ class ModelCrud extends BaseCommand
                 new InputOption('readonly', null, InputOption::VALUE_OPTIONAL, 'read only', false),
                 new InputOption('per_store', null, InputOption::VALUE_OPTIONAL, 'per store', false),
                 new InputOption('config_file', null, InputOption::VALUE_OPTIONAL, 'config file', null),
+                new InputOption('path', null, InputOption::VALUE_OPTIONAL, 'path', null),
             ])
             ->setHelp(
                 <<<EOT
@@ -78,6 +79,10 @@ EOT
             $filename = $input->getOption('config_file');
         }
 
+        if ($input->getOption('path')) {
+            $this->path = $input->getOption('path');
+        }
+
         if (file_exists($filename)) {
             $config = $executor->readConfig($filename);
         }
@@ -94,6 +99,7 @@ EOT
         }
 
         $executor->execute($this->path, $config);
+        $this->runCodeStyleFixer();
 
         return 0;
         //reset

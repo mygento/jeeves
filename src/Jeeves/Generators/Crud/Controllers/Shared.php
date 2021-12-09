@@ -36,6 +36,7 @@ class Shared extends Common
             $reg->setType('\Magento\Framework\Registry');
         } else {
             $reg->addComment('Core registry');
+            $reg->addComment('');
             $reg->addComment('@var \Magento\Framework\Registry');
         }
 
@@ -47,6 +48,7 @@ class Shared extends Common
             $namespace->addUse($repository);
         } else {
             $repo->addComment($className . ' repository')
+                ->addComment('')
                 ->addComment('@var ' . $repository);
         }
 

@@ -24,6 +24,7 @@ class Delete extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('Delete ' . $entityName . ' action')
+            ->addComment('')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
                 . '$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL

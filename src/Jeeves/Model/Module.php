@@ -10,7 +10,7 @@ class Module
 
     private $module;
 
-    private $route;
+    private $route = null;
 
     private $converter;
 
@@ -72,7 +72,18 @@ class Module
 
     public function getAdminRoute(): string
     {
+        if ($this->route === null) {
+            $this->route = $this->getModuleLowercase();
+        }
+
         return $this->route;
+    }
+
+    public function getFullPrintName(): string
+    {
+        return $this->getConverter()->splitAtUpperCase($this->getVendor())
+            . ' '
+            . $this->getConverter()->splitAtUpperCase($this->getModule());
     }
 
     public function getPrintName(): string
