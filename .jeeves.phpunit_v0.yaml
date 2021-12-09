@@ -1,0 +1,78 @@
+Mygento:
+  SampleModule:
+    CustomerAddress:
+      tablename: mygento_sample_custom_table_name
+      comment: 'Table for Customer Address'
+      columns:
+        id:
+          type: int
+          pk: true
+          identity: true
+          unsigned: true
+          comment: 'Address ID'
+        city:
+          type: varchar
+          nullable: false
+          comment: 'City'
+          length: 100
+        customer_group:
+          type: int
+          unsigned: false
+          comment: 'Customer Group'
+          length: 6
+          nullable: false
+          source: 'Magento\Customer\Model\Customer\Source\Group'
+        created_at:
+          type: timestamp
+          nullable: false
+          default: 'CURRENT_TIMESTAMP'
+          comment: 'Create time'
+          on_update: false
+        updated_at:
+          type: timestamp
+          nullable: false
+          default: 'CURRENT_TIMESTAMP'
+          comment: 'Modify time'
+          on_update: true
+        discount:
+          type: decimal
+        price:
+          type: price
+      indexes:
+        IX_CITY:
+          columns: ['city']
+    Banner:
+      api: true
+      readonly: true
+      cache_tag: samp_ban
+      per_store: true
+      columns:
+        id:
+          type: int
+          pk: true
+          unsigned: true
+          comment: 'Banner ID'
+        name:
+          type: varchar
+        subname:
+          type: varchar
+        family:
+          type: varchar
+        is_active:
+          type: boolean
+        product_id:
+          type: int
+          unsigned: true
+      indexes:
+        IX_NAME:
+          type: 'unique'
+          columns: ['family', 'subname']
+        IX_PRD_U:
+          type: 'unique'
+          columns: ['product_id']
+      fk:
+        FK_PROD_ID_CAT_PRD_ENT_ID:
+          column: 'product_id'
+          referenceTable: 'catalog_product_entity'
+          referenceColumn: 'entity_id'
+          indexName: 'IX_PR_ID'

@@ -38,7 +38,7 @@ jobs:
       - run: composer self-update --2
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - run: mv .jeeves.phpunit.yaml .jeeves.yaml
+      #- run: mv .jeeves.phpunit.yaml .jeeves.yaml
       - run: php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
       - run: php vendor/bin/phpcs --config-set show_warnings 0
       - name: Run Tests
