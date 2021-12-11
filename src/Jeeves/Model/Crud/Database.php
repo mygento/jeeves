@@ -86,4 +86,62 @@ class Database extends Generator
             );
         }, array_keys($columns), $columns);
     }
+
+    public function getColumnsPerStore(): array
+    {
+        return [
+            new DbColumn(
+                'entity_id',
+                'int',
+                false,
+                'Entity ID',
+                false,
+                true
+            ),
+            new DbColumn(
+                'store_id',
+                'smallint',
+                false,
+                'Store ID',
+                false,
+                true
+            ),
+        ];
+    }
+
+    public function getIndexesPerStore(Entity $entity): array
+    {
+        return [
+            'IX_' . strtoupper($entity->getName()) . '_STORE_ID' => [
+                'columns' => [
+                    'store_id',
+                ],
+            ],
+        ];
+    }
+
+    public function getFkPerStore(Entity $entity): array
+    {
+        return [
+            'FK_' . strtoupper($entity->getName()) . '_STORE_ID' => [
+                'column' => 'store_id',
+                'referenceTable' => 'store',
+                'referenceColumn' => 'store_id',
+            ],
+            'FK_' . strtoupper($entity->getName()) . '_ENT_ID' => [
+                'column' => 'entity_id',
+                'referenceTable' => $entity->getTablename(),
+                'referenceColumn' => $entity->getPrimaryKey(),
+                'indexName' => 'IX_ENT_ID',
+            ],
+        ];
+    }
+
+    public function getPrimaryPerStore(): array
+    {
+        return [
+            'entity_id',
+            'store_id',
+        ];
+    }
 }

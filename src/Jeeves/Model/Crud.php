@@ -262,7 +262,7 @@ class Crud
         $indexes = $entity->getIndexes();
         $fk = $entity->getFk();
 
-        return [
+        $result = [
             new DbTable(
                 $entity->getTablename(),
                 $columns,
@@ -274,6 +274,20 @@ class Crud
                 ]
             ),
         ];
+
+        if ($entity->withStore()) {
+            $storeColumns = $generator->getColumnsPerStore();
+            $result[] = new DbTable(
+                $entity->getTablename() . '_store',
+                $storeColumns,
+                $comment  . ' With Store',
+                $generator->getIndexesPerStore($entity),
+                $generator->getFkPerStore($entity),
+                $generator->getPrimaryPerStore()
+            );
+        }
+
+        return $result;
     }
 
     private function generateEvents(Crud\Entity $entity): array

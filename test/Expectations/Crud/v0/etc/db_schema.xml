@@ -34,7 +34,7 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="FK_PROD_ID_CAT_PRD_ENT_ID" table="mygento_sample_module_banner" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
-    <table name="mygento_sample_module_banner_store" resource="default" engine="innodb" comment="mygento_sample_module_banner_store Table">
+    <table name="mygento_sample_module_banner_store" resource="default" engine="innodb" comment="Banner Table With Store">
         <column xsi:type="int" name="entity_id" nullable="false" identity="false" unsigned="true" comment="Entity ID"/>
         <column xsi:type="smallint" name="store_id" nullable="false" identity="false" unsigned="true" comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
