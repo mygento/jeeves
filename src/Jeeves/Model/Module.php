@@ -14,15 +14,19 @@ class Module
 
     private $converter;
 
-    public function __construct(string $vendor, string $module)
+    private $typehint;
+
+    public function __construct(string $vendor, string $module, bool $typehint = true)
     {
         $this->vendor = $vendor;
         $this->module = $module;
+        $this->typehint = $typehint;
     }
 
     public function setConfig(array $config)
     {
-        $this->route = $config['settings']['admin_route'] ?? $this->getModuleLowercase();
+        $this->route = $config['admin_route'] ?? $this->getModuleLowercase();
+        $this->typehint = $config['typehint'] ?? $this->typehint;
     }
 
     public function setModule(string $module)
@@ -97,6 +101,11 @@ class Module
     public function getPrintName(): string
     {
         return $this->getConverter()->splitAtUpperCase($this->getModule());
+    }
+
+    public function hasTypehint(): bool
+    {
+        return $this->typehint;
     }
 
     private function getConverter(): Common

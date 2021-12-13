@@ -9,7 +9,7 @@ class Entity extends Generator
 {
     private const DEFAULT_KEY = 'id';
 
-    private $typehint = false;
+    private $typehint = true;
 
     private $version;
 

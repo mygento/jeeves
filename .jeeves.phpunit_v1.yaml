@@ -1,5 +1,5 @@
 settings:
-    typehint: true
+    typehint: false
 Mygento:
   SampleModule:
     settings:
@@ -8,11 +8,54 @@ Mygento:
     shipping:
       code: 'slowcourier'
     entities:
-      CustomerAddress:
-        tablename: mygento_sample_custom_table_name
-        comment: 'Table for Customer Address'
+      Columns:
         columns:
-          address_id:
+          id:
+              type: int
+              pk: true
+              identity: true
+              unsigned: true
+              comment: 'Column ID'
+          is_active:
+              type: boolean
+          has_flag:
+              type: boolean
+              nullable: true
+          merge_date:
+              type: date
+          discount:
+              type: decimal
+              nullable: false
+          cost:
+              type: decimal
+          price:
+              type: price
+          name:
+              type: varchar
+              nullable: false
+              comment: 'City'
+              length: 100
+          description:
+              type: text
+              nullable: false
+              comment: 'Description'
+          created_at:
+              type: timestamp
+              nullable: false
+              default: 'CURRENT_TIMESTAMP'
+              comment: 'Create time'
+              on_update: false
+          updated_at:
+              type: timestamp
+              nullable: false
+              default: 'CURRENT_TIMESTAMP'
+              comment: 'Modify time'
+              on_update: true
+      cartItem:
+        tablename: mygento_sample_custom_cart_item
+        comment: 'Table for Customer Item'
+        columns:
+          cart_id:
             type: int
             pk: true
             identity: true
@@ -20,10 +63,7 @@ Mygento:
             comment: 'Address ID'
           is_active:
             type: boolean
-          has_flag:
-            type: boolean
-            nullable: true
-          merge_date:
+          delivery_date:
             type: date
             nullable: true
           city:
@@ -63,14 +103,24 @@ Mygento:
             columns: ['city']
           IX_ACTIVE:
             columns: ['is_active']
-      Banner:
+      Obsolete:
+          settings:
+              typehint: false
+          columns:
+              id:
+                type: int
+                pk: true
+                unsigned: true
+                comment: 'Banner ID'
+              name:
+                type: varchar
+      Poster:
         settings:
-          typehint: false
-          version: 2.3
+          version: 2.4
         api: true
         cacheable: true
         readonly: true
-        cache_tag: samp_ban
+        cache_tag: samp_poster
         per_store: true
         columns:
           id:
