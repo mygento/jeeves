@@ -326,7 +326,7 @@ class Dependency extends Generator
                                     self::N => 'eventObject',
                                     'xsi:type' => 'string',
                                 ],
-                                self::V => $entity->getEventName($entity->getName()) . '_grid_collection',
+                                self::V => $entity->getEventObject() . '_grid_collection',
                             ],
                             [
                                 self::N => 'argument',

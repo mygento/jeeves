@@ -194,6 +194,11 @@ class Entity extends Generator
         ]);
     }
 
+    public function getEventObject(): string
+    {
+        return $this->getConverter()->camelCaseToSnakeCase($this->name);
+    }
+
     public function getEntityName(): string
     {
         return $this->getConverter()->getEntityName($this->name);

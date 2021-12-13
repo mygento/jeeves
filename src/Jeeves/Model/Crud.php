@@ -280,7 +280,7 @@ class Crud
             $result[] = new DbTable(
                 $entity->getTablename() . '_store',
                 $storeColumns,
-                $comment  . ' With Store',
+                $comment . ' With Store',
                 $generator->getIndexesPerStore($entity),
                 $generator->getFkPerStore($entity),
                 $generator->getPrimaryPerStore()

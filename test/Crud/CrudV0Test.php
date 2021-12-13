@@ -33,6 +33,7 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
         $this->checkInterfaces();
         $this->checkModels();
         $this->checkRepository();
+        $this->checkSearchResults();
         $this->checkGui();
         $this->checkXml('etc/di.xml');
         $this->checkXml('etc/webapi.xml');
@@ -71,6 +72,12 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/CustomerAddressRepository.php');
         $this->checkFile('Model/BannerRepository.php');
         $this->checkFile('Model/SearchCriteria/BannerStoreFilter.php');
+    }
+
+    private function checkSearchResults()
+    {
+        $this->checkFile('Model/BannerSearchResults.php');
+        $this->checkFile('Model/CustomerAddressSearchResults.php');
     }
 
     private function checkGui()

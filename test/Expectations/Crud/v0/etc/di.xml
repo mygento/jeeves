@@ -4,8 +4,8 @@
     <preference for="Mygento\SampleModule\Api\BannerRepositoryInterface" type="Mygento\SampleModule\Model\BannerRepository"/>
     <preference for="Mygento\SampleModule\Api\Data\CustomerAddressInterface" type="Mygento\SampleModule\Model\CustomerAddress"/>
     <preference for="Mygento\SampleModule\Api\Data\BannerInterface" type="Mygento\SampleModule\Model\Banner"/>
-    <preference for="Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Mygento\SampleModule\Api\Data\BannerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\CustomerAddressSearchResultsInterface" type="Mygento\SampleModule\Model\CustomerAddressSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\BannerSearchResultsInterface" type="Mygento\SampleModule\Model\BannerSearchResults"/>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -95,7 +95,7 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">mygento_sample_custom_table_name</argument>
             <argument name="eventPrefix" xsi:type="string">sample_module_customeraddress_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">customeraddress_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_address_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CustomerAddress</argument>
         </arguments>
     </type>
