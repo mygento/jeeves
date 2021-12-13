@@ -9,7 +9,7 @@ use Mygento\SampleModule\Model\ResourceModel\Banner\CollectionFactory;
 class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
     /** @var \Mygento\SampleModule\Model\ResourceModel\Banner\Collection */
-    private $collection;
+    protected $collection;
 
     /** @var DataPersistorInterface */
     private $dataPersistor;

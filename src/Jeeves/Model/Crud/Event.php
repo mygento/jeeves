@@ -10,7 +10,12 @@ class Event extends Generator
     {
         $events = [];
         if ($entity->withStore()) {
-            $event = $entity->getEntityLowercase();
+            $event = strtolower(implode('_', [
+                $entity->getModule()->getEventPrefix(),
+                'Api',
+                'Data',
+                $entity->getEntityName() . 'Interface',
+            ]));
             $eventName = implode('_', [
                 'legacy',
                 $entity->getEventName($entity->getName()),

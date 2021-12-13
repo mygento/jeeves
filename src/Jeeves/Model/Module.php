@@ -65,6 +65,14 @@ class Module
         return $this->getConverter()->camelCaseToSnakeCase($this->module);
     }
 
+    public function getEventPrefix(): string
+    {
+        return
+            $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->vendor)
+            . '_'
+            . $this->getConverter()->camelCaseToSnakeCaseNoUnderscore($this->module);
+    }
+
     public function getVendorLowercase()
     {
         return $this->getConverter()->camelCaseToSnakeCase($this->vendor);

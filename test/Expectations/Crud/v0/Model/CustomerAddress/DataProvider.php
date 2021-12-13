@@ -9,7 +9,7 @@ use Mygento\SampleModule\Model\ResourceModel\CustomerAddress\CollectionFactory;
 class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
     /** @var \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\Collection */
-    private $collection;
+    protected $collection;
 
     /** @var DataPersistorInterface */
     private $dataPersistor;

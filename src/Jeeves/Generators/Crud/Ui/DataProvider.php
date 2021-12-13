@@ -23,7 +23,7 @@ class DataProvider extends Common
         $class = $namespace->addClass($className);
         $class->setExtends('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
         $collect = $class->addProperty('collection')
-            ->setVisibility('private');
+            ->setVisibility('protected');
         $persist = $class->addProperty('dataPersistor')
             ->setVisibility('private');
         $loaded = $class->addProperty('loadedData')
