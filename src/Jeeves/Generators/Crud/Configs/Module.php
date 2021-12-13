@@ -15,7 +15,7 @@ class Module extends Common
             $writer->setIndentString(self::TAB);
             $writer->write([
                 'module' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => $fullname,
                     ],
                 ],

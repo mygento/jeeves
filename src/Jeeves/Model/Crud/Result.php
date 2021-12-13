@@ -16,6 +16,8 @@ class Result
 
     private $menu = [];
 
+    private $webapi = [];
+
     private $adminRoute = [];
 
     private $path;
@@ -25,6 +27,11 @@ class Result
     public function getEvents(): array
     {
         return $this->events;
+    }
+
+    public function getWebApi(): array
+    {
+        return $this->webapi;
     }
 
     public function getDi(): array
@@ -80,6 +87,11 @@ class Result
     public function updateEvents(array $events)
     {
         $this->events = array_merge($this->events, $events);
+    }
+
+    public function updateWebApi(array $webapis)
+    {
+        $this->webapi = array_merge($this->webapi, $webapis);
     }
 
     public function updateDi(array $di)

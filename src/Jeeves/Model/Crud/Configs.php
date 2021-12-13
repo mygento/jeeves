@@ -9,6 +9,7 @@ use Mygento\Jeeves\Generators\Crud\Configs\Dependency;
 use Mygento\Jeeves\Generators\Crud\Configs\Event;
 use Mygento\Jeeves\Generators\Crud\Configs\Menu;
 use Mygento\Jeeves\Generators\Crud\Configs\Module;
+use Mygento\Jeeves\Generators\Crud\Configs\WebApi;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
 
@@ -28,6 +29,8 @@ class Configs extends Generator
         $this->genEvents($result);
         $this->genDI($result);
         $this->genModuleXml($result);
+        $this->genWebApiXml($result);
+        $this->genRegistration($result);
     }
 
     private function genAdminRoute(Result $result)
@@ -112,6 +115,27 @@ class Configs extends Generator
         $this->writeFile(
             $result->getPath() . '/etc/module.xml',
             $generator->generateModule($result->getModule())
+        );
+    }
+
+    private function genWebApiXml(Result $result)
+    {
+        $generator = new WebApi();
+        $this->writeFile(
+            $result->getPath() . '/etc/webapi.xml',
+            $generator->generateWebAPI($result->getWebApi())
+        );
+    }
+
+    private function genRegistration(Result $result)
+    {
+        $this->writeFile(
+            $result->getPath() . '/registration.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+            '\Magento\Framework\Component\ComponentRegistrar::register(' . PHP_EOL .
+            '   \Magento\Framework\Component\ComponentRegistrar::MODULE,' . PHP_EOL .
+            '   \'' . $result->getModule() . '\',' . PHP_EOL .
+            '   __DIR__' . PHP_EOL . ');'
         );
     }
 }

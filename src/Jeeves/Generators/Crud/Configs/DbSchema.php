@@ -18,14 +18,14 @@ class DbSchema extends Common
             $indexFKList = $this->getIndexFK($entity);
 
             return [
-                'name' => 'table',
-                'attributes' => [
+                self::N => 'table',
+                self::A => [
                     'name' => $entity->getName(),
                     'resource' => 'default',
                     'engine' => 'innodb',
                     'comment' => $entity->getComment(),
                 ],
-                'value' => array_merge(
+                self::V => array_merge(
                     $columnList,
                     [$primaryContraint],
                     $indexList,
@@ -64,12 +64,12 @@ class DbSchema extends Common
                 }
 
                 return [
-                    'name' => 'index',
-                    'attributes' => [
+                    self::N => 'index',
+                    self::A => [
                         'indexType' => 'btree',
                         'referenceId' => $param['indexName'],
                     ],
-                    'value' => array_map(
+                    self::V => array_map(
                         [$this, 'getIndexColumn'],
                         [$param['column']]
                     ),
@@ -104,8 +104,8 @@ class DbSchema extends Common
             }
 
             return [
-                'name' => 'column',
-                'attributes' => array_merge([
+                self::N => 'column',
+                self::A => array_merge([
                     'xsi:type' => $column->getType(),
                     'name' => $column->getName(),
                     'nullable' => var_export($column->getNullable(), true),
@@ -122,8 +122,8 @@ class DbSchema extends Common
         return array_map(
             function ($name, $param) use ($tablename) {
                 return [
-                    'name' => 'constraint',
-                    'attributes' => [
+                    self::N => 'constraint',
+                    self::A => [
                         'xsi:type' => 'foreign',
                         'referenceId' => $name,
                         'table' => $tablename,
@@ -142,15 +142,15 @@ class DbSchema extends Common
     private function getPrimary(DbTable $entity): array
     {
         return [
-            'name' => 'constraint',
-            'attributes' => [
+            self::N => 'constraint',
+            self::A => [
                 'xsi:type' => 'primary',
                 'referenceId' => 'PRIMARY',
             ],
-            'value' => array_map(function ($column) {
+            self::V => array_map(function ($column) {
                 return [
-                    'name' => 'column',
-                    'attributes' => [
+                    self::N => 'column',
+                    self::A => [
                         'name' => $column,
                     ],
                 ];
@@ -167,12 +167,12 @@ class DbSchema extends Common
                 $param['type'] = $param['type'] ?? 'btree';
                 if ('unique' === $param['type']) {
                     return [
-                        'name' => 'constraint',
-                        'attributes' => [
+                        self::N => 'constraint',
+                        self::A => [
                             'xsi:type' => 'unique',
                             'referenceId' => $name,
                         ],
-                        'value' => array_map(
+                        self::V => array_map(
                             [$this, 'getIndexColumn'],
                             $param['columns']
                         ),
@@ -180,12 +180,12 @@ class DbSchema extends Common
                 }
 
                 return [
-                    'name' => 'index',
-                    'attributes' => [
+                    self::N => 'index',
+                    self::A => [
                         'referenceId' => $name,
                         'indexType' => $param['type'],
                     ],
-                    'value' => array_map(
+                    self::V => array_map(
                         [$this, 'getIndexColumn'],
                         $param['columns']
                     ),
@@ -199,8 +199,8 @@ class DbSchema extends Common
     private function getIndexColumn($name)
     {
         return [
-            'name' => 'column',
-            'attributes' => [
+            self::N => 'column',
+            self::A => [
                 'name' => $name,
             ],
         ];

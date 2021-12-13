@@ -25,27 +25,27 @@ class Acl extends Common
                 'acl' => [
                     'resources' => [
                         'resource' => [
-                            'attributes' => [
+                            self::A => [
                                 'id' => 'Magento_Backend::admin',
                             ],
-                            'value' => [
+                            self::V => [
                                 $entityResources,
                                 [
-                                    'name' => 'resource',
-                                    'attributes' => [
+                                    self::N => 'resource',
+                                    self::A => [
                                         'id' => 'Magento_Backend::stores',
                                     ],
-                                    'value' => [
+                                    self::V => [
                                         'resource' => [
-                                            'attributes' => [
+                                            self::A => [
                                                 'id' => 'Magento_Backend::stores_settings',
                                             ],
-                                            'value' => [
+                                            self::V => [
                                                 'resource' => [
-                                                    'attributes' => [
+                                                    self::A => [
                                                         'id' => 'Magento_Config::config',
                                                     ],
-                                                    'value' => $configList,
+                                                    self::V => $configList,
                                                 ],
                                             ],
                                         ],

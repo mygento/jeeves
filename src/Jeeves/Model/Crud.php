@@ -71,6 +71,7 @@ class Crud
                 $result->updateDbSchema($moduleResult->getDbSchema());
                 $result->updateEvents($moduleResult->getEvents());
                 $result->updateDi($moduleResult->getDi());
+                $result->updateWebApi($moduleResult->getWebApi());
                 $result->setModule($modEntity->getFullname());
             }
         }
@@ -101,6 +102,7 @@ class Crud
         $menuEntity = [];
         $dbSchema = [];
         $events = [];
+        $webapi = [];
 
         $entityList = [];
 
@@ -124,6 +126,7 @@ class Crud
             $menuEntity = array_merge($menuEntity, $entityResult->getMenu());
             $dbSchema = array_merge($dbSchema, $entityResult->getDbSchema());
             $events = array_merge($events, $entityResult->getEvents());
+            $webapi = array_merge($webapi, $entityResult->getWebApi());
         }
 
         $result->updateDi($this->generateDependency($entityList));
@@ -166,6 +169,7 @@ class Crud
         $result->updateMenu($menuEntity);
         $result->updateDbSchema($dbSchema);
         $result->updateEvents($events);
+        $result->updateWebApi($webapi);
 
         return $result;
     }
@@ -180,7 +184,7 @@ class Crud
         $this->generateModels($entity);
         $this->generateRepository($entity);
 
-        if ($entity->hasGui($entity)) {
+        if ($entity->hasGui()) {
             $this->generateControllers($entity);
             $this->generateAdminLayouts($entity);
 
@@ -190,6 +194,7 @@ class Crud
         $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
         $dbschema = $this->generateDbSchema($entity);
         $events = $this->generateEvents($entity);
+        $webapi = $this->generateWebApi($entity);
         $menu = [
             new Menu(
                 $entity->getFullname() . '::' . $entity->getEntityLowercase(),
@@ -207,6 +212,7 @@ class Crud
         $result->updateDbSchema($dbschema);
         $result->updateEvents($events);
         $result->updateMenu($menu);
+        $result->updateWebApi($webapi);
 
         return $result;
     }
@@ -290,58 +296,18 @@ class Crud
         return $result;
     }
 
+    private function generateWebApi(Crud\Entity $entity): array
+    {
+        $generator = new Crud\Apis();
+
+        return $generator->generateApi($entity);
+    }
+
     private function generateEvents(Crud\Entity $entity): array
     {
-        $events = [];
-        if ($entity->withStore()) {
-            $event = $entity->getEntityLowercase();
-            $eventName = implode('_', [
-                'legacy',
-                $entity->getEventName($entity->getName()),
-            ]);
-            $events[] = [
-                'event' => $event . '_save_before',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'before_save',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntitySave',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_save_after',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'after_save',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntitySave',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_delete_before',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'before_delete',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\BeforeEntityDelete',
-                ]],
-            ];
-            $events[] = [
-                'event' => $event . '_delete_after',
-                'observer' => [[
-                    'name' => implode('_', [
-                        $eventName,
-                        'after_delete',
-                    ]),
-                    'instance' => 'Magento\Framework\EntityManager\Observer\AfterEntityDelete',
-                ]],
-            ];
-        }
+        $generator = new Crud\Event();
 
-        return $events;
+        return $generator->generateEvents($entity);
     }
 
     private function generateDependency(array $entities): array

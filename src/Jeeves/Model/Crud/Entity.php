@@ -180,6 +180,11 @@ class Entity extends Generator
         return $this->gui;
     }
 
+    public function hasApi(): bool
+    {
+        return $this->api;
+    }
+
     public function getEntityAcl()
     {
         return $this->getFullname() . '::' . $this->getEntityLowercase();
@@ -202,6 +207,11 @@ class Entity extends Generator
     public function getEntityName(): string
     {
         return $this->getConverter()->getEntityName($this->name);
+    }
+
+    public function getEntityApiName(): string
+    {
+        return $this->module->getModule() . $this->getEntityName();
     }
 
     public function getEntityLowercase(): string

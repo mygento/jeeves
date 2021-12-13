@@ -13,15 +13,15 @@ class Event extends Common
         $eventList = array_map(function ($entity) {
             return [
                 [
-                    'name' => 'event',
-                    'attributes' => [
+                    self::N => 'event',
+                    self::A => [
                         'name' => $entity['event'],
                     ],
-                    'value' => array_map(function ($observer) {
+                    self::V => array_map(function ($observer) {
                         return [
                             [
-                                'name' => 'observer',
-                                'attributes' => [
+                                self::N => 'observer',
+                                self::A => [
                                     'instance' => $observer['instance'],
                                     'name' => $observer['name'],
                                 ],
