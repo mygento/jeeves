@@ -107,17 +107,17 @@ class Repository extends Common
             . '$this->collectionProcessor = $collectionProcessor;'
             . ($withStore ? PHP_EOL . '$this->storeManager = $storeManager;' : ''));
 
-        $getById = $class->addMethod('getById')
-            ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
-            ->setVisibility('public');
+        $getById = $class->addMethod('getById')->setVisibility('public');
         $getByIdParam = $getById->addParameter('entityId');
 
         if ($typehint) {
             $namespace->addUse($entityInterface);
+            $getById->addComment('@throws NoSuchEntityException');
             $getById->setReturnType($entityInterface);
             $getByIdParam->setType('int');
         } else {
             $getById
+                ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
                 ->addComment('@param int $entityId')
                 ->addComment('@return ' . $entityInterface);
         }
@@ -131,16 +131,16 @@ class Repository extends Common
             . '}' . PHP_EOL
             . 'return $entity;');
 
-        $save = $class->addMethod('save')
-            ->addComment('@throws \Magento\Framework\Exception\CouldNotSaveException')
-            ->setVisibility('public');
+        $save = $class->addMethod('save')->setVisibility('public');
 
         $save->addParameter('entity')->setType($entityInterface);
 
         if ($typehint) {
+            $save->addComment('@throws CouldNotSaveException');
             $save->setReturnType($entityInterface);
         } else {
             $save
+                ->addComment('@throws \Magento\Framework\Exception\CouldNotSaveException')
                 ->addComment('@param ' . $entityInterface . ' $entity')
                 ->addComment('@return ' . $entityInterface);
         }
@@ -159,16 +159,16 @@ class Repository extends Common
             . 'return $entity;'
         );
 
-        $delete = $class->addMethod('delete')
-            ->addComment('@throws \Magento\Framework\Exception\CouldNotDeleteException')
-            ->setVisibility('public');
+        $delete = $class->addMethod('delete')->setVisibility('public');
 
         $delete->addParameter('entity')->setTypeHint($entityInterface);
 
         if ($typehint) {
+            $delete->addComment('@throws CouldNotDeleteException');
             $delete->setReturnType('bool');
         } else {
             $delete
+                ->addComment('@throws \Magento\Framework\Exception\CouldNotDeleteException')
                 ->addComment('@param ' . $entityInterface . ' $entity')
                 ->addComment('@return bool');
         }
@@ -182,18 +182,19 @@ class Repository extends Common
             . '}' . PHP_EOL
             . 'return true;');
 
-        $deleteById = $class->addMethod('deleteById')
-            ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
-            ->addComment('@throws \Magento\Framework\Exception\CouldNotDeleteException')
-            ->setVisibility('public');
+        $deleteById = $class->addMethod('deleteById')->setVisibility('public');
 
         $deleteByIdParam = $deleteById->addParameter('entityId');
 
         if ($typehint) {
+            $deleteById->addComment('@throws NoSuchEntityException');
+            $deleteById->addComment('@throws CouldNotDeleteException');
             $deleteById->setReturnType('bool');
             $deleteByIdParam->setType('int');
         } else {
             $deleteById
+                ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
+                ->addComment('@throws \Magento\Framework\Exception\CouldNotDeleteException')
                 ->addComment('@param int $entityId')
                 ->addComment('@return bool');
         }
@@ -219,7 +220,7 @@ class Repository extends Common
         $getList->setBody('/** @var ' . $collection . ' $collection */' . PHP_EOL
         . '$collection = $this->collectionFactory->create();' . PHP_EOL . PHP_EOL
         . '$this->collectionProcessor->process($criteria, $collection);' . PHP_EOL . PHP_EOL
-        . '/** @var ' . $results . ' $searchResults */' . PHP_EOL
+        . '/** @var ' . $namespace->simplifyName($results) . ' $searchResults */' . PHP_EOL
         . '$searchResults = $this->searchResultsFactory->create();' . PHP_EOL
         . '$searchResults->setSearchCriteria($criteria);' . PHP_EOL
         . '$searchResults->setItems($collection->getItems());' . PHP_EOL

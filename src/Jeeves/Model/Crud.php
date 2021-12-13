@@ -113,7 +113,6 @@ class Crud
             $entity->setVersion($this->magentoVersion);
             $entity->setTypeHint($mod->hasTypehint());
 
-
 //            echo PHP_EOL.$entityName.PHP_EOL;
 //            echo 'global'.PHP_EOL;
 //            var_dump($this->globalTypehint);
@@ -121,7 +120,6 @@ class Crud
 //            var_dump($mod->hasTypehint());
 //            echo 'entity'.PHP_EOL;
 //            var_dump($config['settings']['typehint'] ?? null);
-
 
             $entity->setModule($mod);
             $entity->setName($entityName);
