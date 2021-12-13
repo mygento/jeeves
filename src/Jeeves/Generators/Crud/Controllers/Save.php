@@ -40,8 +40,8 @@ class Save extends Common
         $construct = $class->addMethod('__construct')
             ->setBody(
                 'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
-            . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
-            . '$this->entityFactory = $entityFactory;' . PHP_EOL
+                . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
+                . '$this->entityFactory = $entityFactory;' . PHP_EOL
             );
 
         if ($typehint) {

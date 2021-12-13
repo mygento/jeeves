@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\Generators\Crud\Ui;
 
 use Mygento\Jeeves\Generators\Crud\Common;
+use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpNamespace;
 
 class Grid extends Common
@@ -53,7 +54,7 @@ class Grid extends Common
         $construct->addParameter('resourceModel')->setTypeHint('string');
         $construct->addParameter('model')
             ->setTypeHint('string')
-            ->setDefaultValue(\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class); /** @phpstan-ignore-line */
+            ->setDefaultValue(new Literal('\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class'));
         $construct->addParameter('connection')->setTypeHint('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
         $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 

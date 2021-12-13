@@ -1020,12 +1020,4 @@ class UiComponent extends Common
             ],
         ];
     }
-
-    private function getService()
-    {
-        $service = new \Sabre\Xml\Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-
-        return $service;
-    }
 }

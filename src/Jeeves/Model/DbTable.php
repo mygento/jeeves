@@ -10,8 +10,6 @@ class DbTable
 
     private $indexes;
 
-//    private $constraints;
-
     private $fk;
 
     private $resource;
@@ -26,7 +24,7 @@ class DbTable
         string $name,
         array $columns,
         string $comment,
-//        array $constraints = [],
+        //        array $constraints = [],
         array $indexes = [],
         array $fk = [],
         array $primary = [],
@@ -40,7 +38,6 @@ class DbTable
         $this->name = $name;
         $this->fk = $fk;
         $this->indexes = $indexes;
-//        $this->constraints = $constraints;
         $this->primary = $primary;
     }
 
@@ -78,11 +75,6 @@ class DbTable
     {
         return $this->fk;
     }
-
-//    public function getConstraints(): array
-//    {
-//        return $this->constraints;
-//    }
 
     public function getPrimary(): array
     {

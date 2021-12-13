@@ -3,6 +3,7 @@
 namespace Mygento\Jeeves\Generators\Crud\Models;
 
 use Mygento\Jeeves\Generators\Crud\Common;
+use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpNamespace;
 
 class Collection extends Common
@@ -49,7 +50,7 @@ class Collection extends Common
 
         if ($typehint) {
             $idField->setType('string');
-            $idField->setType($entity . 'Resource::TABLE_PRIMARY_KEY');
+            $idField->setValue(new Literal($entity . 'Resource::TABLE_PRIMARY_KEY'));
         } else {
             $idField->addComment('@var string');
         }
