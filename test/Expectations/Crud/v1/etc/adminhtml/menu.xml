@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mygento_SampleModule::root" title="Sample Module" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Magento_Backend::stores" resource="Mygento_SampleModule::root"/>
+        <add id="Mygento_SampleModule::columns" title="Columns" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/columns" resource="Mygento_SampleModule::columns"/>
+        <add id="Mygento_SampleModule::cartitem" title="Cart Item" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/cartitem" resource="Mygento_SampleModule::cartitem"/>
+        <add id="Mygento_SampleModule::obsolete" title="Obsolete" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/obsolete" resource="Mygento_SampleModule::obsolete"/>
+        <add id="Mygento_SampleModule::poster" title="Poster" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/poster" resource="Mygento_SampleModule::poster"/>
+    </menu>
+</config>

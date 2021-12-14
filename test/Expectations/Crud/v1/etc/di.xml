@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mygento\SampleModule\Api\ColumnsRepositoryInterface" type="Mygento\SampleModule\Model\ColumnsRepository"/>
+    <preference for="Mygento\SampleModule\Api\CartItemRepositoryInterface" type="Mygento\SampleModule\Model\CartItemRepository"/>
+    <preference for="Mygento\SampleModule\Api\ObsoleteRepositoryInterface" type="Mygento\SampleModule\Model\ObsoleteRepository"/>
+    <preference for="Mygento\SampleModule\Api\PosterRepositoryInterface" type="Mygento\SampleModule\Model\PosterRepository"/>
+    <preference for="Mygento\SampleModule\Api\Data\ColumnsInterface" type="Mygento\SampleModule\Model\Columns"/>
+    <preference for="Mygento\SampleModule\Api\Data\CartItemInterface" type="Mygento\SampleModule\Model\CartItem"/>
+    <preference for="Mygento\SampleModule\Api\Data\ObsoleteInterface" type="Mygento\SampleModule\Model\Obsolete"/>
+    <preference for="Mygento\SampleModule\Api\Data\PosterInterface" type="Mygento\SampleModule\Model\Poster"/>
+    <preference for="Mygento\SampleModule\Api\Data\ColumnsSearchResultsInterface" type="Mygento\SampleModule\Model\ColumnsSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\CartItemSearchResultsInterface" type="Mygento\SampleModule\Model\CartItemSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface" type="Mygento\SampleModule\Model\ObsoleteSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\PosterSearchResultsInterface" type="Mygento\SampleModule\Model\PosterSearchResults"/>
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\ColumnsInterface" xsi:type="string">Mygento\SampleModule\Api\ColumnsRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\CartItemInterface" xsi:type="string">Mygento\SampleModule\Api\CartItemRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\ObsoleteInterface" xsi:type="string">Mygento\SampleModule\Api\ObsoleteRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="string">Mygento\SampleModule\Api\PosterRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\PosterFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterStoreFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\ColumnsCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\CartItemCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\ObsoleteCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Mygento\SampleModule\Model\ColumnsRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\ColumnsCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\CartItemRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CartItemCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ObsoleteRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\ObsoleteCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\PosterRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">mygento_sample_module_poster</item>
+                    <item name="identifierField" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sample_module_columns_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Columns\Grid\Collection</item>
+                <item name="sample_module_cartitem_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CartItem\Grid\Collection</item>
+                <item name="sample_module_obsolete_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Obsolete\Grid\Collection</item>
+                <item name="sample_module_poster_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ResourceModel\Columns\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_columns</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_columns_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">columns_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Columns</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ResourceModel\CartItem\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_custom_cart_item</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_cartitem_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">cart_item_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CartItem</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ResourceModel\Obsolete\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_obsolete</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_obsolete_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">obsolete_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Obsolete</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ResourceModel\Poster\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_poster</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_poster_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">poster_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster</argument>
+        </arguments>
+    </type>
+</config>

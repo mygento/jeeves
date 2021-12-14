@@ -47,6 +47,18 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Api/ColumnsRepositoryInterface.php');
         $this->checkFile('Api/Data/ColumnsInterface.php');
         $this->checkFile('Api/Data/ColumnsSearchResultsInterface.php');
+
+        $this->checkFile('Api/CartItemRepositoryInterface.php');
+        $this->checkFile('Api/Data/CartItemInterface.php');
+        $this->checkFile('Api/Data/CartItemSearchResultsInterface.php');
+
+        $this->checkFile('Api/ObsoleteRepositoryInterface.php');
+        $this->checkFile('Api/Data/ObsoleteInterface.php');
+        $this->checkFile('Api/Data/ObsoleteSearchResultsInterface.php');
+
+        $this->checkFile('Api/PosterRepositoryInterface.php');
+        $this->checkFile('Api/Data/PosterInterface.php');
+        $this->checkFile('Api/Data/PosterSearchResultsInterface.php');
     }
 
     private function checkModels()
@@ -54,16 +66,34 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/Columns.php');
         $this->checkFile('Model/ResourceModel/Columns.php');
         $this->checkFile('Model/ResourceModel/Columns/Collection.php');
+
+        $this->checkFile('Model/CartItem.php');
+        $this->checkFile('Model/ResourceModel/CartItem.php');
+        $this->checkFile('Model/ResourceModel/CartItem/Collection.php');
+
+        $this->checkFile('Model/Obsolete.php');
+        $this->checkFile('Model/ResourceModel/Obsolete.php');
+        $this->checkFile('Model/ResourceModel/Obsolete/Collection.php');
+
+        $this->checkFile('Model/Poster.php');
+        $this->checkFile('Model/ResourceModel/Poster.php');
+        $this->checkFile('Model/ResourceModel/Poster/Collection.php');
     }
 
     private function checkRepository()
     {
         $this->checkFile('Model/ColumnsRepository.php');
+        $this->checkFile('Model/CartItemRepository.php');
+        $this->checkFile('Model/ObsoleteRepository.php');
+        $this->checkFile('Model/PosterRepository.php');
     }
 
     private function checkSearchResults()
     {
         $this->checkFile('Model/ColumnsSearchResults.php');
+        $this->checkFile('Model/CartItemSearchResults.php');
+        $this->checkFile('Model/ObsoleteSearchResults.php');
+        $this->checkFile('Model/PosterSearchResults.php');
     }
 
     private function checkGui()
@@ -79,39 +109,87 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 
     private function checkControllers()
     {
-        $this->checkFile('Controller/Adminhtml/CustomerAddress.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/Delete.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/Edit.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/Index.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/InlineEdit.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/MassDelete.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/NewAction.php');
-        $this->checkFile('Controller/Adminhtml/CustomerAddress/Save.php');
+        $this->checkFile('Controller/Adminhtml/Columns.php');
+        $this->checkFile('Controller/Adminhtml/Columns/Index.php');
+        $this->checkFile('Controller/Adminhtml/Columns/Delete.php');
+        $this->checkFile('Controller/Adminhtml/Columns/Edit.php');
+        $this->checkFile('Controller/Adminhtml/Columns/InlineEdit.php');
+        $this->checkFile('Controller/Adminhtml/Columns/MassDelete.php');
+        $this->checkFile('Controller/Adminhtml/Columns/NewAction.php');
+        $this->checkFile('Controller/Adminhtml/Columns/Save.php');
 
-        $this->checkFile('Controller/Adminhtml/Banner.php');
-        $this->checkFile('Controller/Adminhtml/Banner/Index.php');
+        $this->checkFile('Controller/Adminhtml/CartItem.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/Index.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/Delete.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/Edit.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/InlineEdit.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/MassDelete.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/NewAction.php');
+        $this->checkFile('Controller/Adminhtml/CartItem/Save.php');
+
+        $this->checkFile('Controller/Adminhtml/Obsolete.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/Index.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/Delete.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/Edit.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/InlineEdit.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/MassDelete.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/NewAction.php');
+        $this->checkFile('Controller/Adminhtml/Obsolete/Save.php');
+
+        $this->checkFile('Controller/Adminhtml/Poster.php');
+        $this->checkFile('Controller/Adminhtml/Poster/Index.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/Delete.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/Edit.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/InlineEdit.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/MassDelete.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/NewAction.php');
+        $this->checkNoFile('Controller/Adminhtml/Poster/Save.php');
     }
 
     private function checkLayout()
     {
-        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_edit.xml');
-        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_index.xml');
-        $this->checkXml('view/adminhtml/layout/sample_module_customeraddress_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_columns_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_columns_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_columns_edit.xml');
 
-        $this->checkXml('view/adminhtml/layout/sample_module_banner_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_cartitem_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_cartitem_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_cartitem_edit.xml');
+
+        $this->checkXml('view/adminhtml/layout/sample_module_obsolete_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_obsolete_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_obsolete_edit.xml');
+
+        $this->checkXml('view/adminhtml/layout/sample_module_poster_index.xml');
+        $this->checkNoFile('view/adminhtml/layout/sample_module_poster_new.xml');
+        $this->checkNoFile('view/adminhtml/layout/sample_module_poster_edit.xml');
     }
 
     private function checkUi()
     {
-        $this->checkFile('Ui/Component/Listing/CustomerAddressActions.php');
-        $this->checkFile('Model/CustomerAddress/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_customeraddress_listing.xml');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_customeraddress_edit.xml');
-        $this->checkFile('Model/ResourceModel/CustomerAddress/Grid/Collection.php');
+        $this->checkFile('Ui/Component/Listing/ColumnsActions.php');
+        $this->checkFile('Model/Columns/DataProvider.php');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_columns_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_columns_edit.xml');
+        $this->checkFile('Model/ResourceModel/Columns/Grid/Collection.php');
 
-        $this->checkFile('Model/Banner/DataProvider.php');
-        $this->checkXml('view/adminhtml/ui_component/sample_module_banner_listing.xml');
-        $this->checkFile('Model/ResourceModel/Banner/Grid/Collection.php');
+        $this->checkFile('Ui/Component/Listing/CartItemActions.php');
+        $this->checkFile('Model/CartItem/DataProvider.php');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_cartitem_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_cartitem_edit.xml');
+        $this->checkFile('Model/ResourceModel/CartItem/Grid/Collection.php');
+
+        $this->checkFile('Ui/Component/Listing/ObsoleteActions.php');
+        $this->checkFile('Model/Obsolete/DataProvider.php');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_obsolete_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_obsolete_edit.xml');
+        $this->checkFile('Model/ResourceModel/Obsolete/Grid/Collection.php');
+
+        $this->checkNoFile('Ui/Component/Listing/PosterActions.php');
+        $this->checkFile('Model/Poster/DataProvider.php');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_poster_listing.xml');
+        $this->checkNoFile('view/adminhtml/ui_component/sample_module_poster_edit.xml');
+        $this->checkFile('Model/ResourceModel/Poster/Grid/Collection.php');
     }
 
     private function checkFile($file)
@@ -138,5 +216,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             false,
             false
         );
+    }
+
+    private function checkNoFile($file)
+    {
+        $this->assertFileNotExists($this->path . '/' . $file);
     }
 }
