@@ -1,4 +1,5 @@
 /nbproject
+/result
 /vendor/
 .DS_Store
 /generate
@@ -9,3 +10,4 @@ box.phar
 jeeves.phar
 .jeeves.yaml
 .phpunit.result.cache
+/.box_dump

@@ -42,10 +42,27 @@ jobs:
       - run: composer self-update --2
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
-      #- run: mv .jeeves.phpunit.yaml .jeeves.yaml
       - run: php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
       - run: php vendor/bin/phpcs --config-set show_warnings 0
       - name: Info
         run: composer info
       - name: Run Tests
         run: php vendor/bin/grumphp run -vvv
+      - name: Install Composer dependencies without dev
+        run: rm -fR vendor && composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+        if: matrix.php-versions == '7.4'
+      - name: Install Box
+        run: wget https://github.com/box-project/box/releases/download/3.13.0/box.phar
+        if: matrix.php-versions == '7.4'
+      - name: Compile phar
+        run: php box.phar compile
+        if: matrix.php-versions == '7.4'
+      - name: Compile Result
+        run: ls -lah
+        if: matrix.php-versions == '7.4'
+      - name: Compile Result Upload
+        if: matrix.php-versions == '7.4'
+        uses: actions/upload-artifact@v2
+        with:
+           name: jeeves_new.phar
+           path: jeeves.phar
