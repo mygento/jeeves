@@ -52,11 +52,15 @@ class Crud
                 }
 
                 $entities = $ent['entities'] ?? null;
-                $configVersion = 1;
+                $this->configVersion = 1;
 
                 if ($entities === null) {
                     $this->configVersion = 0;
                     $entities = $ent;
+                }
+
+                if (defined('PHP_VERSION_ID') && \PHP_VERSION_ID < 70400) {
+                    $this->configVersion = 0;
                 }
 
                 if (empty($entities)) {
