@@ -59,10 +59,6 @@ class Crud
                     $entities = $ent;
                 }
 
-                if (defined('PHP_VERSION_ID') && \PHP_VERSION_ID < 70400) {
-                    $this->configVersion = 0;
-                }
-
                 if (empty($entities)) {
                     continue;
                 }
@@ -130,6 +126,10 @@ class Crud
 
             if ($this->configVersion === 0) {
                 $config['cacheable'] = true;
+                $config['settings']['typehint'] = false;
+            }
+
+            if (\PHP_VERSION_ID < 70400) {
                 $config['settings']['typehint'] = false;
             }
 

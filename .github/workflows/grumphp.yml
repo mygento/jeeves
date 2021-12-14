@@ -45,5 +45,7 @@ jobs:
       #- run: mv .jeeves.phpunit.yaml .jeeves.yaml
       - run: php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
       - run: php vendor/bin/phpcs --config-set show_warnings 0
+      - name: Info
+        run: composer info
       - name: Run Tests
-        run: php vendor/bin/grumphp run
+        run: php vendor/bin/grumphp run -vvv
