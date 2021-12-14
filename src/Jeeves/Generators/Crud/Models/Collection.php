@@ -47,12 +47,10 @@ class Collection extends Common
         }
         $idField = $class->addProperty('_idFieldName', $key)
             ->setVisibility('protected');
+        $idField->addComment('@var string');
 
         if ($typehint) {
-            $idField->setType('string');
             $idField->setValue(new Literal($entity . 'Resource::TABLE_PRIMARY_KEY'));
-        } else {
-            $idField->addComment('@var string');
         }
 
         if (!$withStore) {

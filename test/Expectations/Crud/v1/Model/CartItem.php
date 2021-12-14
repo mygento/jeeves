@@ -180,8 +180,9 @@ class CartItem extends AbstractModel implements CartItemInterface
 
     /**
      * Set ID
+     * @param int $id
      */
-    public function setId(?int $id): self
+    public function setId($id): self
     {
         return $this->setData(self::CART_ID, $id);
     }

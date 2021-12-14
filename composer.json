@@ -16,11 +16,11 @@
         "sabre/xml": "^2.2",
         "nette/php-generator": "^3.0",
         "padraic/phar-updater": "^1.0",
-        "mygento/coding-standard": "~2.14.0-beta5",
-        "phpstan/phpstan": "1.2.0 as 0.12.23"
+        "mygento/coding-standard": "~2.14.0-beta5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "phpstan/phpstan": "1.2.0 as 0.12.23"
     },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }

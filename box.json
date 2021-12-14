@@ -1,22 +1,42 @@
 {
-  "chmod": "0755",
   "directories": ["src", "bin","vendor"],
-  "files": [],
+  "compression": "GZ",
   "finder": [
     {
       "name": "*.php",
+      "notName": "/LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock/",
       "exclude": [
         "tests",
         "spec",
         "doc",
         "test",
         "Tests",
-        "fixtures"
+        "fixtures",
+        "squizlabs",
+        "seld",
+        "phpstan",
+        "phpmd",
+        "php-parallel-lint",
+        "monolog",
+        "magento",
+        "webonyx",
+        "phpro"
       ],
       "in": "vendor"
     }
   ],
+  "blacklist": [
+    "squizlabs",
+    "seld",
+    "phpstan",
+    "phpmd",
+    "phpunit",
+    "php-parallel-lint",
+    "monolog",
+    "magento",
+    "webonyx",
+    "phpro"
+  ],
   "main": "bin/jeeves",
-  "output": "jeeves.phar",
-  "stub": true
+  "output": "jeeves.phar"
 }

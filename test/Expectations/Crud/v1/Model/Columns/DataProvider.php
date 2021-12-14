@@ -10,7 +10,8 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 
 class DataProvider extends ModifierPoolDataProvider
 {
-    protected Collection $collection;
+    /** @var Collection */
+    protected $collection;
 
     private DataPersistorInterface $dataPersistor;
 

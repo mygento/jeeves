@@ -20,10 +20,18 @@ class DataProvider extends Common
         $namespace->addUse('Magento\Framework\App\Request\DataPersistorInterface');
         $namespace->addUse($collectionFactory);
 
+        if ($typehint) {
+            $namespace->addUse('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
+            $namespace->addUse($collection);
+        }
+
         $class = $namespace->addClass($className);
         $class->setExtends('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
+
         $collect = $class->addProperty('collection')
             ->setVisibility('protected');
+        $collect->addComment('@var ' . $namespace->simplifyName($collection));
+
         $persist = $class->addProperty('dataPersistor')
             ->setVisibility('private');
         $loaded = $class->addProperty('loadedData')
@@ -32,13 +40,10 @@ class DataProvider extends Common
         $namespace->addUse('\Magento\Ui\DataProvider\Modifier\PoolInterface');
 
         if ($typehint) {
-            $namespace->addUse('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
-            $namespace->addUse($collection);
-            $collect->setType($collection);
+            //$collect->setType($collection);
             $persist->setType('\Magento\Framework\App\Request\DataPersistorInterface');
             $loaded->setType('array')->setNullable(true);
         } else {
-            $collect->addComment('@var ' . $collection);
             $persist->addComment('@var DataPersistorInterface');
             $loaded->addComment('@var array');
         }

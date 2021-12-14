@@ -236,6 +236,6 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 
     private function checkNoFile($file)
     {
-        $this->assertFileNotExists($this->path . '/' . $file);
+        $this->assertFileDoesNotExist($this->path . '/' . $file);
     }
 }

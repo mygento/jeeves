@@ -25,8 +25,9 @@ class Poster extends AbstractModel implements PosterInterface
 
     /**
      * Set id
+     * @param int $id
      */
-    public function setId(?int $id): self
+    public function setId($id): self
     {
         return $this->setData(self::ID, $id);
     }
