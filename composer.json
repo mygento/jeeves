@@ -10,15 +10,14 @@
     ],
     "description": "cli tool to generate M2 code",
     "require": {
-        "symfony/console": "^4.0",
-        "symfony/filesystem": "^4.0",
-        "symfony/yaml": "^4.0",
-        "sabre/xml": "^2.1",
+        "symfony/console": "^5.0",
+        "symfony/filesystem": "^5.0",
+        "symfony/yaml": "^5.0",
+        "sabre/xml": "^2.2",
         "nette/php-generator": "^3.0",
         "padraic/phar-updater": "^1.0",
-        "gitonomy/gitlib": "^1.0",
-        "mygento/coding-standard": "~2.14.0-beta1",
-        "phpstan/phpstan": "0.12.99 as 0.12.23"
+        "mygento/coding-standard": "~2.14.0-beta5",
+        "phpstan/phpstan": "1.2.0 as 0.12.23"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"
