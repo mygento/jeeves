@@ -125,6 +125,7 @@ class Ui extends Generator
                 $url . '/save',
                 $provider,
                 $entity->getEntityName(),
+                $entity->getPrimaryKey(),
                 $entity->getColumns(),
                 $entity->withStore()
             )

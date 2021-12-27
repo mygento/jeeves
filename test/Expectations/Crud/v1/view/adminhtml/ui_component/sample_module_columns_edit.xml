@@ -126,6 +126,9 @@
                 <label translate="true">Discount</label>
                 <visible>true</visible>
                 <dataScope>discount</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="cost" formElement="input">
@@ -195,7 +198,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Created At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>created_at</dataScope>
             </settings>
         </field>
@@ -208,7 +211,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Updated At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>updated_at</dataScope>
             </settings>
         </field>

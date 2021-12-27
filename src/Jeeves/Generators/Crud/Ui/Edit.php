@@ -6,14 +6,20 @@ use Mygento\Jeeves\Generators\Crud\Common;
 
 class Edit extends Common
 {
+    private const IGNORED_FIELDS = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function generateAdminUiForm(
         string $uiComponent,
         string $dataSource,
         string $submit,
         string $provider,
         string $entity,
+        string $primary,
         array $fields = self::DEFAULT_FIELDS,
-        $withStore = false
+        bool $withStore = false
     ): string {
         $service = $this->getService();
         if ($withStore) {
@@ -21,9 +27,21 @@ class Edit extends Common
                 'type' => 'store',
             ];
         }
+
         $fieldset = array_map(
-            function ($name, $param) use ($entity) {
+            function ($name, $param) use ($entity, $primary) {
                 $notNullable = isset($param['nullable']) && $param['nullable'] === false;
+
+                $visible = true;
+                if ($primary === $this->camelCaseToSnakeCase($name)) {
+                    $visible = false;
+                }
+
+                if (in_array($name, self::IGNORED_FIELDS)) {
+                    $visible = false;
+                    $notNullable = false;
+                }
+
                 switch ($param['type']) {
                     case 'text':
                     case 'mediumtext':
@@ -102,26 +120,12 @@ class Edit extends Common
                                 ],
                                 'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
-                            'visible' => 'id' === $this->camelCaseToSnakeCase($name) ? 'false' : 'true',
+                            'visible' => $visible ? 'true' : 'false',
                             'dataScope' => $this->camelCaseToSnakeCase($name),
                         ],
                     ],
                 ];
                 switch ($param['type']) {
-                    case 'text':
-                    case 'mediumtext':
-                    case 'longtext':
-                    case 'varchar':
-                        if ($notNullable) {
-                            $field['value']['settings']['validation']['rule'] = [
-                                'attributes' => [
-                                    'name' => 'required-entry',
-                                    'xsi:type' => 'boolean',
-                                ],
-                                'value' => 'true',
-                            ];
-                        }
-                        break;
                     case 'bool':
                     case 'boolean':
                         $field['value']['formElements'] = [
@@ -169,6 +173,15 @@ class Edit extends Common
                         ];
                         break;
                     default:
+                        if ($notNullable) {
+                            $field['value']['settings']['validation']['rule'] = [
+                                'attributes' => [
+                                    'name' => 'required-entry',
+                                    'xsi:type' => 'boolean',
+                                ],
+                                'value' => 'true',
+                            ];
+                        }
                         break;
                 }
                 if (isset($param['source'])) {
@@ -197,12 +210,12 @@ class Edit extends Common
             $fields
         );
 
-        return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider, $fieldset) {
+        return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider, $fieldset, $primary) {
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
             );
-            $writer->setIndentString('    ');
+            $writer->setIndentString(self::TAB);
             $writer->write([
                 [
                     'argument' => [
@@ -338,8 +351,8 @@ class Edit extends Common
                                 ],
                                 'value' => [
                                     'settings' => [
-                                        'requestFieldName' => 'id',
-                                        'primaryFieldName' => 'id',
+                                        'requestFieldName' => $primary,
+                                        'primaryFieldName' => $primary,
                                     ],
                                 ],
                             ],
