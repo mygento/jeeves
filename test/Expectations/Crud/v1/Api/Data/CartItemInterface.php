@@ -122,6 +122,7 @@ interface CartItemInterface
 
     /**
      * Set ID
+     * @param int $id
      */
-    public function setId(?int $id): self;
+    public function setId($id): self;
 }

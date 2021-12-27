@@ -16,7 +16,8 @@ use Psr\Log\LoggerInterface;
 
 class Collection extends AbstractCollection
 {
-    protected string $_idFieldName = PosterResource::TABLE_PRIMARY_KEY;
+    /** @var string */
+    protected $_idFieldName = PosterResource::TABLE_PRIMARY_KEY;
 
     private MetadataPool $metadataPool;
 

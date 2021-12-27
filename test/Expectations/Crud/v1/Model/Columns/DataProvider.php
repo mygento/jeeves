@@ -10,11 +10,12 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 
 class DataProvider extends ModifierPoolDataProvider
 {
-    protected Collection $collection;
+    /** @var Collection */
+    protected $collection;
 
     private DataPersistorInterface $dataPersistor;
 
-    private ?array $loadedData;
+    private array $loadedData = [];
 
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -34,7 +35,7 @@ class DataProvider extends ModifierPoolDataProvider
 
     public function getData(): array
     {
-        if (isset($this->loadedData)) {
+        if (!empty($this->loadedData)) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();

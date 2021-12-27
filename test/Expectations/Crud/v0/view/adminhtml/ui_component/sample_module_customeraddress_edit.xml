@@ -81,6 +81,9 @@
                 <label translate="true">Customer Group</label>
                 <visible>true</visible>
                 <dataScope>customer_group</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
             <formElements>
                 <select>
@@ -100,7 +103,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Created At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>created_at</dataScope>
             </settings>
         </field>
@@ -113,7 +116,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Updated At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>updated_at</dataScope>
             </settings>
         </field>
@@ -137,7 +140,7 @@
                 </item>
             </argument>
             <settings>
-                <dataType>text</dataType>
+                <dataType>price</dataType>
                 <label translate="true">Price</label>
                 <visible>true</visible>
                 <dataScope>price</dataScope>

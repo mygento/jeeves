@@ -8,7 +8,8 @@ use Mygento\SampleModule\Model\ResourceModel\CartItem as CartItemResource;
 
 class Collection extends AbstractCollection
 {
-    protected string $_idFieldName = CartItemResource::TABLE_PRIMARY_KEY;
+    /** @var string */
+    protected $_idFieldName = CartItemResource::TABLE_PRIMARY_KEY;
 
     /**
      * Define resource model

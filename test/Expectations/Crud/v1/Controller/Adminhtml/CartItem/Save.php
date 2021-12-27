@@ -60,8 +60,8 @@ class Save extends CartItem
                 }
             }
         }
-        if (empty($data['id'])) {
-            $data['id'] = null;
+        if (empty($data['cart_id'])) {
+            $data['cart_id'] = null;
         }
         $entity->setData($data);
 

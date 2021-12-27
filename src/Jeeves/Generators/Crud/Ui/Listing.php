@@ -17,6 +17,7 @@ class Listing extends Common
         string $massDelete,
         string $select,
         string $editor,
+        string $primaryKey,
         array $fields = self::DEFAULT_FIELDS,
         bool $readonly = false
     ): string {
@@ -131,8 +132,22 @@ class Listing extends Common
             $fields
         );
 
-        return $service->write('listing', function ($writer) use ($columns, $uiComponent, $dataSource, $column, $addNew, $acl, $actions, $inline, $massDelete, $select, $editor, $readonly) {
-            $writer->setIndentString('    ');
+        return $service->write('listing', function ($writer) use (
+            $columns,
+            $uiComponent,
+            $dataSource,
+            $column,
+            $addNew,
+            $acl,
+            $actions,
+            $inline,
+            $massDelete,
+            $select,
+            $editor,
+            $readonly,
+            $primaryKey
+        ) {
+            $writer->setIndentString(self::TAB);
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
                 'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
@@ -146,7 +161,7 @@ class Listing extends Common
                     ],
                     'value' => [
                         'settings' => [
-                            'indexField' => 'id',
+                            'indexField' => $primaryKey,
                         ],
                     ],
                 ],
@@ -175,14 +190,14 @@ class Listing extends Common
             ];
 
             $gridColumns = array_merge($readonly ? [] : [
-                'settings' => $this->getListingSettings($inline, $select, $editor),
+                'settings' => $this->getListingSettings($inline, $select, $editor, $primaryKey),
                 'selectionsColumn' => [
                     'attributes' => [
                         'name' => 'ids',
                     ],
                     'value' => [
                         'settings' => [
-                            'indexField' => 'id',
+                            'indexField' => $primaryKey,
                         ],
                     ],
                 ],
@@ -235,7 +250,7 @@ class Listing extends Common
                                             'name' => 'indexField',
                                             'xsi:type' => 'string',
                                         ],
-                                        'value' => 'id',
+                                        'value' => $primaryKey,
                                     ],
                                 ],
                                 'updateUrl' => [
@@ -253,7 +268,7 @@ class Listing extends Common
                                 'value' => [
                                     'settings' => [
                                         'requestFieldName' => 'id',
-                                        'primaryFieldName' => 'id',
+                                        'primaryFieldName' => $primaryKey,
                                     ],
                                 ],
                             ],
@@ -271,8 +286,12 @@ class Listing extends Common
         });
     }
 
-    private function getListingSettings($inline, $select, $editor)
-    {
+    private function getListingSettings(
+        string $inline,
+        string $select,
+        string $editor,
+        string $primaryKey
+    ) {
         return [
             'editorConfig' => [
                 [
@@ -306,7 +325,7 @@ class Listing extends Common
                         'name' => 'indexField',
                         'xsi:type' => 'string',
                     ],
-                    'value' => 'id',
+                    'value' => $primaryKey,
                 ],
                 [
                     'name' => 'param',

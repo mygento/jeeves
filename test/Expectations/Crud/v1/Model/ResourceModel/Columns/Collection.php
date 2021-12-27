@@ -8,7 +8,8 @@ use Mygento\SampleModule\Model\ResourceModel\Columns as ColumnsResource;
 
 class Collection extends AbstractCollection
 {
-    protected string $_idFieldName = ColumnsResource::TABLE_PRIMARY_KEY;
+    /** @var string */
+    protected $_idFieldName = ColumnsResource::TABLE_PRIMARY_KEY;
 
     /**
      * Define resource model

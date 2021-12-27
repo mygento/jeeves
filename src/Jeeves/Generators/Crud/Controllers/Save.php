@@ -12,6 +12,7 @@ class Save extends Common
         string $shortName,
         string $repository,
         string $entityClass,
+        string $primaryKey,
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
@@ -92,8 +93,8 @@ class Save extends Common
                 . self::TAB . self::TAB . '}' . PHP_EOL
                 . self::TAB . '}' . PHP_EOL
                 . '}' . PHP_EOL
-                . 'if (empty($data[\'id\'])) {' . PHP_EOL
-                . self::TAB . '$data[\'id\'] = null;' . PHP_EOL
+                . 'if (empty($data[\'' . $primaryKey . '\'])) {' . PHP_EOL
+                . self::TAB . '$data[\'' . $primaryKey . '\'] = null;' . PHP_EOL
                 . '}' . PHP_EOL
                 . '$entity->setData($data);' . PHP_EOL
                 . 'try {' . PHP_EOL

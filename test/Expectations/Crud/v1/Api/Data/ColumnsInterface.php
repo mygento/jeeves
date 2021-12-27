@@ -23,8 +23,9 @@ interface ColumnsInterface
 
     /**
      * Set id
+     * @param int $id
      */
-    public function setId(?int $id): self;
+    public function setId($id): self;
 
     /**
      * Get is active

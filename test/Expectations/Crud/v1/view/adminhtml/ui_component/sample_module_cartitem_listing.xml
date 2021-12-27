@@ -21,7 +21,7 @@
     <dataSource name="sample_module_cartitem_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
-                <param name="indexField" xsi:type="string">id</param>
+                <param name="indexField" xsi:type="string">cart_id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
@@ -29,7 +29,7 @@
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sample_module_cartitem_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>id</primaryFieldName>
+                <primaryFieldName>cart_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -84,7 +84,7 @@
                     <item name="saveUrl" xsi:type="url" path="sample_module/cartitem/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
-                <param name="indexField" xsi:type="string">id</param>
+                <param name="indexField" xsi:type="string">cart_id</param>
                 <param name="enabled" xsi:type="boolean">true</param>
                 <param name="selectProvider" xsi:type="string">sample_module_cartitem_listing.sample_module_cartitem_listing.sample_module_cartitem_columns.ids</param>
             </editorConfig>
@@ -101,7 +101,7 @@
         </settings>
         <selectionsColumn name="ids">
             <settings>
-                <indexField>id</indexField>
+                <indexField>cart_id</indexField>
             </settings>
         </selectionsColumn>
         <column name="cart_id">
@@ -211,7 +211,7 @@
         </column>
         <actionsColumn name="actions" class="Mygento\SampleModule\Ui\Component\Listing\CartItemActions">
             <settings>
-                <indexField>id</indexField>
+                <indexField>cart_id</indexField>
             </settings>
         </actionsColumn>
     </columns>

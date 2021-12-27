@@ -126,6 +126,9 @@
                 <label translate="true">Discount</label>
                 <visible>true</visible>
                 <dataScope>discount</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="cost" formElement="input">
@@ -148,7 +151,7 @@
                 </item>
             </argument>
             <settings>
-                <dataType>text</dataType>
+                <dataType>price</dataType>
                 <label translate="true">Price</label>
                 <visible>true</visible>
                 <dataScope>price</dataScope>
@@ -170,7 +173,7 @@
                 </validation>
             </settings>
         </field>
-        <field name="description" formElement="input">
+        <field name="description" formElement="textarea">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">columns</item>
@@ -181,6 +184,9 @@
                 <label translate="true">Description</label>
                 <visible>true</visible>
                 <dataScope>description</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="created_at" formElement="input">
@@ -192,7 +198,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Created At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>created_at</dataScope>
             </settings>
         </field>
@@ -205,7 +211,7 @@
             <settings>
                 <dataType>date</dataType>
                 <label translate="true">Updated At</label>
-                <visible>true</visible>
+                <visible>false</visible>
                 <dataScope>updated_at</dataScope>
             </settings>
         </field>

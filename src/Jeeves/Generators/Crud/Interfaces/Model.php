@@ -61,6 +61,15 @@ class Model extends Common
                 $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
                     ->addComment('@return $this');
             }
+
+            if ($this->snakeCaseToCamelCase($name) == 'id') {
+                $param->setNullable(false);
+                $param->setType(null);
+
+                if ($typehint) {
+                    $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
+                }
+            }
         }
 
         if ($primary !== self::DEFAULT_KEY && count($pk) === 1) {
@@ -82,11 +91,12 @@ class Model extends Common
                 ->setVisibility('public');
 
             $setIdParam = $setId->addParameter(self::DEFAULT_KEY);
+            $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
 
             if ($typehint) {
                 $setId->setReturnType('self');
-                $setIdParam->setType($this->convertType($item['type']));
-                $setIdParam->setNullable($item['nullable']);
+                // $setIdParam->setType($this->convertType($item['type']));
+                // $setIdParam->setNullable($item['nullable']);
             }
         }
 
