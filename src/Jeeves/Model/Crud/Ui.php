@@ -102,6 +102,7 @@ class Ui extends Generator
                 $url . '/massDelete',
                 $common . $parent . '_columns.ids',
                 $common . $parent . '_columns_editor',
+                $entity->getPrimaryKey(),
                 $entity->getColumns(),
                 $entity->isReadOnly()
             )
