@@ -25,6 +25,12 @@ class Edit extends Common
             function ($name, $param) use ($entity) {
                 $notNullable = isset($param['nullable']) && $param['nullable'] === false;
                 switch ($param['type']) {
+                    case 'text':
+                    case 'mediumtext':
+                    case 'longtext':
+                        $dataType = 'text';
+                        $formElement = 'textarea';
+                        break;
                     case 'store':
                         $dataType = 'int';
                         $formElement = 'multiselect';
@@ -98,6 +104,9 @@ class Edit extends Common
                     ],
                 ];
                 switch ($param['type']) {
+                    case 'text':
+                    case 'mediumtext':
+                    case 'longtext':
                     case 'varchar':
                         if ($notNullable) {
                             $field['value']['settings']['validation']['rule'] = [
