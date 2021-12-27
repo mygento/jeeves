@@ -108,10 +108,8 @@
             <settings>
                 <filter>textRange</filter>
                 <dataType>text</dataType>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Cart Id</label>
+                <sorting>asc</sorting>
             </settings>
         </column>
         <column name="is_active" component="Magento_Ui/js/grid/columns/select">
@@ -173,9 +171,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <label translate="true">Created At</label>
             </settings>
         </column>
@@ -183,9 +178,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <label translate="true">Updated At</label>
             </settings>
         </column>

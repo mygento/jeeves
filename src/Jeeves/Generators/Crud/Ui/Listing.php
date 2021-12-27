@@ -6,6 +6,11 @@ use Mygento\Jeeves\Generators\Crud\Common;
 
 class Listing extends Common
 {
+    private const READONLY_FIELDS = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function generateAdminUiIndex(
         string $uiComponent,
         string $dataSource,
@@ -23,7 +28,7 @@ class Listing extends Common
     ): string {
         $service = $this->getService();
         $columns = array_map(
-            function ($name, $param) {
+            function ($name, $param) use ($primaryKey) {
                 $notNullable = isset($param['nullable']) && $param['nullable'] === false;
                 $options = null;
                 switch ($param['type']) {
@@ -80,7 +85,7 @@ class Listing extends Common
                         ],
                     ],
                 ];
-                if ('id' === $name) {
+                if ($primaryKey === $name) {
                     unset($col['value']['settings']['editor']);
                     $col['value']['settings']['sorting'] = 'asc';
                 }
@@ -124,6 +129,10 @@ class Listing extends Common
                             'class' => $param['source'],
                         ],
                     ];
+                }
+
+                if (in_array($name, self::READONLY_FIELDS)) {
+                    unset($col['value']['settings']['editor']);
                 }
 
                 return $col;

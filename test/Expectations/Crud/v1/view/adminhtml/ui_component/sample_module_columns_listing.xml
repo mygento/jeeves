@@ -201,9 +201,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <label translate="true">Created At</label>
             </settings>
         </column>
@@ -211,9 +208,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <label translate="true">Updated At</label>
             </settings>
         </column>
