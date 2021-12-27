@@ -103,6 +103,7 @@ class Controllers extends Generator
                 $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
+                $entity->getPrimaryKey(),
                 $entity->getNamespace(),
                 $entity->hasTypeHint()
             )
