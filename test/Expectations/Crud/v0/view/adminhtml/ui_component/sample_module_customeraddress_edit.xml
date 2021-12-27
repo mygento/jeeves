@@ -137,7 +137,7 @@
                 </item>
             </argument>
             <settings>
-                <dataType>text</dataType>
+                <dataType>price</dataType>
                 <label translate="true">Price</label>
                 <visible>true</visible>
                 <dataScope>price</dataScope>

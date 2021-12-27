@@ -53,6 +53,10 @@ class Edit extends Common
                         $dataType = 'boolean';
                         $formElement = 'checkbox';
                         break;
+                    case 'price':
+                        $dataType = 'price';
+                        $formElement = 'input';
+                        break;
                     default:
                         $dataType = 'text';
                         $formElement = 'input';
