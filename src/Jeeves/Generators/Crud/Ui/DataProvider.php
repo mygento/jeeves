@@ -35,14 +35,14 @@ class DataProvider extends Common
         $persist = $class->addProperty('dataPersistor')
             ->setVisibility('private');
         $loaded = $class->addProperty('loadedData')
-            ->setVisibility('private');
+            ->setVisibility('private')->setValue([]);
 
         $namespace->addUse('\Magento\Ui\DataProvider\Modifier\PoolInterface');
 
         if ($typehint) {
             //$collect->setType($collection);
             $persist->setType('\Magento\Framework\App\Request\DataPersistorInterface');
-            $loaded->setType('array')->setNullable(true);
+            $loaded->setType('array');
         } else {
             $persist->addComment('@var DataPersistorInterface');
             $loaded->addComment('@var array');
@@ -77,7 +77,7 @@ class DataProvider extends Common
 
         $getData = $class->addMethod('getData')->setVisibility('public');
 
-        $getData->setBody('if (isset($this->loadedData)) {' . PHP_EOL
+        $getData->setBody('if (!empty($this->loadedData)) {' . PHP_EOL
             . '    return $this->loadedData;' . PHP_EOL
             . '}' . PHP_EOL
             . '$items = $this->collection->getItems();' . PHP_EOL

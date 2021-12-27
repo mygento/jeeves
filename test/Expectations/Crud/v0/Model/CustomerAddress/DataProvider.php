@@ -15,7 +15,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $dataPersistor;
 
     /** @var array */
-    private $loadedData;
+    private $loadedData = [];
 
     /**
      * @param \Mygento\SampleModule\Model\ResourceModel\CustomerAddress\CollectionFactory $collectionFactory
@@ -48,7 +48,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     public function getData()
     {
-        if (isset($this->loadedData)) {
+        if (!empty($this->loadedData)) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
