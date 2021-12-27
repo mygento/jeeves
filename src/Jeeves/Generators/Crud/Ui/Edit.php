@@ -351,7 +351,7 @@ class Edit extends Common
                                 ],
                                 'value' => [
                                     'settings' => [
-                                        'requestFieldName' => $primary,
+                                        'requestFieldName' => 'id',
                                         'primaryFieldName' => $primary,
                                     ],
                                 ],

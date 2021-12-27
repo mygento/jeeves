@@ -52,7 +52,7 @@ class Ui extends Generator
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
                 $generator->getActions(
-                    $entity->getAdminRoute(),
+                    $entity->getModule()->getRouteName(),
                     $entity->getEntityLowercase(),
                     $entity->getEntityName() . 'Actions',
                     $entity->getNamespace(),

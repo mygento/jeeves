@@ -6,7 +6,7 @@ use Mygento\Base\Ui\Component\Listing\Actions;
 
 class CartItemActions extends Actions
 {
-    protected string $route = 'samplium';
+    protected string $route = 'sample_module';
 
     protected string $controller = 'cartitem';
 }

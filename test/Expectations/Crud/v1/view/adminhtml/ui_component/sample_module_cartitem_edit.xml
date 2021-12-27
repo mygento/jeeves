@@ -32,7 +32,7 @@
         </settings>
         <dataProvider name="sample_module_cartitem_edit_data_source" class="Mygento\SampleModule\Model\CartItem\DataProvider">
             <settings>
-                <requestFieldName>cart_id</requestFieldName>
+                <requestFieldName>id</requestFieldName>
                 <primaryFieldName>cart_id</primaryFieldName>
             </settings>
         </dataProvider>
