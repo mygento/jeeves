@@ -7,7 +7,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
 use Mygento\SampleModule\Api\Data\PosterInterface;
 use Mygento\SampleModule\Api\Data\PosterInterfaceFactory;
 use Mygento\SampleModule\Api\Data\PosterSearchResultsInterface;
@@ -28,8 +27,6 @@ class PosterRepository implements PosterRepositoryInterface
 
     private PosterSearchResultsInterfaceFactory $searchResultsFactory;
 
-    private StoreManagerInterface $storeManager;
-
     private CollectionProcessorInterface $collectionProcessor;
 
     public function __construct(
@@ -37,7 +34,6 @@ class PosterRepository implements PosterRepositoryInterface
         CollectionFactory $collectionFactory,
         PosterInterfaceFactory $entityFactory,
         PosterSearchResultsInterfaceFactory $searchResultsFactory,
-        StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->resource = $resource;
@@ -45,7 +41,6 @@ class PosterRepository implements PosterRepositoryInterface
         $this->entityFactory = $entityFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -69,10 +64,6 @@ class PosterRepository implements PosterRepositoryInterface
      */
     public function save(PosterInterface $entity): PosterInterface
     {
-        if (empty($entity->getStoreId())) {
-            $entity->setStoreId($this->storeManager->getStore()->getId());
-        }
-
         try {
             $this->resource->save($entity);
         } catch (\Exception $exception) {

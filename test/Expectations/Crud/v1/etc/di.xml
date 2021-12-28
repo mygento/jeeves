@@ -22,13 +22,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\PosterFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
-        <arguments>
-            <argument name="customFilters" xsi:type="array">
-                <item name="store_id" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterStoreFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Mygento\SampleModule\Model\SearchCriteria\ColumnsCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -59,7 +52,7 @@
     <virtualType name="Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="filters" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterFilterProcessor</item>
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
             </argument>
@@ -83,40 +76,6 @@
     <type name="Mygento\SampleModule\Model\PosterRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\EntityManager\MetadataPool">
-        <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="string">mygento_sample_module_poster</item>
-                    <item name="identifierField" xsi:type="string">id</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
-        <arguments>
-            <argument name="extensionActions" xsi:type="array">
-                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="array">
-                    <item name="read" xsi:type="array">
-                        <item name="storeReader" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\ReadHandler</item>
-                    </item>
-                    <item name="create" xsi:type="array">
-                        <item name="storeCreator" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\SaveHandler</item>
-                    </item>
-                    <item name="update" xsi:type="array">
-                        <item name="storeUpdater" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Relation\Store\SaveHandler</item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\EntityManager\HydratorPool">
-        <arguments>
-            <argument name="hydrators" xsi:type="array">
-                <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">

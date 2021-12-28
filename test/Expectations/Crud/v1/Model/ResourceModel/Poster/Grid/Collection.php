@@ -8,7 +8,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Mygento\SampleModule\Model\ResourceModel\Poster\Collection as ParentCollection;
@@ -18,11 +17,7 @@ class Collection extends ParentCollection implements SearchResultInterface
 {
     protected AggregationInterface $aggregations;
 
-    /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     */
     public function __construct(
-        MetadataPool $metadataPool,
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
@@ -36,7 +31,6 @@ class Collection extends ParentCollection implements SearchResultInterface
         AbstractDb $resource = null
     ) {
         parent::__construct(
-            $metadataPool,
             $entityFactory,
             $logger,
             $fetchStrategy,

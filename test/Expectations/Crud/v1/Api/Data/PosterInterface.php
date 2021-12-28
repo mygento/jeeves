@@ -13,7 +13,6 @@ interface PosterInterface extends IdentityInterface
     public const FAMILY = 'family';
     public const IS_ACTIVE = 'is_active';
     public const PRODUCT_ID = 'product_id';
-    public const STORE_ID = 'store_id';
 
     /**
      * Get id
@@ -75,14 +74,4 @@ interface PosterInterface extends IdentityInterface
      * Set product id
      */
     public function setProductId(?int $productId): self;
-
-    /**
-     * Get store id
-     */
-    public function getStoreId(): ?array;
-
-    /**
-     * Set store id
-     */
-    public function setStoreId(?array $storeId): self;
 }

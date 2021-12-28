@@ -114,6 +114,26 @@ Mygento:
                 comment: 'Banner ID'
               name:
                 type: varchar
+      Card:
+        api: true
+        cacheable: true
+        cache_tag: samp_card
+        per_store: true
+        columns:
+          id:
+            type: int
+            pk: true
+            unsigned: true
+            comment: 'Banner ID'
+          title:
+            type: varchar
+          code:
+            type: varchar
+          category_id:
+            type: int
+            nullable: false
+          is_active:
+            type: boolean
       Poster:
         settings:
           version: 2.4
@@ -121,7 +141,6 @@ Mygento:
         cacheable: true
         readonly: true
         cache_tag: samp_poster
-        per_store: true
         columns:
           id:
             type: int

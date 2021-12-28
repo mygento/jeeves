@@ -113,22 +113,6 @@ class Poster extends AbstractModel implements PosterInterface
     }
 
     /**
-     * Get store id
-     */
-    public function getStoreId(): ?array
-    {
-        return $this->getData(self::STORE_ID);
-    }
-
-    /**
-     * Set store id
-     */
-    public function setStoreId(?array $storeId): self
-    {
-        return $this->setData(self::STORE_ID, $storeId);
-    }
-
-    /**
      * @return void
      */
     protected function _construct()
