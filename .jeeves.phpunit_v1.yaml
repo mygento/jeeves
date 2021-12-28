@@ -124,7 +124,7 @@ Mygento:
             type: int
             pk: true
             unsigned: true
-            comment: 'Banner ID'
+            comment: 'Card ID'
           title:
             type: varchar
           code:

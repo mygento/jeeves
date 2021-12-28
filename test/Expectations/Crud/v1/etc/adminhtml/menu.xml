@@ -5,6 +5,7 @@
         <add id="Mygento_SampleModule::columns" title="Columns" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/columns" resource="Mygento_SampleModule::columns"/>
         <add id="Mygento_SampleModule::cartitem" title="Cart Item" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/cartitem" resource="Mygento_SampleModule::cartitem"/>
         <add id="Mygento_SampleModule::obsolete" title="Obsolete" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/obsolete" resource="Mygento_SampleModule::obsolete"/>
+        <add id="Mygento_SampleModule::card" title="Card" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/card" resource="Mygento_SampleModule::card"/>
         <add id="Mygento_SampleModule::poster" title="Poster" translate="title" module="Mygento_SampleModule" sortOrder="90" parent="Mygento_SampleModule::root" action="samplium/poster" resource="Mygento_SampleModule::poster"/>
     </menu>
 </config>

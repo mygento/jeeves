@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="mygento_samplemodule_api_data_posterinterface_save_before">
-        <observer instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" name="legacy_mygento_samplemodule_poster_before_save"/>
+    <event name="mygento_samplemodule_api_data_cardinterface_save_before">
+        <observer instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" name="legacy_mygento_samplemodule_card_before_save"/>
     </event>
-    <event name="mygento_samplemodule_api_data_posterinterface_save_after">
-        <observer instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" name="legacy_mygento_samplemodule_poster_after_save"/>
+    <event name="mygento_samplemodule_api_data_cardinterface_save_after">
+        <observer instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" name="legacy_mygento_samplemodule_card_after_save"/>
     </event>
-    <event name="mygento_samplemodule_api_data_posterinterface_delete_before">
-        <observer instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" name="legacy_mygento_samplemodule_poster_before_delete"/>
+    <event name="mygento_samplemodule_api_data_cardinterface_delete_before">
+        <observer instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" name="legacy_mygento_samplemodule_card_before_delete"/>
     </event>
-    <event name="mygento_samplemodule_api_data_posterinterface_delete_after">
-        <observer instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" name="legacy_mygento_samplemodule_poster_after_delete"/>
+    <event name="mygento_samplemodule_api_data_cardinterface_delete_after">
+        <observer instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" name="legacy_mygento_samplemodule_card_after_delete"/>
     </event>
 </config>

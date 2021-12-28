@@ -7,6 +7,7 @@
                     <resource id="Mygento_SampleModule::columns" title="Sample Module Columns" translate="title"/>
                     <resource id="Mygento_SampleModule::cartitem" title="Sample Module Cart Item" translate="title"/>
                     <resource id="Mygento_SampleModule::obsolete" title="Sample Module Obsolete" translate="title"/>
+                    <resource id="Mygento_SampleModule::card" title="Sample Module Card" translate="title"/>
                     <resource id="Mygento_SampleModule::poster" title="Sample Module Poster" translate="title"/>
                 </resource>
                 <resource id="Magento_Backend::stores">

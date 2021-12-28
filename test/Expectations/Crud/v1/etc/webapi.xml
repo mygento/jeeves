@@ -1,5 +1,35 @@
 <?xml version="1.0"?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/SampleModuleCard/:entityId" method="GET">
+        <service class="Mygento\SampleModule\Api\CardRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Mygento_SampleModule::card"/>
+        </resources>
+    </route>
+    <route url="/V1/SampleModuleCard/search" method="GET">
+        <service class="Mygento\SampleModule\Api\CardRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Mygento_SampleModule::card"/>
+        </resources>
+    </route>
+    <route url="/V1/SampleModuleCard" method="POST">
+        <service class="Mygento\SampleModule\Api\CardRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Mygento_SampleModule::card"/>
+        </resources>
+    </route>
+    <route url="/V1/SampleModuleCard/:id" method="PUT">
+        <service class="Mygento\SampleModule\Api\CardRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Mygento_SampleModule::card"/>
+        </resources>
+    </route>
+    <route url="/V1/SampleModuleCard/:entityId" method="DELETE">
+        <service class="Mygento\SampleModule\Api\CardRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Mygento_SampleModule::card"/>
+        </resources>
+    </route>
     <route url="/V1/SampleModulePoster/:entityId" method="GET">
         <service class="Mygento\SampleModule\Api\PosterRepositoryInterface" method="getById"/>
         <resources>

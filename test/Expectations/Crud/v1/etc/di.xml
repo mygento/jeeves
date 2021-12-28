@@ -3,14 +3,17 @@
     <preference for="Mygento\SampleModule\Api\ColumnsRepositoryInterface" type="Mygento\SampleModule\Model\ColumnsRepository"/>
     <preference for="Mygento\SampleModule\Api\CartItemRepositoryInterface" type="Mygento\SampleModule\Model\CartItemRepository"/>
     <preference for="Mygento\SampleModule\Api\ObsoleteRepositoryInterface" type="Mygento\SampleModule\Model\ObsoleteRepository"/>
+    <preference for="Mygento\SampleModule\Api\CardRepositoryInterface" type="Mygento\SampleModule\Model\CardRepository"/>
     <preference for="Mygento\SampleModule\Api\PosterRepositoryInterface" type="Mygento\SampleModule\Model\PosterRepository"/>
     <preference for="Mygento\SampleModule\Api\Data\ColumnsInterface" type="Mygento\SampleModule\Model\Columns"/>
     <preference for="Mygento\SampleModule\Api\Data\CartItemInterface" type="Mygento\SampleModule\Model\CartItem"/>
     <preference for="Mygento\SampleModule\Api\Data\ObsoleteInterface" type="Mygento\SampleModule\Model\Obsolete"/>
+    <preference for="Mygento\SampleModule\Api\Data\CardInterface" type="Mygento\SampleModule\Model\Card"/>
     <preference for="Mygento\SampleModule\Api\Data\PosterInterface" type="Mygento\SampleModule\Model\Poster"/>
     <preference for="Mygento\SampleModule\Api\Data\ColumnsSearchResultsInterface" type="Mygento\SampleModule\Model\ColumnsSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\CartItemSearchResultsInterface" type="Mygento\SampleModule\Model\CartItemSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface" type="Mygento\SampleModule\Model\ObsoleteSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\CardSearchResultsInterface" type="Mygento\SampleModule\Model\CardSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\PosterSearchResultsInterface" type="Mygento\SampleModule\Model\PosterSearchResults"/>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
@@ -18,10 +21,18 @@
                 <item name="Mygento\SampleModule\Api\Data\ColumnsInterface" xsi:type="string">Mygento\SampleModule\Api\ColumnsRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\CartItemInterface" xsi:type="string">Mygento\SampleModule\Api\CartItemRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\ObsoleteInterface" xsi:type="string">Mygento\SampleModule\Api\ObsoleteRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="string">Mygento\SampleModule\Api\CardRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="string">Mygento\SampleModule\Api\PosterRepositoryInterface</item>
             </argument>
         </arguments>
     </type>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\CardFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CardStoreFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Mygento\SampleModule\Model\SearchCriteria\ColumnsCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -44,6 +55,15 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\CardCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CardFilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
             </argument>
@@ -73,9 +93,48 @@
             <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\ObsoleteCollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Mygento\SampleModule\Model\CardRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CardCollectionProcessor</argument>
+        </arguments>
+    </type>
     <type name="Mygento\SampleModule\Model\PosterRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">mygento_sample_module_card</item>
+                    <item name="identifierField" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Card\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Card\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Card\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
@@ -84,6 +143,7 @@
                 <item name="sample_module_columns_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Columns\Grid\Collection</item>
                 <item name="sample_module_cartitem_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\CartItem\Grid\Collection</item>
                 <item name="sample_module_obsolete_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Obsolete\Grid\Collection</item>
+                <item name="sample_module_card_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Card\Grid\Collection</item>
                 <item name="sample_module_poster_listing_data_source" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Poster\Grid\Collection</item>
             </argument>
         </arguments>
@@ -110,6 +170,14 @@
             <argument name="eventPrefix" xsi:type="string">sample_module_obsolete_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">obsolete_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Obsolete</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\ResourceModel\Card\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mygento_sample_module_card</argument>
+            <argument name="eventPrefix" xsi:type="string">sample_module_card_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">card_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Mygento\SampleModule\Model\ResourceModel\Card</argument>
         </arguments>
     </type>
     <type name="Mygento\SampleModule\Model\ResourceModel\Poster\Grid\Collection">

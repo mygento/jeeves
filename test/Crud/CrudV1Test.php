@@ -56,6 +56,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             $this->checkFile('Api/PosterRepositoryInterface.php');
             $this->checkFile('Api/Data/PosterInterface.php');
             $this->checkFile('Api/Data/PosterSearchResultsInterface.php');
+
+            $this->checkFile('Api/CardRepositoryInterface.php');
+            $this->checkFile('Api/Data/CardInterface.php');
+            $this->checkFile('Api/Data/CardSearchResultsInterface.php');
         }
 
         $this->checkFile('Api/ObsoleteRepositoryInterface.php');
@@ -77,6 +81,13 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             $this->checkFile('Model/Poster.php');
             $this->checkFile('Model/ResourceModel/Poster.php');
             $this->checkFile('Model/ResourceModel/Poster/Collection.php');
+
+            $this->checkFile('Model/Card.php');
+            $this->checkFile('Model/ResourceModel/Card.php');
+            $this->checkFile('Model/ResourceModel/Card/Collection.php');
+
+            $this->checkFile('Model/ResourceModel/Card/Relation/Store/ReadHandler.php');
+            $this->checkFile('Model/ResourceModel/Card/Relation/Store/SaveHandler.php');
         }
 
         $this->checkFile('Model/Obsolete.php');
@@ -91,6 +102,9 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             $this->checkFile('Model/CartItemRepository.php');
             $this->checkFile('Model/ObsoleteRepository.php');
             $this->checkFile('Model/PosterRepository.php');
+            $this->checkFile('Model/CardRepository.php');
+
+            $this->checkFile('Model/SearchCriteria/CardStoreFilter.php');
         }
     }
 
@@ -101,6 +115,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             $this->checkFile('Model/CartItemSearchResults.php');
             $this->checkFile('Model/ObsoleteSearchResults.php');
             $this->checkFile('Model/PosterSearchResults.php');
+            $this->checkFile('Model/CardSearchResults.php');
         }
     }
 
@@ -136,6 +151,15 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
             $this->checkFile('Controller/Adminhtml/CartItem/NewAction.php');
             $this->checkFile('Controller/Adminhtml/CartItem/Save.php');
 
+            $this->checkFile('Controller/Adminhtml/Card.php');
+            $this->checkFile('Controller/Adminhtml/Card/Index.php');
+            $this->checkFile('Controller/Adminhtml/Card/Delete.php');
+            $this->checkFile('Controller/Adminhtml/Card/Edit.php');
+            $this->checkFile('Controller/Adminhtml/Card/InlineEdit.php');
+            $this->checkFile('Controller/Adminhtml/Card/MassDelete.php');
+            $this->checkFile('Controller/Adminhtml/Card/NewAction.php');
+            $this->checkFile('Controller/Adminhtml/Card/Save.php');
+
             $this->checkFile('Controller/Adminhtml/Poster.php');
             $this->checkFile('Controller/Adminhtml/Poster/Index.php');
             $this->checkNoFile('Controller/Adminhtml/Poster/Delete.php');
@@ -166,6 +190,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkXml('view/adminhtml/layout/sample_module_cartitem_new.xml');
         $this->checkXml('view/adminhtml/layout/sample_module_cartitem_edit.xml');
 
+        $this->checkXml('view/adminhtml/layout/sample_module_card_index.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_card_new.xml');
+        $this->checkXml('view/adminhtml/layout/sample_module_card_edit.xml');
+
         $this->checkXml('view/adminhtml/layout/sample_module_obsolete_index.xml');
         $this->checkXml('view/adminhtml/layout/sample_module_obsolete_new.xml');
         $this->checkXml('view/adminhtml/layout/sample_module_obsolete_edit.xml');
@@ -192,6 +220,14 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         }
         $this->checkXml('view/adminhtml/ui_component/sample_module_cartitem_listing.xml');
         $this->checkXml('view/adminhtml/ui_component/sample_module_cartitem_edit.xml');
+
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->checkFile('Ui/Component/Listing/CardActions.php');
+            $this->checkFile('Model/Card/DataProvider.php');
+            $this->checkFile('Model/ResourceModel/Card/Grid/Collection.php');
+        }
+        $this->checkXml('view/adminhtml/ui_component/sample_module_card_listing.xml');
+        $this->checkXml('view/adminhtml/ui_component/sample_module_card_edit.xml');
 
         if (\PHP_VERSION_ID >= 70400) {
             $this->checkNoFile('Ui/Component/Listing/PosterActions.php');
