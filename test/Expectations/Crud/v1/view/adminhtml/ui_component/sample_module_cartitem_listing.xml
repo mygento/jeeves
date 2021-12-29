@@ -152,6 +152,9 @@
                 <dataType>select</dataType>
                 <editor>
                     <editorType>select</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">Customer Group</label>
                 <options class="Magento\Customer\Model\Customer\Source\Group"/>
@@ -163,6 +166,9 @@
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">Description</label>
             </settings>

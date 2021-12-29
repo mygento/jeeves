@@ -150,6 +150,9 @@
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">Discount</label>
             </settings>
@@ -193,6 +196,9 @@
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">Description</label>
             </settings>

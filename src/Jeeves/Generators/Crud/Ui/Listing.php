@@ -90,17 +90,6 @@ class Listing extends Common
                     $col['value']['settings']['sorting'] = 'asc';
                 }
                 switch ($param['type']) {
-                    case 'varchar':
-                        if ($notNullable) {
-                            $col['value']['settings']['editor']['validation']['rule'] = [
-                                'attributes' => [
-                                    'name' => 'required-entry',
-                                    'xsi:type' => 'boolean',
-                                ],
-                                'value' => 'true',
-                            ];
-                        }
-                        break;
                     case 'bool':
                     case 'boolean':
                         $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
@@ -121,6 +110,15 @@ class Listing extends Common
                         break;
                     default:
                         break;
+                }
+                if ($notNullable) {
+                    $col['value']['settings']['editor']['validation']['rule'] = [
+                        'attributes' => [
+                            'name' => 'required-entry',
+                            'xsi:type' => 'boolean',
+                        ],
+                        'value' => 'true',
+                    ];
                 }
                 if (isset($param['source'])) {
                     $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
