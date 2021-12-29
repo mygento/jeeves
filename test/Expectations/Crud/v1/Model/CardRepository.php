@@ -70,7 +70,7 @@ class CardRepository implements CardRepositoryInterface
     public function save(CardInterface $entity): CardInterface
     {
         if (empty($entity->getStoreId())) {
-            $entity->setStoreId($this->storeManager->getStore()->getId());
+            $entity->setStoreId([$this->storeManager->getStore()->getId()]);
         }
 
         try {

@@ -147,7 +147,7 @@ class Repository extends Common
 
         $save->setBody(
             ($withStore ? 'if (empty($entity->getStoreId())) {' . PHP_EOL
-            . self::TAB . '$entity->setStoreId($this->storeManager->getStore()->getId());' . PHP_EOL
+            . self::TAB . '$entity->setStoreId([$this->storeManager->getStore()->getId()]);' . PHP_EOL
             . '}' . PHP_EOL : '')
             . 'try {' . PHP_EOL
             . self::TAB . '$this->resource->save($entity);' . PHP_EOL

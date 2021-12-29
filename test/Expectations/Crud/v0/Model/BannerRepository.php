@@ -81,7 +81,7 @@ class BannerRepository implements \Mygento\SampleModule\Api\BannerRepositoryInte
     public function save(\Mygento\SampleModule\Api\Data\BannerInterface $entity)
     {
         if (empty($entity->getStoreId())) {
-            $entity->setStoreId($this->storeManager->getStore()->getId());
+            $entity->setStoreId([$this->storeManager->getStore()->getId()]);
         }
 
         try {
