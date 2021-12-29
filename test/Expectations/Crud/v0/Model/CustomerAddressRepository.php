@@ -59,7 +59,7 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('Sample Module Customer Address with id "%1" does not exist.', $entityId)
+                __('A Sample Module Customer Address with id "%1" does not exist', $entityId)
             );
         }
 
@@ -77,7 +77,8 @@ class CustomerAddressRepository implements \Mygento\SampleModule\Api\CustomerAdd
             $this->resource->save($entity);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
-                __($exception->getMessage())
+                __('Could not save the Sample Module Customer Address'),
+                $exception
             );
         }
 

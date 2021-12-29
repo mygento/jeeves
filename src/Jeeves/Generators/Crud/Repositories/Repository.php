@@ -126,7 +126,7 @@ class Repository extends Common
             . '$this->resource->load($entity, $entityId);' . PHP_EOL
             . 'if (!$entity->getId()) {' . PHP_EOL
             . '    throw new NoSuchEntityException(' . PHP_EOL
-            . '        __(\'' . $print . ' with id "%1" does not exist.\', $entityId)' . PHP_EOL
+            . '        __(\'A ' . $print . ' with id "%1" does not exist\', $entityId)' . PHP_EOL
             . '    );' . PHP_EOL
             . '}' . PHP_EOL
             . 'return $entity;');
@@ -145,7 +145,7 @@ class Repository extends Common
                 ->addComment('@return ' . $entityInterface);
         }
 
-        $save->setBody(
+        $save->addBody(
             ($withStore ? 'if (empty($entity->getStoreId())) {' . PHP_EOL
             . self::TAB . '$entity->setStoreId([$this->storeManager->getStore()->getId()]);' . PHP_EOL
             . '}' . PHP_EOL : '')
@@ -153,7 +153,8 @@ class Repository extends Common
             . self::TAB . '$this->resource->save($entity);' . PHP_EOL
             . '} catch (\Exception $exception) {' . PHP_EOL
             . self::TAB . 'throw new CouldNotSaveException(' . PHP_EOL
-            . self::TAB . self::TAB . '__($exception->getMessage())' . PHP_EOL
+            . self::TAB . self::TAB . '__(\'Could not save the ' . $print . '\'),' . PHP_EOL
+            . self::TAB . self::TAB . '$exception' . PHP_EOL
             . self::TAB . ');' . PHP_EOL
             . '}' . PHP_EOL
             . 'return $entity;'

@@ -52,7 +52,7 @@ class CartItemRepository implements CartItemRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('Sample Module Cart Item with id "%1" does not exist.', $entityId)
+                __('A Sample Module Cart Item with id "%1" does not exist', $entityId)
             );
         }
 
@@ -68,7 +68,8 @@ class CartItemRepository implements CartItemRepositoryInterface
             $this->resource->save($entity);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
-                __($exception->getMessage())
+                __('Could not save the Sample Module Cart Item'),
+                $exception
             );
         }
 

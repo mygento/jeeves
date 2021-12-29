@@ -52,7 +52,7 @@ class PosterRepository implements PosterRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('Sample Module Poster with id "%1" does not exist.', $entityId)
+                __('A Sample Module Poster with id "%1" does not exist', $entityId)
             );
         }
 
@@ -68,7 +68,8 @@ class PosterRepository implements PosterRepositoryInterface
             $this->resource->save($entity);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
-                __($exception->getMessage())
+                __('Could not save the Sample Module Poster'),
+                $exception
             );
         }
 

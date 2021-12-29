@@ -57,7 +57,7 @@ class CardRepository implements CardRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('Sample Module Card with id "%1" does not exist.', $entityId)
+                __('A Sample Module Card with id "%1" does not exist', $entityId)
             );
         }
 
@@ -77,7 +77,8 @@ class CardRepository implements CardRepositoryInterface
             $this->resource->save($entity);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
-                __($exception->getMessage())
+                __('Could not save the Sample Module Card'),
+                $exception
             );
         }
 
