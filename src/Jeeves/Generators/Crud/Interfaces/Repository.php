@@ -25,29 +25,28 @@ class Repository extends Common
         $save = $interface->addMethod('save');
         $save->addComment('Save ' . $print)
             ->setVisibility('public')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
+            ->addComment('@return ' . $entInterface);
         $save->addParameter('entity')->setTypeHint($entInterface);
 
         if ($typehint) {
             $save->setReturnType($entInterface);
         } else {
-            $save
-                ->addComment('@param ' . $entInterface . ' $entity')
-                ->addComment('@return ' . $entInterface);
+            $save->addComment('@param ' . $entInterface . ' $entity');
         }
 
         $get = $interface->addMethod('getById');
         $get->addComment('Retrieve ' . $print)
+            ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->setVisibility('public');
+            ->addComment('@return ' . $entInterface);
         $getParam = $get->addParameter('entityId');
 
         if ($typehint) {
             $get->setReturnType($entInterface);
             $getParam->setType('int');
         } else {
-            $get->addComment('@param int $entityId')
-                ->addComment('@return ' . $entInterface);
+            $get->addComment('@param int $entityId');
         }
 
         $getList = $interface->addMethod('getList');
@@ -56,42 +55,46 @@ class Repository extends Common
         $getList
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addParameter('searchCriteria')
+            ->addComment('@return ' . $resultInterface);
+        $getList->addParameter('searchCriteria')
             ->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
+
         if ($typehint) {
             $getList->setReturnType($resultInterface);
         } else {
             $getList
-                ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria')
-                ->addComment('@return ' . $resultInterface);
+                ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria');
         }
 
         $del = $interface->addMethod('delete');
         $del
             ->addComment('Delete ' . $print)
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
             ->setVisibility('public')
-            ->addParameter('entity')->setTypeHint($entInterface);
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
+            ->addComment('@return bool true on success');
+        $del->addParameter('entity')
+            ->setTypeHint($entInterface);
+
         if ($typehint) {
             $del->setReturnType('bool');
         } else {
-            $del->addComment('@param ' . $entInterface . ' $entity')
-                ->addComment('@return bool true on success');
+            $del->addComment('@param ' . $entInterface . ' $entity');
         }
 
         $delId = $interface->addMethod('deleteById');
         $delId->addComment('Delete ' . $print)
+            ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->setVisibility('public');
+            ->addComment('@return bool true on success');
+
         $delParam = $delId->addParameter('entityId');
 
         if ($typehint) {
             $delId->setReturnType('bool');
             $delParam->setType('int');
         } else {
-            $delId->addComment('@param int $entityId')
-                ->addComment('@return bool true on success');
+            $delId->addComment('@param int $entityId');
         }
 
         return $namespace;
