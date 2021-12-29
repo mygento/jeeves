@@ -10,10 +10,12 @@ class Read extends Common
     public function genReadHandler(
         string $entity,
         string $resourceClass,
+        string $interface,
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity . '\\Relation\\Store');
+        $namespace->addUse($interface);
 
         $class = $namespace->addClass('ReadHandler');
         $class->addImplement('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
@@ -38,7 +40,7 @@ class Read extends Common
             ->setVisibility('public')
             ->setBody('if ($entity->getId()) {' . PHP_EOL
             . self::TAB . '$stores = $this->resource->lookupStoreIds((int) $entity->getId());' . PHP_EOL
-            . self::TAB . '$entity->setData(\'store_id\', $stores);' . PHP_EOL
+            . self::TAB . '$entity->setData(' . $namespace->simplifyType($interface) . '::STORE_ID, $stores);' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'return $entity;');
         $execute->addParameter('entity');

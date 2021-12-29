@@ -15,7 +15,7 @@ class Save extends Common
         bool $typehint = false
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity . '\\Relation\\Store');
-        $namespace->addUse($rootNamespace . '\Api\Data\\' . $interface);
+        $namespace->addUse($interface);
         $namespace->addUse($rootNamespace . '\Model\ResourceModel\\' . $entity);
         $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
 
@@ -47,7 +47,7 @@ class Save extends Common
             ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
             ->setVisibility('public')
             ->setBody(
-                '$entityMetadata = $this->metadataPool->getMetadata(' . $interface . '::class);' . PHP_EOL
+                '$entityMetadata = $this->metadataPool->getMetadata(' . $namespace->simplifyType($interface) . '::class);' . PHP_EOL
                 . '$linkField = $entityMetadata->getLinkField();' . PHP_EOL
                 . '$connection = $entityMetadata->getEntityConnection();' . PHP_EOL
                 . '$oldStores = $this->resource->lookupStoreIds((int) $entity->getId());' . PHP_EOL

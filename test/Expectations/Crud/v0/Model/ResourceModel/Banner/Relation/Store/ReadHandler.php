@@ -2,6 +2,8 @@
 
 namespace Mygento\SampleModule\Model\ResourceModel\Banner\Relation\Store;
 
+use Mygento\SampleModule\Api\Data\BannerInterface;
+
 class ReadHandler implements \Magento\Framework\EntityManager\Operation\ExtensionInterface
 {
     /** @var \Mygento\SampleModule\Model\ResourceModel\Banner */
@@ -20,7 +22,7 @@ class ReadHandler implements \Magento\Framework\EntityManager\Operation\Extensio
     {
         if ($entity->getId()) {
             $stores = $this->resource->lookupStoreIds((int) $entity->getId());
-            $entity->setData('store_id', $stores);
+            $entity->setData(BannerInterface::STORE_ID, $stores);
         }
 
         return $entity;

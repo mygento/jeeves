@@ -55,6 +55,7 @@ class Ui extends Generator
                     $entity->getModule()->getRouteName(),
                     $entity->getEntityLowercase(),
                     $entity->getEntityName() . 'Actions',
+                    $entity->getPrimaryKey(),
                     $entity->getNamespace(),
                     $entity->hasTypeHint()
                 )

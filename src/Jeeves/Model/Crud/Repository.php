@@ -78,6 +78,7 @@ class Repository extends Generator
             $generator->genReadHandler(
                 $entity->getEntityName(),
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName(),
+                $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
                 $entity->hasTypeHint()
             )
@@ -95,7 +96,7 @@ class Repository extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->genSaveHandler(
                 $entity->getEntityName(),
-                $entity->getEntityName() . 'Interface',
+                $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName(),
                 $entity->getNamespace(),
                 $entity->hasTypeHint()
@@ -113,6 +114,7 @@ class Repository extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
             $generator->getRepoFilter(
                 $fileName,
+                $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
                 $entity->hasTypeHint()
             )

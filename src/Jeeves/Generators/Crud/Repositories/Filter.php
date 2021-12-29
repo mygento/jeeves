@@ -7,9 +7,14 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class Filter extends Common
 {
-    public function getRepoFilter(string $className, string $rootNamespace, bool $typehint = false): PhpNamespace
-    {
+    public function getRepoFilter(
+        string $className,
+        string $interface,
+        string $rootNamespace,
+        bool $typehint = false
+    ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model\SearchCriteria');
+        $namespace->addUse($interface);
         $namespace->addUse('Magento\Framework\Api\Filter');
         $namespace->addUse('Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface');
         $namespace->addUse('Magento\Framework\Data\Collection\AbstractDb');
@@ -26,7 +31,7 @@ class Filter extends Common
 
         $apply->setBody(
             '$collection->addFilter(' . PHP_EOL
-            . self::TAB . '\'store_id\',' . PHP_EOL
+            . self::TAB . $namespace->simplifyType($interface) . '::STORE_ID,' . PHP_EOL
             . self::TAB . '[\'in\' => $filter->getValue()]' . PHP_EOL
             . ');' . PHP_EOL . PHP_EOL
             . 'return true;'

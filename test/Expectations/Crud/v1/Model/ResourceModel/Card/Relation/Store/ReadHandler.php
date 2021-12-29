@@ -3,6 +3,7 @@
 namespace Mygento\SampleModule\Model\ResourceModel\Card\Relation\Store;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Mygento\SampleModule\Api\Data\CardInterface;
 use Mygento\SampleModule\Model\ResourceModel\Card;
 
 class ReadHandler implements ExtensionInterface
@@ -22,7 +23,7 @@ class ReadHandler implements ExtensionInterface
     {
         if ($entity->getId()) {
             $stores = $this->resource->lookupStoreIds((int) $entity->getId());
-            $entity->setData('store_id', $stores);
+            $entity->setData(CardInterface::STORE_ID, $stores);
         }
 
         return $entity;
