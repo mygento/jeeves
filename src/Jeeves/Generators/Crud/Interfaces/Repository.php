@@ -13,10 +13,15 @@ class Repository extends Common
         string $className,
         string $print,
         string $rootNamespace,
+        bool $hasApi = false,
         bool $typehint = false
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Api');
         $interface = $namespace->addInterface($className);
+
+        if ($hasApi) {
+            $interface->addComment('@api');
+        }
 
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\Api\SearchCriteriaInterface');
@@ -25,8 +30,12 @@ class Repository extends Common
         $save = $interface->addMethod('save');
         $save->addComment('Save ' . $print)
             ->setVisibility('public')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addComment('@return ' . $entInterface);
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+
+        if ($hasApi || !$typehint) {
+            $save->addComment('@return ' . $entInterface);
+        }
+
         $save->addParameter('entity')->setTypeHint($entInterface);
 
         if ($typehint) {
@@ -38,9 +47,13 @@ class Repository extends Common
         $get = $interface->addMethod('getById');
         $get->addComment('Retrieve ' . $print)
             ->setVisibility('public')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addComment('@return ' . $entInterface);
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+
         $getParam = $get->addParameter('entityId');
+
+        if ($hasApi || !$typehint) {
+            $get->addComment('@return ' . $entInterface);
+        }
 
         if ($typehint) {
             $get->setReturnType($entInterface);
@@ -54,8 +67,12 @@ class Repository extends Common
 
         $getList
             ->setVisibility('public')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addComment('@return ' . $resultInterface);
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+
+        if ($hasApi || !$typehint) {
+            $getList->addComment('@return ' . $resultInterface);
+        }
+
         $getList->addParameter('searchCriteria')
             ->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
 
@@ -70,8 +87,12 @@ class Repository extends Common
         $del
             ->addComment('Delete ' . $print)
             ->setVisibility('public')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addComment('@return bool true on success');
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+
+        if ($hasApi || !$typehint) {
+            $del->addComment('@return bool true on success');
+        }
+
         $del->addParameter('entity')
             ->setTypeHint($entInterface);
 
@@ -85,8 +106,11 @@ class Repository extends Common
         $delId->addComment('Delete ' . $print)
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
-            ->addComment('@throws \Magento\Framework\Exception\LocalizedException')
-            ->addComment('@return bool true on success');
+            ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
+
+        if ($hasApi || !$typehint) {
+            $delId->addComment('@return bool true on success');
+        }
 
         $delParam = $delId->addParameter('entityId');
 

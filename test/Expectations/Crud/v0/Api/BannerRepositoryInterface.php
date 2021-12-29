@@ -2,6 +2,9 @@
 
 namespace Mygento\SampleModule\Api;
 
+/**
+ * @api
+ */
 interface BannerRepositoryInterface
 {
     /**

@@ -34,6 +34,7 @@ class Interfaces extends Generator
                 $entity->getNamespace(),
                 $entity->getCacheTag(),
                 $entity->getColumns(),
+                $entity->hasApi(),
                 $entity->withStore(),
                 $entity->hasTypehint()
             )
@@ -55,6 +56,7 @@ class Interfaces extends Generator
                 $fileName,
                 $this->getConverter()->getEntityPrintName($entity->getName()),
                 $entity->getNamespace(),
+                $entity->hasApi(),
                 $entity->hasTypehint()
             )
         );

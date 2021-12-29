@@ -4,6 +4,9 @@ namespace Mygento\SampleModule\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * @api
+ */
 interface PosterRepositoryInterface
 {
     /**

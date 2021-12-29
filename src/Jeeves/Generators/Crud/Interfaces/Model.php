@@ -13,11 +13,16 @@ class Model extends Common
         string $rootNamespace,
         string $cacheTag = null,
         array $fields = self::DEFAULT_FIELDS,
+        bool $hasApi = false,
         bool $withStore = false,
         bool $typehint = false
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
+
+        if ($hasApi) {
+            $interface->addComment('@api');
+        }
 
         if ($cacheTag !== null) {
             $namespace->addUse('\Magento\Framework\DataObject\IdentityInterface');
@@ -57,9 +62,12 @@ class Model extends Common
                 $param->setType($this->convertType($value['type']));
                 $set->setReturnType('self');
             } else {
+                $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
+            }
+
+            if ($hasApi || !$typehint) {
                 $get->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'));
-                $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
-                    ->addComment('@return $this');
+                $set->addComment('@return $this');
             }
 
             if ($this->snakeCaseToCamelCase($name) == 'id') {
@@ -80,6 +88,10 @@ class Model extends Common
                 ->addComment('Get ID')
                 ->setVisibility('public');
 
+            if ($hasApi || !$typehint) {
+                $getId->addComment('@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : ''));
+            }
+
             if ($typehint) {
                 $getId->setReturnType($this->convertType($item['type']));
                 $getId->setReturnNullable($item['nullable']);
@@ -92,6 +104,10 @@ class Model extends Common
 
             $setIdParam = $setId->addParameter(self::DEFAULT_KEY);
             $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
+
+            if ($hasApi || !$typehint) {
+                $setId->addComment('@return $this');
+            }
 
             if ($typehint) {
                 $setId->setReturnType('self');

@@ -4,6 +4,9 @@ namespace Mygento\SampleModule\Api\Data;
 
 use Magento\Framework\DataObject\IdentityInterface;
 
+/**
+ * @api
+ */
 interface BannerInterface extends IdentityInterface
 {
     public const CACHE_TAG = 'samp_ban';
