@@ -11,6 +11,7 @@ class Actions extends Common
         string $route,
         string $controller,
         string $className,
+        string $primaryKey,
         string $rootNamespace,
         bool $typehint = false
     ): PhpNamespace {
@@ -29,6 +30,17 @@ class Actions extends Common
         } else {
             $router->addComment('@var string');
             $cont->addComment('@var string');
+        }
+
+        if ($primaryKey !== 'id') {
+            $key = $class->addProperty('key', $primaryKey)
+                ->setVisibility('protected');
+
+            if ($typehint) {
+                $key->setType('string');
+            } else {
+                $key->addComment('@var string');
+            }
         }
 
         return $namespace;
