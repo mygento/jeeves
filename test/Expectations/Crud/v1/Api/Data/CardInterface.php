@@ -7,7 +7,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 interface CardInterface extends IdentityInterface
 {
     public const CACHE_TAG = 'samp_card';
-    public const ID = 'id';
+    public const CARD_ID = 'card_id';
     public const TITLE = 'title';
     public const CODE = 'code';
     public const CATEGORY_ID = 'category_id';
@@ -15,15 +15,14 @@ interface CardInterface extends IdentityInterface
     public const STORE_ID = 'store_id';
 
     /**
-     * Get id
+     * Get card id
      */
-    public function getId(): ?int;
+    public function getCardId(): ?int;
 
     /**
-     * Set id
-     * @param int $id
+     * Set card id
      */
-    public function setId($id): self;
+    public function setCardId(?int $cardId): self;
 
     /**
      * Get title
@@ -74,4 +73,15 @@ interface CardInterface extends IdentityInterface
      * Set store id
      */
     public function setStoreId(?array $storeId): self;
+
+    /**
+     * Get ID
+     */
+    public function getId(): ?int;
+
+    /**
+     * Set ID
+     * @param int $id
+     */
+    public function setId($id): self;
 }

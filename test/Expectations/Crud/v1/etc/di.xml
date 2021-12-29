@@ -108,7 +108,7 @@
             <argument name="metadata" xsi:type="array">
                 <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">mygento_sample_module_card</item>
-                    <item name="identifierField" xsi:type="string">id</item>
+                    <item name="identifierField" xsi:type="string">card_id</item>
                 </item>
             </argument>
         </arguments>

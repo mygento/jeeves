@@ -120,9 +120,10 @@ Mygento:
         cache_tag: samp_card
         per_store: true
         columns:
-          id:
+          card_id:
             type: int
             pk: true
+            identity: true
             unsigned: true
             comment: 'Card ID'
           title:

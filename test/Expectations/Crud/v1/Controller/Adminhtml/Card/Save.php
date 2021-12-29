@@ -60,8 +60,8 @@ class Save extends Card
                 }
             }
         }
-        if (empty($data['id'])) {
-            $data['id'] = null;
+        if (empty($data['card_id'])) {
+            $data['card_id'] = null;
         }
         $entity->setData($data);
 

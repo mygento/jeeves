@@ -33,7 +33,7 @@
         <dataProvider name="sample_module_card_edit_data_source" class="Mygento\SampleModule\Model\Card\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>id</primaryFieldName>
+                <primaryFieldName>card_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -41,7 +41,7 @@
         <settings>
             <label></label>
         </settings>
-        <field name="id" formElement="input">
+        <field name="card_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">card</item>
@@ -49,9 +49,9 @@
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">Id</label>
+                <label translate="true">Card Id</label>
                 <visible>false</visible>
-                <dataScope>id</dataScope>
+                <dataScope>card_id</dataScope>
             </settings>
         </field>
         <field name="title" formElement="input">

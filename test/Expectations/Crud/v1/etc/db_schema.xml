@@ -45,13 +45,13 @@
         </constraint>
     </table>
     <table name="mygento_sample_module_card" resource="default" engine="innodb" comment="Card Table">
-        <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Card ID"/>
+        <column xsi:type="int" name="card_id" nullable="false" identity="true" unsigned="true" comment="Card ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
         <column xsi:type="int" name="category_id" nullable="false" identity="false" unsigned="false" comment="Category_id"/>
         <column xsi:type="boolean" name="is_active" nullable="false" comment="Is_active"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="id"/>
+            <column name="card_id"/>
         </constraint>
     </table>
     <table name="mygento_sample_module_card_store" resource="default" engine="innodb" comment="Card Table With Store">
@@ -65,7 +65,7 @@
             <column name="store_id"/>
         </index>
         <constraint xsi:type="foreign" referenceId="FK_CARD_STORE_ID" table="mygento_sample_module_card_store" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="FK_CARD_ENT_ID" table="mygento_sample_module_card_store" column="entity_id" referenceTable="mygento_sample_module_card" referenceColumn="id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_CARD_ENT_ID" table="mygento_sample_module_card_store" column="entity_id" referenceTable="mygento_sample_module_card" referenceColumn="card_id" onDelete="CASCADE"/>
         <index indexType="btree" referenceId="IX_ENT_ID">
             <column name="entity_id"/>
         </index>

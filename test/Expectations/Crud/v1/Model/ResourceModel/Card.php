@@ -12,7 +12,7 @@ use Mygento\SampleModule\Api\Data\CardInterface;
 class Card extends AbstractDb
 {
     public const TABLE_NAME = 'mygento_sample_module_card';
-    public const TABLE_PRIMARY_KEY = 'id';
+    public const TABLE_PRIMARY_KEY = 'card_id';
 
     private EntityManager $entityManager;
 

@@ -16,20 +16,19 @@ class Card extends AbstractModel implements CardInterface
     }
 
     /**
-     * Get id
+     * Get card id
      */
-    public function getId(): ?int
+    public function getCardId(): ?int
     {
-        return $this->getData(self::ID);
+        return $this->getData(self::CARD_ID);
     }
 
     /**
-     * Set id
-     * @param int $id
+     * Set card id
      */
-    public function setId($id): self
+    public function setCardId(?int $cardId): self
     {
-        return $this->setData(self::ID, $id);
+        return $this->setData(self::CARD_ID, $cardId);
     }
 
     /**
@@ -110,6 +109,23 @@ class Card extends AbstractModel implements CardInterface
     public function setStoreId(?array $storeId): self
     {
         return $this->setData(self::STORE_ID, $storeId);
+    }
+
+    /**
+     * Get ID
+     */
+    public function getId(): ?int
+    {
+        return $this->getData(self::CARD_ID);
+    }
+
+    /**
+     * Set ID
+     * @param int $id
+     */
+    public function setId($id): self
+    {
+        return $this->setData(self::CARD_ID, $id);
     }
 
     /**
