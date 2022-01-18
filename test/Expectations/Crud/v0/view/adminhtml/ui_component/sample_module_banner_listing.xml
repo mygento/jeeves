@@ -108,5 +108,12 @@
                 <label translate="true">Product Id</label>
             </settings>
         </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
+        </column>
     </columns>
 </listing>

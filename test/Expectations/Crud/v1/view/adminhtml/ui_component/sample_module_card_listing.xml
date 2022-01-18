@@ -156,6 +156,13 @@
                 <options class="Magento\Config\Model\Config\Source\Yesno"/>
             </settings>
         </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
+        </column>
         <actionsColumn name="actions" class="Mygento\SampleModule\Ui\Component\Listing\CardActions">
             <settings>
                 <indexField>card_id</indexField>

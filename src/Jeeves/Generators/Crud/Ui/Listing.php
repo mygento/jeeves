@@ -24,9 +24,15 @@ class Listing extends Common
         string $editor,
         string $primaryKey,
         array $fields = self::DEFAULT_FIELDS,
-        bool $readonly = false
+        bool $readonly = false,
+        bool $withStore = false
     ): string {
         $service = $this->getService();
+        if ($withStore) {
+            $fields['store_id'] = [
+                'type' => 'store',
+            ];
+        }
         $columns = array_map(
             function ($name, $param) use ($primaryKey) {
                 $notNullable = isset($param['nullable']) && $param['nullable'] === false;
@@ -65,11 +71,11 @@ class Listing extends Common
                     $dataType = 'select';
                 }
                 $col = [
-                    'name' => 'column',
-                    'attributes' => [
+                    self::N => 'column',
+                    self::A => [
                         'name' => $name,
                     ],
-                    'value' => [
+                    self::V => [
                         'settings' => [
                             'filter' => $filter,
                             'dataType' => $dataType,
@@ -77,60 +83,69 @@ class Listing extends Common
                                 'editorType' => $dataType,
                             ],
                             'label' => [
-                                'attributes' => [
+                                self::A => [
                                     'translate' => 'true',
                                 ],
-                                'value' => $this->snakeCaseToUpperCamelCaseWithSpace($name),
+                                self::V => $this->snakeCaseToUpperCamelCaseWithSpace($name),
                             ],
                         ],
                     ],
                 ];
                 if ($primaryKey === $name) {
-                    unset($col['value']['settings']['editor']);
-                    $col['value']['settings']['sorting'] = 'asc';
+                    unset($col[self::V]['settings']['editor']);
+                    $col[self::V]['settings']['sorting'] = 'asc';
                 }
                 switch ($param['type']) {
                     case 'bool':
                     case 'boolean':
-                        $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
-                        $col['value']['settings']['options'] = [
-                            'attributes' => [
+                        $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
+                        $col[self::V]['settings']['options'] = [
+                            self::A => [
                                 'class' => $options,
                             ],
                         ];
                         break;
                     case 'price':
-                        $col['attributes']['class'] = 'Magento\Catalog\Ui\Component\Listing\Columns\Price';
+                        $col[self::A]['class'] = 'Magento\Catalog\Ui\Component\Listing\Columns\Price';
                         break;
                     case 'date':
                     case 'datetime':
                     case 'timestamp':
-                        $col['attributes']['class'] = 'Magento\Ui\Component\Listing\Columns\Date';
-                        $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/date';
+                        $col[self::A]['class'] = 'Magento\Ui\Component\Listing\Columns\Date';
+                        $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/date';
+                        break;
+                    case 'store':
+                        $col[self::A]['class'] = 'Magento\Store\Ui\Component\Listing\Column\Store';
+                        $col[self::V]['settings']['label'][self::V] = 'Store View';
+                        $col[self::V]['settings']['bodyTmpl'] = 'ui/grid/cells/html';
+                        $col[self::V]['settings']['sortable'] = 'false';
+                        unset($col[self::V]['settings']['filter']);
+                        unset($col[self::V]['settings']['dataType']);
+                        unset($col[self::V]['settings']['editor']);
                         break;
                     default:
                         break;
                 }
                 if ($notNullable) {
-                    $col['value']['settings']['editor']['validation']['rule'] = [
-                        'attributes' => [
+                    $col[self::V]['settings']['editor']['validation']['rule'] = [
+                        self::A => [
                             'name' => 'required-entry',
                             'xsi:type' => 'boolean',
                         ],
-                        'value' => 'true',
+                        self::V => 'true',
                     ];
                 }
                 if (isset($param['source'])) {
-                    $col['attributes']['component'] = 'Magento_Ui/js/grid/columns/select';
-                    $col['value']['settings']['options'] = [
-                        'attributes' => [
+                    $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
+                    $col[self::V]['settings']['options'] = [
+                        self::A => [
                             'class' => $param['source'],
                         ],
                     ];
                 }
 
                 if (in_array($name, self::READONLY_FIELDS)) {
-                    unset($col['value']['settings']['editor']);
+                    unset($col[self::V]['settings']['editor']);
                 }
 
                 return $col;
@@ -162,11 +177,11 @@ class Listing extends Common
 
             $actionColumn = $readonly ? [] : [
                 'actionsColumn' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'actions',
                         'class' => $actions,
                     ],
-                    'value' => [
+                    self::V => [
                         'settings' => [
                             'indexField' => $primaryKey,
                         ],
@@ -176,21 +191,21 @@ class Listing extends Common
 
             $addNewButton = $readonly ? [] : [
                 'button' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'add',
                     ],
-                    'value' => [
+                    self::V => [
                         'url' => [
-                            'attributes' => [
+                            self::A => [
                                 'path' => '*/*/new',
                             ],
                         ],
                         'class' => 'primary',
                         'label' => [
-                            'attributes' => [
+                            self::A => [
                                 'translate' => 'true',
                             ],
-                            'value' => $addNew,
+                            self::V => $addNew,
                         ],
                     ],
                 ],
@@ -199,10 +214,10 @@ class Listing extends Common
             $gridColumns = array_merge($readonly ? [] : [
                 'settings' => $this->getListingSettings($inline, $select, $editor, $primaryKey),
                 'selectionsColumn' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'ids',
                     ],
-                    'value' => [
+                    self::V => [
                         'settings' => [
                             'indexField' => $primaryKey,
                         ],
@@ -213,24 +228,24 @@ class Listing extends Common
             $writer->write([
                 [
                     'argument' => [
-                        'attributes' => [
+                        self::A => [
                             'name' => 'data',
                             'xsi:type' => 'array',
                         ],
-                        'value' => [
+                        self::V => [
                             [
                                 'item' => [
-                                    'attributes' => [
+                                    self::A => [
                                         'name' => 'js_config',
                                         'xsi:type' => 'array',
                                     ],
-                                    'value' => [
+                                    self::V => [
                                         'item' => [
-                                            'attributes' => [
+                                            self::A => [
                                                 'name' => 'provider',
                                                 'xsi:type' => 'string',
                                             ],
-                                            'value' => $uiComponent . '.' . $dataSource,
+                                            self::V => $uiComponent . '.' . $dataSource,
                                         ],
                                     ],
                                 ],
@@ -245,34 +260,34 @@ class Listing extends Common
                         ],
                     ],
                     'dataSource' => [
-                        'attributes' => [
+                        self::A => [
                             'name' => $dataSource,
                             'component' => 'Magento_Ui/js/grid/provider',
                         ],
-                        'value' => [
+                        self::V => [
                             'settings' => [
                                 'storageConfig' => [
                                     'param' => [
-                                        'attributes' => [
+                                        self::A => [
                                             'name' => 'indexField',
                                             'xsi:type' => 'string',
                                         ],
-                                        'value' => $primaryKey,
+                                        self::V => $primaryKey,
                                     ],
                                 ],
                                 'updateUrl' => [
-                                    'attributes' => [
+                                    self::A => [
                                         'path' => 'mui/index/render',
                                     ],
                                 ],
                             ],
                             'aclResource' => $acl,
                             'dataProvider' => [
-                                'attributes' => [
+                                self::A => [
                                     'class' => 'Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider',
                                     'name' => $dataSource,
                                 ],
-                                'value' => [
+                                self::V => [
                                     'settings' => [
                                         'requestFieldName' => 'id',
                                         'primaryFieldName' => $primaryKey,
@@ -283,10 +298,10 @@ class Listing extends Common
                     ],
                     'listingToolbar' => $this->getToolbar($massDelete, $editor, $readonly),
                     'columns' => [
-                        'attributes' => [
+                        self::A => [
                             'name' => $column,
                         ],
-                        'value' => $gridColumns,
+                        self::V => $gridColumns,
                     ],
                 ],
             ]);
@@ -303,14 +318,14 @@ class Listing extends Common
             'editorConfig' => [
                 [
                     'name' => 'param',
-                    'attributes' => [
+                    self::A => [
                         'name' => 'clientConfig',
                         'xsi:type' => 'array',
                     ],
-                    'value' => [
+                    self::V => [
                         [
                             'name' => 'item',
-                            'attributes' => [
+                            self::A => [
                                 'name' => 'saveUrl',
                                 'xsi:type' => 'url',
                                 'path' => $inline,
@@ -318,84 +333,84 @@ class Listing extends Common
                         ],
                         [
                             'name' => 'item',
-                            'attributes' => [
+                            self::A => [
                                 'name' => 'validateBeforeSave',
                                 'xsi:type' => 'boolean',
                             ],
-                            'value' => 'false',
+                            self::V => 'false',
                         ],
                     ],
                 ],
                 [
                     'name' => 'param',
-                    'attributes' => [
+                    self::A => [
                         'name' => 'indexField',
                         'xsi:type' => 'string',
                     ],
-                    'value' => $primaryKey,
+                    self::V => $primaryKey,
                 ],
                 [
                     'name' => 'param',
-                    'attributes' => [
+                    self::A => [
                         'name' => 'enabled',
                         'xsi:type' => 'boolean',
                     ],
-                    'value' => 'true',
+                    self::V => 'true',
                 ],
                 [
                     'name' => 'param',
-                    'attributes' => [
+                    self::A => [
                         'name' => 'selectProvider',
                         'xsi:type' => 'string',
                     ],
-                    'value' => $select,
+                    self::V => $select,
                 ],
             ],
             'childDefaults' => [
                 'param' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'fieldAction',
                         'xsi:type' => 'array',
                     ],
-                    'value' => [
+                    self::V => [
                         [
                             'name' => 'item',
-                            'attributes' => [
+                            self::A => [
                                 'name' => 'provider',
                                 'xsi:type' => 'string',
                             ],
-                            'value' => $editor,
+                            self::V => $editor,
                         ],
                         [
                             'name' => 'item',
-                            'attributes' => [
+                            self::A => [
                                 'name' => 'target',
                                 'xsi:type' => 'string',
                             ],
-                            'value' => 'startEdit',
+                            self::V => 'startEdit',
                         ],
                         [
                             'name' => 'item',
-                            'attributes' => [
+                            self::A => [
                                 'name' => 'params',
                                 'xsi:type' => 'array',
                             ],
-                            'value' => [
+                            self::V => [
                                 [
                                     'name' => 'item',
-                                    'attributes' => [
+                                    self::A => [
                                         'name' => '0',
                                         'xsi:type' => 'string',
                                     ],
-                                    'value' => '${ $.$data.rowIndex }',
+                                    self::V => '${ $.$data.rowIndex }',
                                 ],
                                 [
                                     'name' => 'item',
-                                    'attributes' => [
+                                    self::A => [
                                         'name' => '1',
                                         'xsi:type' => 'boolean',
                                     ],
-                                    'value' => 'true',
+                                    self::V => 'true',
                                 ],
                             ],
                         ],
@@ -409,52 +424,52 @@ class Listing extends Common
     {
         $massActions = $readonly ? [] : [
             'massaction' => [
-                'attributes' => [
+                self::A => [
                     'name' => 'listing_massaction',
                 ],
-                'value' => [
+                self::V => [
                     [
                         'name' => 'action',
-                        'attributes' => [
+                        self::A => [
                             'name' => 'delete',
                         ],
-                        'value' => [
+                        self::V => [
                             'settings' => [
                                 'confirm' => [
                                     'message' => [
-                                        'attributes' => [
+                                        self::A => [
                                             'translate' => 'true',
                                         ],
-                                        'value' => 'Are you sure you want to delete selected items?',
+                                        self::V => 'Are you sure you want to delete selected items?',
                                     ],
                                     'title' => [
-                                        'attributes' => [
+                                        self::A => [
                                             'translate' => 'true',
                                         ],
-                                        'value' => 'Delete items',
+                                        self::V => 'Delete items',
                                     ],
                                 ],
                                 'url' => [
-                                    'attributes' => [
+                                    self::A => [
                                         'path' => $massDelete,
                                     ],
                                 ],
                                 'type' => 'delete',
                                 'label' => [
-                                    'attributes' => [
+                                    self::A => [
                                         'translate' => 'true',
                                     ],
-                                    'value' => 'Delete',
+                                    self::V => 'Delete',
                                 ],
                             ],
                         ],
                     ],
                     [
                         'name' => 'action',
-                        'attributes' => [
+                        self::A => [
                             'name' => 'edit',
                         ],
-                        'value' => [
+                        self::V => [
                             'settings' => [
                                 'callback' => [
                                     'target' => 'editSelected',
@@ -462,10 +477,10 @@ class Listing extends Common
                                 ],
                                 'type' => 'edit',
                                 'label' => [
-                                    'attributes' => [
+                                    self::A => [
                                         'translate' => 'true',
                                     ],
-                                    'value' => 'Edit',
+                                    self::V => 'Edit',
                                 ],
                             ],
                         ],
@@ -475,52 +490,52 @@ class Listing extends Common
         ];
 
         return [
-            'attributes' => [
+            self::A => [
                 'name' => 'listing_top',
             ],
-            'value' => [
+            self::V => [
                 'settings' => [
                     'sticky' => true,
                 ],
                 'bookmark' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'bookmarks',
                     ],
                 ],
                 'columnsControls' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'columns_controls',
                     ],
                 ],
                 'filterSearch' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'fulltext',
                     ],
                 ],
                 'filters' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'listing_filters',
                     ],
-                    'value' => [
+                    self::V => [
                         'settings' => [
                             'templates' => [
                                 'filters' => [
                                     'select' => [
                                         [
                                             'name' => 'param',
-                                            'attributes' => [
+                                            self::A => [
                                                 'name' => 'template',
                                                 'xsi:type' => 'string',
                                             ],
-                                            'value' => 'ui/grid/filters/elements/ui-select',
+                                            self::V => 'ui/grid/filters/elements/ui-select',
                                         ],
                                         [
                                             'name' => 'param',
-                                            'attributes' => [
+                                            self::A => [
                                                 'name' => 'component',
                                                 'xsi:type' => 'string',
                                             ],
-                                            'value' => 'Magento_Ui/js/form/element/ui-select',
+                                            self::V => 'Magento_Ui/js/form/element/ui-select',
                                         ],
                                     ],
                                 ],
@@ -530,7 +545,7 @@ class Listing extends Common
                 ],
                 $massActions,
                 'paging' => [
-                    'attributes' => [
+                    self::A => [
                         'name' => 'listing_paging',
                     ],
                 ],

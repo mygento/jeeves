@@ -105,7 +105,8 @@ class Ui extends Generator
                 $common . $parent . '_columns_editor',
                 $entity->getPrimaryKey(),
                 $entity->getColumns(),
-                $entity->isReadOnly()
+                $entity->isReadOnly(),
+                $entity->withStore()
             )
         );
     }
