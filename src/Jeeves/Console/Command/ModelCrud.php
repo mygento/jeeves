@@ -40,7 +40,7 @@ EOT
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $executor = new Crud($this->getIO());
         $this->path = Application::GEN;

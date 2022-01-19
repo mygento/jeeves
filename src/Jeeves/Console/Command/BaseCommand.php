@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Console\Command;
 
 use Mygento\CS\Config\Module;
 use Mygento\Jeeves\Console\Application;
+use Mygento\Jeeves\Generators\Crud\Common;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\IO\NullIO;
 use Mygento\Jeeves\Util\XmlManager;
@@ -147,7 +148,7 @@ abstract class BaseCommand extends Command
     protected function getConverter()
     {
         if (null === $this->converter) {
-            $this->converter = new \Mygento\Jeeves\Generators\Crud\Common();
+            $this->converter = new Common();
         }
 
         return $this->converter;
