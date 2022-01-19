@@ -1,18 +1,18 @@
 <?php
 
-namespace Mygento\Banan\Model;
+namespace Mygento\SampleModule\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
 class Carrier extends \Mygento\Shipment\Model\AbstractCarrier
 {
     /** @var string */
-    protected $code = 'banan';
+    protected $code = 'slowcourier';
 
     /**
-     * @param \Mygento\Banan\Model\Service $service
-     * @param \Mygento\Banan\Model\Carrier$carrier
-     * @param \Mygento\Banan\Helper\Data$helper
+     * @param \Mygento\SampleModule\Model\Service $service
+     * @param \Mygento\SampleModule\Model\Carrier $carrier
+     * @param \Mygento\SampleModule\Helper\Data $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -21,7 +21,7 @@ class Carrier extends \Mygento\Shipment\Model\AbstractCarrier
     public function __construct(
         Service $service,
         Carrier $carrier,
-        \Mygento\Banan\Helper\Data $helper,
+        \Mygento\SampleModule\Helper\Data $helper,
         Service $scopeConfig,
         Service $rateErrorFactory,
         Service $logger

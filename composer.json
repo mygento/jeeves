@@ -28,6 +28,9 @@
     "config": {
         "platform": {
             "php": "7.3.20"
+        },
+        "allow-plugins": {
+            "phpro/grumphp": true
         }
     },
     "bin": ["bin/jeeves"]

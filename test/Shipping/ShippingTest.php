@@ -2,28 +2,38 @@
 
 namespace Shipping;
 
+use Mygento\Jeeves\Console\Application as App;
 use Mygento\Jeeves\Console\Command\ShippingModule;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CrudTest extends \PHPUnit\Framework\TestCase
 {
+    private const V = 'shipping';
+
+    private $path;
+
+    private $commandTester;
+
     protected function setUp(): void
     {
-        $application = new \Symfony\Component\Console\Application();
+        $application = new Application();
         $application->add(new ShippingModule());
         $command = $application->find('generate-shipping');
+
         $this->commandTester = new CommandTester($command);
+        $this->path = App::GEN . DIRECTORY_SEPARATOR . self::V;
     }
 
     public function testCrudBasic()
     {
         $this->commandTester->execute([
-            'module' => 'Banan',
+            '--config_file' => '.jeeves.phpunit_v1.yaml',
+            '--path' => $this->path,
         ]);
         $this->checkFile('Helper/Data.php');
         $this->checkModels();
         $this->checkXml('etc/adminhtml/system.xml');
-        // $this->checkXml('etc/webapi.xml');
     }
 
     private function checkModels()
@@ -36,8 +46,8 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
             'test/Expectations/Shipping/' . $file,
+            $this->path . '/' . $file,
             '',
             false,
             false
@@ -47,12 +57,12 @@ class CrudTest extends \PHPUnit\Framework\TestCase
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
-            'test/Expectations/Shipping/' . $file
+            'test/Expectations/Shipping/' . $file,
+            $this->path . '/' . $file,
         );
         $this->assertFileEquals(
-            \Mygento\Jeeves\Console\Application::GEN . '/' . $file,
             'test/Expectations/Shipping/' . $file,
+            $this->path . '/' . $file,
             '',
             false,
             false

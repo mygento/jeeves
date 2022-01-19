@@ -1,9 +1,9 @@
 <?php
 
-namespace Mygento\Banan\Helper;
+namespace Mygento\SampleModule\Helper;
 
 class Data extends \Mygento\Shipment\Helper\Data
 {
     /** @var string */
-    protected $code = 'banan';
+    protected $code = 'slowcourier';
 }

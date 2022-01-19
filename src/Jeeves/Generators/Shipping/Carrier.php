@@ -6,8 +6,14 @@ use Nette\PhpGenerator\PhpNamespace;
 
 class Carrier
 {
-    public function genCarrier($method, $service, $carrier, $helper, $rootNamespace)
-    {
+    public function genCarrier(
+        string $method,
+        string $service,
+        string $carrier,
+        string $helper,
+        string $rootNamespace,
+        bool $typehint = false
+    ) {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Quote\Model\Quote\Address\RateRequest');
         $class = $namespace->addClass('Carrier');
@@ -18,20 +24,20 @@ class Carrier
 
         $construct = $class->addMethod('__construct')
             ->addComment('@param ' . $service . ' $service')
-            ->addComment('@param ' . $carrier . '$carrier')
-            ->addComment('@param ' . $helper . '$helper')
+            ->addComment('@param ' . $carrier . ' $carrier')
+            ->addComment('@param ' . $helper . ' $helper')
             ->addComment('@param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig')
             ->addComment('@param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory')
             ->addComment('@param \Psr\Log\LoggerInterface $logger')
             ->addComment('@param array $data')
             ->setVisibility('public');
 
-        $construct->addParameter('service')->setTypeHint($service);
-        $construct->addParameter('carrier')->setTypeHint($carrier);
-        $construct->addParameter('helper')->setTypeHint($helper);
-        $construct->addParameter('scopeConfig')->setTypeHint($service);
-        $construct->addParameter('rateErrorFactory')->setTypeHint($service);
-        $construct->addParameter('logger')->setTypeHint($service);
+        $construct->addParameter('service')->setType($service);
+        $construct->addParameter('carrier')->setType($carrier);
+        $construct->addParameter('helper')->setType($helper);
+        $construct->addParameter('scopeConfig')->setType($service);
+        $construct->addParameter('rateErrorFactory')->setType($service);
+        $construct->addParameter('logger')->setType($service);
 
         $construct->setBody(
             '$this->service = $service;' . PHP_EOL
@@ -51,7 +57,7 @@ class Carrier
             ->addComment('@api')
             ->setVisibility('public');
 
-        $collect->addParameter('request')->setTypeHint('\Magento\Quote\Model\Quote\Address\RateRequest');
+        $collect->addParameter('request')->setType('\Magento\Quote\Model\Quote\Address\RateRequest');
         $collect->setBody(
             '\Magento\Framework\Profiler::start($this->code . \'_collect_rate\');' . PHP_EOL . PHP_EOL
             . '//Validation' . PHP_EOL
@@ -98,8 +104,8 @@ class Carrier
             ->addComment('@param \Mygento\Shipment\Model\Service $service')
             ->setVisibility('public');
 
-        $construct->addParameter('client')->setTypeHint($client);
-        $construct->addParameter('service')->setTypeHint('\Mygento\Shipment\Model\Service');
+        $construct->addParameter('client')->setType($client);
+        $construct->addParameter('service')->setType('\Mygento\Shipment\Model\Service');
 
         $construct->setBody(
             '$this->client = $client;' . PHP_EOL
@@ -115,7 +121,7 @@ class Carrier
             ->setReturnType('array')
             ->setVisibility('public');
 
-        $calculate->addParameter('params')->setTypeHint('array');
+        $calculate->addParameter('params')->setType('array');
         $calculate->setBody('return [];');
 
         $create = $class->addMethod('orderCreate')
@@ -123,8 +129,8 @@ class Carrier
             ->addComment('@param array $data')
             ->setVisibility('public');
 
-        $create->addParameter('order')->setTypeHint('\Magento\Sales\Model\Order');
-        $create->addParameter('data', [])->setTypeHint('array');
+        $create->addParameter('order')->setType('\Magento\Sales\Model\Order');
+        $create->addParameter('data', [])->setType('array');
         $create->setBody('');
 
         $cancel = $class->addMethod('orderCancel')
@@ -148,8 +154,8 @@ class Carrier
             ->addComment('@param \Mygento\Shipment\Model\Client $client')
             ->setVisibility('public');
 
-        $construct->addParameter('helper')->setTypeHint($helper);
-        $construct->addParameter('client')->setTypeHint('\Mygento\Shipment\Model\Client');
+        $construct->addParameter('helper')->setType($helper);
+        $construct->addParameter('client')->setType('\Mygento\Shipment\Model\Client');
 
         $construct->setBody(
             '$this->helper = $helper;' . PHP_EOL

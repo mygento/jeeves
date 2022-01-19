@@ -2,8 +2,11 @@
 
 namespace Mygento\Jeeves\Console\Command;
 
+use Mygento\Jeeves\Console\Application;
+use Mygento\Jeeves\Model\Shipping;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ShippingModule extends BaseCommand
@@ -23,9 +26,11 @@ class ShippingModule extends BaseCommand
             ->setAliases(['generate_shipping', 'shipping'])
             ->setDescription('Generate Shipping Model')
             ->setDefinition([
-                new InputArgument('module', InputArgument::REQUIRED, 'Name of the module'),
+                new InputArgument('module', InputArgument::OPTIONAL, 'Name of the module'),
                 new InputArgument('name', InputArgument::OPTIONAL, 'Name of the method'),
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
+                new InputOption('config_file', null, InputOption::VALUE_OPTIONAL, 'config file', null),
+                new InputOption('path', null, InputOption::VALUE_OPTIONAL, 'path', null),
             ])
             ->setHelp(
                 <<<EOT
@@ -36,7 +41,42 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->path = \Mygento\Jeeves\Console\Application::GEN;
+        $executor = new Shipping($this->getIO());
+        $this->path = Application::GEN;
+        $filename = '.jeeves.yaml';
+        $config = [];
+
+        if ($input->getOption('config_file')) {
+            $filename = $input->getOption('config_file');
+        }
+
+        if ($input->getOption('path')) {
+            $this->path = $input->getOption('path');
+        }
+
+        if (file_exists($filename)) {
+            $config = $executor->readConfig($filename);
+        }
+
+        if (empty($config)) {
+            $config = $this->getInputConfig($input);
+        }
+
+        if (empty($config)) {
+            $io = $this->getIO();
+            $io->write('<warning>Empty Config</warning>');
+
+            return 1;
+        }
+
+        $executor->execute($this->path, $config);
+        $this->runCodeStyleFixer();
+
+        return 0;
+    }
+
+    private function getInputConfig(InputInterface $input): array
+    {
         $io = $this->getIO();
         $v = strtolower($input->getArgument('vendor'));
         $m = strtolower($input->getArgument('module'));
@@ -81,104 +121,12 @@ EOT
             $m
         );
 
-        $this->vendor = $v;
-        $this->module = $m;
-        $this->entity = $e;
-
-        //Helper
-        $this->genHelper(new \Mygento\Jeeves\Generators\Shipping\Helper());
-
-        //Models
-        $generator = new \Mygento\Jeeves\Generators\Shipping\Carrier();
-        $this->genCarrier($generator);
-        $this->genClient($generator);
-        $this->genService($generator);
-
-        //xml
-        $this->genSystemXml();
-
-        // CS
-        $this->runCodeStyleFixer();
-
-        return 0;
-    }
-
-    protected function getNamespace()
-    {
-        return ucfirst($this->vendor) . '\\' . ucfirst($this->module);
-    }
-
-    private function genHelper($generator)
-    {
-        $filePath = $this->path . '/Helper/';
-        $fileName = 'Data';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genHelper(
-                strtolower($this->entity),
-                $this->getNamespace()
-            )
-        );
-    }
-
-    private function genCarrier($generator)
-    {
-        $filePath = $this->path . '/Model/';
-        $fileName = 'Carrier';
-        $namePath = '\\' . $this->getNamespace() . '\\';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genCarrier(
-                strtolower($this->entity),
-                $namePath . 'Model\\Service',
-                $namePath . 'Model\\Carrier',
-                $namePath . 'Helper\\Data',
-                $this->getNamespace()
-            )
-        );
-    }
-
-    private function genClient($generator)
-    {
-        $filePath = $this->path . '/Model/';
-        $fileName = 'Client';
-        $namePath = '\\' . $this->getNamespace() . '\\';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genClient(
-                $namePath . 'Helper\\Data',
-                $this->getNamespace()
-            )
-        );
-    }
-
-    private function genService($generator)
-    {
-        $filePath = $this->path . '/Model/';
-        $fileName = 'Service';
-        $namePath = '\\' . $this->getNamespace() . '\\';
-        $this->writeFile(
-            $filePath . $fileName . '.php',
-            '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genService(
-                $namePath . 'Model\\Client',
-                $this->getNamespace()
-            )
-        );
-    }
-
-    private function genSystemXml()
-    {
-        $this->writeFile(
-            $this->path . '/etc/adminhtml/system.xml',
-            $this->getXmlManager()->generateShippingSystem(
-                strtolower($this->entity),
-                ucfirst($this->module),
-                $this->getNamespace()
-            )
-        );
+        return [
+            $v => [
+                $m => [
+                    'shipping' => $e,
+                ],
+            ],
+        ];
     }
 }

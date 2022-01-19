@@ -1,14 +1,14 @@
 <?php
 
-namespace Mygento\Banan\Model;
+namespace Mygento\SampleModule\Model;
 
 class Service extends \Mygento\Shipment\Model\AbstractService
 {
-    /** \Mygento\Banan\Model\Client */
+    /** \Mygento\SampleModule\Model\Client */
     private $client;
 
     /**
-     * @param \Mygento\Banan\Model\Client $client
+     * @param \Mygento\SampleModule\Model\Client $client
      * @param \Mygento\Shipment\Model\Service $service
      */
     public function __construct(Client $client, \Mygento\Shipment\Model\Service $service)
