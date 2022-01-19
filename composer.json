@@ -15,7 +15,7 @@
         "symfony/yaml": "^5.0",
         "sabre/xml": "^2.2",
         "nette/php-generator": "^3.0",
-        "padraic/phar-updater": "^1.0",
+        "consolidation/self-update": "^2.0.3",
         "mygento/coding-standard": "~2.14.0-beta5"
     },
     "require-dev": {

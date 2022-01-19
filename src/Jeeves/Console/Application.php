@@ -6,6 +6,7 @@ use Mygento\Jeeves\Factory;
 use Mygento\Jeeves\IO\ConsoleIO;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Util\ErrorHandler;
+use SelfUpdate\SelfUpdateCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,6 +15,7 @@ class Application extends BaseApplication
 {
     public const GEN = 'generate';
     public const VERSION = '1.0.0';
+    public const NAME = 'Jeeves';
 
     /**
      * @var IOInterface
@@ -70,14 +72,16 @@ class Application extends BaseApplication
      */
     protected function getDefaultCommands()
     {
+        $selfUpdate = new SelfUpdateCommand(self::NAME, self::VERSION, 'mygento/jeeves');
+
         return array_merge(parent::getDefaultCommands(), [
             new Command\Generate(),
             //new Command\PaymentGateway(),
             new Command\ModelCrud(),
-            new Command\SelfUpdate(),
             new Command\Workplace(),
             new Command\EmptyProject(),
             new Command\ShippingModule(),
+            $selfUpdate,
         ]);
     }
 }
