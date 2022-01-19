@@ -104,35 +104,4 @@ gem 'scss_lint', require: false
 
 GEM;
     }
-
-    public function generateCI()
-    {
-        $IS_PULL_REQUEST = '$IS_PULL_REQUEST';
-        $BRANCH = '$BRANCH';
-
-        return <<<CONFIG
-branches:
-  only:
-    - stage
-    - production
-
-build:
-  pre_ci_boot:
-    image_name: mygento/deployer
-    image_tag: v1-full
-    pull: true
-  ci:
-    - apt-get install libxml2-utils
-    - composer self-update
-    - bundle install
-    - if [[ ${IS_PULL_REQUEST} == true ]]; then npm install --production --silent --no-progress; fi
-    - if [[ ${IS_PULL_REQUEST} == true ]]; then NODE_ENV=production gulp lint; fi
-    - if [[ ${IS_PULL_REQUEST} == true ]]; then rm composer.json; rm composer.lock; fi
-    - if [[ ${IS_PULL_REQUEST} == true ]]; then composer require mygento/coding-standard --quiet; fi
-    - if [[ ${IS_PULL_REQUEST} == true ]]; then php vendor/bin/grumphp run; fi
-  on_success:
-    - if [[ ${IS_PULL_REQUEST} != true ]]; then mina ${BRANCH} deploy; fi
-
-CONFIG;
-    }
 }

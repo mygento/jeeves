@@ -79,7 +79,7 @@ class Application extends BaseApplication
             //new Command\PaymentGateway(),
             new Command\ModelCrud(),
             new Command\Workplace(),
-            new Command\EmptyProject(),
+            // new Command\EmptyProject(),
             new Command\ShippingModule(),
             $selfUpdate,
         ]);

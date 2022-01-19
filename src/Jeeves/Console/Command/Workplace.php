@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Workplace extends BaseCommand
@@ -11,16 +12,15 @@ class Workplace extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName('new-workplace')
-            ->setAliases(['workplace'])
+            ->setName('workplace')
             ->setDescription('Create workplace')
             ->setDefinition([
-                new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
-                new InputArgument('repo', InputArgument::OPTIONAL, 'Project repository url'),
+                new InputArgument('name', InputArgument::OPTIONAL, 'Name of the project'),
+                new InputOption('path', null, InputOption::VALUE_OPTIONAL, 'path', '.'),
             ])
             ->setHelp(
                 <<<EOT
-<info>php jeeves.phar new-workplace</info>
+<info>php jeeves.phar workplace</info>
 EOT
             );
     }
@@ -28,78 +28,50 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getIO();
-        // Clone to a non-bare repository
-        $folder = strtolower($input->getArgument('name'));
-        $folder = $io->askAndValidate(
-            'Project Name [<comment>' . $folder . '</comment>]: ',
-            function ($value) use ($folder) {
+        $name = strtolower($input->getArgument('name'));
+        $name = $io->askAndValidate(
+            'Project Name [<comment>' . $name . '</comment>]: ',
+            function ($value) use ($name) {
                 if (null === $value) {
-                    return $folder;
+                    return $name;
                 }
 
                 return $value;
             },
             null,
-            $folder
+            $name
         );
-        $repo = strtolower($input->getArgument('repo'));
-        $repo = $io->askAndValidate(
-            'Project repository [<comment>' . $repo . '</comment>]: ',
-            function ($value) use ($repo) {
-                if (null === $value) {
-                    return $repo;
-                }
 
-                return $value;
-            },
-            null,
-            $repo
-        );
-        if (!is_dir($folder . '-project')) {
-            mkdir($folder . '-project');
-        }
-        $workplaceFolder = $folder . '-project' . DIRECTORY_SEPARATOR . $folder . '-workplace';
+        $path = $input->getOption('path') . '/';
 
-        try {
-            $io->write(sprintf('Cloning: <info>%s</info>.', 'workplace'));
-            $repository = \Gitonomy\Git\Admin::cloneTo(
-                $workplaceFolder,
-                'https://github.com/mygento/workplace.git',
-                false
-            );
-        } catch (\Gitonomy\Git\Exception\RuntimeException $e) {
-            $io->writeError($e->getMessage());
-        }
-
-        try {
-            $io->write(sprintf('Cloning: <info>%s</info>.', $repo));
-            $repository = \Gitonomy\Git\Admin::cloneTo(
-                $folder . '-project' . DIRECTORY_SEPARATOR . $folder,
-                $repo,
-                false
-            );
-        } catch (\Gitonomy\Git\Exception\RuntimeException $e) {
-            $io->writeError($e->getMessage());
-        }
-        $srcFolder = $workplaceFolder . DIRECTORY_SEPARATOR . 'src';
-        if (!is_dir($srcFolder)) {
-            $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
-            symlink('../' . $folder, $srcFolder);
-
-            return 0;
-        }
-        if (!is_link($srcFolder) &&
-            (
-                !(new \FilesystemIterator($srcFolder))->valid() ||
-                count(scandir($srcFolder)) <= 3
-            )
-        ) {
-            $io->write(sprintf('Creating symlink to: <info>%s</info>.', $folder));
-            unlink($srcFolder . DIRECTORY_SEPARATOR . '.keep');
-            rmdir($srcFolder);
-            symlink('../' . $folder, $srcFolder);
-        }
+        $this->writeFile($path . 'package.json', $this->generateWorkplace($name));
 
         return 0;
+    }
+
+    private function generateWorkplace(string $project): string
+    {
+        return json_encode(
+            [
+                'name' => $project,
+                'private' => true,
+                'version' => '1.0.0',
+                'description' => '',
+                'scripts' => [
+                    'start' => 'mage-workplace start',
+                    'test' => 'mage-workplace test',
+                    'stop' => 'mage-workplace stop',
+                    'delete' => 'mage-workplace delete',
+                    'install' => 'mage-workplace install',
+                ],
+                'dependencies' => [
+                    'mage-workplace' => '~1.0.0-beta16',
+                ],
+                'workplace' => [
+                    'type' => 'magento2',
+                ],
+            ],
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
     }
 }

@@ -1,7 +1,5 @@
 grumphp:
     tasks:
-        composer:
-            no_check_lock: true
         git_blacklist:
             keywords:
                 - "die("

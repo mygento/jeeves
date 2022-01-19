@@ -114,7 +114,6 @@ EOT
         }
         $this->writeFile($path . 'config/deploy.rb', $deployGenerator->generateDeployer($name, $repo));
         $this->writeFile($path . 'Gemfile', $deployGenerator->generateGems());
-        $this->writeFile($path . '.shippable.yml', $deployGenerator->generateCI());
 
         $editor = <<<EDITOR
 root = true
