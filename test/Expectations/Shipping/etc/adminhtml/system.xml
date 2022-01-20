@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="carriers">
-            <group id="banan" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Banan</label>
+            <group id="slowcourier" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>slowcourier</label>
                 <field id="active" type="select" sortOrder="10" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -35,22 +35,22 @@
                     <field id="weight_unit" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Weight Unit</label>
                         <source_model>Mygento\Shipment\Model\Source\Weightunits</source_model>
-                        <config_path>carriers/banan/weight_unit</config_path>
+                        <config_path>carriers/slowcourier/weight_unit</config_path>
                     </field>
                     <field id="dimension_unit" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Dimension Unit</label>
                         <source_model>Mygento\Shipment\Model\Source\Dimensionunits</source_model>
-                        <config_path>carriers/banan/dimension_unit</config_path>
+                        <config_path>carriers/slowcourier/dimension_unit</config_path>
                     </field>
                     <field id="width" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Width Attribute</label>
                         <source_model>Mygento\Base\Model\Source\Attributes</source_model>
-                        <config_path>carriers/banan/width</config_path>
+                        <config_path>carriers/slowcourier/width</config_path>
                     </field>
                     <field id="width_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Width default</label>
                         <validate>validate-number</validate>
-                        <config_path>carriers/banan/width_default</config_path>
+                        <config_path>carriers/slowcourier/width_default</config_path>
                         <depends>
                             <field id="width">0</field>
                         </depends>
@@ -58,12 +58,12 @@
                     <field id="length" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Length Attribute</label>
                         <source_model>Mygento\Base\Model\Source\Attributes</source_model>
-                        <config_path>carriers/banan/length</config_path>
+                        <config_path>carriers/slowcourier/length</config_path>
                     </field>
                     <field id="length_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Length default</label>
                         <validate>validate-number</validate>
-                        <config_path>carriers/banan/length_default</config_path>
+                        <config_path>carriers/slowcourier/length_default</config_path>
                         <depends>
                             <field id="length">0</field>
                         </depends>
@@ -71,12 +71,12 @@
                     <field id="height" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Height Attribute</label>
                         <source_model>Mygento\Base\Model\Source\Attributes</source_model>
-                        <config_path>carriers/banan/height</config_path>
+                        <config_path>carriers/slowcourier/height</config_path>
                     </field>
                     <field id="height_default" type="text" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Height default</label>
                         <validate>validate-number</validate>
-                        <config_path>carriers/banan/height_default</config_path>
+                        <config_path>carriers/slowcourier/height_default</config_path>
                         <depends>
                             <field id="height">0</field>
                         </depends>
@@ -97,7 +97,7 @@
                     </field>
                     <field id="tax_products" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Tax value for all products</label>
-                        <source_model>Mygento\Banan\Model\Source\Tax</source_model>
+                        <source_model>Mygento\SampleModule\Model\Source\Tax</source_model>
                         <depends>
                             <field id="tax">1</field>
                             <field id="tax_same">1</field>
@@ -113,7 +113,7 @@
                     </field>
                     <field id="tax_shipping" type="select" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Shipping Tax</label>
-                        <source_model>Mygento\Banan\Model\Source\Tax</source_model>
+                        <source_model>Mygento\SampleModule\Model\Source\Tax</source_model>
                         <depends>
                             <field id="tax">1</field>
                         </depends>

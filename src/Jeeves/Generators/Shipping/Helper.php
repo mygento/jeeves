@@ -2,11 +2,12 @@
 
 namespace Mygento\Jeeves\Generators\Shipping;
 
+use Mygento\Jeeves\Generators\Common;
 use Nette\PhpGenerator\PhpNamespace;
 
-class Helper
+class Helper extends Common
 {
-    public function genHelper($method, $rootNamespace)
+    public function genHelper($method, $rootNamespace): PhpNamespace
     {
         $namespace = new PhpNamespace($rootNamespace . '\Helper');
         $class = $namespace->addClass('Data');

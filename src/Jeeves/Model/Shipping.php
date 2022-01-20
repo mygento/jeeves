@@ -19,6 +19,8 @@ class Shipping extends Generator
 
     private $global;
 
+    // private $magentoVersion;
+
     public function __construct(IOInterface $io)
     {
         $this->io = $io;
@@ -58,6 +60,8 @@ class Shipping extends Generator
                 }
 
                 $moduleResult = $this->generate($carrier, $modEntity);
+                $result->updateCarrierConfigs($moduleResult->getCarrierConfigs());
+                $result->updateDefaultConfigs($moduleResult->getDefaultConfigs());
                 $result->setModule($modEntity->getFullname());
             }
         }
@@ -87,12 +91,34 @@ class Shipping extends Generator
         $this->generateClient();
         $this->generateService();
 
+        $result->updateCarrierConfigs([
+            $carrier => [
+                'active' => 0,
+                'title' => $carrier,
+            ],
+        ]);
+        $result->updateDefaultConfigs([
+            $carrier => [
+                'active' => 0,
+                'name' => $carrier,
+                'title' => $carrier,
+                'debug' => '0',
+                'test' => '1',
+                'model' => $this->mod->getNamespace() . '\Model\Carrier',
+                'order_status' => [
+                    'autoshipping' => '0',
+                    'track_check' => '0',
+                    'track_cron' => '*/15 * * * *',
+                ],
+            ],
+        ]);
+
         return $result;
     }
 
     private function setGlobalSettings(array $config)
     {
-        $this->magentoVersion = $config['settings']['version'] ?? '2.4';
+        // $this->magentoVersion = $config['settings']['version'] ?? '2.4';
         $this->globalTypehint = $config['settings']['typehint'] ?? true;
     }
 

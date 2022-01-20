@@ -2,9 +2,10 @@
 
 namespace Mygento\Jeeves\Generators\Shipping;
 
+use Mygento\Jeeves\Generators\Common;
 use Nette\PhpGenerator\PhpNamespace;
 
-class Carrier
+class Carrier extends Common
 {
     public function genCarrier(
         string $method,
@@ -13,7 +14,7 @@ class Carrier
         string $helper,
         string $rootNamespace,
         bool $typehint = false
-    ) {
+    ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Quote\Model\Quote\Address\RateRequest');
         $class = $namespace->addClass('Carrier');

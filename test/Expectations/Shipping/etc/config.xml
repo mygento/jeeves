@@ -2,19 +2,19 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <carriers>
-            <banan>
+            <slowcourier>
                 <active>0</active>
-                <name>Banan</name>
-                <title>Banan</title>
+                <name>slowcourier</name>
+                <title>slowcourier</title>
                 <debug>0</debug>
                 <test>1</test>
-                <model>Mygento\Banan\Model\Carrier</model>
+                <model>Mygento\SampleModule\Model\Carrier</model>
                 <order_status>
                     <autoshipping>0</autoshipping>
                     <track_check>0</track_check>
                     <track_cron>*/15 * * * *</track_cron>
                 </order_status>
-            </banan>
+            </slowcourier>
         </carriers>
     </default>
 </config>

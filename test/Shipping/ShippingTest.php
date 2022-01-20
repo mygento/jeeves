@@ -34,6 +34,7 @@ class CrudTest extends \PHPUnit\Framework\TestCase
         $this->checkFile('Helper/Data.php');
         $this->checkModels();
         $this->checkXml('etc/adminhtml/system.xml');
+        $this->checkXml('etc/config.xml');
     }
 
     private function checkModels()

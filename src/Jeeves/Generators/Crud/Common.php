@@ -2,16 +2,10 @@
 
 namespace Mygento\Jeeves\Generators\Crud;
 
-use Sabre\Xml\Service;
-
-class Common
+class Common extends \Mygento\Jeeves\Generators\Common
 {
     protected const DEFAULT_FIELDS = ['id' => ['type' => 'int']];
-    protected const TAB = '    ';
     protected const DEFAULT_KEY = 'id';
-    protected const A = 'attributes';
-    protected const N = 'name';
-    protected const V = 'value';
 
     /**
      * Converts an input string from snake_case to upper CamelCase.
@@ -134,13 +128,5 @@ class Common
         }
 
         return isset($value['nullable']) && $value['nullable'] === false;
-    }
-
-    protected function getService(): Service
-    {
-        $service = new Service();
-        $service->namespaceMap = ['http://www.w3.org/2001/XMLSchema-instance' => 'xsi'];
-
-        return $service;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     public const GEN = 'generate';
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.0RC1';
     public const NAME = 'Jeeves';
 
     /**

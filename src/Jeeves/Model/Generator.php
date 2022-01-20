@@ -2,16 +2,13 @@
 
 namespace Mygento\Jeeves\Model;
 
-use Mygento\Jeeves\Generators\Crud\Common;
+use Mygento\Jeeves\Generators\Common;
+use Mygento\Jeeves\Generators\Crud;
 use Mygento\Jeeves\IO\IOInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class Generator
+class Generator extends Common
 {
-    public const A = 'attributes';
-    public const N = 'name';
-    public const V = 'value';
-
     protected $path;
 
     protected $io;
@@ -39,10 +36,10 @@ class Generator
     /**
      * Get Converter
      */
-    protected function getConverter(): Common
+    protected function getConverter(): Crud\Common
     {
         if (null === $this->converter) {
-            $this->converter = new Common();
+            $this->converter = new Crud\Common();
         }
 
         return $this->converter;
