@@ -11,13 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ShippingModule extends BaseCommand
 {
-    private $vendor;
-
     private $path;
-
-    private $module;
-
-    private $entity;
 
     protected function configure()
     {

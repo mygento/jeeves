@@ -6,6 +6,8 @@ on:
     branches:
       - v1
   push:
+    tags:
+       - '*'
     branches:
       - v1
 
@@ -66,3 +68,9 @@ jobs:
         with:
            name: jeeves_new.phar
            path: jeeves.phar
+      - name: Upload to Releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') && matrix.php-versions == '7.4'
+        with:
+          files: jeeves.phar
+          token: ${{ secrets.token }}
