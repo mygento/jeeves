@@ -71,7 +71,7 @@ class Edit extends Common
         $execute = $class->addMethod('execute')
             ->addComment('Edit ' . $entityName . ' action')
             ->addComment('')
-            ->setBody('$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
+            ->setBody('$entityId = (int) $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . '$entity = $this->entityFactory->create();' . PHP_EOL
                 . 'if ($entityId) {' . PHP_EOL
                 . self::TAB . 'try {' . PHP_EOL
