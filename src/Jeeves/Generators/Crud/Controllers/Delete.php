@@ -27,7 +27,7 @@ class Delete extends Common
             ->addComment('')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
-                . '$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
+                . '$entityId = (int) $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . 'if (!$entityId) {' . PHP_EOL
                 . '    $this->messageManager->addErrorMessage(__(\'We can not find a ' . $entityName . ' to delete.\'));' . PHP_EOL
                 . '     return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
