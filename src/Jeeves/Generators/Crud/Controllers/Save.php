@@ -79,7 +79,7 @@ class Save extends Common
                 . 'if (!$data) {' . PHP_EOL
                 . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '}' . PHP_EOL
-                . '$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
+                . '$entityId = (int) $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . '$entity = $this->entityFactory->create();' . PHP_EOL
                 . 'if ($entityId) {' . PHP_EOL
                 . self::TAB . 'try {' . PHP_EOL
