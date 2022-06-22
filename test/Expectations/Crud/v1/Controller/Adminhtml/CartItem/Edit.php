@@ -35,13 +35,15 @@ class Edit extends CartItem
      */
     public function execute(): ResultInterface
     {
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This Cart Item no longer exists'));
+                $this->messageManager->addErrorMessage(
+                    __('This Cart Item no longer exists')->render()
+                );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -54,12 +56,12 @@ class Edit extends CartItem
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mygento_SampleModule::cartitem');
         $resultPage->addBreadcrumb(
-            $entityId ? __('Edit Cart Item') : __('New Cart Item'),
-            $entityId ? __('Edit Cart Item') : __('New Cart Item')
+            $entityId ? __('Edit Cart Item')->render() : __('New Cart Item')->render(),
+            $entityId ? __('Edit Cart Item')->render() : __('New Cart Item')->render()
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Cart Item'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Cart Item')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Cart Item')
+            $entity->getId() ? $entity->getTitle() : __('New Cart Item')->render()
         );
 
         return $resultPage;

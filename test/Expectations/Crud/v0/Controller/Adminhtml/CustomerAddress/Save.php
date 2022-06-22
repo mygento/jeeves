@@ -49,16 +49,16 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         if (!$data) {
             return $resultRedirect->setPath('*/*/');
         }
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                if (!$entity->getId() && $entityId) {
-                    $this
-                        ->messageManager
-                        ->addErrorMessage(__('This Customer Address no longer exists'));
+                if (!$entity->getId()) {
+                    $this->messageManager->addErrorMessage(
+                        __('This Customer Address no longer exists')->render()
+                    );
 
                     return $resultRedirect->setPath('*/*/');
                 }
@@ -71,7 +71,9 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
 
         try {
             $this->repository->save($entity);
-            $this->messageManager->addSuccessMessage(__('You saved the Customer Address'));
+            $this->messageManager->addSuccessMessage(
+                __('You saved the Customer Address')->render()
+            );
             $this->dataPersistor->clear('sample_module_customeraddress');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
@@ -81,7 +83,10 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Customer Address'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while saving the Customer Address')->render()
+            );
         }
         $this->dataPersistor->set('sample_module_customeraddress', $data);
 

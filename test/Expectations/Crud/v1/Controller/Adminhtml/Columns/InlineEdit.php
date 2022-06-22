@@ -38,7 +38,7 @@ class InlineEdit extends Columns
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
             return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
+                'messages' => [__('Please correct the data sent.')->render()],
                 'error' => true,
             ]);
         }
@@ -49,7 +49,7 @@ class InlineEdit extends Columns
                 $entity->setData(array_merge($entity->getData(), $postItems[$id]));
                 $this->repository->save($entity);
             } catch (NoSuchEntityException $e) {
-                $messages[] = $id . ' -> ' . __('Not found');
+                $messages[] = $id . ' -> ' . __('Not found')->render();
                 $error = true;
                 continue;
             } catch (\Exception $e) {

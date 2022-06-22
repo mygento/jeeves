@@ -35,13 +35,15 @@ class Edit extends Columns
      */
     public function execute(): ResultInterface
     {
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This Columns no longer exists'));
+                $this->messageManager->addErrorMessage(
+                    __('This Columns no longer exists')->render()
+                );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -54,12 +56,12 @@ class Edit extends Columns
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mygento_SampleModule::columns');
         $resultPage->addBreadcrumb(
-            $entityId ? __('Edit Columns') : __('New Columns'),
-            $entityId ? __('Edit Columns') : __('New Columns')
+            $entityId ? __('Edit Columns')->render() : __('New Columns')->render(),
+            $entityId ? __('Edit Columns')->render() : __('New Columns')->render()
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Columns'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Columns')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Columns')
+            $entity->getId() ? $entity->getTitle() : __('New Columns')->render()
         );
 
         return $resultPage;

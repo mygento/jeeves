@@ -42,7 +42,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::customeraddress')
             ->getConfig()
-            ->getTitle()->prepend(__('Customer Address'));
+            ->getTitle()->prepend(__('Customer Address')->render());
 
         $this->dataPersistor->clear('sample_module_customeraddress');
 

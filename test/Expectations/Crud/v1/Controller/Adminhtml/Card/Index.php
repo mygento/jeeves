@@ -39,7 +39,7 @@ class Index extends Card
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::card')
             ->getConfig()
-            ->getTitle()->prepend(__('Card'));
+            ->getTitle()->prepend(__('Card')->render());
 
         $this->dataPersistor->clear('sample_module_card');
 

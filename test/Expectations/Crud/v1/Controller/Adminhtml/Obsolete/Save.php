@@ -49,16 +49,16 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         if (!$data) {
             return $resultRedirect->setPath('*/*/');
         }
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                if (!$entity->getId() && $entityId) {
-                    $this
-                        ->messageManager
-                        ->addErrorMessage(__('This Obsolete no longer exists'));
+                if (!$entity->getId()) {
+                    $this->messageManager->addErrorMessage(
+                        __('This Obsolete no longer exists')->render()
+                    );
 
                     return $resultRedirect->setPath('*/*/');
                 }
@@ -71,7 +71,9 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
 
         try {
             $this->repository->save($entity);
-            $this->messageManager->addSuccessMessage(__('You saved the Obsolete'));
+            $this->messageManager->addSuccessMessage(
+                __('You saved the Obsolete')->render()
+            );
             $this->dataPersistor->clear('sample_module_obsolete');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
@@ -81,7 +83,10 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Obsolete'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while saving the Obsolete')->render()
+            );
         }
         $this->dataPersistor->set('sample_module_obsolete', $data);
 

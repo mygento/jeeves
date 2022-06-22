@@ -64,30 +64,30 @@ class Inline extends Common
         . '$messages = [];' . PHP_EOL . PHP_EOL
         . '$postItems = $this->getRequest()->getParam(\'items\', []);' . PHP_EOL
         . 'if (!($this->getRequest()->getParam(\'isAjax\') && count($postItems))) {' . PHP_EOL
-        . '    return $resultJson->setData([' . PHP_EOL
-        . '        \'messages\' => [__(\'Please correct the data sent.\')],' . PHP_EOL
-        . '        \'error\' => true,' . PHP_EOL
-        . '    ]);' . PHP_EOL
+        . self::TAB . 'return $resultJson->setData([' . PHP_EOL
+        . self::TAB . self::TAB . '\'messages\' => [__(\'Please correct the data sent.\')->render()],' . PHP_EOL
+        . self::TAB . self::TAB . '\'error\' => true,' . PHP_EOL
+        . self::TAB . ']);' . PHP_EOL
         . '}' . PHP_EOL . PHP_EOL
         . 'foreach (array_keys($postItems) as $id) {' . PHP_EOL
-        . '    try {' . PHP_EOL
-        . '        $entity = $this->repository->getById($id);' . PHP_EOL
-        . '        $entity->setData(array_merge($entity->getData(), $postItems[$id]));' . PHP_EOL
-        . '        $this->repository->save($entity);' . PHP_EOL
-        . '    } catch (NoSuchEntityException $e) {' . PHP_EOL
-        . '        $messages[] = $id .\' -> \'. __(\'Not found\');' . PHP_EOL
-        . '        $error = true;' . PHP_EOL
-        . '        continue;' . PHP_EOL
-        . '    } catch (\Exception $e) {' . PHP_EOL
-        . '        $messages[] = __($e->getMessage());' . PHP_EOL
-        . '        $error = true;' . PHP_EOL
-        . '        continue;' . PHP_EOL
-        . '    }' . PHP_EOL
+        . self::TAB . 'try {' . PHP_EOL
+        . self::TAB . self::TAB . '$entity = $this->repository->getById($id);' . PHP_EOL
+        . self::TAB . self::TAB . '$entity->setData(array_merge($entity->getData(), $postItems[$id]));' . PHP_EOL
+        . self::TAB . self::TAB . '$this->repository->save($entity);' . PHP_EOL
+        . self::TAB . '} catch (NoSuchEntityException $e) {' . PHP_EOL
+        . self::TAB . self::TAB . '$messages[] = $id .\' -> \'. __(\'Not found\')->render();' . PHP_EOL
+        . self::TAB . self::TAB . '$error = true;' . PHP_EOL
+        . self::TAB . self::TAB . 'continue;' . PHP_EOL
+        . self::TAB . '} catch (\Exception $e) {' . PHP_EOL
+        . self::TAB . self::TAB . '$messages[] = __($e->getMessage());' . PHP_EOL
+        . self::TAB . self::TAB . '$error = true;' . PHP_EOL
+        . self::TAB . self::TAB . 'continue;' . PHP_EOL
+        . self::TAB . '}' . PHP_EOL
         . '}' . PHP_EOL . PHP_EOL
 
         . 'return $resultJson->setData([' . PHP_EOL
-        . '    \'messages\' => $messages,' . PHP_EOL
-        . '    \'error\' => $error' . PHP_EOL
+        . self::TAB . '\'messages\' => $messages,' . PHP_EOL
+        . self::TAB . '\'error\' => $error' . PHP_EOL
         . ']);' . PHP_EOL);
 
         if ($typehint) {

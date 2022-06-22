@@ -14,16 +14,20 @@ class Delete extends Columns
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         if (!$entityId) {
-            $this->messageManager->addErrorMessage(__('We can not find a Columns to delete.'));
+            $this->messageManager->addErrorMessage(
+                __('We can not find a Columns to delete.')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         }
 
         try {
             $this->repository->deleteById($entityId);
-            $this->messageManager->addSuccessMessage(__('You deleted the Columns'));
+            $this->messageManager->addSuccessMessage(
+                __('You deleted the Columns')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         } catch (\Exception $e) {

@@ -39,7 +39,7 @@ class Index extends Poster
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::poster')
             ->getConfig()
-            ->getTitle()->prepend(__('Poster'));
+            ->getTitle()->prepend(__('Poster')->render());
 
         $this->dataPersistor->clear('sample_module_poster');
 

@@ -85,10 +85,10 @@ class Save extends Common
                 . self::TAB . 'try {' . PHP_EOL
                 . self::TAB . self::TAB . '$entity = $this->repository->getById($entityId);' . PHP_EOL
                 . self::TAB . '} catch (NoSuchEntityException $e) {' . PHP_EOL
-                . self::TAB . self::TAB . 'if (!$entity->getId() && $entityId) {' . PHP_EOL
-                . self::TAB . self::TAB . self::TAB . '$this' . PHP_EOL
-                . self::TAB . self::TAB . self::TAB . self::TAB . '->messageManager' . PHP_EOL
-                . self::TAB . self::TAB . self::TAB . self::TAB . '->addErrorMessage(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
+                . self::TAB . self::TAB . 'if (!$entity->getId()) {' . PHP_EOL
+                . self::TAB . self::TAB . self::TAB . '$this->messageManager->addErrorMessage(' . PHP_EOL
+                . self::TAB . self::TAB . self::TAB . self::TAB . '__(\'This ' . $entityName . ' no longer exists\')->render()' . PHP_EOL
+                . self::TAB . self::TAB . self::TAB . ');' . PHP_EOL . PHP_EOL
                 . self::TAB . self::TAB . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . self::TAB . self::TAB . '}' . PHP_EOL
                 . self::TAB . '}' . PHP_EOL
@@ -99,16 +99,20 @@ class Save extends Common
                 . '$entity->setData($data);' . PHP_EOL
                 . 'try {' . PHP_EOL
                 . self::TAB . '$this->repository->save($entity);' . PHP_EOL
-                . self::TAB . '$this->messageManager->addSuccessMessage(__(\'You saved the ' . $entityName . '\'));' . PHP_EOL
+                . self::TAB . '$this->messageManager->addSuccessMessage(' . PHP_EOL
+                . self::TAB . self::TAB . '__(\'You saved the ' . $entityName . '\')->render()' . PHP_EOL
+                . self::TAB . ');' . PHP_EOL
                 . self::TAB . '$this->dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . self::TAB . 'if ($this->getRequest()->getParam(\'back\')) {' . PHP_EOL
                 . self::TAB . self::TAB . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $entity->getId()]);' . PHP_EOL
-                . self::TAB . '}' . PHP_EOL
+                . self::TAB . '}' . PHP_EOL . PHP_EOL
                 . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '} catch (LocalizedException $e) {' . PHP_EOL
                 . self::TAB . '$this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
-                . self::TAB . '$this->messageManager->addExceptionMessage($e, __(\'Something went wrong while saving the ' . $entityName . '\'));' . PHP_EOL
+                . self::TAB . '$this->messageManager->addExceptionMessage(' . PHP_EOL
+                . self::TAB . self::TAB . '$e, __(\'Something went wrong while saving the ' . $entityName . '\')->render()' . PHP_EOL
+                . self::TAB . ');' . PHP_EOL
                 . '}' . PHP_EOL
                 . '$this->dataPersistor->set(\'' . $this->camelCaseToSnakeCase($shortName) . '\', $data);' . PHP_EOL . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $this->getRequest()->getParam(\'id\')]);');

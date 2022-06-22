@@ -39,13 +39,15 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
      */
     public function execute()
     {
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This Obsolete no longer exists'));
+                $this->messageManager->addErrorMessage(
+                    __('This Obsolete no longer exists')->render()
+                );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -58,12 +60,12 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mygento_SampleModule::obsolete');
         $resultPage->addBreadcrumb(
-            $entityId ? __('Edit Obsolete') : __('New Obsolete'),
-            $entityId ? __('Edit Obsolete') : __('New Obsolete')
+            $entityId ? __('Edit Obsolete')->render() : __('New Obsolete')->render(),
+            $entityId ? __('Edit Obsolete')->render() : __('New Obsolete')->render()
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Obsolete'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Obsolete')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Obsolete')
+            $entity->getId() ? $entity->getTitle() : __('New Obsolete')->render()
         );
 
         return $resultPage;

@@ -72,11 +72,11 @@ class Mass extends Common
         . '$collectionSize = $collection->getSize();' . PHP_EOL . PHP_EOL
 
         . 'foreach ($collection as $entity) {' . PHP_EOL
-        . '    $this->repository->delete($entity);' . PHP_EOL
+        . self::TAB . '$this->repository->delete($entity);' . PHP_EOL
         . '}' . PHP_EOL
 
         . '$this->messageManager->addSuccessMessage(' . PHP_EOL
-        . '    __(\'A total of %1 record(s) have been deleted.\', $collectionSize)' . PHP_EOL
+        . self::TAB . '__(\'A total of %1 record(s) have been deleted.\', $collectionSize)->render()' . PHP_EOL
         . ');' . PHP_EOL
 
         . '/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL

@@ -45,16 +45,16 @@ class Save extends Columns
         if (!$data) {
             return $resultRedirect->setPath('*/*/');
         }
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                if (!$entity->getId() && $entityId) {
-                    $this
-                        ->messageManager
-                        ->addErrorMessage(__('This Columns no longer exists'));
+                if (!$entity->getId()) {
+                    $this->messageManager->addErrorMessage(
+                        __('This Columns no longer exists')->render()
+                    );
 
                     return $resultRedirect->setPath('*/*/');
                 }
@@ -67,7 +67,9 @@ class Save extends Columns
 
         try {
             $this->repository->save($entity);
-            $this->messageManager->addSuccessMessage(__('You saved the Columns'));
+            $this->messageManager->addSuccessMessage(
+                __('You saved the Columns')->render()
+            );
             $this->dataPersistor->clear('sample_module_columns');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
@@ -77,7 +79,10 @@ class Save extends Columns
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Columns'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while saving the Columns')->render()
+            );
         }
         $this->dataPersistor->set('sample_module_columns', $data);
 

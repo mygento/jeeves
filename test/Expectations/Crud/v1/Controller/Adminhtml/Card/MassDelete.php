@@ -41,7 +41,7 @@ class MassDelete extends Card
             $this->repository->delete($entity);
         }
         $this->messageManager->addSuccessMessage(
-            __('A total of %1 record(s) have been deleted.', $collectionSize)
+            __('A total of %1 record(s) have been deleted.', $collectionSize)->render()
         );
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

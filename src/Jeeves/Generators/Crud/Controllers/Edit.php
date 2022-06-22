@@ -77,7 +77,9 @@ class Edit extends Common
                 . self::TAB . 'try {' . PHP_EOL
                 . self::TAB . self::TAB . '$entity = $this->repository->getById($entityId);' . PHP_EOL
                 . self::TAB . '} catch (NoSuchEntityException $e) {' . PHP_EOL
-                . self::TAB . self::TAB . '$this->messageManager->addErrorMessage(__(\'This ' . $entityName . ' no longer exists\'));' . PHP_EOL
+                . self::TAB . self::TAB . '$this->messageManager->addErrorMessage(' . PHP_EOL
+                . self::TAB . self::TAB . self::TAB . '__(\'This ' . $entityName . ' no longer exists\')->render()' . PHP_EOL
+                . self::TAB . self::TAB . ');' . PHP_EOL
                 . self::TAB . self::TAB . '/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . self::TAB . self::TAB . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL . PHP_EOL
                 . self::TAB . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
@@ -88,12 +90,12 @@ class Edit extends Common
                 . '$resultPage = $this->resultPageFactory->create();' . PHP_EOL
                 . '$resultPage->setActiveMenu(\'' . $acl . '\');' . PHP_EOL
                 . '$resultPage->addBreadcrumb(' . PHP_EOL
-                . '    $entityId ? __(\'Edit ' . $entityName . '\') : __(\'New ' . $entityName . '\'),' . PHP_EOL
-                . '    $entityId ? __(\'Edit ' . $entityName . '\') : __(\'New ' . $entityName . '\')' . PHP_EOL
+                . self::TAB . '$entityId ? __(\'Edit ' . $entityName . '\')->render() : __(\'New ' . $entityName . '\')->render(),' . PHP_EOL
+                . self::TAB . '$entityId ? __(\'Edit ' . $entityName . '\')->render() : __(\'New ' . $entityName . '\')->render()' . PHP_EOL
                 . ');' . PHP_EOL
-                . '$resultPage->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL
+                . '$resultPage->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\')->render());' . PHP_EOL
                 . '$resultPage->getConfig()->getTitle()->prepend(' . PHP_EOL
-                . '    $entity->getId() ? $entity->getTitle() : __(\'New ' . $entityName . '\')' . PHP_EOL
+                . self::TAB . '$entity->getId() ? $entity->getTitle() : __(\'New ' . $entityName . '\')->render()' . PHP_EOL
                 . ');' . PHP_EOL . PHP_EOL
                 . 'return $resultPage;');
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');

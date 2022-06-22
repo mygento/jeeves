@@ -42,7 +42,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::obsolete')
             ->getConfig()
-            ->getTitle()->prepend(__('Obsolete'));
+            ->getTitle()->prepend(__('Obsolete')->render());
 
         $this->dataPersistor->clear('sample_module_obsolete');
 

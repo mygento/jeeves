@@ -39,7 +39,7 @@ class Index extends Columns
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::columns')
             ->getConfig()
-            ->getTitle()->prepend(__('Columns'));
+            ->getTitle()->prepend(__('Columns')->render());
 
         $this->dataPersistor->clear('sample_module_columns');
 
