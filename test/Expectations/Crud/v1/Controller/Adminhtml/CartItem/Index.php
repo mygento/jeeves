@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 class Index extends CartItem
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(
@@ -39,7 +38,7 @@ class Index extends CartItem
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::cartitem')
             ->getConfig()
-            ->getTitle()->prepend(__('Cart Item'));
+            ->getTitle()->prepend(__('Cart Item')->render());
 
         $this->dataPersistor->clear('sample_module_cartitem');
 

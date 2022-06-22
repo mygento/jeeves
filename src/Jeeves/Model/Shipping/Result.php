@@ -5,11 +5,8 @@ namespace Mygento\Jeeves\Model\Shipping;
 class Result
 {
     private $path;
-
     private $module;
-
     private $carrierConfigs = [];
-
     private $defaultConfigs = [];
 
     public function getPath(): string

@@ -7,13 +7,9 @@ use Mygento\Jeeves\Generators\Crud\Common;
 class Module
 {
     private $vendor;
-
     private $module;
-
     private $route = null;
-
     private $converter;
-
     private $typehint;
 
     public function __construct(string $vendor, string $module, bool $typehint = true)

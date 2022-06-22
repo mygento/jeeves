@@ -27,17 +27,21 @@ class Delete extends Common
             ->addComment('')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
-                . '$entityId = $this->getRequest()->getParam(\'id\');' . PHP_EOL
+                . '$entityId = (int) $this->getRequest()->getParam(\'id\');' . PHP_EOL
                 . 'if (!$entityId) {' . PHP_EOL
-                . '    $this->messageManager->addErrorMessage(__(\'We can not find a ' . $entityName . ' to delete.\'));' . PHP_EOL
-                . '     return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
+                . self::TAB . '$this->messageManager->addErrorMessage(' . PHP_EOL
+                . self::TAB . self::TAB . '__(\'We can not find a ' . $entityName . ' to delete.\')->render()' . PHP_EOL
+                . self::TAB . ');' . PHP_EOL
+                . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '}' . PHP_EOL
                 . 'try {' . PHP_EOL
-                . '    $this->repository->deleteById($entityId);' . PHP_EOL
-                . '    $this->messageManager->addSuccessMessage(__(\'You deleted the ' . $entityName . '\'));' . PHP_EOL
-                . '    return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
+                . self::TAB . '$this->repository->deleteById($entityId);' . PHP_EOL
+                . self::TAB . '$this->messageManager->addSuccessMessage(' . PHP_EOL
+                . self::TAB . self::TAB . '__(\'You deleted the ' . $entityName . '\')->render()' . PHP_EOL
+                . self::TAB . ');' . PHP_EOL . PHP_EOL
+                . self::TAB . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL
                 . '} catch (\Exception $e) {' . PHP_EOL
-                . '    $this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL
+                . self::TAB . '$this->messageManager->addErrorMessage($e->getMessage());' . PHP_EOL
                 . '}' . PHP_EOL . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $entityId]);');
 

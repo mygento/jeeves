@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Poster;
 class Index extends Poster
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(
@@ -39,7 +38,7 @@ class Index extends Poster
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::poster')
             ->getConfig()
-            ->getTitle()->prepend(__('Poster'));
+            ->getTitle()->prepend(__('Poster')->render());
 
         $this->dataPersistor->clear('sample_module_poster');
 

@@ -14,7 +14,6 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 class MassDelete extends Columns
 {
     private Filter $filter;
-
     private CollectionFactory $collectionFactory;
 
     public function __construct(
@@ -41,7 +40,7 @@ class MassDelete extends Columns
             $this->repository->delete($entity);
         }
         $this->messageManager->addSuccessMessage(
-            __('A total of %1 record(s) have been deleted.', $collectionSize)
+            __('A total of %1 record(s) have been deleted.', $collectionSize)->render()
         );
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

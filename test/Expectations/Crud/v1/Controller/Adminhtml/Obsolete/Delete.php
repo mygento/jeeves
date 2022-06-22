@@ -13,16 +13,20 @@ class Delete extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         if (!$entityId) {
-            $this->messageManager->addErrorMessage(__('We can not find a Obsolete to delete.'));
+            $this->messageManager->addErrorMessage(
+                __('We can not find a Obsolete to delete.')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         }
 
         try {
             $this->repository->deleteById($entityId);
-            $this->messageManager->addSuccessMessage(__('You deleted the Obsolete'));
+            $this->messageManager->addSuccessMessage(
+                __('You deleted the Obsolete')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         } catch (\Exception $e) {

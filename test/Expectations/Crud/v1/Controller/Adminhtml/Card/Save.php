@@ -15,7 +15,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 class Save extends Card
 {
     private DataPersistorInterface $dataPersistor;
-
     private CardInterfaceFactory $entityFactory;
 
     public function __construct(
@@ -45,16 +44,16 @@ class Save extends Card
         if (!$data) {
             return $resultRedirect->setPath('*/*/');
         }
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                if (!$entity->getId() && $entityId) {
-                    $this
-                        ->messageManager
-                        ->addErrorMessage(__('This Card no longer exists'));
+                if (!$entity->getId()) {
+                    $this->messageManager->addErrorMessage(
+                        __('This Card no longer exists')->render()
+                    );
 
                     return $resultRedirect->setPath('*/*/');
                 }
@@ -67,7 +66,9 @@ class Save extends Card
 
         try {
             $this->repository->save($entity);
-            $this->messageManager->addSuccessMessage(__('You saved the Card'));
+            $this->messageManager->addSuccessMessage(
+                __('You saved the Card')->render()
+            );
             $this->dataPersistor->clear('sample_module_card');
             if ($this->getRequest()->getParam('back')) {
                 return $resultRedirect->setPath('*/*/edit', ['id' => $entity->getId()]);
@@ -77,7 +78,10 @@ class Save extends Card
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Card'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while saving the Card')->render()
+            );
         }
         $this->dataPersistor->set('sample_module_card', $data);
 

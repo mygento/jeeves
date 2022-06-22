@@ -14,7 +14,6 @@ class DataProvider extends ModifierPoolDataProvider
     protected $collection;
 
     private DataPersistorInterface $dataPersistor;
-
     private array $loadedData = [];
 
     public function __construct(

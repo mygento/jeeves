@@ -5,9 +5,7 @@ namespace Mygento\Jeeves\Model;
 class Acl
 {
     private $id;
-
     private $title;
-
     private $children;
 
     public function __construct(string $id, string $title, array $children = null)

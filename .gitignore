@@ -4,6 +4,7 @@
 .DS_Store
 /generate
 .php_cs.cache
+.php-cs-fixer.cache
 composer.lock
 
 box.phar

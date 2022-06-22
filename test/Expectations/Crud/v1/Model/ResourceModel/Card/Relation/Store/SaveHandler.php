@@ -10,7 +10,6 @@ use Mygento\SampleModule\Model\ResourceModel\Card;
 class SaveHandler implements ExtensionInterface
 {
     private Card $resource;
-
     private MetadataPool $metadataPool;
 
     public function __construct(Card $resource, MetadataPool $metadataPool)

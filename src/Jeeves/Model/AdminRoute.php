@@ -5,9 +5,7 @@ namespace Mygento\Jeeves\Model;
 class AdminRoute
 {
     private $id;
-
     private $name;
-
     private $path;
 
     public function __construct(string $id, string $name, string $path)

@@ -21,15 +21,10 @@ use Mygento\SampleModule\Model\ResourceModel\Card\CollectionFactory;
 class CardRepository implements CardRepositoryInterface
 {
     private ResourceModel\Card $resource;
-
     private CollectionFactory $collectionFactory;
-
     private CardInterfaceFactory $entityFactory;
-
     private CardSearchResultsInterfaceFactory $searchResultsFactory;
-
     private StoreManagerInterface $storeManager;
-
     private CollectionProcessorInterface $collectionProcessor;
 
     public function __construct(

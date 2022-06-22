@@ -10,13 +10,9 @@ use Symfony\Component\Yaml\Yaml;
 class Shipping extends Generator
 {
     protected $path;
-
     protected $io;
-
     private $globalTypehint;
-
     private $mod;
-
     private $global;
 
     // private $magentoVersion;

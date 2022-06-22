@@ -70,7 +70,7 @@ class View extends Common
                 . '$resultPage' . PHP_EOL
                 . self::TAB . '->setActiveMenu(\'' . $acl . '\')' . PHP_EOL
                 . self::TAB . '->getConfig()' . PHP_EOL
-                . self::TAB . '->getTitle()->prepend(__(\'' . $entityName . '\'));' . PHP_EOL . PHP_EOL
+                . self::TAB . '->getTitle()->prepend(__(\'' . $entityName . '\')->render());' . PHP_EOL . PHP_EOL
                 . '$this->dataPersistor->clear(\'' . $this->camelCaseToSnakeCase($shortName) . '\');' . PHP_EOL
                 . 'return $resultPage;');
 

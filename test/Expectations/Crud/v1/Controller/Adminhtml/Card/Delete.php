@@ -14,16 +14,20 @@ class Delete extends Card
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         if (!$entityId) {
-            $this->messageManager->addErrorMessage(__('We can not find a Card to delete.'));
+            $this->messageManager->addErrorMessage(
+                __('We can not find a Card to delete.')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         }
 
         try {
             $this->repository->deleteById($entityId);
-            $this->messageManager->addSuccessMessage(__('You deleted the Card'));
+            $this->messageManager->addSuccessMessage(
+                __('You deleted the Card')->render()
+            );
 
             return $resultRedirect->setPath('*/*/');
         } catch (\Exception $e) {

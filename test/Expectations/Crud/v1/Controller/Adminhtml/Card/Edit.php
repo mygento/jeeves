@@ -14,7 +14,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 class Edit extends Card
 {
     private CardInterfaceFactory $entityFactory;
-
     private PageFactory $resultPageFactory;
 
     public function __construct(
@@ -35,13 +34,15 @@ class Edit extends Card
      */
     public function execute(): ResultInterface
     {
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This Card no longer exists'));
+                $this->messageManager->addErrorMessage(
+                    __('This Card no longer exists')->render()
+                );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -54,12 +55,12 @@ class Edit extends Card
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mygento_SampleModule::card');
         $resultPage->addBreadcrumb(
-            $entityId ? __('Edit Card') : __('New Card'),
-            $entityId ? __('Edit Card') : __('New Card')
+            $entityId ? __('Edit Card')->render() : __('New Card')->render(),
+            $entityId ? __('Edit Card')->render() : __('New Card')->render()
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Card'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Card')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Card')
+            $entity->getId() ? $entity->getTitle() : __('New Card')->render()
         );
 
         return $resultPage;

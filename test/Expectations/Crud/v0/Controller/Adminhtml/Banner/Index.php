@@ -42,7 +42,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Banner
         $resultPage
             ->setActiveMenu('Mygento_SampleModule::banner')
             ->getConfig()
-            ->getTitle()->prepend(__('Banner'));
+            ->getTitle()->prepend(__('Banner')->render());
 
         $this->dataPersistor->clear('sample_module_banner');
 

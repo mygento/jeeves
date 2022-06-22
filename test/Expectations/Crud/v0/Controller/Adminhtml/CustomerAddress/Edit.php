@@ -39,13 +39,15 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
      */
     public function execute()
     {
-        $entityId = $this->getRequest()->getParam('id');
+        $entityId = (int) $this->getRequest()->getParam('id');
         $entity = $this->entityFactory->create();
         if ($entityId) {
             try {
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This Customer Address no longer exists'));
+                $this->messageManager->addErrorMessage(
+                    __('This Customer Address no longer exists')->render()
+                );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -58,12 +60,12 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mygento_SampleModule::customeraddress');
         $resultPage->addBreadcrumb(
-            $entityId ? __('Edit Customer Address') : __('New Customer Address'),
-            $entityId ? __('Edit Customer Address') : __('New Customer Address')
+            $entityId ? __('Edit Customer Address')->render() : __('New Customer Address')->render(),
+            $entityId ? __('Edit Customer Address')->render() : __('New Customer Address')->render()
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Customer Address'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Customer Address')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Customer Address')
+            $entity->getId() ? $entity->getTitle() : __('New Customer Address')->render()
         );
 
         return $resultPage;

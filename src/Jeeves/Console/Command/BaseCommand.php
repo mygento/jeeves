@@ -75,7 +75,15 @@ abstract class BaseCommand extends Command
         $config = new Module();
         $config->setFinder($finder);
 
-        $resolver = new \PhpCsFixer\Console\ConfigurationResolver($config, [], getcwd(), new \PhpCsFixer\ToolInfo());
+        $resolver = new \PhpCsFixer\Console\ConfigurationResolver(
+            $config,
+            [
+                'dry-run' => false,
+                'stop-on-violation' => false,
+            ],
+            getcwd(),
+            new \PhpCsFixer\ToolInfo()
+        );
         $errorsManager = new \PhpCsFixer\Error\ErrorsManager();
         $runner = new \PhpCsFixer\Runner\Runner(
             $finder,
