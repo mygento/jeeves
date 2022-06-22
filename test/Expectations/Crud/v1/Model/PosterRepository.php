@@ -20,13 +20,9 @@ use Mygento\SampleModule\Model\ResourceModel\Poster\CollectionFactory;
 class PosterRepository implements PosterRepositoryInterface
 {
     private ResourceModel\Poster $resource;
-
     private CollectionFactory $collectionFactory;
-
     private PosterInterfaceFactory $entityFactory;
-
     private PosterSearchResultsInterfaceFactory $searchResultsFactory;
-
     private CollectionProcessorInterface $collectionProcessor;
 
     public function __construct(

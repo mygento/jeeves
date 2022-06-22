@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Poster;
 class Index extends Poster
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(

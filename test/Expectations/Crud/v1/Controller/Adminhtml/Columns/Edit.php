@@ -14,7 +14,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 class Edit extends Columns
 {
     private ColumnsInterfaceFactory $entityFactory;
-
     private PageFactory $resultPageFactory;
 
     public function __construct(

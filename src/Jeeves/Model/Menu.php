@@ -5,15 +5,10 @@ namespace Mygento\Jeeves\Model;
 class Menu
 {
     private $id;
-
     private $name;
-
     private $code;
-
     private $parent;
-
     private $resource;
-
     private $action;
 
     public function __construct(string $id, string $name, string $code, string $parent, string $resource, string $action = null)

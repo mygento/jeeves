@@ -15,7 +15,6 @@ class Card extends AbstractDb
     public const TABLE_PRIMARY_KEY = 'card_id';
 
     private EntityManager $entityManager;
-
     private MetadataPool $metadataPool;
 
     public function __construct(

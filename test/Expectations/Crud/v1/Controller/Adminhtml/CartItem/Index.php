@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 class Index extends CartItem
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(

@@ -15,7 +15,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 class Save extends Columns
 {
     private DataPersistorInterface $dataPersistor;
-
     private ColumnsInterfaceFactory $entityFactory;
 
     public function __construct(

@@ -5,13 +5,9 @@ namespace Mygento\Jeeves\Model;
 class Api
 {
     private $url;
-
     private $method;
-
     private $class;
-
     private $classMethod;
-
     private $resource;
 
     public function __construct(

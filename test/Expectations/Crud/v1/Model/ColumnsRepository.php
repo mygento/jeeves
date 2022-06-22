@@ -20,13 +20,9 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 class ColumnsRepository implements ColumnsRepositoryInterface
 {
     private ResourceModel\Columns $resource;
-
     private CollectionFactory $collectionFactory;
-
     private ColumnsInterfaceFactory $entityFactory;
-
     private ColumnsSearchResultsInterfaceFactory $searchResultsFactory;
-
     private CollectionProcessorInterface $collectionProcessor;
 
     public function __construct(

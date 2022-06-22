@@ -14,7 +14,6 @@ use Mygento\SampleModule\Model\ResourceModel\Card\CollectionFactory;
 class MassDelete extends Card
 {
     private Filter $filter;
-
     private CollectionFactory $collectionFactory;
 
     public function __construct(

@@ -14,7 +14,6 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 class Edit extends CartItem
 {
     private CartItemInterfaceFactory $entityFactory;
-
     private PageFactory $resultPageFactory;
 
     public function __construct(

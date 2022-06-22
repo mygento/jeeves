@@ -5,19 +5,12 @@ namespace Mygento\Jeeves\Model;
 class DbTable
 {
     private $name;
-
     private $columns;
-
     private $indexes;
-
     private $fk;
-
     private $resource;
-
     private $engine;
-
     private $comment;
-
     private $primary;
 
     public function __construct(

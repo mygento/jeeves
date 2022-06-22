@@ -14,7 +14,6 @@ use Mygento\SampleModule\Model\ResourceModel\CartItem\CollectionFactory;
 class MassDelete extends CartItem
 {
     private Filter $filter;
-
     private CollectionFactory $collectionFactory;
 
     public function __construct(

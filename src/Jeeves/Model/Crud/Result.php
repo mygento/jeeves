@@ -5,23 +5,14 @@ namespace Mygento\Jeeves\Model\Crud;
 class Result
 {
     private $events = [];
-
     private $di = [];
-
     private $aclEntity = [];
-
     private $aclConfig = [];
-
     private $db = [];
-
     private $menu = [];
-
     private $webapi = [];
-
     private $adminRoute = [];
-
     private $path;
-
     private $module;
 
     public function getEvents(): array

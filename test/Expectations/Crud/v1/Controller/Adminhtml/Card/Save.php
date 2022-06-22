@@ -15,7 +15,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 class Save extends Card
 {
     private DataPersistorInterface $dataPersistor;
-
     private CardInterfaceFactory $entityFactory;
 
     public function __construct(

@@ -14,7 +14,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 class Edit extends Card
 {
     private CardInterfaceFactory $entityFactory;
-
     private PageFactory $resultPageFactory;
 
     public function __construct(

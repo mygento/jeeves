@@ -14,7 +14,6 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 class MassDelete extends Columns
 {
     private Filter $filter;
-
     private CollectionFactory $collectionFactory;
 
     public function __construct(

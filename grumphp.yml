@@ -10,7 +10,7 @@ grumphp:
         phpunit:
             testsuite: 'Test'
         phpcsfixer:
-            config: '.php_cs'
+            config: '.php-cs-fixer.php'
         phpcs:
             warning_severity: 0
         xmllint:

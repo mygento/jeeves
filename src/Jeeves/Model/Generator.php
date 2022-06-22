@@ -10,9 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class Generator extends Common
 {
     protected $path;
-
     protected $io;
-
     private $converter;
 
     public function setPath(string $path)

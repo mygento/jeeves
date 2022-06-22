@@ -16,7 +16,6 @@ abstract class Poster extends Action
     public const ADMIN_RESOURCE = 'Mygento_SampleModule::poster';
 
     protected Registry $coreRegistry;
-
     protected PosterRepositoryInterface $repository;
 
     public function __construct(PosterRepositoryInterface $repository, Registry $coreRegistry, Action\Context $context)

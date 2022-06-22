@@ -19,15 +19,14 @@
         "mygento/coding-standard": "~2.14.0-beta5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
-        "phpstan/phpstan": "1.2.0 as 0.12.23"
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-4": { "Mygento\\Jeeves\\": "src/Jeeves" }
     },
     "config": {
         "platform": {
-            "php": "7.3.20"
+            "php": "7.4.20"
         },
         "allow-plugins": {
             "phpro/grumphp": true

@@ -8,15 +8,10 @@ use Symfony\Component\Yaml\Yaml;
 class Crud
 {
     private $magentoVersion;
-
     private $configVersion;
-
     private $globalTypehint;
-
     private $path;
-
     private $io;
-
     private $global = false;
 
     public function __construct(IOInterface $io)

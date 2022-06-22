@@ -15,7 +15,6 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 class Save extends CartItem
 {
     private DataPersistorInterface $dataPersistor;
-
     private CartItemInterfaceFactory $entityFactory;
 
     public function __construct(

@@ -10,32 +10,21 @@ class Entity extends Generator
     private const DEFAULT_KEY = 'id';
 
     private $typehint = true;
-
     private $version;
-
     private $config = [];
-
     private $name;
 
     /** @var Module */
     private $module;
 
     private $api;
-
     private $gui;
-
     private $readonly = false;
-
     private $withStore = false;
-
     private $tablename;
-
     private $cacheTag = null;
-
     private $primaryKey;
-
     private $adminRoute;
-
     private $comment;
 
     public function __construct()

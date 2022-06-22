@@ -16,7 +16,6 @@ abstract class Columns extends Action
     public const ADMIN_RESOURCE = 'Mygento_SampleModule::columns';
 
     protected Registry $coreRegistry;
-
     protected ColumnsRepositoryInterface $repository;
 
     public function __construct(ColumnsRepositoryInterface $repository, Registry $coreRegistry, Action\Context $context)

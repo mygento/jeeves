@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 class Index extends Card
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(

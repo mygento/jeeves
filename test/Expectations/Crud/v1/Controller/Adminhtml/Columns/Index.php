@@ -13,7 +13,6 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 class Index extends Columns
 {
     private PageFactory $resultPageFactory;
-
     private DataPersistorInterface $dataPersistor;
 
     public function __construct(

@@ -16,7 +16,6 @@ abstract class Card extends Action
     public const ADMIN_RESOURCE = 'Mygento_SampleModule::card';
 
     protected Registry $coreRegistry;
-
     protected CardRepositoryInterface $repository;
 
     public function __construct(CardRepositoryInterface $repository, Registry $coreRegistry, Action\Context $context)

@@ -5,25 +5,15 @@ namespace Mygento\Jeeves\Model;
 class DbColumn
 {
     private $onUpdate;
-
     private $default;
-
     private $scale;
-
     private $precision;
-
     private $type;
-
     private $name;
-
     private $nullable;
-
     private $identity;
-
     private $unsigned;
-
     private $comment;
-
     private $length;
 
     public function __construct(
