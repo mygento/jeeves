@@ -9,18 +9,15 @@ class Entity extends Generator
 {
     private const DEFAULT_KEY = 'id';
 
-    private $typehint = true;
-    private $version;
-    private $config = [];
-    private $name;
-
-    /** @var Module */
-    private $module;
-
+    private string $phpVersion;
+    private string $version;
+    private array $config = [];
+    private string $name;
+    private Module $module;
     private $api;
     private $gui;
-    private $readonly = false;
-    private $withStore = false;
+    private bool $readonly = false;
+    private bool $withStore = false;
     private $tablename;
     private $cacheTag = null;
     private $primaryKey;
@@ -71,9 +68,9 @@ class Entity extends Generator
         return $this->withStore;
     }
 
-    public function hasTypehint(): bool
+    public function getPhpVersion(): string
     {
-        return $this->typehint;
+        return $this->phpVersion;
     }
 
     public function getName(): string
@@ -86,9 +83,9 @@ class Entity extends Generator
         return $this->comment;
     }
 
-    public function setTypeHint(bool $hint)
+    public function setPhpVersion(string $version)
     {
-        $this->typehint = $hint;
+        $this->phpVersion = $version;
     }
 
     public function setVersion(string $version)
@@ -99,7 +96,7 @@ class Entity extends Generator
     public function setConfig(array $config)
     {
         $this->config = $config;
-        $this->typehint = $config['settings']['typehint'] ?? $this->typehint;
+        $this->phpVersion = $config['settings']['php_version'] ?? $this->phpVersion;
         $this->version = $config['settings']['version'] ?? $this->version;
 
         $this->api = $config['api'] ?? false;

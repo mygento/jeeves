@@ -42,7 +42,7 @@ class Controllers extends Generator
                 $entity->getEntityAcl(),
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -63,7 +63,7 @@ class Controllers extends Generator
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getEntityAcl(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -84,7 +84,7 @@ class Controllers extends Generator
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getEntityAcl(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -105,7 +105,7 @@ class Controllers extends Generator
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getPrimaryKey(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -121,7 +121,7 @@ class Controllers extends Generator
             $generator->genAdminDeleteController(
                 $entity->getEntityName(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -140,7 +140,7 @@ class Controllers extends Generator
                 $fileName,
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -159,7 +159,7 @@ class Controllers extends Generator
                 $fileName,
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -179,7 +179,7 @@ class Controllers extends Generator
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName() . '\\CollectionFactory',
                 $namePath . 'Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }

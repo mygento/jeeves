@@ -15,8 +15,9 @@ class Model extends Common
         array $fields = self::DEFAULT_FIELDS,
         bool $hasApi = false,
         bool $withStore = false,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
 

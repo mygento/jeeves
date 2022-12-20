@@ -11,7 +11,7 @@ class Shipping extends Generator
 {
     protected $path;
     protected $io;
-    private $globalTypehint;
+    private string $phpVersion;
     private $mod;
     private $global;
 
@@ -44,7 +44,7 @@ class Shipping extends Generator
                 continue;
             }
             foreach ($mod as $module => $ent) {
-                $modEntity = new Module($vendor, $module, $this->globalTypehint);
+                $modEntity = new Module($vendor, $module, $this->phpVersion);
                 if (isset($ent['settings'])) {
                     $modEntity->setConfig($ent['settings']);
                 }
@@ -115,7 +115,7 @@ class Shipping extends Generator
     private function setGlobalSettings(array $config)
     {
         // $this->magentoVersion = $config['settings']['version'] ?? '2.4';
-        $this->globalTypehint = $config['settings']['typehint'] ?? true;
+        $this->phpVersion = $config['settings']['php_version'] ?? PHP_VERSION;
     }
 
     private function generateHelper(string $carrier)

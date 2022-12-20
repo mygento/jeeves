@@ -36,7 +36,7 @@ class Repository extends Generator
                 $namePath . 'Api\\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
                 $entity->withStore(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -54,7 +54,7 @@ class Repository extends Generator
                 $fileName,
                 $namePath . $entity->getEntityName() . 'SearchResultsInterface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -80,7 +80,7 @@ class Repository extends Generator
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName(),
                 $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -99,7 +99,7 @@ class Repository extends Generator
                 $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $namePath . 'Model\\ResourceModel\\' . $entity->getEntityName(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -116,7 +116,7 @@ class Repository extends Generator
                 $fileName,
                 $entity->getNamespace() . '\Api\Data\\' . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }

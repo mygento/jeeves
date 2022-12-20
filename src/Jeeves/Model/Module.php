@@ -6,23 +6,23 @@ use Mygento\Jeeves\Generators\Crud\Common;
 
 class Module
 {
-    private $vendor;
-    private $module;
-    private $route = null;
-    private $converter;
-    private $typehint;
+    private string $vendor;
+    private string $module;
+    private ?string $route = null;
+    private ?Common $converter = null;
+    private string $phpVersion;
 
-    public function __construct(string $vendor, string $module, bool $typehint = true)
+    public function __construct(string $vendor, string $module, string $phpVersion)
     {
         $this->vendor = $vendor;
         $this->module = $module;
-        $this->typehint = $typehint;
+        $this->phpVersion = $phpVersion;
     }
 
     public function setConfig(array $config)
     {
         $this->route = $config['admin_route'] ?? $this->getModuleLowercase();
-        $this->typehint = $config['typehint'] ?? $this->typehint;
+        $this->phpVersion = $config['php_version'] ?? $this->phpVersion;
     }
 
     public function setModule(string $module)
@@ -99,9 +99,9 @@ class Module
         return $this->getConverter()->splitAtUpperCase($this->getModule());
     }
 
-    public function hasTypehint(): bool
+    public function getPhpVersion(): string
     {
-        return $this->typehint;
+        return $this->phpVersion;
     }
 
     private function getConverter(): Common

@@ -14,8 +14,9 @@ class Grid extends Common
         string $collection,
         string $rootNamespace,
         bool $withStore = false,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
         $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
         $namespace->addUse('Magento\Framework\Api\SearchCriteriaInterface');

@@ -1,9 +1,6 @@
-settings:
-    typehint: false
 Mygento:
   SampleModule:
     settings:
-      typehint: true
       admin_route: samplium
     shipping:
       code: 'slowcourier'
@@ -105,7 +102,7 @@ Mygento:
             columns: ['is_active']
       Obsolete:
           settings:
-              typehint: false
+              php_version: '7.3'
           columns:
               id:
                 type: int

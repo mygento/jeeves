@@ -85,6 +85,6 @@ look in ```.jeeves.phpunit_v1.yaml``` or ```.jeeves.phpunit_v0.yaml```
 
 | Property | Description | Required | Default | Comment |
 | -- | -- | -- | -- | -- |
-| typehint | Boolean | N | true
+| php_version | String | N | PHP_VERSION
 | admin_route | String | N | %module%
 | version | string | N | 2.4 | Magento version

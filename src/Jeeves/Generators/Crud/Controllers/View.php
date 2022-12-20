@@ -13,8 +13,9 @@ class View extends Common
         string $repository,
         string $acl,
         string $rootNamespace,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Index')

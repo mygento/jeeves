@@ -12,8 +12,9 @@ class Save extends Common
         string $interface,
         string $resourceClass,
         string $rootNamespace,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity . '\\Relation\\Store');
         $namespace->addUse($interface);
         $namespace->addUse($rootNamespace . '\Model\ResourceModel\\' . $entity);

@@ -17,8 +17,9 @@ class Repository extends Common
         string $entityInterface,
         string $rootNamespace,
         bool $withStore = false,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');

@@ -14,8 +14,9 @@ class Resource extends Common
         string $rootNamespace,
         string $interface,
         bool $withStore = false,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel');
 
         if ($typehint) {

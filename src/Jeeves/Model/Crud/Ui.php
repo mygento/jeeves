@@ -38,7 +38,7 @@ class Ui extends Generator
                 $entity->getNamespace() . '\Model\\ResourceModel\\' . $entity->getEntityName() . '\\Collection',
                 $entity->getNamespace(),
                 $entity->withStore(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }
@@ -57,7 +57,7 @@ class Ui extends Generator
                     $entity->getEntityName() . 'Actions',
                     $entity->getPrimaryKey(),
                     $entity->getNamespace(),
-                    $entity->hasTypeHint()
+                    $entity->getPhpVersion()
                 )
         );
     }
@@ -77,7 +77,7 @@ class Ui extends Generator
                 $fileName,
                 $entity->getModule()->getModuleLowercase() . '_' . $entity->getEntityLowercase(),
                 $entity->getNamespace(),
-                $entity->hasTypeHint()
+                $entity->getPhpVersion()
             )
         );
     }

@@ -9,7 +9,7 @@ class Crud
 {
     private $magentoVersion;
     private $configVersion;
-    private $globalTypehint;
+    private $phpVersion;
     private $path;
     private $io;
     private $global = false;
@@ -41,7 +41,7 @@ class Crud
                 continue;
             }
             foreach ($mod as $module => $ent) {
-                $modEntity = new Module($vendor, $module, $this->globalTypehint);
+                $modEntity = new Module($vendor, $module, $this->phpVersion);
                 if (isset($ent['settings'])) {
                     $modEntity->setConfig($ent['settings']);
                 }
@@ -87,7 +87,7 @@ class Crud
     private function setGlobalSettings(array $config)
     {
         $this->magentoVersion = $config['settings']['version'] ?? '2.4';
-        $this->globalTypehint = $config['settings']['typehint'] ?? true;
+        $this->phpVersion = $config['settings']['php_version'] ?? PHP_VERSION;
     }
 
     private function generateEntities(array $entities, Module $mod): Crud\Result
@@ -106,33 +106,17 @@ class Crud
             $entity->setIO($this->io);
             $entity->setPath($this->path);
             $entity->setVersion($this->magentoVersion);
-            $entity->setTypeHint($mod->hasTypehint());
-
-//            echo PHP_EOL.$entityName.PHP_EOL;
-//            echo 'global'.PHP_EOL;
-//            var_dump($this->globalTypehint);
-//            echo 'module'.PHP_EOL;
-//            var_dump($mod->hasTypehint());
-//            echo 'entity'.PHP_EOL;
-//            var_dump($config['settings']['typehint'] ?? null);
+            $entity->setPhpVersion($mod->getPhpVersion());
 
             $entity->setModule($mod);
             $entity->setName($entityName);
 
             if ($this->configVersion === 0) {
                 $config['cacheable'] = true;
-                $config['settings']['typehint'] = false;
-            }
-
-            if (\PHP_VERSION_ID < 70400) {
-                $config['settings']['typehint'] = false;
+                $config['settings']['php_version'] = '7.3.0';
             }
 
             $entity->setConfig($config);
-
-//            echo 'result'.PHP_EOL;
-//            var_dump($entity->hasTypehint());
-//            echo PHP_EOL.PHP_EOL;
 
             $entityList[] = $entity;
 

@@ -12,8 +12,9 @@ class Shared extends Common
         string $acl,
         string $repository,
         string $rootNamespace,
-        bool $typehint = false
+        string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
 
         if ($typehint) {
