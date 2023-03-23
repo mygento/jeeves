@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">sample_module_cartitem_edit.sample_module_cartitem_edit_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">General Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="Mygento\Base\Block\Adminhtml\Component\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Mygento\Base\Block\Adminhtml\Component\Edit\SaveButton"/>
+            <button name="reset" class="Mygento\Base\Block\Adminhtml\Component\Edit\ResetButton"/>
+            <button name="delete" class="Mygento\Base\Block\Adminhtml\Component\Edit\DeleteButton"/>
+            <button name="back" class="Mygento\Base\Block\Adminhtml\Component\Edit\BackButton"/>
+        </buttons>
+        <namespace>sample_module_cartitem_edit</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>sample_module_cartitem_edit.sample_module_cartitem_edit_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="sample_module_cartitem_edit_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="sample_module/cartitem/save"/>
+        </settings>
+        <dataProvider name="sample_module_cartitem_edit_data_source" class="Mygento\SampleModule\Model\CartItem\DataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>cart_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label></label>
+        </settings>
+        <field name="cart_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Cart Id</label>
+                <visible>false</visible>
+                <dataScope>cart_id</dataScope>
+            </settings>
+        </field>
+        <field name="is_active" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Is Active</label>
+                <visible>true</visible>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="delivery_date" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Delivery Date</label>
+                <visible>true</visible>
+                <dataScope>delivery_date</dataScope>
+            </settings>
+        </field>
+        <field name="city" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+                <visible>true</visible>
+                <dataScope>city</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="customer_group" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Customer Group</label>
+                <visible>true</visible>
+                <dataScope>customer_group</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Customer\Model\Customer\Source\Group"/>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="description" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+                <visible>true</visible>
+                <dataScope>description</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="created_at" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Created At</label>
+                <visible>false</visible>
+                <dataScope>created_at</dataScope>
+            </settings>
+        </field>
+        <field name="updated_at" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Updated At</label>
+                <visible>false</visible>
+                <dataScope>updated_at</dataScope>
+            </settings>
+        </field>
+        <field name="discount" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Discount</label>
+                <visible>true</visible>
+                <dataScope>discount</dataScope>
+            </settings>
+        </field>
+        <field name="price" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">cartitem</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>price</dataType>
+                <label translate="true">Price</label>
+                <visible>true</visible>
+                <dataScope>price</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+</form>

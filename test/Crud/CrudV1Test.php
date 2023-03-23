@@ -9,11 +9,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CrudV1Test extends \PHPUnit\Framework\TestCase
 {
+    private const GEN_PATH = App::GEN . App::DS . 'crud' . App::DS;
     private const V = 'v1';
+    private const VARIANTS = ['7.4', '8.1', '8.2'];
 
-    private $commandTester;
-
-    private $path;
+    private CommandTester $commandTester;
+    private string $path;
 
     protected function setUp(): void
     {
@@ -21,14 +22,23 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $application->add(new ModelCrud());
         $command = $application->find('generate-model-crud');
         $this->commandTester = new CommandTester($command);
-        $this->path = App::GEN . DIRECTORY_SEPARATOR . self::V;
     }
 
     public function testCrudV1()
     {
+        foreach (self::VARIANTS as $v) {
+            if (version_compare(PHP_VERSION, $v, '>=')) {
+                $this->path = str_replace('.', '', $v) . App::DS . self::V;
+                $this->checkEveryThing();
+            }
+        }
+    }
+
+    private function checkEveryThing()
+    {
         $this->commandTester->execute([
             '--config_file' => '.jeeves.phpunit_' . self::V . '.yaml',
-            '--path' => $this->path,
+            '--path' => self::GEN_PATH . $this->path,
         ]);
         $this->checkInterfaces();
         $this->checkModels();
@@ -44,23 +54,21 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 
     private function checkInterfaces()
     {
-        if (\PHP_VERSION_ID >= 70400) {
-            $this->checkFile('Api/ColumnsRepositoryInterface.php');
-            $this->checkFile('Api/Data/ColumnsInterface.php');
-            $this->checkFile('Api/Data/ColumnsSearchResultsInterface.php');
+        $this->checkFile('Api/ColumnsRepositoryInterface.php');
+        $this->checkFile('Api/Data/ColumnsInterface.php');
+        $this->checkFile('Api/Data/ColumnsSearchResultsInterface.php');
 
-            $this->checkFile('Api/CartItemRepositoryInterface.php');
-            $this->checkFile('Api/Data/CartItemInterface.php');
-            $this->checkFile('Api/Data/CartItemSearchResultsInterface.php');
+        $this->checkFile('Api/CartItemRepositoryInterface.php');
+        $this->checkFile('Api/Data/CartItemInterface.php');
+        $this->checkFile('Api/Data/CartItemSearchResultsInterface.php');
 
-            $this->checkFile('Api/PosterRepositoryInterface.php');
-            $this->checkFile('Api/Data/PosterInterface.php');
-            $this->checkFile('Api/Data/PosterSearchResultsInterface.php');
+        $this->checkFile('Api/PosterRepositoryInterface.php');
+        $this->checkFile('Api/Data/PosterInterface.php');
+        $this->checkFile('Api/Data/PosterSearchResultsInterface.php');
 
-            $this->checkFile('Api/CardRepositoryInterface.php');
-            $this->checkFile('Api/Data/CardInterface.php');
-            $this->checkFile('Api/Data/CardSearchResultsInterface.php');
-        }
+        $this->checkFile('Api/CardRepositoryInterface.php');
+        $this->checkFile('Api/Data/CardInterface.php');
+        $this->checkFile('Api/Data/CardSearchResultsInterface.php');
 
         $this->checkFile('Api/ObsoleteRepositoryInterface.php');
         $this->checkFile('Api/Data/ObsoleteInterface.php');
@@ -247,8 +255,8 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
             '',
             false,
             false
@@ -258,12 +266,12 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
         );
         $this->assertFileEquals(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
             '',
             false,
             false

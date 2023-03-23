@@ -20,8 +20,8 @@ class ModelCrud extends BaseCommand
             ->setAliases(['generate_model_crud', 'crud'])
             ->setDescription('Generate Model Crud')
             ->setDefinition([
-                new InputArgument('module', InputArgument::OPTIONAL, 'Name of the module'),
-                new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity'),
+                new InputArgument('module', InputArgument::OPTIONAL, 'Name of the module', 'example'),
+                new InputArgument('name', InputArgument::OPTIONAL, 'Name of the entity', ''),
                 new InputArgument('vendor', InputArgument::OPTIONAL, 'Vendor of the module', 'mygento'),
                 new InputOption('tablename', null, InputOption::VALUE_OPTIONAL, 'route path of the module'),
                 new InputOption('routepath', null, InputOption::VALUE_OPTIONAL, 'tablename of the entity'),

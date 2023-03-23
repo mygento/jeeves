@@ -9,11 +9,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CrudV0Test extends \PHPUnit\Framework\TestCase
 {
+    private const GEN_PATH = App::GEN . App::DS . 'crud' . App::DS;
     private const V = 'v0';
+    private const VARIANTS = ['7.4'];
 
-    private $commandTester;
-
-    private $path;
+    private CommandTester $commandTester;
+    private string $path;
 
     protected function setUp(): void
     {
@@ -21,14 +22,23 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
         $application->add(new ModelCrud());
         $command = $application->find('generate-model-crud');
         $this->commandTester = new CommandTester($command);
-        $this->path = App::GEN . DIRECTORY_SEPARATOR . self::V;
     }
 
     public function testCrudV0()
     {
+        foreach (self::VARIANTS as $v) {
+            if (version_compare(PHP_VERSION, $v, '>=')) {
+                $this->path = str_replace('.', '', $v) . App::DS . self::V;
+                $this->checkEveryThing();
+            }
+        }
+    }
+
+    private function checkEveryThing()
+    {
         $this->commandTester->execute([
             '--config_file' => '.jeeves.phpunit_' . self::V . '.yaml',
-            '--path' => $this->path,
+            '--path' => self::GEN_PATH . $this->path,
         ]);
         $this->checkInterfaces();
         $this->checkModels();
@@ -131,8 +141,8 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
     private function checkFile($file)
     {
         $this->assertFileEquals(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
             '',
             false,
             false
@@ -142,12 +152,12 @@ class CrudV0Test extends \PHPUnit\Framework\TestCase
     private function checkXml($file)
     {
         $this->assertXmlFileEqualsXmlFile(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
         );
         $this->assertFileEquals(
-            'test/Expectations/Crud/' . self::V . '/' . $file,
-            $this->path . '/' . $file,
+            'test/Expectations/Crud/' . $this->path . '/' . $file,
+            self::GEN_PATH . $this->path . '/' . $file,
             '',
             false,
             false
