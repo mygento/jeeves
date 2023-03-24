@@ -5,8 +5,8 @@ grumphp:
                 - "die("
                 - "var_dump("
                 - "exit;"
-        phplint:
-          exclude: ['./test/Expectations/Crud/v1']
+#        phplint:
+#          exclude: ['./test/Expectations/Crud']
         phpunit:
             testsuite: 'Test'
         phpcsfixer:

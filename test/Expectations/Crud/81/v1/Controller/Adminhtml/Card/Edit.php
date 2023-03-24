@@ -13,20 +13,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 
 class Edit extends Card
 {
-    private CardInterfaceFactory $entityFactory;
-    private PageFactory $resultPageFactory;
-
     public function __construct(
-        CardInterfaceFactory $entityFactory,
-        PageFactory $resultPageFactory,
+        private readonly CardInterfaceFactory $entityFactory,
+        private readonly PageFactory $resultPageFactory,
         CardRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->entityFactory = $entityFactory;
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**

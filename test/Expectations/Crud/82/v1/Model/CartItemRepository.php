@@ -19,24 +19,13 @@ use Mygento\SampleModule\Model\ResourceModel\CartItem\CollectionFactory;
  */
 class CartItemRepository implements CartItemRepositoryInterface
 {
-    private ResourceModel\CartItem $resource;
-    private CollectionFactory $collectionFactory;
-    private CartItemInterfaceFactory $entityFactory;
-    private CartItemSearchResultsInterfaceFactory $searchResultsFactory;
-    private CollectionProcessorInterface $collectionProcessor;
-
     public function __construct(
-        ResourceModel\CartItem $resource,
-        CollectionFactory $collectionFactory,
-        CartItemInterfaceFactory $entityFactory,
-        CartItemSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor
+        private readonly ResourceModel\CartItem $resource,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly CartItemInterfaceFactory $entityFactory,
+        private readonly CartItemSearchResultsInterfaceFactory $searchResultsFactory,
+        private readonly CollectionProcessorInterface $collectionProcessor,
     ) {
-        $this->resource = $resource;
-        $this->collectionFactory = $collectionFactory;
-        $this->entityFactory = $entityFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**

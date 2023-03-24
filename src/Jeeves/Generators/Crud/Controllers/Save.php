@@ -16,7 +16,10 @@ class Save extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $namespace->addUse('Magento\Framework\Exception\LocalizedException');
@@ -24,35 +27,39 @@ class Save extends Common
         $class = $namespace->addClass('Save')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
-        $persistor = $class->addProperty('dataPersistor')
-            ->setVisibility('private');
+        if (!$constructorProp) {
+            $persistor = $class->addProperty('dataPersistor')
+                ->setVisibility('private');
 
-        $factory = $class->addProperty('entityFactory')
-            ->setVisibility('private');
+            $factory = $class->addProperty('entityFactory')
+                ->setVisibility('private');
 
-        if ($typehint) {
-            $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-            $factory->setType($entityClass . 'Factory');
-            $persistor->setType('\Magento\Framework\App\Request\DataPersistorInterface');
-        } else {
-            $persistor->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
-            $factory->addComment('@var ' . $entityClass . 'Factory');
+            if ($typehint) {
+                $factory->setType($entityClass . 'Factory');
+                $persistor->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+            } else {
+                $persistor->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
+                $factory->addComment('@var ' . $entityClass . 'Factory');
+            }
         }
 
-        $construct = $class->addMethod('__construct')
-            ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
+        $body = 'parent::__construct($repository, $coreRegistry, $context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL
                 . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
-                . '$this->entityFactory = $entityFactory;' . PHP_EOL
-            );
+                . '$this->entityFactory = $entityFactory;' . PHP_EOL;
+        }
+        $construct = $class->addMethod('__construct')->setBody($body);
 
         if ($typehint) {
-            $namespace->addUse('\Magento\Framework\App\Request\DataPersistorInterface');
-            $namespace->addUse($entityClass . 'Factory');
-            $namespace->addUse($repository);
-            $namespace->addUse('\Magento\Framework\Registry');
-            $namespace->addUse('\Magento\Backend\App\Action\Context');
-            $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
+            $namespace
+                ->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity)
+                ->addUse('\Magento\Framework\App\Request\DataPersistorInterface')
+                ->addUse($entityClass . 'Factory')
+                ->addUse($repository)
+                ->addUse('\Magento\Framework\Registry')
+                ->addUse('\Magento\Backend\App\Action\Context')
+                ->addUse('\Magento\Framework\Exception\NoSuchEntityException');
         } else {
             $construct
                 ->addComment('@param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor')
@@ -62,12 +69,29 @@ class Save extends Common
                 ->addComment('@param \Magento\Backend\App\Action\Context $context');
         }
 
-        $construct->addParameter('dataPersistor')
-            ->setTypeHint('\Magento\Framework\App\Request\DataPersistorInterface');
-        $construct->addParameter('entityFactory')->setTypeHint($entityClass . 'Factory');
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('dataPersistor')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+            $construct
+                ->addPromotedParameter('entityFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType($entityClass . 'Factory');
+        } else {
+            $construct
+                ->addParameter('dataPersistor')
+                ->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+            $construct
+                ->addParameter('entityFactory')
+                ->setType($entityClass . 'Factory');
+        }
+
+        $construct->addParameter('repository')->setType($repository);
+        $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
             ->addComment('Save ' . $entityName . ' action')

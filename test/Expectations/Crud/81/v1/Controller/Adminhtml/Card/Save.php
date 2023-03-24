@@ -14,20 +14,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 
 class Save extends Card
 {
-    private DataPersistorInterface $dataPersistor;
-    private CardInterfaceFactory $entityFactory;
-
     public function __construct(
-        DataPersistorInterface $dataPersistor,
-        CardInterfaceFactory $entityFactory,
+        private readonly DataPersistorInterface $dataPersistor,
+        private readonly CardInterfaceFactory $entityFactory,
         CardRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->dataPersistor = $dataPersistor;
-        $this->entityFactory = $entityFactory;
     }
 
     /**

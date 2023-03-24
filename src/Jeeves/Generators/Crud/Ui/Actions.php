@@ -15,7 +15,7 @@ class Actions extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Ui\Component\Listing');
         $class = $namespace->addClass($className);
         $class->setExtends('\Mygento\Base\Ui\Component\Listing\Actions');

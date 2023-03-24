@@ -12,20 +12,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 
 class Index extends Card
 {
-    private PageFactory $resultPageFactory;
-    private DataPersistorInterface $dataPersistor;
-
     public function __construct(
-        PageFactory $resultPageFactory,
-        DataPersistorInterface $dataPersistor,
+        private readonly PageFactory $resultPageFactory,
+        private readonly DataPersistorInterface $dataPersistor,
         CardRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->resultPageFactory = $resultPageFactory;
-        $this->dataPersistor = $dataPersistor;
     }
 
     /**

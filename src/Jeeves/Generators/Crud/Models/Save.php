@@ -14,7 +14,10 @@ class Save extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity . '\\Relation\\Store');
         $namespace->addUse($interface);
         $namespace->addUse($rootNamespace . '\Model\ResourceModel\\' . $entity);
@@ -23,25 +26,47 @@ class Save extends Common
         $class = $namespace->addClass('SaveHandler');
         $class->addImplement('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
 
-        $res = $class->addProperty('resource')
-            ->setVisibility('private');
-        $mtdPool = $class->addProperty('metadataPool')
-            ->setVisibility('private');
-
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
-            $res->setType($resourceClass);
-            $mtdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-        } else {
-            $res->addComment('@var ' . $resourceClass);
-            $mtdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
         }
 
-        $construct = $class->addMethod('__construct')
-            ->setVisibility('public');
-        $construct->addParameter('resource')->setType($resourceClass);
-        $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
-        $construct->setBody('$this->resource = $resource;' . PHP_EOL . '$this->metadataPool = $metadataPool;');
+        if (!$constructorProp) {
+            $res = $class->addProperty('resource')->setVisibility('private');
+            $mtdPool = $class->addProperty('metadataPool')->setVisibility('private');
+
+            if ($typehint) {
+                $res->setType($resourceClass);
+                $mtdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
+            } else {
+                $res->addComment('@var ' . $resourceClass);
+                $mtdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
+            }
+        }
+
+        $construct = $class->addMethod('__construct')->setVisibility('public');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('resource')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType($resourceClass);
+            $construct
+                ->addPromotedParameter('metadataPool')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        } else {
+            $construct
+                ->addParameter('resource')
+                ->setType($resourceClass);
+            $construct
+                ->addParameter('metadataPool')
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        }
+
+        if (!$constructorProp) {
+            $construct->setBody('$this->resource = $resource;' . PHP_EOL . '$this->metadataPool = $metadataPool;');
+        }
 
         $execute = $class->addMethod('execute')
             ->addComment('@inheritDoc')

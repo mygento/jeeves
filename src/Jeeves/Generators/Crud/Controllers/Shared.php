@@ -14,7 +14,10 @@ class Shared extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
 
         if ($typehint) {
@@ -29,38 +32,61 @@ class Shared extends Common
             ->addComment('')
             ->addComment('@see _isAllowed()');
 
-        $reg = $class->addProperty('coreRegistry')
-            ->setVisibility('protected');
-
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\Registry');
-            $reg->setType('\Magento\Framework\Registry');
-        } else {
-            $reg->addComment('Core registry');
-            $reg->addComment('');
-            $reg->addComment('@var \Magento\Framework\Registry');
+            $namespace->addUse($repository);
         }
 
-        $repo = $class->addProperty('repository')
-            ->setVisibility('protected');
+        if (!$constructorProp) {
+            $reg = $class->addProperty('coreRegistry')
+                ->setVisibility('protected');
 
-        if ($typehint) {
-            $repo->setType($repository);
-            $namespace->addUse($repository);
-        } else {
-            $repo->addComment($className . ' repository')
-                ->addComment('')
-                ->addComment('@var ' . $repository);
+            if ($typehint) {
+                $reg->setType('\Magento\Framework\Registry');
+            } else {
+                $reg->addComment('Core registry');
+                $reg->addComment('');
+                $reg->addComment('@var \Magento\Framework\Registry');
+            }
+
+            $repo = $class->addProperty('repository')
+                ->setVisibility('protected');
+
+            if ($typehint) {
+                $repo->setType($repository);
+            } else {
+                $repo->addComment($className . ' repository')
+                    ->addComment('')
+                    ->addComment('@var ' . $repository);
+            }
+        }
+
+        $body = 'parent::__construct($context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL
+                . '$this->repository = $repository;' . PHP_EOL
+                . '$this->coreRegistry = $coreRegistry;';
         }
 
         $construct = $class->addMethod('__construct')
-            ->setBody('parent::__construct($context);' . PHP_EOL . PHP_EOL
-                . '$this->repository = $repository;' . PHP_EOL
-                . '$this->coreRegistry = $coreRegistry;');
+            ->setBody($body);
 
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('repository')
+                ->setReadOnly($readonlyProp)
+                ->setProtected()
+                ->setType($repository);
+            $construct
+                ->addPromotedParameter('coreRegistry')
+                ->setReadOnly($readonlyProp)
+                ->setProtected()
+                ->setType('\Magento\Framework\Registry');
+        } else {
+            $construct->addParameter('repository')->setType($repository);
+            $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        }
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         if (!$typehint) {
             $construct

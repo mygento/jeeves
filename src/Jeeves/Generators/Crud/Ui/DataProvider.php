@@ -16,7 +16,7 @@ class DataProvider extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Model\\' . ucfirst($entity));
         $namespace->addUse('Magento\Framework\App\Request\DataPersistorInterface');
         $namespace->addUse($collectionFactory);
@@ -63,14 +63,14 @@ class DataProvider extends Common
                 ->addComment('@param \Magento\Ui\DataProvider\Modifier\PoolInterface|null $pool');
         }
 
-        $construct->addParameter('collectionFactory')->setTypeHint($collectionFactory);
-        $construct->addParameter('dataPersistor')->setTypeHint('\Magento\Framework\App\Request\DataPersistorInterface');
+        $construct->addParameter('collectionFactory')->setType($collectionFactory);
+        $construct->addParameter('dataPersistor')->setType('\Magento\Framework\App\Request\DataPersistorInterface');
         $construct->addParameter('name')->setType('string');
         $construct->addParameter('primaryFieldName')->setType('string');
         $construct->addParameter('requestFieldName')->setType('string');
-        $construct->addParameter('meta')->setTypeHint('array')->setDefaultValue([]);
-        $construct->addParameter('data')->setTypeHint('array')->setDefaultValue([]);
-        $construct->addParameter('pool')->setTypeHint('\Magento\Ui\DataProvider\Modifier\PoolInterface')->setDefaultValue(null);
+        $construct->addParameter('meta')->setType('array')->setDefaultValue([]);
+        $construct->addParameter('data')->setType('array')->setDefaultValue([]);
+        $construct->addParameter('pool')->setType('\Magento\Ui\DataProvider\Modifier\PoolInterface')->setDefaultValue(null);
 
         $construct->setBody('parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);' . PHP_EOL . PHP_EOL
             . '$this->collection = $collectionFactory->create();' . PHP_EOL

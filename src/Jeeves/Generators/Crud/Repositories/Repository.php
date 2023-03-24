@@ -19,7 +19,11 @@ class Repository extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+        $readonlyClass = false; //$this->hasReadOnlyClass($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
@@ -30,30 +34,42 @@ class Repository extends Common
         $class->setImplements([$repoInterface]);
         $class->setComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)');
 
-        $rs = $class->addProperty('resource')
-            ->setVisibility('private');
-        $cf = $class->addProperty('collectionFactory')
-            ->setVisibility('private');
-        $ef = $class->addProperty('entityFactory')
-            ->setVisibility('private');
-        $sr = $class->addProperty('searchResultsFactory')
-            ->setVisibility('private');
+        if ($readonlyClass) {  /** @phpstan-ignore-line */
+            $class->setReadOnly($readonlyClass);  /** @phpstan-ignore-line */
+        }
+
+        if (!$constructorProp) {
+            $rs = $class->addProperty('resource')
+                ->setVisibility('private');
+            $cf = $class->addProperty('collectionFactory')
+                ->setVisibility('private');
+            $ef = $class->addProperty('entityFactory')
+                ->setVisibility('private');
+            $sr = $class->addProperty('searchResultsFactory')
+                ->setVisibility('private');
+            if ($typehint) {
+                $namespace->addUse($repoInterface);
+                $namespace->addUse($collection . 'Factory');
+                $namespace->addUse($entityInterface . 'Factory');
+                $namespace->addUse($results . 'Factory');
+
+                $rs->setType($resource);
+                $cf->setType($collection . 'Factory');
+                $ef->setType($entityInterface . 'Factory');
+                $sr->setType($results . 'Factory');
+            } else {
+                $rs->addComment('@var ' . $resource);
+                $cf->addComment('@var ' . $collection . 'Factory');
+                $ef->addComment('@var ' . $entityInterface . 'Factory');
+                $sr->addComment('@var ' . $results . 'Factory');
+            }
+        }
 
         if ($typehint) {
             $namespace->addUse($repoInterface);
             $namespace->addUse($collection . 'Factory');
             $namespace->addUse($entityInterface . 'Factory');
             $namespace->addUse($results . 'Factory');
-
-            $rs->setType($resource);
-            $cf->setType($collection . 'Factory');
-            $ef->setType($entityInterface . 'Factory');
-            $sr->setType($results . 'Factory');
-        } else {
-            $rs->addComment('@var ' . $resource);
-            $cf->addComment('@var ' . $collection . 'Factory');
-            $ef->addComment('@var ' . $entityInterface . 'Factory');
-            $sr->addComment('@var ' . $results . 'Factory');
         }
 
         $construct = $class->addMethod('__construct')->setVisibility('public');
@@ -65,48 +81,102 @@ class Repository extends Common
                 ->addComment('@param ' . $results . 'Factory $searchResultsFactory');
         }
 
-        $construct->addParameter('resource')->setType($resource);
-        $construct->addParameter('collectionFactory')->setType($collection . 'Factory');
-        $construct->addParameter('entityFactory')->setType($entityInterface . 'Factory');
-        $construct->addParameter('searchResultsFactory')->setType($results . 'Factory');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('resource')
+                ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                ->setPrivate()
+                ->setType($resource);
+            $construct
+                ->addPromotedParameter('collectionFactory')
+                ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                ->setPrivate()
+                ->setType($collection . 'Factory');
+            $construct
+                ->addPromotedParameter('entityFactory')
+                ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                ->setPrivate()
+                ->setType($entityInterface . 'Factory');
+            $construct
+                ->addPromotedParameter('searchResultsFactory')
+                ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                ->setPrivate()
+                ->setType($results . 'Factory');
+        } else {
+            $construct
+                ->addParameter('resource')
+                ->setType($resource);
+            $construct
+                ->addParameter('collectionFactory')
+                ->setType($collection . 'Factory');
+            $construct
+                ->addParameter('entityFactory')
+                ->setType($entityInterface . 'Factory');
+            $construct
+                ->addParameter('searchResultsFactory')
+                ->setType($results . 'Factory');
+        }
 
         if ($withStore) {
             $namespace->addUse('Magento\Store\Model\StoreManagerInterface');
-            $sm = $class->addProperty('storeManager')
-                ->setVisibility('private');
 
-            $construct
-                ->addParameter('storeManager')
-                ->setType('\Magento\Store\Model\StoreManagerInterface');
+            if (!$constructorProp) {
+                $sm = $class->addProperty('storeManager')->setPrivate();
+                if ($typehint) {
+                    $sm->setType('\Magento\Store\Model\StoreManagerInterface');
+                } else {
+                    $sm->addComment('@var StoreManagerInterface');
+                }
+            }
 
-            if ($typehint) {
-                $sm->setType('\Magento\Store\Model\StoreManagerInterface');
+            if ($constructorProp) {
+                $construct
+                    ->addPromotedParameter('storeManager')
+                    ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                    ->setPrivate()
+                    ->setType('\Magento\Store\Model\StoreManagerInterface');
             } else {
                 $construct
-                    ->addComment('@param StoreManagerInterface $storeManager');
-                $sm->addComment('@var StoreManagerInterface');
+                    ->addParameter('storeManager')
+                    ->setType('\Magento\Store\Model\StoreManagerInterface');
+                if (!$typehint) {
+                    $construct->addComment('@param StoreManagerInterface $storeManager');
+                }
             }
         }
 
-        $cp = $class->addProperty('collectionProcessor')
-            ->setVisibility('private');
-
-        $construct->addParameter('collectionProcessor')
-            ->setType('Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
-
-        if ($typehint) {
-            $cp->setType('\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
-        } else {
-            $construct->addComment('@param CollectionProcessorInterface $collectionProcessor');
-            $cp->addComment('@var CollectionProcessorInterface');
+        if (!$constructorProp) {
+            $cp = $class->addProperty('collectionProcessor')
+                ->setPrivate();
+            if ($typehint) {
+                $cp->setType('\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
+            } else {
+                $cp->addComment('@var CollectionProcessorInterface');
+            }
         }
 
-        $construct->setBody('$this->resource = $resource;' . PHP_EOL
-            . '$this->collectionFactory = $collectionFactory;' . PHP_EOL
-            . '$this->entityFactory = $entityFactory;' . PHP_EOL
-            . '$this->searchResultsFactory = $searchResultsFactory;' . PHP_EOL
-            . '$this->collectionProcessor = $collectionProcessor;'
-            . ($withStore ? PHP_EOL . '$this->storeManager = $storeManager;' : ''));
+        if ($constructorProp) {
+            $construct->addPromotedParameter('collectionProcessor')
+                ->setReadOnly($readonlyProp && !$readonlyClass)  /** @phpstan-ignore-line */
+                ->setPrivate()
+                ->setType('Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
+        } else {
+            $construct->addParameter('collectionProcessor')
+                ->setType('Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface');
+        }
+
+        if (!$typehint) {
+            $construct->addComment('@param CollectionProcessorInterface $collectionProcessor');
+        }
+
+        if (!$constructorProp) {
+            $construct->setBody('$this->resource = $resource;' . PHP_EOL
+                . '$this->collectionFactory = $collectionFactory;' . PHP_EOL
+                . '$this->entityFactory = $entityFactory;' . PHP_EOL
+                . '$this->searchResultsFactory = $searchResultsFactory;' . PHP_EOL
+                . '$this->collectionProcessor = $collectionProcessor;'
+                . ($withStore ? PHP_EOL . '$this->storeManager = $storeManager;' : ''));
+        }
 
         $getById = $class->addMethod('getById')->setVisibility('public');
         $getByIdParam = $getById->addParameter('entityId');
@@ -163,7 +233,7 @@ class Repository extends Common
 
         $delete = $class->addMethod('delete')->setVisibility('public');
 
-        $delete->addParameter('entity')->setTypeHint($entityInterface);
+        $delete->addParameter('entity')->setType($entityInterface);
 
         if ($typehint) {
             $delete->addComment('@throws CouldNotDeleteException');
@@ -207,7 +277,7 @@ class Repository extends Common
 
             ->setVisibility('public');
 
-        $getList->addParameter('criteria')->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
+        $getList->addParameter('criteria')->setType('\Magento\Framework\Api\SearchCriteriaInterface');
 
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\Api\SearchCriteriaInterface');

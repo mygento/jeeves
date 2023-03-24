@@ -14,20 +14,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 
 class Save extends Columns
 {
-    private DataPersistorInterface $dataPersistor;
-    private ColumnsInterfaceFactory $entityFactory;
-
     public function __construct(
-        DataPersistorInterface $dataPersistor,
-        ColumnsInterfaceFactory $entityFactory,
+        private readonly DataPersistorInterface $dataPersistor,
+        private readonly ColumnsInterfaceFactory $entityFactory,
         ColumnsRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->dataPersistor = $dataPersistor;
-        $this->entityFactory = $entityFactory;
     }
 
     /**

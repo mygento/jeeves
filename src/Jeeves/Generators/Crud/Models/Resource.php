@@ -16,7 +16,10 @@ class Resource extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel');
 
         if ($typehint) {
@@ -47,21 +50,26 @@ class Resource extends Common
             return $namespace;
         }
 
-        $em = $class->addProperty('entityManager');
-        $em->setVisibility('private');
+        if (!$constructorProp) {
+            $em = $class->addProperty('entityManager');
+            $em->setVisibility('private');
 
-        $mdPool = $class->addProperty('metadataPool');
-        $mdPool->setVisibility('private');
+            $mdPool = $class->addProperty('metadataPool');
+            $mdPool->setVisibility('private');
+
+            if ($typehint) {
+                $em->setType('\Magento\Framework\EntityManager\EntityManager');
+                $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
+            } else {
+                $em->addComment('@var \Magento\Framework\EntityManager\EntityManager');
+                $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
+            }
+        }
 
         if ($typehint) {
-            $namespace->addUse('\Magento\Framework\EntityManager\EntityManager');
-            $em->setType('\Magento\Framework\EntityManager\EntityManager');
-            $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
-            $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-            $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\Context');
-        } else {
-            $em->addComment('@var \Magento\Framework\EntityManager\EntityManager');
-            $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
+            $namespace->addUse('\Magento\Framework\EntityManager\EntityManager')
+                ->addUse('\Magento\Framework\EntityManager\MetadataPool')
+                ->addUse('\Magento\Framework\Model\ResourceModel\Db\Context');
         }
 
         $construct = $class->addMethod('__construct');
@@ -74,8 +82,26 @@ class Resource extends Common
                 ->addComment('@param string $connectionName');
         }
 
-        $construct->addParameter('entityManager')->setType('\Magento\Framework\EntityManager\EntityManager');
-        $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('entityManager')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\EntityManager\EntityManager');
+            $construct
+                ->addPromotedParameter('metadataPool')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        } else {
+            $construct
+                ->addParameter('entityManager')
+                ->setType('\Magento\Framework\EntityManager\EntityManager');
+            $construct
+                ->addParameter('metadataPool')
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        }
+
         $construct->addParameter('context')->setType('\Magento\Framework\Model\ResourceModel\Db\Context');
         $conParam = $construct->addParameter('connectionName')->setDefaultValue(null);
 
@@ -83,9 +109,13 @@ class Resource extends Common
             $conParam->setType('string');
         }
 
-        $construct->setBody('parent::__construct($context, $connectionName);' . PHP_EOL
-            . '$this->entityManager = $entityManager;' . PHP_EOL
-            . '$this->metadataPool = $metadataPool;');
+        $body = 'parent::__construct($context, $connectionName);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL
+                . '$this->entityManager = $entityManager;' . PHP_EOL
+                . '$this->metadataPool = $metadataPool;';
+        }
+        $construct->setBody($body);
 
         $connection = $class->addMethod('getConnection')
             ->addComment('@inheritDoc')

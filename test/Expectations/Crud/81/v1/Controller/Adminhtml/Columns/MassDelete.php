@@ -13,18 +13,13 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 
 class MassDelete extends Columns
 {
-    private Filter $filter;
-    private CollectionFactory $collectionFactory;
-
     public function __construct(
-        CollectionFactory $collectionFactory,
-        Filter $filter,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly Filter $filter,
         ColumnsRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
-        $this->filter = $filter;
-        $this->collectionFactory = $collectionFactory;
         parent::__construct($repository, $coreRegistry, $context);
     }
 

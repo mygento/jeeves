@@ -14,21 +14,32 @@ class Create extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass($className)
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $entityName = $this->getEntityPrintName($entity);
 
-        $forward = $class->addProperty('resultForwardFactory')
-            ->setVisibility('private');
+        if (!$constructorProp) {
+            $forward = $class->addProperty('resultForwardFactory')->setVisibility('private');
 
+            if ($typehint) {
+                $forward->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
+            } else {
+                $forward->addComment('@var \Magento\Backend\Model\View\Result\ForwardFactory');
+            }
+        }
+
+        $body = 'parent::__construct($repository, $coreRegistry, $context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL . '$this->resultForwardFactory = $resultForwardFactory;' . PHP_EOL;
+        }
         $construct = $class->addMethod('__construct')
-            ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL .
-                '$this->resultForwardFactory = $resultForwardFactory;' . PHP_EOL
-            );
+            ->setBody($body);
 
         if ($typehint) {
             $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
@@ -36,21 +47,27 @@ class Create extends Common
             $namespace->addUse('\Magento\Framework\Registry');
             $namespace->addUse('\Magento\Backend\App\Action\Context');
             $namespace->addUse('\Magento\Backend\Model\View\Result\ForwardFactory');
-            $forward->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
         } else {
             $construct
                 ->addComment('@param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory')
                 ->addComment('@param ' . $repository . ' $repository')
                 ->addComment('@param \Magento\Framework\Registry $coreRegistry')
                 ->addComment('@param \Magento\Backend\App\Action\Context $context');
-            $forward->addComment('@var \Magento\Backend\Model\View\Result\ForwardFactory');
         }
 
-        $construct->addParameter('resultForwardFactory')
-            ->setTypeHint('\Magento\Backend\Model\View\Result\ForwardFactory');
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('resultForwardFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
+        } else {
+            $construct->addParameter('resultForwardFactory')->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
+        }
+
+        $construct->addParameter('repository')->setType($repository);
+        $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
             ->addComment('Create new ' . $entityName)

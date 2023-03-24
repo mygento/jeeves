@@ -15,7 +15,7 @@ class Search extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $namespace->addUse('\Magento\Framework\Api\SearchResultsInterface');
 
@@ -34,7 +34,7 @@ class Search extends Common
             ->setVisibility('public')
             ->addComment('Set list of ' . $print)
             ->addComment('@param ' . $entInterface . '[] $items');
-        $set->addParameter('items')->setTypeHint('array');
+        $set->addParameter('items')->setType('array');
 
         if ($typehint) {
             // $set->setReturnType('self');

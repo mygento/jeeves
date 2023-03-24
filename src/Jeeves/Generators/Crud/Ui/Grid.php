@@ -16,7 +16,8 @@ class Grid extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
         $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
         $namespace->addUse('Magento\Framework\Api\SearchCriteriaInterface');
@@ -45,19 +46,19 @@ class Grid extends Common
         if ($withStore) {
             $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
         }
-        $construct->addParameter('entityFactory')->setTypeHint('\Magento\Framework\Data\Collection\EntityFactoryInterface');
-        $construct->addParameter('logger')->setTypeHint('\Psr\Log\LoggerInterface');
-        $construct->addParameter('fetchStrategy')->setTypeHint('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $construct->addParameter('eventManager')->setTypeHint('\Magento\Framework\Event\ManagerInterface');
-        $construct->addParameter('mainTable')->setTypeHint('string');
-        $construct->addParameter('eventPrefix')->setTypeHint('string');
-        $construct->addParameter('eventObject')->setTypeHint('string');
-        $construct->addParameter('resourceModel')->setTypeHint('string');
+        $construct->addParameter('entityFactory')->setType('\Magento\Framework\Data\Collection\EntityFactoryInterface');
+        $construct->addParameter('logger')->setType('\Psr\Log\LoggerInterface');
+        $construct->addParameter('fetchStrategy')->setType('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $construct->addParameter('eventManager')->setType('\Magento\Framework\Event\ManagerInterface');
+        $construct->addParameter('mainTable')->setType('string');
+        $construct->addParameter('eventPrefix')->setType('string');
+        $construct->addParameter('eventObject')->setType('string');
+        $construct->addParameter('resourceModel')->setType('string');
         $construct->addParameter('model')
-            ->setTypeHint('string')
+            ->setType('string')
             ->setDefaultValue(new Literal('\Magento\Framework\View\Element\UiComponent\DataProvider\Document::class'));
-        $construct->addParameter('connection')->setTypeHint('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
-        $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
+        $construct->addParameter('connection')->setType('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
+        $construct->addParameter('resource')->setType('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\Data\Collection\EntityFactoryInterface');
@@ -122,7 +123,7 @@ class Grid extends Common
             ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
             ->setVisibility('public');
         $setSearchCriteria->addParameter('searchCriteria')
-            ->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface')
+            ->setType('\Magento\Framework\Api\SearchCriteriaInterface')
             ->setDefaultValue(null);
         $setSearchCriteria->setBody('return $this;');
 
@@ -144,7 +145,7 @@ class Grid extends Common
             ->addComment('@return $this')
             ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
             ->setVisibility('public');
-        $setItems->addParameter('items')->setTypeHint('array')->setDefaultValue(null);
+        $setItems->addParameter('items')->setType('array')->setDefaultValue(null);
         $setItems->setBody('return $this;');
 
         return $namespace;

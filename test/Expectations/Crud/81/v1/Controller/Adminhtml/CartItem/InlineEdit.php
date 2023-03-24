@@ -12,17 +12,13 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 
 class InlineEdit extends CartItem
 {
-    private JsonFactory $jsonFactory;
-
     public function __construct(
-        JsonFactory $jsonFactory,
+        private readonly JsonFactory $jsonFactory,
         CartItemRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->jsonFactory = $jsonFactory;
     }
 
     /**

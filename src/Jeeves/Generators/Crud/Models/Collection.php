@@ -18,7 +18,10 @@ class Collection extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ) {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity);
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
@@ -69,13 +72,15 @@ class Collection extends Common
             $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
         }
 
-        $mdPool = $class->addProperty('metadataPool');
-        $mdPool->setVisibility('private');
+        if (!$constructorProp) {
+            $mdPool = $class->addProperty('metadataPool');
+            $mdPool->setVisibility('private');
 
-        if ($typehint) {
-            $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-        } else {
-            $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
+            if ($typehint) {
+                $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
+            } else {
+                $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
+            }
         }
 
         $construct = $class->addMethod('__construct')->setVisibility('public');
@@ -91,23 +96,51 @@ class Collection extends Common
         }
         $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
 
-        $construct->addParameter('metadataPool')->setType('\Magento\Framework\EntityManager\MetadataPool');
-        $construct->addParameter('entityFactory')->setType('\Magento\Framework\Data\Collection\EntityFactoryInterface');
-        $construct->addParameter('logger')->setType('\Psr\Log\LoggerInterface');
-        $construct->addParameter('fetchStrategy')->setType('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $construct->addParameter('eventManager')->setType('\Magento\Framework\Event\ManagerInterface');
-        $construct->addParameter('connection')->setType('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
-        $construct->addParameter('resource')->setTypeHint('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('metadataPool')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        } else {
+            $construct
+                ->addParameter('metadataPool')
+                ->setType('\Magento\Framework\EntityManager\MetadataPool');
+        }
+        $construct
+            ->addParameter('entityFactory')
+            ->setType('\Magento\Framework\Data\Collection\EntityFactoryInterface');
+        $construct
+            ->addParameter('logger')
+            ->setType('\Psr\Log\LoggerInterface');
+        $construct
+            ->addParameter('fetchStrategy')
+            ->setType('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $construct
+            ->addParameter('eventManager')
+            ->setType('\Magento\Framework\Event\ManagerInterface');
+        $construct
+            ->addParameter('connection')
+            ->setType('\Magento\Framework\DB\Adapter\AdapterInterface')
+            ->setDefaultValue(null);
+        $construct
+            ->addParameter('resource')
+            ->setType('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+            ->setDefaultValue(null);
 
-        $construct->setBody('parent::__construct(' . PHP_EOL
+        $body = 'parent::__construct(' . PHP_EOL
             . self::TAB . '$entityFactory,' . PHP_EOL
             . self::TAB . '$logger,' . PHP_EOL
             . self::TAB . '$fetchStrategy,' . PHP_EOL
             . self::TAB . '$eventManager,' . PHP_EOL
             . self::TAB . '$connection,' . PHP_EOL
             . self::TAB . '$resource' . PHP_EOL
-            . ');' . PHP_EOL
-            . '$this->metadataPool = $metadataPool;');
+            . ');';
+        if (!$constructorProp) {
+            $body .= PHP_EOL
+            . '$this->metadataPool = $metadataPool;';
+        }
+        $construct->setBody($body);
 
         $afterLoad = $class->addMethod('_afterLoad')->setVisibility('protected');
         $afterLoad->setBody(

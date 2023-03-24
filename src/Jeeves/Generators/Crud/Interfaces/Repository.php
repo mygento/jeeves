@@ -16,7 +16,7 @@ class Repository extends Common
         bool $hasApi = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api');
         $interface = $namespace->addInterface($className);
 
@@ -37,7 +37,7 @@ class Repository extends Common
             $save->addComment('@return ' . $entInterface);
         }
 
-        $save->addParameter('entity')->setTypeHint($entInterface);
+        $save->addParameter('entity')->setType($entInterface);
 
         if ($typehint) {
             $save->setReturnType($entInterface);
@@ -75,7 +75,7 @@ class Repository extends Common
         }
 
         $getList->addParameter('searchCriteria')
-            ->setTypeHint('\Magento\Framework\Api\SearchCriteriaInterface');
+            ->setType('\Magento\Framework\Api\SearchCriteriaInterface');
 
         if ($typehint) {
             $getList->setReturnType($resultInterface);
@@ -95,7 +95,7 @@ class Repository extends Common
         }
 
         $del->addParameter('entity')
-            ->setTypeHint($entInterface);
+            ->setType($entInterface);
 
         if ($typehint) {
             $del->setReturnType('bool');

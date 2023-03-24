@@ -1,4 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'mina', git: 'https://github.com/luckyraul/mina.git', branch: 'relative_path'
-gem 'scss_lint', require: false

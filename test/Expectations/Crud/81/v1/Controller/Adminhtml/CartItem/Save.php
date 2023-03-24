@@ -14,20 +14,14 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 
 class Save extends CartItem
 {
-    private DataPersistorInterface $dataPersistor;
-    private CartItemInterfaceFactory $entityFactory;
-
     public function __construct(
-        DataPersistorInterface $dataPersistor,
-        CartItemInterfaceFactory $entityFactory,
+        private readonly DataPersistorInterface $dataPersistor,
+        private readonly CartItemInterfaceFactory $entityFactory,
         CartItemRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->dataPersistor = $dataPersistor;
-        $this->entityFactory = $entityFactory;
     }
 
     /**

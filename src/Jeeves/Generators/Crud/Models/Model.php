@@ -18,7 +18,7 @@ class Model extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Model\AbstractModel');
         $namespace->addUse($entInterface);

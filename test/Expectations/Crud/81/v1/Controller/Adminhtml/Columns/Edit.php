@@ -13,20 +13,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 
 class Edit extends Columns
 {
-    private ColumnsInterfaceFactory $entityFactory;
-    private PageFactory $resultPageFactory;
-
     public function __construct(
-        ColumnsInterfaceFactory $entityFactory,
-        PageFactory $resultPageFactory,
+        private readonly ColumnsInterfaceFactory $entityFactory,
+        private readonly PageFactory $resultPageFactory,
         ColumnsRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->entityFactory = $entityFactory;
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**

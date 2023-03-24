@@ -15,14 +15,11 @@ abstract class CartItem extends Action
      */
     public const ADMIN_RESOURCE = 'Mygento_SampleModule::cartitem';
 
-    protected Registry $coreRegistry;
-    protected CartItemRepositoryInterface $repository;
-
-    public function __construct(CartItemRepositoryInterface $repository, Registry $coreRegistry, Action\Context $context)
-    {
+    public function __construct(
+        protected readonly CartItemRepositoryInterface $repository,
+        protected readonly Registry $coreRegistry,
+        Action\Context $context,
+    ) {
         parent::__construct($context);
-
-        $this->repository = $repository;
-        $this->coreRegistry = $coreRegistry;
     }
 }

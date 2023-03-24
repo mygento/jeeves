@@ -19,24 +19,13 @@ use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
  */
 class ColumnsRepository implements ColumnsRepositoryInterface
 {
-    private ResourceModel\Columns $resource;
-    private CollectionFactory $collectionFactory;
-    private ColumnsInterfaceFactory $entityFactory;
-    private ColumnsSearchResultsInterfaceFactory $searchResultsFactory;
-    private CollectionProcessorInterface $collectionProcessor;
-
     public function __construct(
-        ResourceModel\Columns $resource,
-        CollectionFactory $collectionFactory,
-        ColumnsInterfaceFactory $entityFactory,
-        ColumnsSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor
+        private readonly ResourceModel\Columns $resource,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly ColumnsInterfaceFactory $entityFactory,
+        private readonly ColumnsSearchResultsInterfaceFactory $searchResultsFactory,
+        private readonly CollectionProcessorInterface $collectionProcessor,
     ) {
-        $this->resource = $resource;
-        $this->collectionFactory = $collectionFactory;
-        $this->entityFactory = $entityFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**

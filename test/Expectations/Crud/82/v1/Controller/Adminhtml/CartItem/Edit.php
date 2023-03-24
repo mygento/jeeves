@@ -13,20 +13,14 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 
 class Edit extends CartItem
 {
-    private CartItemInterfaceFactory $entityFactory;
-    private PageFactory $resultPageFactory;
-
     public function __construct(
-        CartItemInterfaceFactory $entityFactory,
-        PageFactory $resultPageFactory,
+        private readonly CartItemInterfaceFactory $entityFactory,
+        private readonly PageFactory $resultPageFactory,
         CartItemRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->entityFactory = $entityFactory;
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**

@@ -14,36 +14,50 @@ class Inline extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class = $namespace->addClass($className)
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
-        $json = $class->addProperty('jsonFactory')
-            ->setVisibility('private');
+        if (!$constructorProp) {
+            $json = $class->addProperty('jsonFactory')->setVisibility('private');
+            if ($typehint) {
+                $json->setType('\Magento\Framework\Controller\Result\JsonFactory');
+            } else {
+                $json->addComment('@var \Magento\Framework\Controller\Result\JsonFactory');
+            }
+        }
+
+        $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
+
+        $body = 'parent::__construct($repository, $coreRegistry, $context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL . '$this->jsonFactory = $jsonFactory;';
+        }
+        $construct = $class->addMethod('__construct')->setBody($body);
+
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('jsonFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\Controller\Result\JsonFactory');
+        } else {
+            $construct
+                ->addParameter('jsonFactory')
+                ->setType('\Magento\Framework\Controller\Result\JsonFactory');
+        }
+
+        $construct->addParameter('repository')->setType($repository);
+        $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         if ($typehint) {
             $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-            $json->setType('\Magento\Framework\Controller\Result\JsonFactory');
-        } else {
-            $json->addComment('@var \Magento\Framework\Controller\Result\JsonFactory');
-        }
-        $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
-
-        $construct = $class->addMethod('__construct')
-            ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
-                . '$this->jsonFactory = $jsonFactory;'
-            );
-
-        $construct->addParameter('jsonFactory')
-            ->setTypeHint('\Magento\Framework\Controller\Result\JsonFactory');
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
-
-        if ($typehint) {
             $namespace->addUse('\Magento\Framework\Controller\Result\JsonFactory');
             $namespace->addUse($repository);
             $namespace->addUse('\Magento\Framework\Registry');

@@ -19,24 +19,13 @@ use Mygento\SampleModule\Model\ResourceModel\Poster\CollectionFactory;
  */
 class PosterRepository implements PosterRepositoryInterface
 {
-    private ResourceModel\Poster $resource;
-    private CollectionFactory $collectionFactory;
-    private PosterInterfaceFactory $entityFactory;
-    private PosterSearchResultsInterfaceFactory $searchResultsFactory;
-    private CollectionProcessorInterface $collectionProcessor;
-
     public function __construct(
-        ResourceModel\Poster $resource,
-        CollectionFactory $collectionFactory,
-        PosterInterfaceFactory $entityFactory,
-        PosterSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor
+        private readonly ResourceModel\Poster $resource,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly PosterInterfaceFactory $entityFactory,
+        private readonly PosterSearchResultsInterfaceFactory $searchResultsFactory,
+        private readonly CollectionProcessorInterface $collectionProcessor,
     ) {
-        $this->resource = $resource;
-        $this->collectionFactory = $collectionFactory;
-        $this->entityFactory = $entityFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**

@@ -11,17 +11,13 @@ use Mygento\SampleModule\Controller\Adminhtml\CartItem;
 
 class NewAction extends CartItem
 {
-    private ForwardFactory $resultForwardFactory;
-
     public function __construct(
-        ForwardFactory $resultForwardFactory,
+        private readonly ForwardFactory $resultForwardFactory,
         CartItemRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**

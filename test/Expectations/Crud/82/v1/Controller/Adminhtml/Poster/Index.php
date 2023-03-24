@@ -12,20 +12,14 @@ use Mygento\SampleModule\Controller\Adminhtml\Poster;
 
 class Index extends Poster
 {
-    private PageFactory $resultPageFactory;
-    private DataPersistorInterface $dataPersistor;
-
     public function __construct(
-        PageFactory $resultPageFactory,
-        DataPersistorInterface $dataPersistor,
+        private readonly PageFactory $resultPageFactory,
+        private readonly DataPersistorInterface $dataPersistor,
         PosterRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->resultPageFactory = $resultPageFactory;
-        $this->dataPersistor = $dataPersistor;
     }
 
     /**

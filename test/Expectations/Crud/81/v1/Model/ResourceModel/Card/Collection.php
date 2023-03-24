@@ -19,19 +19,17 @@ class Collection extends AbstractCollection
     /** @var string */
     protected $_idFieldName = CardResource::TABLE_PRIMARY_KEY;
 
-    private MetadataPool $metadataPool;
-
     /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        MetadataPool $metadataPool,
+        private readonly MetadataPool $metadataPool,
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,
@@ -41,7 +39,6 @@ class Collection extends AbstractCollection
             $connection,
             $resource
         );
-        $this->metadataPool = $metadataPool;
     }
 
     /**

@@ -15,40 +15,68 @@ class View extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $entityName = $this->getEntityPrintName($entity);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $class = $namespace->addClass('Index')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
-        $result = $class->addProperty('resultPageFactory')
-            ->setVisibility('private');
-        $pers = $class->addProperty('dataPersistor')
-            ->setVisibility('private');
-
         if ($typehint) {
-            $result->setType('\Magento\Framework\View\Result\PageFactory');
-            $pers->setType('\Magento\Framework\App\Request\DataPersistorInterface');
             $namespace->addUse('\Magento\Framework\View\Result\PageFactory');
             $namespace->addUse('\Magento\Framework\App\Request\DataPersistorInterface');
             $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-        } else {
-            $pers->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
-            $result->addComment('@var \Magento\Framework\View\Result\PageFactory');
         }
 
-        $construct = $class->addMethod('__construct')
-            ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
-                . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
-                . '$this->dataPersistor = $dataPersistor;' . PHP_EOL
-            );
+        if (!$constructorProp) {
+            $result = $class->addProperty('resultPageFactory')
+                ->setVisibility('private');
+            $pers = $class->addProperty('dataPersistor')
+                ->setVisibility('private');
 
-        $construct->addParameter('resultPageFactory')->setTypeHint('\Magento\Framework\View\Result\PageFactory');
-        $construct->addParameter('dataPersistor')->setTypeHint('\Magento\Framework\App\Request\DataPersistorInterface');
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+            if ($typehint) {
+                $result->setType('\Magento\Framework\View\Result\PageFactory');
+                $pers->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+            } else {
+                $pers->addComment('@var \Magento\Framework\App\Request\DataPersistorInterface');
+                $result->addComment('@var \Magento\Framework\View\Result\PageFactory');
+            }
+        }
+
+        $body = 'parent::__construct($repository, $coreRegistry, $context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL
+                . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
+                . '$this->dataPersistor = $dataPersistor;' . PHP_EOL;
+        }
+        $construct = $class->addMethod('__construct')
+            ->setBody($body);
+
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('resultPageFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\View\Result\PageFactory');
+            $construct
+                ->addPromotedParameter('dataPersistor')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+        } else {
+            $construct
+                ->addParameter('resultPageFactory')
+                ->setType('\Magento\Framework\View\Result\PageFactory');
+            $construct
+                ->addParameter('dataPersistor')
+                ->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+        }
+
+        $construct->addParameter('repository')->setType($repository);
+        $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         if ($typehint) {
             $namespace->addUse($repository);

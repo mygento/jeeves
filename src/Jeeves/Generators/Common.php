@@ -11,6 +11,26 @@ class Common
     protected const N = 'name';
     protected const V = 'value';
 
+    protected function hasTypes(string $version): bool
+    {
+        return version_compare($version, '7.4.0', '>=');
+    }
+
+    protected function hasConstructorProp(string $version): bool
+    {
+        return version_compare($version, '8.0.0', '>=');
+    }
+
+    protected function hasReadOnlyProp(string $version): bool
+    {
+        return version_compare($version, '8.1.0', '>=');
+    }
+
+    protected function hasReadOnlyClass(string $version): bool
+    {
+        return version_compare($version, '8.2.0', '>=');
+    }
+
     protected function getService(): Service
     {
         $service = new Service();

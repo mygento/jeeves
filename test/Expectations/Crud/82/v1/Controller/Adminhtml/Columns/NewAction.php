@@ -11,17 +11,13 @@ use Mygento\SampleModule\Controller\Adminhtml\Columns;
 
 class NewAction extends Columns
 {
-    private ForwardFactory $resultForwardFactory;
-
     public function __construct(
-        ForwardFactory $resultForwardFactory,
+        private readonly ForwardFactory $resultForwardFactory,
         ColumnsRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**

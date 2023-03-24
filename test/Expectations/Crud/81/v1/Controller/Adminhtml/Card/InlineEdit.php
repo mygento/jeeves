@@ -12,17 +12,13 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 
 class InlineEdit extends Card
 {
-    private JsonFactory $jsonFactory;
-
     public function __construct(
-        JsonFactory $jsonFactory,
+        private readonly JsonFactory $jsonFactory,
         CardRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->jsonFactory = $jsonFactory;
     }
 
     /**

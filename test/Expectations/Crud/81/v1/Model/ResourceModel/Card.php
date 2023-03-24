@@ -14,18 +14,13 @@ class Card extends AbstractDb
     public const TABLE_NAME = 'mygento_sample_module_card';
     public const TABLE_PRIMARY_KEY = 'card_id';
 
-    private EntityManager $entityManager;
-    private MetadataPool $metadataPool;
-
     public function __construct(
-        EntityManager $entityManager,
-        MetadataPool $metadataPool,
+        private readonly EntityManager $entityManager,
+        private readonly MetadataPool $metadataPool,
         Context $context,
-        string $connectionName = null
+        string $connectionName = null,
     ) {
         parent::__construct($context, $connectionName);
-        $this->entityManager = $entityManager;
-        $this->metadataPool = $metadataPool;
     }
 
     /**

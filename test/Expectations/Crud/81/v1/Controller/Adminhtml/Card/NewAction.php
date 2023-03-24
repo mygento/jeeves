@@ -11,17 +11,13 @@ use Mygento\SampleModule\Controller\Adminhtml\Card;
 
 class NewAction extends Card
 {
-    private ForwardFactory $resultForwardFactory;
-
     public function __construct(
-        ForwardFactory $resultForwardFactory,
+        private readonly ForwardFactory $resultForwardFactory,
         CardRepositoryInterface $repository,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
-
-        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**

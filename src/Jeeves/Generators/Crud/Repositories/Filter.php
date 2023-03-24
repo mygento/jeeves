@@ -13,7 +13,8 @@ class Filter extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\SearchCriteria');
         $namespace->addUse($interface);
         $namespace->addUse('Magento\Framework\Api\Filter');

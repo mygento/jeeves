@@ -14,26 +14,45 @@ class Read extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity . '\\Relation\\Store');
         $namespace->addUse($interface);
 
         $class = $namespace->addClass('ReadHandler');
         $class->addImplement('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
 
-        $res = $class->addProperty('resource')->setVisibility('private');
         if ($typehint) {
             $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
             $namespace->addUse($resourceClass);
-            $res->setType($resourceClass);
-        } else {
-            $res->addComment('@var ' . $resourceClass);
+        }
+
+        if (!$constructorProp) {
+            $res = $class->addProperty('resource')->setVisibility('private');
+            if ($typehint) {
+                $res->setType($resourceClass);
+            } else {
+                $res->addComment('@var ' . $resourceClass);
+            }
         }
 
         $construct = $class->addMethod('__construct')
             ->setVisibility('public');
-        $construct->addParameter('resource')->setType($resourceClass);
-        $construct->setBody('$this->resource = $resource;');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('resource')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType($resourceClass);
+        } else {
+            $construct->addParameter('resource')->setType($resourceClass);
+        }
+
+        if (!$constructorProp) {
+            $construct->setBody('$this->resource = $resource;');
+        }
 
         $execute = $class->addMethod('execute')
             ->addComment('@inheritDoc')

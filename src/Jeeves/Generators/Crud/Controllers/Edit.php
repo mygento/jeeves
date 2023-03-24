@@ -16,7 +16,10 @@ class Edit extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
+        $typehint = $this->hasTypes($phpVersion);
+        $constructorProp = $this->hasConstructorProp($phpVersion);
+        $readonlyProp = $this->hasReadOnlyProp($phpVersion);
+
         $entityName = $this->getEntityPrintName($entity);
 
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
@@ -29,31 +32,35 @@ class Edit extends Common
             $namespace->addUse($entityClass . 'Factory');
         }
 
-        $factory = $class->addProperty('entityFactory')
-            ->setVisibility('private');
+        if (!$constructorProp) {
+            $factory = $class->addProperty('entityFactory')
+                ->setVisibility('private');
 
-        $result = $class->addProperty('resultPageFactory')
-            ->setVisibility('private');
+            $result = $class->addProperty('resultPageFactory')
+                ->setVisibility('private');
 
-        if ($typehint) {
-            $factory->setType($entityClass . 'Factory');
-            $result->setType('\Magento\Framework\View\Result\PageFactory');
-        } else {
-            $factory->addComment('@var ' . $entityClass . 'Factory');
-            $result->addComment('@var \Magento\Framework\View\Result\PageFactory');
+            if ($typehint) {
+                $factory->setType($entityClass . 'Factory');
+                $result->setType('\Magento\Framework\View\Result\PageFactory');
+            } else {
+                $factory->addComment('@var ' . $entityClass . 'Factory');
+                $result->addComment('@var \Magento\Framework\View\Result\PageFactory');
+            }
         }
 
-        $construct = $class->addMethod('__construct')
-            ->setBody(
-                'parent::__construct($repository, $coreRegistry, $context);' . PHP_EOL . PHP_EOL
+        $body = 'parent::__construct($repository, $coreRegistry, $context);';
+        if (!$constructorProp) {
+            $body .= PHP_EOL . PHP_EOL
                 . '$this->entityFactory = $entityFactory;' . PHP_EOL
-                . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL
-            );
+                . '$this->resultPageFactory = $resultPageFactory;' . PHP_EOL;
+        }
+        $construct = $class->addMethod('__construct')->setBody($body);
 
         if ($typehint) {
-            $namespace->addUse($repository);
-            $namespace->addUse('\Magento\Framework\Registry');
-            $namespace->addUse('\Magento\Backend\App\Action\Context');
+            $namespace
+                ->addUse($repository)
+                ->addUse('\Magento\Framework\Registry')
+                ->addUse('\Magento\Backend\App\Action\Context');
         } else {
             $construct
                 ->addComment('@param ' . $entityClass . 'Factory $entityFactory')
@@ -63,11 +70,29 @@ class Edit extends Common
                 ->addComment('@param \Magento\Backend\App\Action\Context $context');
         }
 
-        $construct->addParameter('entityFactory')->setTypeHint($entityClass . 'Factory');
-        $construct->addParameter('resultPageFactory')->setTypeHint('\Magento\Framework\View\Result\PageFactory');
-        $construct->addParameter('repository')->setTypeHint($repository);
-        $construct->addParameter('coreRegistry')->setTypeHint('\Magento\Framework\Registry');
-        $construct->addParameter('context')->setTypeHint('\Magento\Backend\App\Action\Context');
+        if ($constructorProp) {
+            $construct
+                ->addPromotedParameter('entityFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType($entityClass . 'Factory');
+
+            $construct
+                ->addPromotedParameter('resultPageFactory')
+                ->setReadOnly($readonlyProp)
+                ->setPrivate()
+                ->setType('\Magento\Framework\View\Result\PageFactory');
+        } else {
+            $construct
+                ->addParameter('entityFactory')
+                ->setType($entityClass . 'Factory');
+            $construct
+                ->addParameter('resultPageFactory')
+                ->setType('\Magento\Framework\View\Result\PageFactory');
+        }
+        $construct->addParameter('repository')->setType($repository);
+        $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
+        $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
             ->addComment('Edit ' . $entityName . ' action')
