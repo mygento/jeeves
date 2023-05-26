@@ -3,61 +3,61 @@ Mygento:
     settings:
       admin_route: samplium
     shipping:
-      code: 'slowcourier'
+      code: "slowcourier"
     entities:
       Columns:
         columns:
           id:
-              type: int
-              pk: true
-              identity: true
-              unsigned: true
-              comment: 'Column ID'
+            type: int
+            pk: true
+            identity: true
+            unsigned: true
+            comment: "Column ID"
           is_active:
-              type: boolean
+            type: boolean
           has_flag:
-              type: boolean
-              nullable: true
+            type: boolean
+            nullable: true
           merge_date:
-              type: date
+            type: date
           discount:
-              type: decimal
-              nullable: false
+            type: decimal
+            nullable: false
           cost:
-              type: decimal
+            type: decimal
           price:
-              type: price
+            type: price
           name:
-              type: varchar
-              nullable: false
-              comment: 'City'
-              length: 100
+            type: varchar
+            nullable: false
+            comment: "City"
+            length: 100
           description:
-              type: text
-              nullable: false
-              comment: 'Description'
+            type: text
+            nullable: false
+            comment: "Description"
           created_at:
-              type: timestamp
-              nullable: false
-              default: 'CURRENT_TIMESTAMP'
-              comment: 'Create time'
-              on_update: false
+            type: timestamp
+            nullable: false
+            default: "CURRENT_TIMESTAMP"
+            comment: "Create time"
+            on_update: false
           updated_at:
-              type: timestamp
-              nullable: false
-              default: 'CURRENT_TIMESTAMP'
-              comment: 'Modify time'
-              on_update: true
+            type: timestamp
+            nullable: false
+            default: "CURRENT_TIMESTAMP"
+            comment: "Modify time"
+            on_update: true
       cartItem:
         tablename: mygento_sample_custom_cart_item
-        comment: 'Table for Customer Item'
+        comment: "Table for Customer Item"
         columns:
           cart_id:
             type: int
             pk: true
             identity: true
             unsigned: true
-            comment: 'Address ID'
+            comment: "Address ID"
           is_active:
             type: boolean
           delivery_date:
@@ -66,30 +66,30 @@ Mygento:
           city:
             type: varchar
             nullable: false
-            comment: 'City'
+            comment: "City"
             length: 100
           customer_group:
             type: int
             unsigned: false
-            comment: 'Customer Group'
+            comment: "Customer Group"
             length: 6
             nullable: false
             source: 'Magento\Customer\Model\Customer\Source\Group'
           description:
             type: text
             nullable: false
-            comment: 'Description'
+            comment: "Description"
           created_at:
             type: timestamp
             nullable: false
-            default: 'CURRENT_TIMESTAMP'
-            comment: 'Create time'
+            default: "CURRENT_TIMESTAMP"
+            comment: "Create time"
             on_update: false
           updated_at:
             type: timestamp
             nullable: false
-            default: 'CURRENT_TIMESTAMP'
-            comment: 'Modify time'
+            default: "CURRENT_TIMESTAMP"
+            comment: "Modify time"
             on_update: true
           discount:
             type: decimal
@@ -97,20 +97,20 @@ Mygento:
             type: price
         indexes:
           IX_CITY:
-            columns: ['city']
+            columns: ["city"]
           IX_ACTIVE:
-            columns: ['is_active']
+            columns: ["is_active"]
       Obsolete:
-          settings:
-              php_version: '7.3'
-          columns:
-              id:
-                type: int
-                pk: true
-                unsigned: true
-                comment: 'Banner ID'
-              name:
-                type: varchar
+        settings:
+          php_version: "7.3"
+        columns:
+          id:
+            type: int
+            pk: true
+            unsigned: true
+            comment: "Banner ID"
+          name:
+            type: varchar
       Card:
         api: true
         cacheable: true
@@ -122,7 +122,7 @@ Mygento:
             pk: true
             identity: true
             unsigned: true
-            comment: 'Card ID'
+            comment: "Card ID"
           title:
             type: varchar
           code:
@@ -130,6 +130,19 @@ Mygento:
           category_id:
             type: int
             nullable: false
+          is_active:
+            type: boolean
+      Ticket:
+        gui: false
+        columns:
+          ticket_id:
+            type: int
+            pk: true
+            identity: true
+            unsigned: true
+            comment: "Ticket ID"
+          name:
+            type: varchar
           is_active:
             type: boolean
       Poster:
@@ -144,7 +157,7 @@ Mygento:
             type: int
             pk: true
             unsigned: true
-            comment: 'Banner ID'
+            comment: "Banner ID"
           name:
             type: varchar
           subname:
@@ -158,14 +171,14 @@ Mygento:
             unsigned: true
         indexes:
           IX_NAME:
-            type: 'unique'
-            columns: ['family', 'subname']
+            type: "unique"
+            columns: ["family", "subname"]
           IX_PRD_U:
-            type: 'unique'
-            columns: ['product_id']
+            type: "unique"
+            columns: ["product_id"]
         fk:
           FK_PROD_ID_CAT_PRD_ENT_ID:
-            column: 'product_id'
-            referenceTable: 'catalog_product_entity'
-            referenceColumn: 'entity_id'
-            indexName: 'IX_PR_ID'
+            column: "product_id"
+            referenceTable: "catalog_product_entity"
+            referenceColumn: "entity_id"
+            indexName: "IX_PR_ID"

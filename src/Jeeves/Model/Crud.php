@@ -101,6 +101,7 @@ class Crud
 
         $entityList = [];
 
+        $gui = false;
         foreach ($entities as $entityName => $config) {
             $entity = new Crud\Entity();
             $entity->setIO($this->io);
@@ -117,6 +118,10 @@ class Crud
             }
 
             $entity->setConfig($config);
+
+            if ($entity->hasApi()) {
+                $gui = true;
+            }
 
             $entityList[] = $entity;
 
@@ -146,26 +151,31 @@ class Crud
                 ),
             ]
         );
-        $result->updateAdminRoute(
-            [
-                $mod->getFullname() => new AdminRoute(
-                    $mod->getRouteName(),
-                    $mod->getFullname(),
-                    $mod->getAdminRoute()
-                ),
-            ]
-        );
 
-        $result->updateMenu([
-            new Menu(
-                $mod->getFullname() . '::root',
-                $mod->getPrintName(),
-                $mod->getFullname(),
-                'Magento_Backend::stores',
-                $mod->getFullname() . '::root'
-            ),
-        ]);
-        $result->updateMenu($menuEntity);
+        if ($gui) {
+            $result->updateAdminRoute(
+                [
+                    $mod->getFullname() => new AdminRoute(
+                        $mod->getRouteName(),
+                        $mod->getFullname(),
+                        $mod->getAdminRoute()
+                    ),
+                ]
+            );
+        }
+
+        if (!empty($menuEntity)) {
+            $result->updateMenu([
+                new Menu(
+                    $mod->getFullname() . '::root',
+                    $mod->getPrintName(),
+                    $mod->getFullname(),
+                    'Magento_Backend::stores',
+                    $mod->getFullname() . '::root'
+                ),
+            ]);
+            $result->updateMenu($menuEntity);
+        }
         $result->updateDbSchema($dbSchema);
         $result->updateEvents($events);
         $result->updateWebApi($webapi);
@@ -210,7 +220,9 @@ class Crud
         $result->updateAclEntities($acl);
         $result->updateDbSchema($dbschema);
         $result->updateEvents($events);
-        $result->updateMenu($menu);
+        if ($entity->hasGui()) {
+            $result->updateMenu($menu);
+        }
         $result->updateWebApi($webapi);
 
         return $result;

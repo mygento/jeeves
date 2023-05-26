@@ -120,6 +120,9 @@ class Configs extends Generator
 
     private function genWebApiXml(Result $result)
     {
+        if (empty($result->getWebApi())) {
+            return;
+        }
         $generator = new WebApi();
         $this->writeFile(
             $result->getPath() . '/etc/webapi.xml',

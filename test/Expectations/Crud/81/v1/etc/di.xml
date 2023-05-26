@@ -4,16 +4,19 @@
     <preference for="Mygento\SampleModule\Api\CartItemRepositoryInterface" type="Mygento\SampleModule\Model\CartItemRepository"/>
     <preference for="Mygento\SampleModule\Api\ObsoleteRepositoryInterface" type="Mygento\SampleModule\Model\ObsoleteRepository"/>
     <preference for="Mygento\SampleModule\Api\CardRepositoryInterface" type="Mygento\SampleModule\Model\CardRepository"/>
+    <preference for="Mygento\SampleModule\Api\TicketRepositoryInterface" type="Mygento\SampleModule\Model\TicketRepository"/>
     <preference for="Mygento\SampleModule\Api\PosterRepositoryInterface" type="Mygento\SampleModule\Model\PosterRepository"/>
     <preference for="Mygento\SampleModule\Api\Data\ColumnsInterface" type="Mygento\SampleModule\Model\Columns"/>
     <preference for="Mygento\SampleModule\Api\Data\CartItemInterface" type="Mygento\SampleModule\Model\CartItem"/>
     <preference for="Mygento\SampleModule\Api\Data\ObsoleteInterface" type="Mygento\SampleModule\Model\Obsolete"/>
     <preference for="Mygento\SampleModule\Api\Data\CardInterface" type="Mygento\SampleModule\Model\Card"/>
+    <preference for="Mygento\SampleModule\Api\Data\TicketInterface" type="Mygento\SampleModule\Model\Ticket"/>
     <preference for="Mygento\SampleModule\Api\Data\PosterInterface" type="Mygento\SampleModule\Model\Poster"/>
     <preference for="Mygento\SampleModule\Api\Data\ColumnsSearchResultsInterface" type="Mygento\SampleModule\Model\ColumnsSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\CartItemSearchResultsInterface" type="Mygento\SampleModule\Model\CartItemSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface" type="Mygento\SampleModule\Model\ObsoleteSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\CardSearchResultsInterface" type="Mygento\SampleModule\Model\CardSearchResults"/>
+    <preference for="Mygento\SampleModule\Api\Data\TicketSearchResultsInterface" type="Mygento\SampleModule\Model\TicketSearchResults"/>
     <preference for="Mygento\SampleModule\Api\Data\PosterSearchResultsInterface" type="Mygento\SampleModule\Model\PosterSearchResults"/>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
@@ -22,6 +25,7 @@
                 <item name="Mygento\SampleModule\Api\Data\CartItemInterface" xsi:type="string">Mygento\SampleModule\Api\CartItemRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\ObsoleteInterface" xsi:type="string">Mygento\SampleModule\Api\ObsoleteRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\CardInterface" xsi:type="string">Mygento\SampleModule\Api\CardRepositoryInterface</item>
+                <item name="Mygento\SampleModule\Api\Data\TicketInterface" xsi:type="string">Mygento\SampleModule\Api\TicketRepositoryInterface</item>
                 <item name="Mygento\SampleModule\Api\Data\PosterInterface" xsi:type="string">Mygento\SampleModule\Api\PosterRepositoryInterface</item>
             </argument>
         </arguments>
@@ -69,6 +73,15 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Mygento\SampleModule\Model\SearchCriteria\TicketCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Mygento\SampleModule\Model\SearchCriteria\PosterCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -96,6 +109,11 @@
     <type name="Mygento\SampleModule\Model\CardRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\CardCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Mygento\SampleModule\Model\TicketRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Mygento\SampleModule\Model\SearchCriteria\TicketCollectionProcessor</argument>
         </arguments>
     </type>
     <type name="Mygento\SampleModule\Model\PosterRepository">

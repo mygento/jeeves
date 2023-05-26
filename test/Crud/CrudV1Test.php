@@ -77,6 +77,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Api/Data/CardInterface.php');
         $this->checkFile('Api/Data/CardSearchResultsInterface.php');
 
+        $this->checkFile('Api/TicketRepositoryInterface.php');
+        $this->checkFile('Api/Data/TicketInterface.php');
+        $this->checkFile('Api/Data/TicketSearchResultsInterface.php');
+
         $this->checkFile('Api/ObsoleteRepositoryInterface.php');
         $this->checkFile('Api/Data/ObsoleteInterface.php');
         $this->checkFile('Api/Data/ObsoleteSearchResultsInterface.php');
@@ -103,6 +107,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/ResourceModel/Card/Relation/Store/ReadHandler.php');
         $this->checkFile('Model/ResourceModel/Card/Relation/Store/SaveHandler.php');
 
+        $this->checkFile('Model/Ticket.php');
+        $this->checkFile('Model/ResourceModel/Ticket.php');
+        $this->checkFile('Model/ResourceModel/Ticket/Collection.php');
+
         $this->checkFile('Model/Obsolete.php');
         $this->checkFile('Model/ResourceModel/Obsolete.php');
         $this->checkFile('Model/ResourceModel/Obsolete/Collection.php');
@@ -114,6 +122,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/CartItemRepository.php');
         $this->checkFile('Model/ObsoleteRepository.php');
         $this->checkFile('Model/PosterRepository.php');
+        $this->checkFile('Model/TicketRepository.php');
         $this->checkFile('Model/CardRepository.php');
 
         $this->checkFile('Model/SearchCriteria/CardStoreFilter.php');
@@ -125,6 +134,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/CartItemSearchResults.php');
         $this->checkFile('Model/ObsoleteSearchResults.php');
         $this->checkFile('Model/PosterSearchResults.php');
+        $this->checkFile('Model/TicketSearchResults.php');
         $this->checkFile('Model/CardSearchResults.php');
     }
 
@@ -177,6 +187,15 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkNoFile('Controller/Adminhtml/Poster/NewAction.php');
         $this->checkNoFile('Controller/Adminhtml/Poster/Save.php');
 
+        $this->checkNoFile('Controller/Adminhtml/Ticket.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/Index.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/Delete.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/Edit.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/InlineEdit.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/MassDelete.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/NewAction.php');
+        $this->checkNoFile('Controller/Adminhtml/Ticket/Save.php');
+
         $this->checkFile('Controller/Adminhtml/Obsolete.php');
         $this->checkFile('Controller/Adminhtml/Obsolete/Index.php');
         $this->checkFile('Controller/Adminhtml/Obsolete/Delete.php');
@@ -208,6 +227,10 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkXml('view/adminhtml/layout/sample_module_poster_index.xml');
         $this->checkNoFile('view/adminhtml/layout/sample_module_poster_new.xml');
         $this->checkNoFile('view/adminhtml/layout/sample_module_poster_edit.xml');
+
+        $this->checkNoFile('view/adminhtml/layout/sample_module_ticket_index.xml');
+        $this->checkNoFile('view/adminhtml/layout/sample_module_ticket_new.xml');
+        $this->checkNoFile('view/adminhtml/layout/sample_module_ticket_edit.xml');
     }
 
     private function checkUi()
@@ -239,6 +262,13 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 
         $this->checkXml('view/adminhtml/ui_component/sample_module_poster_listing.xml');
         $this->checkNoFile('view/adminhtml/ui_component/sample_module_poster_edit.xml');
+
+        $this->checkNoFile('Ui/Component/Listing/TicketActions.php');
+        $this->checkNoFile('Model/Ticket/DataProvider.php');
+        $this->checkNoFile('Model/ResourceModel/Ticket/Grid/Collection.php');
+
+        $this->checkNoFile('view/adminhtml/ui_component/sample_module_ticket_listing.xml');
+        $this->checkNoFile('view/adminhtml/ui_component/sample_module_ticket_edit.xml');
 
         $this->checkFile('Ui/Component/Listing/ObsoleteActions.php');
         $this->checkFile('Model/Obsolete/DataProvider.php');

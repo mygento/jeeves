@@ -70,6 +70,14 @@
             <column name="entity_id"/>
         </index>
     </table>
+    <table name="mygento_sample_module_ticket" resource="default" engine="innodb" comment="Ticket Table">
+        <column xsi:type="int" name="ticket_id" nullable="false" identity="true" unsigned="true" comment="Ticket ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" comment="Is_active"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="ticket_id"/>
+        </constraint>
+    </table>
     <table name="mygento_sample_module_poster" resource="default" engine="innodb" comment="Poster Table">
         <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
