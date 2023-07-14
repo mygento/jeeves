@@ -30,18 +30,18 @@ class Acl
         return $this->children;
     }
 
-//    public function setId(string $id)
-//    {
-//        $this->id = $id;
-//    }
-//
-//    public function setTitle(string $title)
-//    {
-//        $this->title = $title;
-//    }
-//
-//    public function setChildren(array $children)
-//    {
-//        $this->children = $children;
-//    }
+    //    public function setId(string $id)
+    //    {
+    //        $this->id = $id;
+    //    }
+    //
+    //    public function setTitle(string $title)
+    //    {
+    //        $this->title = $title;
+    //    }
+    //
+    //    public function setChildren(array $children)
+    //    {
+    //        $this->children = $children;
+    //    }
 }

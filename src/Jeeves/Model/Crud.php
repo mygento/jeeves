@@ -119,7 +119,7 @@ class Crud
 
             $entity->setConfig($config);
 
-            if ($entity->hasApi()) {
+            if ($entity->hasGui()) {
                 $gui = true;
             }
 
