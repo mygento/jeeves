@@ -118,10 +118,10 @@ Mygento:
         per_store: true
         columns:
           card_id:
-            type: int
+            type: smallint
             pk: true
             identity: true
-            unsigned: true
+            unsigned: false
             comment: "Card ID"
           title:
             type: varchar

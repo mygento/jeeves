@@ -293,7 +293,8 @@ class Crud
         ];
 
         if ($entity->withStore()) {
-            $storeColumns = $generator->getColumnsPerStore();
+            $primary = $generator->findPrimary($entity);
+            $storeColumns = $generator->getColumnsPerStore($primary);
             $result[] = new DbTable(
                 $entity->getTablename() . '_store',
                 $storeColumns,
