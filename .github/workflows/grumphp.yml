@@ -7,7 +7,7 @@ on:
       - v1
   push:
     tags:
-       - '*'
+      - "*"
     branches:
       - v1
 
@@ -18,9 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         php-versions:
-          - '7.4'
-          - '8.0'
-          - '8.1'
+          - "7.4"
+          - "8.0"
+          - "8.1"
           # - '8.2'
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           # Use composer.json for key, if composer.lock is not committed.
@@ -64,10 +64,10 @@ jobs:
         if: matrix.php-versions == '7.4'
       - name: Compile Result Upload
         if: matrix.php-versions == '7.4'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-           name: jeeves_new.phar
-           path: jeeves.phar
+          name: jeeves_new.phar
+          path: jeeves.phar
       - name: Upload to Releases
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && matrix.php-versions == '7.4'
