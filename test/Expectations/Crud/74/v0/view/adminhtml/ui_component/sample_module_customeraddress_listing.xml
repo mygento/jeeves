@@ -132,6 +132,7 @@
                 <editor>
                     <editorType>select</editorType>
                     <validation>
+                        <rule name="validate-integer" xsi:type="boolean">true</rule>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
                 </editor>

@@ -121,7 +121,7 @@ class Edit extends Common
                 . ');' . PHP_EOL
                 . '$resultPage->getConfig()->getTitle()->prepend(__(\'' . $entityName . '\')->render());' . PHP_EOL
                 . '$resultPage->getConfig()->getTitle()->prepend(' . PHP_EOL
-                . self::TAB . '$entity->getId() ? $entity->getTitle() : __(\'New ' . $entityName . '\')->render()' . PHP_EOL
+                . self::TAB . '$entityId ? $entity->getTitle() : __(\'New ' . $entityName . '\')->render()' . PHP_EOL
                 . ');' . PHP_EOL . PHP_EOL
                 . 'return $resultPage;');
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');

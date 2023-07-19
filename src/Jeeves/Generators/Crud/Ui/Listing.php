@@ -33,126 +33,10 @@ class Listing extends Common
                 'type' => 'store',
             ];
         }
-        $columns = array_map(
-            function ($name, $param) use ($primaryKey) {
-                $notNullable = isset($param['nullable']) && $param['nullable'] === false;
-                $options = null;
-                switch ($param['type']) {
-                    case 'bool':
-                    case 'boolean':
-                        $filter = 'select';
-                        $dataType = 'select';
-                        $options = 'Magento\Config\Model\Config\Source\Yesno';
-                        break;
-                    case 'smallint':
-                    case 'bigint':
-                    case 'tinyint':
-                    case 'int':
-                        $filter = 'textRange';
-                        $dataType = 'text';
-
-                        break;
-                    case 'price':
-                        $filter = 'textRange';
-                        $dataType = 'text';
-                        break;
-                    case 'date':
-                    case 'datetime':
-                    case 'timestamp':
-                        $filter = 'dateRange';
-                        $dataType = 'date';
-                        break;
-                    default:
-                        $filter = 'text';
-                        $dataType = 'text';
-                }
-                if (isset($param['source'])) {
-                    $filter = 'select';
-                    $dataType = 'select';
-                }
-                $col = [
-                    self::N => 'column',
-                    self::A => [
-                        'name' => $name,
-                    ],
-                    self::V => [
-                        'settings' => [
-                            'filter' => $filter,
-                            'dataType' => $dataType,
-                            'editor' => [
-                                'editorType' => $dataType,
-                            ],
-                            'label' => [
-                                self::A => [
-                                    'translate' => 'true',
-                                ],
-                                self::V => $this->snakeCaseToUpperCamelCaseWithSpace($name),
-                            ],
-                        ],
-                    ],
-                ];
-                if ($primaryKey === $name) {
-                    unset($col[self::V]['settings']['editor']);
-                    $col[self::V]['settings']['sorting'] = 'asc';
-                }
-                switch ($param['type']) {
-                    case 'bool':
-                    case 'boolean':
-                        $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
-                        $col[self::V]['settings']['options'] = [
-                            self::A => [
-                                'class' => $options,
-                            ],
-                        ];
-                        break;
-                    case 'price':
-                        $col[self::A]['class'] = 'Magento\Catalog\Ui\Component\Listing\Columns\Price';
-                        break;
-                    case 'date':
-                    case 'datetime':
-                    case 'timestamp':
-                        $col[self::A]['class'] = 'Magento\Ui\Component\Listing\Columns\Date';
-                        $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/date';
-                        break;
-                    case 'store':
-                        $col[self::A]['class'] = 'Magento\Store\Ui\Component\Listing\Column\Store';
-                        $col[self::V]['settings']['label'][self::V] = 'Store View';
-                        $col[self::V]['settings']['bodyTmpl'] = 'ui/grid/cells/html';
-                        $col[self::V]['settings']['sortable'] = 'false';
-                        unset($col[self::V]['settings']['filter']);
-                        unset($col[self::V]['settings']['dataType']);
-                        unset($col[self::V]['settings']['editor']);
-                        break;
-                    default:
-                        break;
-                }
-                if ($notNullable) {
-                    $col[self::V]['settings']['editor']['validation']['rule'] = [
-                        self::A => [
-                            'name' => 'required-entry',
-                            'xsi:type' => 'boolean',
-                        ],
-                        self::V => 'true',
-                    ];
-                }
-                if (isset($param['source'])) {
-                    $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
-                    $col[self::V]['settings']['options'] = [
-                        self::A => [
-                            'class' => $param['source'],
-                        ],
-                    ];
-                }
-
-                if (in_array($name, self::READONLY_FIELDS)) {
-                    unset($col[self::V]['settings']['editor']);
-                }
-
-                return $col;
-            },
-            array_keys($fields),
-            $fields
-        );
+        $columns = [];
+        foreach ($fields as $name => $param) {
+            $columns[] = $this->getColumn($name, $param, $primaryKey);
+        }
 
         return $service->write('listing', function ($writer) use (
             $columns,
@@ -551,5 +435,175 @@ class Listing extends Common
                 ],
             ],
         ];
+    }
+
+    private function getColumn(string $name, array $param, string $primaryKey): array
+    {
+        $notNullable = isset($param['nullable']) && $param['nullable'] === false;
+        $options = null;
+        switch ($param['type']) {
+            case 'bool':
+            case 'boolean':
+                $filter = 'select';
+                $dataType = 'select';
+                $options = 'Magento\Config\Model\Config\Source\Yesno';
+                break;
+            case 'smallint':
+            case 'bigint':
+            case 'tinyint':
+            case 'int':
+                $filter = 'textRange';
+                $dataType = 'text';
+
+                break;
+            case 'price':
+                $filter = 'textRange';
+                $dataType = 'text';
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $filter = 'dateRange';
+                $dataType = 'date';
+                break;
+            default:
+                $filter = 'text';
+                $dataType = 'text';
+        }
+        if (isset($param['source'])) {
+            $filter = 'select';
+            $dataType = 'select';
+        }
+        $col = [
+            self::N => 'column',
+            self::A => [
+                'name' => $name,
+            ],
+            self::V => [
+                'settings' => [
+                    'filter' => $filter,
+                    'dataType' => $dataType,
+                    'editor' => [
+                        'editorType' => $dataType,
+                    ],
+                    'label' => [
+                        self::A => [
+                            'translate' => 'true',
+                        ],
+                        self::V => $this->snakeCaseToUpperCamelCaseWithSpace($name),
+                    ],
+                ],
+            ],
+        ];
+
+        $col = $this->setComponent($col, $param, $options);
+        $col = $this->setValidation($col, $param, $notNullable);
+
+        if ($primaryKey === $name) {
+            unset($col[self::V]['settings']['editor']);
+            $col[self::V]['settings']['sorting'] = 'asc';
+        }
+
+        if (in_array($name, self::READONLY_FIELDS)) {
+            unset($col[self::V]['settings']['editor']);
+        }
+
+        return $col;
+    }
+
+    private function setComponent(array $col, array $param, ?string $options): array
+    {
+        switch ($param['type']) {
+            case 'bool':
+            case 'boolean':
+                $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
+                $col[self::V]['settings']['options'] = [
+                    self::A => [
+                        'class' => $options,
+                    ],
+                ];
+                break;
+            case 'price':
+                $col[self::A]['class'] = 'Magento\Catalog\Ui\Component\Listing\Columns\Price';
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $col[self::A]['class'] = 'Magento\Ui\Component\Listing\Columns\Date';
+                $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/date';
+                break;
+            case 'store':
+                $col[self::A]['class'] = 'Magento\Store\Ui\Component\Listing\Column\Store';
+                $col[self::V]['settings']['label'][self::V] = 'Store View';
+                $col[self::V]['settings']['bodyTmpl'] = 'ui/grid/cells/html';
+                $col[self::V]['settings']['sortable'] = 'false';
+                unset($col[self::V]['settings']['filter']);
+                unset($col[self::V]['settings']['dataType']);
+                unset($col[self::V]['settings']['editor']);
+                break;
+            default:
+                break;
+        }
+
+        if (isset($param['source'])) {
+            $col[self::A]['component'] = 'Magento_Ui/js/grid/columns/select';
+            $col[self::V]['settings']['options'] = [
+                self::A => [
+                    'class' => $param['source'],
+                ],
+            ];
+        }
+
+        return $col;
+    }
+
+    private function setValidation(array $col, array $param, bool $notNullable): array
+    {
+        $rules = [];
+
+        switch ($param['type']) {
+            case 'smallint':
+            case 'bigint':
+            case 'tinyint':
+            case 'int':
+                $rules[] = [
+                    self::N => 'rule',
+                    self::A => [
+                        self::N => 'validate-integer',
+                        'xsi:type' => 'boolean',
+                    ],
+                    self::V => 'true',
+                ];
+                if (isset($param['unsigned']) && $param['unsigned'] === true) {
+                    $rules[] = [
+                        self::N => 'rule',
+                        self::A => [
+                            self::N => 'validate-zero-or-greater',
+                            'xsi:type' => 'boolean',
+                        ],
+                        self::V => 'true',
+                    ];
+                }
+                break;
+            default:
+                break;
+        }
+
+        if ($notNullable) {
+            $rules[] = [
+                self::N => 'rule',
+                self::A => [
+                    self::N => 'required-entry',
+                    'xsi:type' => 'boolean',
+                ],
+                self::V => 'true',
+            ];
+        }
+
+        if (!empty($rules)) {
+            $col[self::V]['settings']['editor']['validation'] = $rules;
+        }
+
+        return $col;
     }
 }

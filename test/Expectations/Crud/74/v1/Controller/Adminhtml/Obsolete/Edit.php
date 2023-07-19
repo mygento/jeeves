@@ -65,7 +65,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Obsolete')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Obsolete')->render()
+            $entityId ? $entity->getTitle() : __('New Obsolete')->render()
         );
 
         return $resultPage;

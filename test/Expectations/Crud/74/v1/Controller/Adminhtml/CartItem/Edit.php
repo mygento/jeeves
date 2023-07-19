@@ -60,7 +60,7 @@ class Edit extends CartItem
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Cart Item')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Cart Item')->render()
+            $entityId ? $entity->getTitle() : __('New Cart Item')->render()
         );
 
         return $resultPage;

@@ -54,7 +54,7 @@ class Edit extends Columns
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Columns')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Columns')->render()
+            $entityId ? $entity->getTitle() : __('New Columns')->render()
         );
 
         return $resultPage;

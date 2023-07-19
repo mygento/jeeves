@@ -45,6 +45,10 @@ class Model extends Common
                 $pk[$name] = $value;
                 $pk[$name]['nullable'] = !$notNullable;
             }
+            $generated = false;
+            if (isset($value['identity']) && $value['identity'] === true) {
+                $generated = true;
+            }
             $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
             $method = $this->snakeCaseToUpperCamelCase($name);
             $get = $interface->addMethod('get' . $method)
@@ -58,7 +62,7 @@ class Model extends Common
 
             if ($typehint) {
                 $get->setReturnType($this->convertType($value['type']));
-                $get->setReturnNullable(!$notNullable);
+                $get->setReturnNullable($generated ? true : !$notNullable);
                 $param->setNullable(!$notNullable);
                 $param->setType($this->convertType($value['type']));
                 $set->setReturnType('self');
@@ -84,6 +88,11 @@ class Model extends Common
         if ($primary !== self::DEFAULT_KEY && count($pk) === 1) {
             $item = current($pk);
 
+            $generated = false;
+            if (isset($item['identity']) && $item['identity'] === true) {
+                $generated = true;
+            }
+
             $getId = $interface
                 ->addMethod('getId')
                 ->addComment('Get ID')
@@ -95,7 +104,7 @@ class Model extends Common
 
             if ($typehint) {
                 $getId->setReturnType($this->convertType($item['type']));
-                $getId->setReturnNullable($item['nullable']);
+                $getId->setReturnNullable($generated ? true : $item['nullable']);
             }
 
             $setId = $interface
@@ -103,7 +112,7 @@ class Model extends Common
                 ->addComment('Set ID')
                 ->setVisibility('public');
 
-            $setIdParam = $setId->addParameter(self::DEFAULT_KEY);
+            $setId->addParameter(self::DEFAULT_KEY);
             $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
 
             if ($hasApi || !$typehint) {

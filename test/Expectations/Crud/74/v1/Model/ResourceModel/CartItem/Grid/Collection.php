@@ -17,6 +17,9 @@ class Collection extends ParentCollection implements SearchResultInterface
 {
     protected AggregationInterface $aggregations;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,

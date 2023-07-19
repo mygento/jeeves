@@ -54,7 +54,7 @@ class Edit extends Card
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Card')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Card')->render()
+            $entityId ? $entity->getTitle() : __('New Card')->render()
         );
 
         return $resultPage;

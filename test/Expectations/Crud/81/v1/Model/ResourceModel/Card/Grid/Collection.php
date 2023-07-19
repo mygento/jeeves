@@ -19,7 +19,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     protected AggregationInterface $aggregations;
 
     /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MetadataPool $metadataPool,

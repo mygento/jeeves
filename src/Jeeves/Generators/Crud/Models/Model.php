@@ -62,6 +62,10 @@ class Model extends Common
                 $pk[$name] = $value;
                 $pk[$name]['nullable'] = !$notNullable;
             }
+            $generated = false;
+            if (isset($value['identity']) && $value['identity'] === true) {
+                $generated = true;
+            }
             $method = $this->snakeCaseToUpperCamelCase($name);
             $getter = $class->addMethod('get' . $method)
                 ->addComment('Get ' . str_replace('_', ' ', $name))
@@ -76,7 +80,7 @@ class Model extends Common
 
             if ($typehint) {
                 $getter->setReturnType($this->convertType($value['type']));
-                $getter->setReturnNullable(!$notNullable);
+                $getter->setReturnNullable($generated ? true : !$notNullable);
 
                 $setter->setReturnType('self');
                 $setParam->setType($this->convertType($value['type']));
@@ -102,6 +106,11 @@ class Model extends Common
             $item = current($pk);
             $itemName = current(array_keys($pk));
 
+            $generated = false;
+            if (isset($item['identity']) && $item['identity'] === true) {
+                $generated = true;
+            }
+
             $getId = $class
                 ->addMethod('getId')
                 ->addComment('Get ID')
@@ -109,7 +118,7 @@ class Model extends Common
                 ->setBody('return $this->getData(self::' . strtoupper($itemName) . ');');
             if ($typehint) {
                 $getId->setReturnType($this->convertType($item['type']));
-                $getId->setReturnNullable($item['nullable']);
+                $getId->setReturnNullable($generated ? true : $item['nullable']);
             }
 
             $setId = $class

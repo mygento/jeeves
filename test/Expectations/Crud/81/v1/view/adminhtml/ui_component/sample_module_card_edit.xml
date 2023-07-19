@@ -92,6 +92,7 @@
                 <visible>true</visible>
                 <dataScope>category_id</dataScope>
                 <validation>
+                    <rule name="validate-integer" xsi:type="boolean">true</rule>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
             </settings>
@@ -131,6 +132,9 @@
                 <label translate="true">Store Id</label>
                 <visible>true</visible>
                 <dataScope>store_id</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
             <formElements>
                 <multiselect>

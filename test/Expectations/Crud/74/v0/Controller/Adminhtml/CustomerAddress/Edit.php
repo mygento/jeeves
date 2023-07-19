@@ -65,7 +65,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\CustomerAddress
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Address')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entity->getId() ? $entity->getTitle() : __('New Customer Address')->render()
+            $entityId ? $entity->getTitle() : __('New Customer Address')->render()
         );
 
         return $resultPage;

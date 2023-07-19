@@ -104,6 +104,10 @@
                 <dataType>text</dataType>
                 <editor>
                     <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-integer" xsi:type="boolean">true</rule>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
                 </editor>
                 <label translate="true">Product Id</label>
             </settings>
