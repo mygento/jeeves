@@ -14,7 +14,6 @@ class Inline extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
@@ -25,11 +24,8 @@ class Inline extends Common
 
         if (!$constructorProp) {
             $json = $class->addProperty('jsonFactory')->setVisibility('private');
-            if ($typehint) {
-                $json->setType('\Magento\Framework\Controller\Result\JsonFactory');
-            } else {
-                $json->addComment('@var \Magento\Framework\Controller\Result\JsonFactory');
-            }
+
+            $json->setType('\Magento\Framework\Controller\Result\JsonFactory');
         }
 
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
@@ -56,19 +52,11 @@ class Inline extends Common
         $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
         $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
 
-        if ($typehint) {
-            $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-            $namespace->addUse('\Magento\Framework\Controller\Result\JsonFactory');
-            $namespace->addUse($repository);
-            $namespace->addUse('\Magento\Framework\Registry');
-            $namespace->addUse('\Magento\Backend\App\Action\Context');
-        } else {
-            $construct
-                ->addComment('@param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory')
-                ->addComment('@param ' . $repository . ' $repository')
-                ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-                ->addComment('@param \Magento\Backend\App\Action\Context $context');
-        }
+        $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
+        $namespace->addUse('\Magento\Framework\Controller\Result\JsonFactory');
+        $namespace->addUse($repository);
+        $namespace->addUse('\Magento\Framework\Registry');
+        $namespace->addUse('\Magento\Backend\App\Action\Context');
 
         $execute = $class->addMethod('execute')
             ->addComment('Execute action')
@@ -105,12 +93,8 @@ class Inline extends Common
         . self::TAB . '\'error\' => $error' . PHP_EOL
         . ']);' . PHP_EOL);
 
-        if ($typehint) {
-            $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
-            $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
-        } else {
-            $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');
-        }
+        $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
+        $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
 
         return $namespace;
     }

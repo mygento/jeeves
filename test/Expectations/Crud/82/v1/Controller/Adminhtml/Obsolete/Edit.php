@@ -24,7 +24,7 @@ class Edit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 

@@ -16,15 +16,12 @@ class DataProvider extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Model\\' . ucfirst($entity));
         $namespace->addUse('Magento\Framework\App\Request\DataPersistorInterface');
         $namespace->addUse($collectionFactory);
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
-            $namespace->addUse($collection);
-        }
+        $namespace->addUse('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
+        $namespace->addUse($collection);
 
         $class = $namespace->addClass($className);
         $class->setExtends('\Magento\Ui\DataProvider\ModifierPoolDataProvider');
@@ -40,28 +37,11 @@ class DataProvider extends Common
 
         $namespace->addUse('\Magento\Ui\DataProvider\Modifier\PoolInterface');
 
-        if ($typehint) {
-            //$collect->setType($collection);
-            $persist->setType('\Magento\Framework\App\Request\DataPersistorInterface');
-            $loaded->setType('array');
-        } else {
-            $persist->addComment('@var DataPersistorInterface');
-            $loaded->addComment('@var array');
-        }
+        //$collect->setType($collection);
+        $persist->setType('\Magento\Framework\App\Request\DataPersistorInterface');
+        $loaded->setType('array');
 
         $construct = $class->addMethod('__construct')->setVisibility('public');
-
-        if (!$typehint) {
-            $construct
-                ->addComment('@param \\' . $collectionFactory . ' $collectionFactory')
-                ->addComment('@param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor')
-                ->addComment('@param string $name')
-                ->addComment('@param string $primaryFieldName')
-                ->addComment('@param string $requestFieldName')
-                ->addComment('@param array $meta')
-                ->addComment('@param array $data')
-                ->addComment('@param \Magento\Ui\DataProvider\Modifier\PoolInterface|null $pool');
-        }
 
         $construct->addParameter('collectionFactory')->setType($collectionFactory);
         $construct->addParameter('dataPersistor')->setType('\Magento\Framework\App\Request\DataPersistorInterface');
@@ -94,11 +74,7 @@ class DataProvider extends Common
             . '}' . PHP_EOL
             . 'return $this->loadedData;');
 
-        if ($typehint) {
-            $getData->setReturnType('array');
-        } else {
-            $getData->addComment('@return array');
-        }
+        $getData->setReturnType('array');
 
         return $namespace;
     }

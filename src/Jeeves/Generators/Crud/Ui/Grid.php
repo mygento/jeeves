@@ -16,8 +16,6 @@ class Grid extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
-
         $namespace = new PhpNamespace($rootNamespace . '\Model\\ResourceModel\\' . ucfirst($entity) . '\\Grid');
         $namespace->addUse('Magento\Framework\Api\Search\SearchResultInterface');
         $namespace->addUse('Magento\Framework\Api\SearchCriteriaInterface');
@@ -29,17 +27,11 @@ class Grid extends Common
         $agg = $class->addProperty('aggregations')
             ->setVisibility('protected'); //private?
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\Api\Search\AggregationInterface');
-            $agg->setType('\Magento\Framework\Api\Search\AggregationInterface');
-        } else {
-            $agg->addComment('@var \Magento\Framework\Api\Search\AggregationInterface');
-        }
+        $namespace->addUse('\Magento\Framework\Api\Search\AggregationInterface');
+        $agg->setType('\Magento\Framework\Api\Search\AggregationInterface');
 
         $construct = $class->addMethod('__construct');
-        if ($withStore && !$typehint) {
-            $construct->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool');
-        }
+
         $construct
             ->setVisibility('public');
 
@@ -60,29 +52,14 @@ class Grid extends Common
         $construct->addParameter('connection')->setType('\Magento\Framework\DB\Adapter\AdapterInterface')->setDefaultValue(null);
         $construct->addParameter('resource')->setType('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')->setDefaultValue(null);
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\Data\Collection\EntityFactoryInterface');
-            $namespace->addUse('\Psr\Log\LoggerInterface');
-            $namespace->addUse('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-            $namespace->addUse('\Magento\Framework\Event\ManagerInterface');
-            $namespace->addUse('\Magento\Framework\DB\Adapter\AdapterInterface');
-            $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
-            if ($withStore) {
-                $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
-            }
-        } else {
-            $construct
-                ->addComment('@param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory')
-                ->addComment('@param \Psr\Log\LoggerInterface $logger')
-                ->addComment('@param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy')
-                ->addComment('@param \Magento\Framework\Event\ManagerInterface $eventManager')
-                ->addComment('@param string $mainTable')
-                ->addComment('@param string $eventPrefix')
-                ->addComment('@param string $eventObject')
-                ->addComment('@param string $resourceModel')
-                ->addComment('@param string $model')
-                ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
-                ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource');
+        $namespace->addUse('\Magento\Framework\Data\Collection\EntityFactoryInterface');
+        $namespace->addUse('\Psr\Log\LoggerInterface');
+        $namespace->addUse('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $namespace->addUse('\Magento\Framework\Event\ManagerInterface');
+        $namespace->addUse('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
+        if ($withStore) {
+            $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
         }
 
         $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');

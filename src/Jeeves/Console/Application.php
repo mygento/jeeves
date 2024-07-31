@@ -15,7 +15,7 @@ class Application extends BaseApplication
 {
     public const GEN = 'generate';
     public const DS = DIRECTORY_SEPARATOR;
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.1.0';
     public const NAME = 'Jeeves';
 
     /**
@@ -31,7 +31,7 @@ class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(InputInterface $input = null, OutputInterface $output = null): int
     {
         if (null === $output) {
             $output = Factory::createOutput();
@@ -71,7 +71,7 @@ class Application extends BaseApplication
     /**
      * Initializes all commands.
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $selfUpdate = new SelfUpdateCommand(self::NAME, self::VERSION, 'mygento/jeeves');
 

@@ -14,15 +14,12 @@ class Shared extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml');
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Backend\App\Action');
-        }
+        $namespace->addUse('\Magento\Backend\App\Action');
 
         $class = $namespace->addClass($className)
             ->setAbstract()
@@ -32,33 +29,19 @@ class Shared extends Common
             ->addComment('')
             ->addComment('@see _isAllowed()');
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\Registry');
-            $namespace->addUse($repository);
-        }
+        $namespace->addUse('\Magento\Framework\Registry');
+        $namespace->addUse($repository);
 
         if (!$constructorProp) {
             $reg = $class->addProperty('coreRegistry')
                 ->setVisibility('protected');
 
-            if ($typehint) {
-                $reg->setType('\Magento\Framework\Registry');
-            } else {
-                $reg->addComment('Core registry');
-                $reg->addComment('');
-                $reg->addComment('@var \Magento\Framework\Registry');
-            }
+            $reg->setType('\Magento\Framework\Registry');
 
             $repo = $class->addProperty('repository')
                 ->setVisibility('protected');
 
-            if ($typehint) {
-                $repo->setType($repository);
-            } else {
-                $repo->addComment($className . ' repository')
-                    ->addComment('')
-                    ->addComment('@var ' . $repository);
-            }
+            $repo->setType($repository);
         }
 
         $body = 'parent::__construct($context);';
@@ -87,13 +70,6 @@ class Shared extends Common
             $construct->addParameter('coreRegistry')->setType('\Magento\Framework\Registry');
         }
         $construct->addParameter('context')->setType('\Magento\Backend\App\Action\Context');
-
-        if (!$typehint) {
-            $construct
-                ->addComment('@param ' . $repository . ' $repository')
-                ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-                ->addComment('@param \Magento\Backend\App\Action\Context $context');
-        }
 
         return $namespace;
     }

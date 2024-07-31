@@ -33,7 +33,7 @@ abstract class Obsolete extends \Magento\Backend\App\Action
     public function __construct(
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         parent::__construct($context);
 

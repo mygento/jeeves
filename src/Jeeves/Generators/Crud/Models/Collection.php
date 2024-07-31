@@ -18,82 +18,58 @@ class Collection extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ) {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel\\' . $entity);
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
-            $namespace->addUse($entityClass);
-            $namespace->addUse($resourceClass, $entity . 'Resource');
-        }
+
+        $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
+        $namespace->addUse($entityClass);
+        $namespace->addUse($resourceClass, $entity . 'Resource');
+
         if ($withStore) {
             $namespace->addUse($rootNamespace . '\Api\Data\\' . $interface);
         }
 
         $class = $namespace->addClass('Collection');
         $class->setExtends('\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection');
-        $construct = $class->addMethod('_construct')
+        $construct1 = $class->addMethod('_construct')
             ->addComment('Define resource model')
             ->setVisibility('protected');
 
-        if ($typehint) {
-            $construct->setBody('$this->_init(' . PHP_EOL .
-            self::TAB . $entity . '::class,' . PHP_EOL .
-            self::TAB . $entity . 'Resource::class' . PHP_EOL .
-            ');');
-        } else {
-            $construct->setBody('$this->_init(' . PHP_EOL .
-            self::TAB . $entityClass . '::class,' . PHP_EOL .
-            self::TAB . $resourceClass . '::class' . PHP_EOL .
-            ');');
-        }
+        $construct1->setBody('$this->_init(' . PHP_EOL .
+        self::TAB . $entity . '::class,' . PHP_EOL .
+        self::TAB . $entity . 'Resource::class' . PHP_EOL .
+        ');');
+
         $idField = $class->addProperty('_idFieldName', $key)
             ->setVisibility('protected');
         $idField->addComment('@var string');
 
-        if ($typehint) {
-            $idField->setValue(new Literal($entity . 'Resource::TABLE_PRIMARY_KEY'));
-        }
+        $idField->setValue(new Literal($entity . 'Resource::TABLE_PRIMARY_KEY'));
 
         if (!$withStore) {
             return $namespace;
         }
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
-            $namespace->addUse('\Magento\Framework\Data\Collection\EntityFactoryInterface');
-            $namespace->addUse('\Psr\Log\LoggerInterface');
-            $namespace->addUse('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-            $namespace->addUse('\Magento\Framework\Event\ManagerInterface');
-            $namespace->addUse('\Psr\Log\LoggerInterface');
-            $namespace->addUse('\Magento\Framework\DB\Adapter\AdapterInterface');
-            $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
-        }
+        $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
+        $namespace->addUse('\Magento\Framework\Data\Collection\EntityFactoryInterface');
+        $namespace->addUse('\Psr\Log\LoggerInterface');
+        $namespace->addUse('\Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $namespace->addUse('\Magento\Framework\Event\ManagerInterface');
+        $namespace->addUse('\Psr\Log\LoggerInterface');
+        $namespace->addUse('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $namespace->addUse('\Magento\Framework\Model\ResourceModel\Db\AbstractDb');
 
         if (!$constructorProp) {
             $mdPool = $class->addProperty('metadataPool');
             $mdPool->setVisibility('private');
 
-            if ($typehint) {
-                $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-            } else {
-                $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
-            }
+            $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
         }
 
         $construct = $class->addMethod('__construct')->setVisibility('public');
 
-        if (!$typehint) {
-            $construct->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool')
-                ->addComment('@param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory')
-                ->addComment('@param \Psr\Log\LoggerInterface $logger')
-                ->addComment('@param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy')
-                ->addComment('@param \Magento\Framework\Event\ManagerInterface $eventManager')
-                ->addComment('@param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection')
-                ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource');
-        }
         $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
 
         if ($constructorProp) {

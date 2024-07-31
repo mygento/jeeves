@@ -25,7 +25,7 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 

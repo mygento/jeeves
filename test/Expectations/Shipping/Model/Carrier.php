@@ -24,7 +24,7 @@ class Carrier extends \Mygento\Shipment\Model\AbstractCarrier
         \Mygento\SampleModule\Helper\Data $helper,
         Service $scopeConfig,
         Service $rateErrorFactory,
-        Service $logger
+        Service $logger,
     ) {
         $this->service = $service;
         parent::__construct(

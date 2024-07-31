@@ -19,7 +19,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     protected AggregationInterface $aggregations;
 
     /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -33,7 +33,7 @@ class Collection extends ParentCollection implements SearchResultInterface
         string $resourceModel,
         string $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        AbstractDb $resource = null,
     ) {
         parent::__construct(
             $metadataPool,

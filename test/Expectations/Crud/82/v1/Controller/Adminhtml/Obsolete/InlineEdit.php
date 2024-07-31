@@ -19,7 +19,7 @@ class InlineEdit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 

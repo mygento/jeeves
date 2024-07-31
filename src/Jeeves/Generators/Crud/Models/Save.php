@@ -14,7 +14,6 @@ class Save extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
@@ -26,21 +25,14 @@ class Save extends Common
         $class = $namespace->addClass('SaveHandler');
         $class->addImplement('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
-        }
+        $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
 
         if (!$constructorProp) {
             $res = $class->addProperty('resource')->setVisibility('private');
             $mtdPool = $class->addProperty('metadataPool')->setVisibility('private');
 
-            if ($typehint) {
-                $res->setType($resourceClass);
-                $mtdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-            } else {
-                $res->addComment('@var ' . $resourceClass);
-                $mtdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
-            }
+            $res->setType($resourceClass);
+            $mtdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
         }
 
         $construct = $class->addMethod('__construct')->setVisibility('public');

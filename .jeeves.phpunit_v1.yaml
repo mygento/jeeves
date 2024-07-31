@@ -100,17 +100,6 @@ Mygento:
             columns: ["city"]
           IX_ACTIVE:
             columns: ["is_active"]
-      Obsolete:
-        settings:
-          php_version: "7.3"
-        columns:
-          id:
-            type: int
-            pk: true
-            unsigned: true
-            comment: "Banner ID"
-          name:
-            type: varchar
       Card:
         api: true
         cacheable: true

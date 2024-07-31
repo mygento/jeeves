@@ -24,7 +24,7 @@ class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         \Magento\Ui\Component\MassAction\Filter $filter,
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;

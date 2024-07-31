@@ -14,7 +14,6 @@ class Read extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
@@ -24,22 +23,15 @@ class Read extends Common
         $class = $namespace->addClass('ReadHandler');
         $class->addImplement('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
-            $namespace->addUse($resourceClass);
-        }
+        $namespace->addUse('\Magento\Framework\EntityManager\Operation\ExtensionInterface');
+        $namespace->addUse($resourceClass);
 
         if (!$constructorProp) {
             $res = $class->addProperty('resource')->setVisibility('private');
-            if ($typehint) {
-                $res->setType($resourceClass);
-            } else {
-                $res->addComment('@var ' . $resourceClass);
-            }
+            $res->setType($resourceClass);
         }
 
-        $construct = $class->addMethod('__construct')
-            ->setVisibility('public');
+        $construct = $class->addMethod('__construct')->setVisibility('public');
         if ($constructorProp) {
             $construct
                 ->addPromotedParameter('resource')

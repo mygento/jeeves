@@ -7,7 +7,7 @@ use Mygento\Jeeves\Console\Command\ShippingModule;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CrudTest extends \PHPUnit\Framework\TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     private const V = 'shipping';
 

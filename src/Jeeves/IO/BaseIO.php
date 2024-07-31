@@ -9,11 +9,8 @@ abstract class BaseIO implements IOInterface, LoggerInterface
 {
     /**
      * System is unusable.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function emergency($message, array $context = [])
+    public function emergency(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -23,11 +20,8 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      *
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function alert($message, array $context = [])
+    public function alert(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -36,11 +30,8 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      * Critical conditions.
      *
      * Example: Application component unavailable, unexpected exception.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function critical($message, array $context = [])
+    public function critical(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -48,11 +39,8 @@ abstract class BaseIO implements IOInterface, LoggerInterface
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function error($message, array $context = [])
+    public function error(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -66,18 +54,15 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      * @param string $message
      * @param array $context
      */
-    public function warning($message, array $context = [])
+    public function warning(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
      * Normal but significant events.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function notice($message, array $context = [])
+    public function notice(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -86,34 +71,25 @@ abstract class BaseIO implements IOInterface, LoggerInterface
      * Interesting events.
      *
      * Example: User logs in, SQL logs.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function info($message, array $context = [])
+    public function info(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
 
     /**
      * Detailed debug information.
-     *
-     * @param string $message
-     * @param array $context
      */
-    public function debug($message, array $context = [])
+    public function debug(string|\Stringable $message, array $context = []): void
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
 
     /**
      * Logs with an arbitrary level.
-     *
      * @param mixed $level
-     * @param string $message
-     * @param array $context
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (in_array($level, [LogLevel::EMERGENCY, LogLevel::ALERT, LogLevel::CRITICAL, LogLevel::ERROR])) {
             $this->writeError('<error>' . $message . '</error>', true, self::NORMAL);

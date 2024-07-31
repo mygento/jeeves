@@ -37,15 +37,8 @@
             <column name="is_active"/>
         </index>
     </table>
-    <table name="mygento_sample_module_obsolete" resource="default" engine="innodb" comment="Obsolete Table">
-        <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
-        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="id"/>
-        </constraint>
-    </table>
     <table name="mygento_sample_module_card" resource="default" engine="innodb" comment="Card Table">
-        <column xsi:type="int" name="card_id" nullable="false" identity="true" unsigned="true" comment="Card ID"/>
+        <column xsi:type="smallint" name="card_id" nullable="false" identity="true" unsigned="false" comment="Card ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
         <column xsi:type="int" name="category_id" nullable="false" identity="false" unsigned="false" comment="Category_id"/>
@@ -55,7 +48,7 @@
         </constraint>
     </table>
     <table name="mygento_sample_module_card_store" resource="default" engine="innodb" comment="Card Table With Store">
-        <column xsi:type="int" name="entity_id" nullable="false" identity="false" unsigned="true" comment="Entity ID"/>
+        <column xsi:type="smallint" name="entity_id" nullable="false" identity="false" unsigned="false" comment="Entity ID"/>
         <column xsi:type="smallint" name="store_id" nullable="false" identity="false" unsigned="true" comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -69,6 +62,14 @@
         <index indexType="btree" referenceId="IX_ENT_ID">
             <column name="entity_id"/>
         </index>
+    </table>
+    <table name="mygento_sample_module_ticket" resource="default" engine="innodb" comment="Ticket Table">
+        <column xsi:type="int" name="ticket_id" nullable="false" identity="true" unsigned="true" comment="Ticket ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" comment="Is_active"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="ticket_id"/>
+        </constraint>
     </table>
     <table name="mygento_sample_module_poster" resource="default" engine="innodb" comment="Poster Table">
         <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>

@@ -39,7 +39,7 @@ class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepository
         ResourceModel\Obsolete\CollectionFactory $collectionFactory,
         \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory,
         \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
