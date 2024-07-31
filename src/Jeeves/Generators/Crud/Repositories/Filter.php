@@ -13,8 +13,6 @@ class Filter extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
-
         $namespace = new PhpNamespace($rootNamespace . '\Model\SearchCriteria');
         $namespace->addUse($interface);
         $namespace->addUse('Magento\Framework\Api\Filter');
@@ -27,9 +25,7 @@ class Filter extends Common
         $apply->addParameter('filter')->setType('Magento\Framework\Api\Filter');
         $apply->addParameter('collection')->setType('Magento\Framework\Data\Collection\AbstractDb');
 
-        if ($typehint) {
-            $apply->setReturnType('bool');
-        }
+        $apply->setReturnType('bool');
 
         $apply->setBody(
             '$collection->addFilter(' . PHP_EOL

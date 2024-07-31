@@ -2,29 +2,26 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\Ui\Component\MassAction\Filter;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
+use Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory;
 
-class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
+class MassDelete extends Obsolete
 {
-    /** @var \Magento\Ui\Component\MassAction\Filter */
-    private $filter;
+    private Filter $filter;
+    private CollectionFactory $collectionFactory;
 
-    /** @var \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory */
-    private $collectionFactory;
-
-    /**
-     * @param \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory $collectionFactory
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
     public function __construct(
-        \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory $collectionFactory,
-        \Magento\Ui\Component\MassAction\Filter $filter,
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
+        CollectionFactory $collectionFactory,
+        Filter $filter,
+        ObsoleteRepositoryInterface $repository,
+        Registry $coreRegistry,
+        Context $context,
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
@@ -33,10 +30,8 @@ class MassDelete extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
 
     /**
      * Execute action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();

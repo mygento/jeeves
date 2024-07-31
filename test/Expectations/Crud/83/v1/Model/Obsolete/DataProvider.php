@@ -4,29 +4,18 @@ namespace Mygento\SampleModule\Model\Obsolete;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Ui\DataProvider\ModifierPoolDataProvider;
+use Mygento\SampleModule\Model\ResourceModel\Obsolete\Collection;
 use Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory;
 
-class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
+class DataProvider extends ModifierPoolDataProvider
 {
-    /** @var \Mygento\SampleModule\Model\ResourceModel\Obsolete\Collection */
+    /** @var Collection */
     protected $collection;
 
-    /** @var DataPersistorInterface */
-    private $dataPersistor;
+    private DataPersistorInterface $dataPersistor;
+    private array $loadedData = [];
 
-    /** @var array */
-    private $loadedData = [];
-
-    /**
-     * @param \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
-     * @param array $meta
-     * @param array $data
-     * @param \Magento\Ui\DataProvider\Modifier\PoolInterface|null $pool
-     */
     public function __construct(
         CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
@@ -43,10 +32,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $this->dataPersistor = $dataPersistor;
     }
 
-    /**
-     * @return array
-     */
-    public function getData()
+    public function getData(): array
     {
         if (!empty($this->loadedData)) {
             return $this->loadedData;

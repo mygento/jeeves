@@ -13,8 +13,6 @@ class Search extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
-
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse($interface);
         $namespace->addUse('\Magento\Framework\Api\SearchResults');

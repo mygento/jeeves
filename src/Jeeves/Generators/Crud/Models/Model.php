@@ -18,7 +18,6 @@ class Model extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Model\AbstractModel');
         $namespace->addUse($entInterface);
@@ -41,11 +40,8 @@ class Model extends Common
             $getCache = $class->addMethod('getIdentities');
             $getCache->setVisibility('public')
                 ->setBody('return [self::CACHE_TAG . \'_\' . $this->getId()];');
-            if ($typehint) {
-                $getCache->setReturnType('array');
-            } else {
-                $getCache->addComment('@return string[]');
-            }
+
+            $getCache->setReturnType('array');
         }
 
         if ($withStore) {
@@ -78,27 +74,18 @@ class Model extends Common
             $setParam = $setter->addParameter($this->snakeCaseToCamelCase($name));
             $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');
 
-            if ($typehint) {
-                $getter->setReturnType($this->convertType($value['type']));
-                $getter->setReturnNullable($generated ? true : !$notNullable);
+            $getter->setReturnType($this->convertType($value['type']));
+            $getter->setReturnNullable($generated ? true : !$notNullable);
 
-                $setter->setReturnType('self');
-                $setParam->setType($this->convertType($value['type']));
-                $setParam->setNullable(!$notNullable);
-            } else {
-                $getter->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'));
-                $setter
-                    ->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name))
-                    ->addComment('@return $this');
-            }
+            $setter->setReturnType('self');
+            $setParam->setType($this->convertType($value['type']));
+            $setParam->setNullable(!$notNullable);
 
             if ($this->snakeCaseToCamelCase($name) == 'id') {
                 $setParam->setNullable(false);
                 $setParam->setType(null);
 
-                if ($typehint) {
-                    $setter->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
-                }
+                $setter->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
             }
         }
 
@@ -116,10 +103,9 @@ class Model extends Common
                 ->addComment('Get ID')
                 ->setVisibility('public')
                 ->setBody('return $this->getData(self::' . strtoupper($itemName) . ');');
-            if ($typehint) {
-                $getId->setReturnType($this->convertType($item['type']));
-                $getId->setReturnNullable($generated ? true : $item['nullable']);
-            }
+
+            $getId->setReturnType($this->convertType($item['type']));
+            $getId->setReturnNullable($generated ? true : $item['nullable']);
 
             $setId = $class
                 ->addMethod('setId')
@@ -129,12 +115,10 @@ class Model extends Common
             $setIdParam = $setId->addParameter('id');
             $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
 
-            if ($typehint) {
-                $setId->setReturnType('self');
+            $setId->setReturnType('self');
 
-                //$setIdParam->setType($this->convertType($item['type']));
-                //$setIdParam->setNullable($item['nullable']);
-            }
+            //$setIdParam->setType($this->convertType($item['type']));
+            //$setIdParam->setNullable($item['nullable']);
         }
 
         return $namespace;

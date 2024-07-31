@@ -16,7 +16,6 @@ class Edit extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
@@ -26,11 +25,9 @@ class Edit extends Common
         $class = $namespace->addClass('Edit')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
-        if ($typehint) {
-            $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-            $namespace->addUse('\Magento\Framework\View\Result\PageFactory');
-            $namespace->addUse($entityClass . 'Factory');
-        }
+        $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
+        $namespace->addUse('\Magento\Framework\View\Result\PageFactory');
+        $namespace->addUse($entityClass . 'Factory');
 
         if (!$constructorProp) {
             $factory = $class->addProperty('entityFactory')
@@ -39,13 +36,8 @@ class Edit extends Common
             $result = $class->addProperty('resultPageFactory')
                 ->setVisibility('private');
 
-            if ($typehint) {
-                $factory->setType($entityClass . 'Factory');
-                $result->setType('\Magento\Framework\View\Result\PageFactory');
-            } else {
-                $factory->addComment('@var ' . $entityClass . 'Factory');
-                $result->addComment('@var \Magento\Framework\View\Result\PageFactory');
-            }
+            $factory->setType($entityClass . 'Factory');
+            $result->setType('\Magento\Framework\View\Result\PageFactory');
         }
 
         $body = 'parent::__construct($repository, $coreRegistry, $context);';
@@ -56,19 +48,10 @@ class Edit extends Common
         }
         $construct = $class->addMethod('__construct')->setBody($body);
 
-        if ($typehint) {
-            $namespace
-                ->addUse($repository)
-                ->addUse('\Magento\Framework\Registry')
-                ->addUse('\Magento\Backend\App\Action\Context');
-        } else {
-            $construct
-                ->addComment('@param ' . $entityClass . 'Factory $entityFactory')
-                ->addComment('@param \Magento\Framework\View\Result\PageFactory $resultPageFactory')
-                ->addComment('@param ' . $repository . ' $repository')
-                ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-                ->addComment('@param \Magento\Backend\App\Action\Context $context');
-        }
+        $namespace
+            ->addUse($repository)
+            ->addUse('\Magento\Framework\Registry')
+            ->addUse('\Magento\Backend\App\Action\Context');
 
         if ($constructorProp) {
             $construct
@@ -126,12 +109,8 @@ class Edit extends Common
                 . 'return $resultPage;');
         $namespace->addUse('\Magento\Framework\Exception\NoSuchEntityException');
 
-        if ($typehint) {
-            $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
-            $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
-        } else {
-            $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');
-        }
+        $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
+        $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
 
         return $namespace;
     }

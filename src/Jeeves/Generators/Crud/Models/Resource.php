@@ -16,15 +16,12 @@ class Resource extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
         $namespace = new PhpNamespace($rootNamespace . '\Model\ResourceModel');
 
-        if ($typehint) {
-            $namespace->addUse('Magento\Framework\Model\ResourceModel\Db\AbstractDb');
-        }
+        $namespace->addUse('Magento\Framework\Model\ResourceModel\Db\AbstractDb');
 
         if ($withStore) {
             $namespace->addUse('Magento\Framework\Model\AbstractModel');
@@ -37,14 +34,10 @@ class Resource extends Common
         $class->addConstant('TABLE_NAME', $table)->setVisibility('public');
         $class->addConstant('TABLE_PRIMARY_KEY', $key)->setVisibility('public');
 
-        $construct = $class->addMethod('_construct')
+        $class->addMethod('_construct')
             ->addComment('Initialize resource model')
             ->setVisibility('protected')
             ->setBody('$this->_init(self::TABLE_NAME, self::TABLE_PRIMARY_KEY);');
-
-        if (!$typehint) {
-            $construct->addComment('@return void');
-        }
 
         if (!$withStore) {
             return $namespace;
@@ -57,30 +50,16 @@ class Resource extends Common
             $mdPool = $class->addProperty('metadataPool');
             $mdPool->setVisibility('private');
 
-            if ($typehint) {
-                $em->setType('\Magento\Framework\EntityManager\EntityManager');
-                $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
-            } else {
-                $em->addComment('@var \Magento\Framework\EntityManager\EntityManager');
-                $mdPool->addComment('@var \Magento\Framework\EntityManager\MetadataPool');
-            }
+            $em->setType('\Magento\Framework\EntityManager\EntityManager');
+            $mdPool->setType('\Magento\Framework\EntityManager\MetadataPool');
         }
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\EntityManager\EntityManager')
-                ->addUse('\Magento\Framework\EntityManager\MetadataPool')
-                ->addUse('\Magento\Framework\Model\ResourceModel\Db\Context');
-        }
+        $namespace->addUse('\Magento\Framework\EntityManager\EntityManager')
+            ->addUse('\Magento\Framework\EntityManager\MetadataPool')
+            ->addUse('\Magento\Framework\Model\ResourceModel\Db\Context');
 
         $construct = $class->addMethod('__construct');
         $construct->setVisibility('public');
-        if (!$typehint) {
-            $construct
-                ->addComment('@param \Magento\Framework\EntityManager\EntityManager $entityManager')
-                ->addComment('@param \Magento\Framework\EntityManager\MetadataPool $metadataPool')
-                ->addComment('@param \Magento\Framework\Model\ResourceModel\Db\Context $context')
-                ->addComment('@param string $connectionName');
-        }
 
         if ($constructorProp) {
             $construct
@@ -105,9 +84,7 @@ class Resource extends Common
         $construct->addParameter('context')->setType('\Magento\Framework\Model\ResourceModel\Db\Context');
         $conParam = $construct->addParameter('connectionName')->setDefaultValue(null);
 
-        if ($typehint) {
-            $conParam->setType('string');
-        }
+        $conParam->setType('string');
 
         $body = 'parent::__construct($context, $connectionName);';
         if (!$constructorProp) {
@@ -154,14 +131,10 @@ class Resource extends Common
             ->setVisibility('public');
 
         $lookIdParam = $lookup->addParameter('id');
-        if ($typehint) {
-            $lookup->setReturnType('array');
-            $lookIdParam->setType('int');
-        } else {
-            $lookup
-                ->addComment('@param int $id')
-                ->addComment('@return array');
-        }
+
+        $lookup->setReturnType('array');
+        $lookIdParam->setType('int');
+
         $lookup->setBody(
             '$connection = $this->getConnection();' . PHP_EOL . PHP_EOL
 

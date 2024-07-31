@@ -2,10 +2,14 @@
 
 namespace Mygento\SampleModule\Model\ResourceModel\Obsolete;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mygento\SampleModule\Model\Obsolete;
+use Mygento\SampleModule\Model\ResourceModel\Obsolete as ObsoleteResource;
+
+class Collection extends AbstractCollection
 {
     /** @var string */
-    protected $_idFieldName = 'id';
+    protected $_idFieldName = ObsoleteResource::TABLE_PRIMARY_KEY;
 
     /**
      * Define resource model
@@ -13,8 +17,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Mygento\SampleModule\Model\Obsolete::class,
-            \Mygento\SampleModule\Model\ResourceModel\Obsolete::class
+            Obsolete::class,
+            ObsoleteResource::class
         );
     }
 }

@@ -2,24 +2,23 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-class InlineEdit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
+class InlineEdit extends Obsolete
 {
-    /** @var \Magento\Framework\Controller\Result\JsonFactory */
-    private $jsonFactory;
+    private JsonFactory $jsonFactory;
 
-    /**
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
+        JsonFactory $jsonFactory,
+        ObsoleteRepositoryInterface $repository,
+        Registry $coreRegistry,
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 
@@ -28,10 +27,8 @@ class InlineEdit extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
 
     /**
      * Execute action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();

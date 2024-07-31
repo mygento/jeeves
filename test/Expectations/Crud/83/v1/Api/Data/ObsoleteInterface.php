@@ -9,27 +9,22 @@ interface ObsoleteInterface
 
     /**
      * Get id
-     * @return int|null
      */
-    public function getId();
+    public function getId(): ?int;
 
     /**
      * Set id
      * @param int $id
-     * @return $this
      */
-    public function setId($id);
+    public function setId($id): self;
 
     /**
      * Get name
-     * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * Set name
-     * @param string $name
-     * @return $this
      */
-    public function setName($name);
+    public function setName(?string $name): self;
 }

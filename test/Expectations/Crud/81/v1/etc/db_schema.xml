@@ -37,13 +37,6 @@
             <column name="is_active"/>
         </index>
     </table>
-    <table name="mygento_sample_module_obsolete" resource="default" engine="innodb" comment="Obsolete Table">
-        <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
-        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="id"/>
-        </constraint>
-    </table>
     <table name="mygento_sample_module_card" resource="default" engine="innodb" comment="Card Table">
         <column xsi:type="smallint" name="card_id" nullable="false" identity="true" unsigned="false" comment="Card ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>

@@ -35,7 +35,7 @@ EOT
         $payment = false;
         foreach ($config as $vendor => $mod) {
             foreach ($mod as $module => $ent) {
-                if (isset($ent['crud'])) {
+                if (isset($ent['entities'])) {
                     $crud = true;
                 }
                 if (isset($ent['shipping'])) {
@@ -48,6 +48,16 @@ EOT
 
             $arguments = [
                 'command' => 'generate-model-crud',
+            ];
+
+            $input = new ArrayInput($arguments);
+            $command->run($input, $output);
+        }
+        if ($shipping) {
+            $command = $this->getApplication()->find('generate-shipping');
+
+            $arguments = [
+                'command' => 'generate-shipping',
             ];
 
             $input = new ArrayInput($arguments);

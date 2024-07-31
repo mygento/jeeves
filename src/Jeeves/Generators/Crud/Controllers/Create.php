@@ -14,7 +14,6 @@ class Create extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
@@ -27,11 +26,7 @@ class Create extends Common
         if (!$constructorProp) {
             $forward = $class->addProperty('resultForwardFactory')->setVisibility('private');
 
-            if ($typehint) {
-                $forward->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
-            } else {
-                $forward->addComment('@var \Magento\Backend\Model\View\Result\ForwardFactory');
-            }
+            $forward->setType('\Magento\Backend\Model\View\Result\ForwardFactory');
         }
 
         $body = 'parent::__construct($repository, $coreRegistry, $context);';
@@ -41,19 +36,11 @@ class Create extends Common
         $construct = $class->addMethod('__construct')
             ->setBody($body);
 
-        if ($typehint) {
-            $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-            $namespace->addUse($repository);
-            $namespace->addUse('\Magento\Framework\Registry');
-            $namespace->addUse('\Magento\Backend\App\Action\Context');
-            $namespace->addUse('\Magento\Backend\Model\View\Result\ForwardFactory');
-        } else {
-            $construct
-                ->addComment('@param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory')
-                ->addComment('@param ' . $repository . ' $repository')
-                ->addComment('@param \Magento\Framework\Registry $coreRegistry')
-                ->addComment('@param \Magento\Backend\App\Action\Context $context');
-        }
+        $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
+        $namespace->addUse($repository);
+        $namespace->addUse('\Magento\Framework\Registry');
+        $namespace->addUse('\Magento\Backend\App\Action\Context');
+        $namespace->addUse('\Magento\Backend\Model\View\Result\ForwardFactory');
 
         if ($constructorProp) {
             $construct
@@ -76,12 +63,8 @@ class Create extends Common
                 . '$resultForward = $this->resultForwardFactory->create();' . PHP_EOL
                 . 'return $resultForward->forward(\'edit\');');
 
-        if ($typehint) {
-            $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
-            $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
-        } else {
-            $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');
-        }
+        $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
+        $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
 
         return $namespace;
     }

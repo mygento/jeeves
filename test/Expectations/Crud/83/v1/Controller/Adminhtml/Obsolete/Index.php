@@ -2,27 +2,25 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-class Index extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
+
+class Index extends Obsolete
 {
-    /** @var \Magento\Framework\View\Result\PageFactory */
-    private $resultPageFactory;
+    private PageFactory $resultPageFactory;
+    private DataPersistorInterface $dataPersistor;
 
-    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
-    private $dataPersistor;
-
-    /**
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
     public function __construct(
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
+        PageFactory $resultPageFactory,
+        DataPersistorInterface $dataPersistor,
+        ObsoleteRepositoryInterface $repository,
+        Registry $coreRegistry,
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 
@@ -32,10 +30,8 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
 
     /**
      * Index action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

@@ -16,7 +16,6 @@ class Repository extends Common
         bool $hasApi = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api');
         $interface = $namespace->addInterface($className);
 
@@ -24,26 +23,20 @@ class Repository extends Common
             $interface->addComment('@api');
         }
 
-        if ($typehint) {
-            $namespace->addUse('\Magento\Framework\Api\SearchCriteriaInterface');
-        }
+        $namespace->addUse('\Magento\Framework\Api\SearchCriteriaInterface');
 
         $save = $interface->addMethod('save');
         $save->addComment('Save ' . $print)
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
 
-        if ($hasApi || !$typehint) {
+        if ($hasApi) {
             $save->addComment('@return ' . $entInterface);
         }
 
         $save->addParameter('entity')->setType($entInterface);
 
-        if ($typehint) {
-            $save->setReturnType($entInterface);
-        } else {
-            $save->addComment('@param ' . $entInterface . ' $entity');
-        }
+        $save->setReturnType($entInterface);
 
         $get = $interface->addMethod('getById');
         $get->addComment('Retrieve ' . $print)
@@ -52,16 +45,12 @@ class Repository extends Common
 
         $getParam = $get->addParameter('entityId');
 
-        if ($hasApi || !$typehint) {
+        if ($hasApi) {
             $get->addComment('@return ' . $entInterface);
         }
 
-        if ($typehint) {
-            $get->setReturnType($entInterface);
-            $getParam->setType('int');
-        } else {
-            $get->addComment('@param int $entityId');
-        }
+        $get->setReturnType($entInterface);
+        $getParam->setType('int');
 
         $getList = $interface->addMethod('getList');
         $getList->addComment('Retrieve ' . $print . ' entities matching the specified criteria');
@@ -70,19 +59,14 @@ class Repository extends Common
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
 
-        if ($hasApi || !$typehint) {
+        if ($hasApi) {
             $getList->addComment('@return ' . $resultInterface);
         }
 
         $getList->addParameter('searchCriteria')
             ->setType('\Magento\Framework\Api\SearchCriteriaInterface');
 
-        if ($typehint) {
-            $getList->setReturnType($resultInterface);
-        } else {
-            $getList
-                ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria');
-        }
+        $getList->setReturnType($resultInterface);
 
         $del = $interface->addMethod('delete');
         $del
@@ -90,18 +74,14 @@ class Repository extends Common
             ->setVisibility('public')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
 
-        if ($hasApi || !$typehint) {
+        if ($hasApi) {
             $del->addComment('@return bool true on success');
         }
 
         $del->addParameter('entity')
             ->setType($entInterface);
 
-        if ($typehint) {
-            $del->setReturnType('bool');
-        } else {
-            $del->addComment('@param ' . $entInterface . ' $entity');
-        }
+        $del->setReturnType('bool');
 
         $delId = $interface->addMethod('deleteById');
         $delId->addComment('Delete ' . $print)
@@ -109,18 +89,14 @@ class Repository extends Common
             ->addComment('@throws \Magento\Framework\Exception\NoSuchEntityException')
             ->addComment('@throws \Magento\Framework\Exception\LocalizedException');
 
-        if ($hasApi || !$typehint) {
+        if ($hasApi) {
             $delId->addComment('@return bool true on success');
         }
 
         $delParam = $delId->addParameter('entityId');
 
-        if ($typehint) {
-            $delId->setReturnType('bool');
-            $delParam->setType('int');
-        } else {
-            $delId->addComment('@param int $entityId');
-        }
+        $delId->setReturnType('bool');
+        $delParam->setType('int');
 
         return $namespace;
     }

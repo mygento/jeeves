@@ -2,30 +2,27 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
+class Save extends Obsolete
 {
-    /** @var \Magento\Framework\App\Request\DataPersistorInterface */
-    private $dataPersistor;
+    private DataPersistorInterface $dataPersistor;
+    private ObsoleteInterfaceFactory $entityFactory;
 
-    /** @var \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory */
-    private $entityFactory;
-
-    /**
-     * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
     public function __construct(
-        \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
-        \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory,
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
+        DataPersistorInterface $dataPersistor,
+        ObsoleteInterfaceFactory $entityFactory,
+        ObsoleteRepositoryInterface $repository,
+        Registry $coreRegistry,
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 
@@ -38,10 +35,8 @@ class Save extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
      *
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

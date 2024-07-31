@@ -2,14 +2,15 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-class Delete extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
+use Magento\Framework\Controller\ResultInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
+
+class Delete extends Obsolete
 {
     /**
      * Delete Obsolete action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

@@ -3,42 +3,33 @@
 namespace Mygento\SampleModule\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Mygento\SampleModule\Api\Data\ObsoleteInterface;
+use Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory;
+use Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface;
+use Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterfaceFactory;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepositoryInterface
+class ObsoleteRepository implements ObsoleteRepositoryInterface
 {
-    /** @var \Mygento\SampleModule\Model\ResourceModel\Obsolete */
-    private $resource;
+    private ResourceModel\Obsolete $resource;
+    private CollectionFactory $collectionFactory;
+    private ObsoleteInterfaceFactory $entityFactory;
+    private ObsoleteSearchResultsInterfaceFactory $searchResultsFactory;
+    private CollectionProcessorInterface $collectionProcessor;
 
-    /** @var \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory */
-    private $collectionFactory;
-
-    /** @var \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory */
-    private $entityFactory;
-
-    /** @var \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterfaceFactory */
-    private $searchResultsFactory;
-
-    /** @var CollectionProcessorInterface */
-    private $collectionProcessor;
-
-    /**
-     * @param \Mygento\SampleModule\Model\ResourceModel\Obsolete $resource
-     * @param \Mygento\SampleModule\Model\ResourceModel\Obsolete\CollectionFactory $collectionFactory
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterfaceFactory $searchResultsFactory
-     * @param CollectionProcessorInterface $collectionProcessor
-     */
     public function __construct(
         ResourceModel\Obsolete $resource,
-        ResourceModel\Obsolete\CollectionFactory $collectionFactory,
-        \Mygento\SampleModule\Api\Data\ObsoleteInterfaceFactory $entityFactory,
-        \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterfaceFactory $searchResultsFactory,
+        CollectionFactory $collectionFactory,
+        ObsoleteInterfaceFactory $entityFactory,
+        ObsoleteSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor,
     ) {
         $this->resource = $resource;
@@ -49,11 +40,9 @@ class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepository
     }
 
     /**
-     * @param int $entityId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteInterface
+     * @throws NoSuchEntityException
      */
-    public function getById($entityId)
+    public function getById(int $entityId): ObsoleteInterface
     {
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $entityId);
@@ -67,11 +56,9 @@ class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepository
     }
 
     /**
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterface $entity
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteInterface
+     * @throws CouldNotSaveException
      */
-    public function save(\Mygento\SampleModule\Api\Data\ObsoleteInterface $entity)
+    public function save(ObsoleteInterface $entity): ObsoleteInterface
     {
         try {
             $this->resource->save($entity);
@@ -86,11 +73,9 @@ class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepository
     }
 
     /**
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterface $entity
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @return bool
+     * @throws CouldNotDeleteException
      */
-    public function delete(\Mygento\SampleModule\Api\Data\ObsoleteInterface $entity)
+    public function delete(ObsoleteInterface $entity): bool
     {
         try {
             $this->resource->delete($entity);
@@ -104,28 +89,22 @@ class ObsoleteRepository implements \Mygento\SampleModule\Api\ObsoleteRepository
     }
 
     /**
-     * @param int $entityId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @return bool
+     * @throws NoSuchEntityException
+     * @throws CouldNotDeleteException
      */
-    public function deleteById($entityId)
+    public function deleteById(int $entityId): bool
     {
         return $this->delete($this->getById($entityId));
     }
 
-    /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface
-     */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
+    public function getList(SearchCriteriaInterface $criteria): ObsoleteSearchResultsInterface
     {
         /** @var \Mygento\SampleModule\Model\ResourceModel\Obsolete\Collection $collection */
         $collection = $this->collectionFactory->create();
 
         $this->collectionProcessor->process($criteria, $collection);
 
-        /** @var \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface $searchResults */
+        /** @var ObsoleteSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($collection->getItems());

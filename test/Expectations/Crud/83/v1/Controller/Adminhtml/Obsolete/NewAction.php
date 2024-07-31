@@ -2,22 +2,22 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-class NewAction extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
-{
-    /** @var \Magento\Backend\Model\View\Result\ForwardFactory */
-    private $resultForwardFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+use Mygento\SampleModule\Controller\Adminhtml\Obsolete;
 
-    /**
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+class NewAction extends Obsolete
+{
+    private ForwardFactory $resultForwardFactory;
+
     public function __construct(
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
+        ForwardFactory $resultForwardFactory,
+        ObsoleteRepositoryInterface $repository,
+        Registry $coreRegistry,
+        Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 
@@ -26,10 +26,8 @@ class NewAction extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
 
     /**
      * Create new Obsolete
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();

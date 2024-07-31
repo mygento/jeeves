@@ -2,46 +2,38 @@
 
 namespace Mygento\SampleModule\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+
 interface ObsoleteRepositoryInterface
 {
     /**
      * Save Obsolete
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteInterface
      */
-    public function save(Data\ObsoleteInterface $entity);
+    public function save(Data\ObsoleteInterface $entity): Data\ObsoleteInterface;
 
     /**
      * Retrieve Obsolete
-     * @param int $entityId
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteInterface
      */
-    public function getById($entityId);
+    public function getById(int $entityId): Data\ObsoleteInterface;
 
     /**
      * Retrieve Obsolete entities matching the specified criteria
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Mygento\SampleModule\Api\Data\ObsoleteSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria): Data\ObsoleteSearchResultsInterface;
 
     /**
      * Delete Obsolete
-     * @param \Mygento\SampleModule\Api\Data\ObsoleteInterface $entity
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return bool true on success
      */
-    public function delete(Data\ObsoleteInterface $entity);
+    public function delete(Data\ObsoleteInterface $entity): bool;
 
     /**
      * Delete Obsolete
-     * @param int $entityId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return bool true on success
      */
-    public function deleteById($entityId);
+    public function deleteById(int $entityId): bool;
 }

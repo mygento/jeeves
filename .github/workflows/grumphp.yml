@@ -23,7 +23,6 @@ jobs:
           - "8.3"
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -46,28 +45,56 @@ jobs:
       - name: Info
         run: composer info
       - name: Run Tests
-        run: php vendor/bin/grumphp run -vvv
+        run: php vendor/bin/grumphp run # -vvv
       - name: Install Composer dependencies without dev
         run: rm -fR vendor && composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
         if: matrix.php-versions == '8.1'
-      - name: Install Box
-        run: wget https://github.com/box-project/box/releases/download/4.5.1/box.phar
-        if: matrix.php-versions == '8.1'
       - name: Compile phar
-        run: php box.phar compile
+        run: wget https://github.com/box-project/box/releases/download/4.5.1/box.phar && php box.phar compile
         if: matrix.php-versions == '8.1'
-      - name: Compile Result
-        run: ls -lah
-        if: matrix.php-versions == '8.1'
+      # - name: Compile Result
+      #   run: ls -lah
+      #   if: matrix.php-versions == '8.1'
       - name: Compile Result Upload
         if: matrix.php-versions == '8.1'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jeeves_new.phar
           path: jeeves.phar
+  test:
+    runs-on: ubuntu-latest
+    needs: ["build"]
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: jeeves_new.phar
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, mysql
+      - name: Prepare test
+        run: mv .jeeves.phpunit_v1.yaml .jeeves.yaml
+      - name: Test phar
+        run: php jeeves.phar generate
+  release:
+    runs-on: ubuntu-latest
+    needs: ["test"]
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: jeeves_new.phar
       - name: Upload to Releases
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/') && matrix.php-versions == '8.1'
         with:
           files: jeeves.phar
           token: ${{ secrets.token }}

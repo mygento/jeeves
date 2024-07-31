@@ -2,11 +2,10 @@
 
 namespace Mygento\SampleModule\Ui\Component\Listing;
 
-class ObsoleteActions extends \Mygento\Base\Ui\Component\Listing\Actions
-{
-    /** @var string */
-    protected $route = 'sample_module';
+use Mygento\Base\Ui\Component\Listing\Actions;
 
-    /** @var string */
-    protected $controller = 'obsolete';
+class ObsoleteActions extends Actions
+{
+    protected string $route = 'sample_module';
+    protected string $controller = 'obsolete';
 }

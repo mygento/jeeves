@@ -2,7 +2,11 @@
 
 namespace Mygento\SampleModule\Controller\Adminhtml;
 
-abstract class Obsolete extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Framework\Registry;
+use Mygento\SampleModule\Api\ObsoleteRepositoryInterface;
+
+abstract class Obsolete extends Action
 {
     /**
      * Authorization level
@@ -11,30 +15,11 @@ abstract class Obsolete extends \Magento\Backend\App\Action
      */
     public const ADMIN_RESOURCE = 'Mygento_SampleModule::obsolete';
 
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $coreRegistry;
+    protected Registry $coreRegistry;
+    protected ObsoleteRepositoryInterface $repository;
 
-    /**
-     * Obsolete repository
-     *
-     * @var \Mygento\SampleModule\Api\ObsoleteRepositoryInterface
-     */
-    protected $repository;
-
-    /**
-     * @param \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(
-        \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context,
-    ) {
+    public function __construct(ObsoleteRepositoryInterface $repository, Registry $coreRegistry, Action\Context $context)
+    {
         parent::__construct($context);
 
         $this->repository = $repository;

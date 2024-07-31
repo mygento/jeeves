@@ -2,14 +2,15 @@
 
 namespace Mygento\SampleModule\Model\ResourceModel;
 
-class Obsolete extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class Obsolete extends AbstractDb
 {
     public const TABLE_NAME = 'mygento_sample_module_obsolete';
     public const TABLE_PRIMARY_KEY = 'id';
 
     /**
      * Initialize resource model
-     * @return void
      */
     protected function _construct()
     {

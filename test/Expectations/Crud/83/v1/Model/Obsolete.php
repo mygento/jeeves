@@ -12,9 +12,8 @@ class Obsolete extends AbstractModel implements ObsoleteInterface
 
     /**
      * Get id
-     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->getData(self::ID);
     }
@@ -22,28 +21,24 @@ class Obsolete extends AbstractModel implements ObsoleteInterface
     /**
      * Set id
      * @param int $id
-     * @return $this
      */
-    public function setId($id)
+    public function setId($id): self
     {
         return $this->setData(self::ID, $id);
     }
 
     /**
      * Get name
-     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->getData(self::NAME);
     }
 
     /**
      * Set name
-     * @param string $name
-     * @return $this
      */
-    public function setName($name)
+    public function setName(?string $name): self
     {
         return $this->setData(self::NAME, $name);
     }

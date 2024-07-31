@@ -17,7 +17,6 @@ class Model extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
 
@@ -60,17 +59,13 @@ class Model extends Common
                 ->setVisibility('public');
             $param = $set->addParameter($this->snakeCaseToCamelCase($name));
 
-            if ($typehint) {
-                $get->setReturnType($this->convertType($value['type']));
-                $get->setReturnNullable($generated ? true : !$notNullable);
-                $param->setNullable(!$notNullable);
-                $param->setType($this->convertType($value['type']));
-                $set->setReturnType('self');
-            } else {
-                $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
-            }
+            $get->setReturnType($this->convertType($value['type']));
+            $get->setReturnNullable($generated ? true : !$notNullable);
+            $param->setNullable(!$notNullable);
+            $param->setType($this->convertType($value['type']));
+            $set->setReturnType('self');
 
-            if ($hasApi || !$typehint) {
+            if ($hasApi) {
                 $get->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'));
                 $set->addComment('@return $this');
             }
@@ -79,9 +74,7 @@ class Model extends Common
                 $param->setNullable(false);
                 $param->setType(null);
 
-                if ($typehint) {
-                    $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
-                }
+                $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
             }
         }
 
@@ -98,14 +91,12 @@ class Model extends Common
                 ->addComment('Get ID')
                 ->setVisibility('public');
 
-            if ($hasApi || !$typehint) {
+            if ($hasApi) {
                 $getId->addComment('@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : ''));
             }
 
-            if ($typehint) {
-                $getId->setReturnType($this->convertType($item['type']));
-                $getId->setReturnNullable($generated ? true : $item['nullable']);
-            }
+            $getId->setReturnType($this->convertType($item['type']));
+            $getId->setReturnNullable($generated ? true : $item['nullable']);
 
             $setId = $interface
                 ->addMethod('setId')
@@ -115,15 +106,13 @@ class Model extends Common
             $setId->addParameter(self::DEFAULT_KEY);
             $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
 
-            if ($hasApi || !$typehint) {
+            if ($hasApi) {
                 $setId->addComment('@return $this');
             }
 
-            if ($typehint) {
-                $setId->setReturnType('self');
-                // $setIdParam->setType($this->convertType($item['type']));
-                // $setIdParam->setNullable($item['nullable']);
-            }
+            $setId->setReturnType('self');
+            // $setIdParam->setType($this->convertType($item['type']));
+            // $setIdParam->setNullable($item['nullable']);
         }
 
         return $namespace;

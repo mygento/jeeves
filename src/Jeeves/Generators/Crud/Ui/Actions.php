@@ -15,7 +15,6 @@ class Actions extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Ui\Component\Listing');
         $class = $namespace->addClass($className);
         $class->setExtends('\Mygento\Base\Ui\Component\Listing\Actions');
@@ -24,24 +23,15 @@ class Actions extends Common
         $cont = $class->addProperty('controller', $controller)
             ->setVisibility('protected');
 
-        if ($typehint) {
-            $namespace->addUse('\Mygento\Base\Ui\Component\Listing\Actions');
-            $router->setType('string');
-            $cont->setType('string');
-        } else {
-            $router->addComment('@var string');
-            $cont->addComment('@var string');
-        }
+        $namespace->addUse('\Mygento\Base\Ui\Component\Listing\Actions');
+        $router->setType('string');
+        $cont->setType('string');
 
         if ($primaryKey !== 'id') {
             $key = $class->addProperty('key', $primaryKey)
                 ->setVisibility('protected');
 
-            if ($typehint) {
-                $key->setType('string');
-            } else {
-                $key->addComment('@var string');
-            }
+            $key->setType('string');
         }
 
         return $namespace;

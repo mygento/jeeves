@@ -12,16 +12,13 @@ class Delete extends Common
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = $this->hasTypes($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $class = $namespace->addClass('Delete')
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
         $entityName = $this->getEntityPrintName($entity);
 
-        if ($typehint) {
-            $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-        }
+        $namespace->addUse($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 
         $execute = $class->addMethod('execute')
             ->addComment('Delete ' . $entityName . ' action')
@@ -46,12 +43,8 @@ class Delete extends Common
                 . '}' . PHP_EOL . PHP_EOL
                 . 'return $resultRedirect->setPath(\'*/*/edit\', [\'id\' => $entityId]);');
 
-        if ($typehint) {
-            $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
-            $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
-        } else {
-            $execute->addComment('@return \Magento\Framework\Controller\ResultInterface');
-        }
+        $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
+        $namespace->addUse('\Magento\Framework\Controller\ResultInterface');
 
         return $namespace;
     }
