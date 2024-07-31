@@ -4,17 +4,17 @@ namespace Mygento\SampleModule\Api\Data;
 
 interface ColumnsInterface
 {
-    public const ID = 'id';
-    public const IS_ACTIVE = 'is_active';
-    public const HAS_FLAG = 'has_flag';
-    public const MERGE_DATE = 'merge_date';
-    public const DISCOUNT = 'discount';
-    public const COST = 'cost';
-    public const PRICE = 'price';
-    public const NAME = 'name';
-    public const DESCRIPTION = 'description';
-    public const CREATED_AT = 'created_at';
-    public const UPDATED_AT = 'updated_at';
+    public const string ID = 'id';
+    public const string IS_ACTIVE = 'is_active';
+    public const string HAS_FLAG = 'has_flag';
+    public const string MERGE_DATE = 'merge_date';
+    public const string DISCOUNT = 'discount';
+    public const string COST = 'cost';
+    public const string PRICE = 'price';
+    public const string NAME = 'name';
+    public const string DESCRIPTION = 'description';
+    public const string CREATED_AT = 'created_at';
+    public const string UPDATED_AT = 'updated_at';
 
     /**
      * Get id

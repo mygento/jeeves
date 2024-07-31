@@ -4,16 +4,16 @@ namespace Mygento\SampleModule\Api\Data;
 
 interface CartItemInterface
 {
-    public const CART_ID = 'cart_id';
-    public const IS_ACTIVE = 'is_active';
-    public const DELIVERY_DATE = 'delivery_date';
-    public const CITY = 'city';
-    public const CUSTOMER_GROUP = 'customer_group';
-    public const DESCRIPTION = 'description';
-    public const CREATED_AT = 'created_at';
-    public const UPDATED_AT = 'updated_at';
-    public const DISCOUNT = 'discount';
-    public const PRICE = 'price';
+    public const string CART_ID = 'cart_id';
+    public const string IS_ACTIVE = 'is_active';
+    public const string DELIVERY_DATE = 'delivery_date';
+    public const string CITY = 'city';
+    public const string CUSTOMER_GROUP = 'customer_group';
+    public const string DESCRIPTION = 'description';
+    public const string CREATED_AT = 'created_at';
+    public const string UPDATED_AT = 'updated_at';
+    public const string DISCOUNT = 'discount';
+    public const string PRICE = 'price';
 
     /**
      * Get cart id

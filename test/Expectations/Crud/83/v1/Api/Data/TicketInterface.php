@@ -4,9 +4,9 @@ namespace Mygento\SampleModule\Api\Data;
 
 interface TicketInterface
 {
-    public const TICKET_ID = 'ticket_id';
-    public const NAME = 'name';
-    public const IS_ACTIVE = 'is_active';
+    public const string TICKET_ID = 'ticket_id';
+    public const string NAME = 'name';
+    public const string IS_ACTIVE = 'is_active';
 
     /**
      * Get ticket id

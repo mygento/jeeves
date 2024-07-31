@@ -9,13 +9,13 @@ use Magento\Framework\DataObject\IdentityInterface;
  */
 interface PosterInterface extends IdentityInterface
 {
-    public const CACHE_TAG = 'samp_poster';
-    public const ID = 'id';
-    public const NAME = 'name';
-    public const SUBNAME = 'subname';
-    public const FAMILY = 'family';
-    public const IS_ACTIVE = 'is_active';
-    public const PRODUCT_ID = 'product_id';
+    public const string CACHE_TAG = 'samp_poster';
+    public const string ID = 'id';
+    public const string NAME = 'name';
+    public const string SUBNAME = 'subname';
+    public const string FAMILY = 'family';
+    public const string IS_ACTIVE = 'is_active';
+    public const string PRODUCT_ID = 'product_id';
 
     /**
      * Get id

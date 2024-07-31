@@ -17,6 +17,7 @@ class Model extends Common
         bool $withStore = false,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
+        $hasTypedConst = $this->hasTypedConst($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $interface = $namespace->addInterface($className);
 
@@ -27,7 +28,10 @@ class Model extends Common
         if ($cacheTag !== null) {
             $namespace->addUse('\Magento\Framework\DataObject\IdentityInterface');
             $interface->setExtends('\Magento\Framework\DataObject\IdentityInterface');
-            $interface->addConstant('CACHE_TAG', $cacheTag)->setVisibility('public');
+            $ctag = $interface->addConstant('CACHE_TAG', $cacheTag)->setVisibility('public');
+            if ($hasTypedConst) {
+                $ctag->setType('string');
+            }
         }
 
         if ($withStore) {
@@ -48,7 +52,10 @@ class Model extends Common
             if (isset($value['identity']) && $value['identity'] === true) {
                 $generated = true;
             }
-            $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
+            $c = $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
+            if ($hasTypedConst) {
+                $c->setType('string');
+            }
             $method = $this->snakeCaseToUpperCamelCase($name);
             $get = $interface->addMethod('get' . $method)
                 ->setVisibility('public');

@@ -9,13 +9,13 @@ use Magento\Framework\DataObject\IdentityInterface;
  */
 interface CardInterface extends IdentityInterface
 {
-    public const CACHE_TAG = 'samp_card';
-    public const CARD_ID = 'card_id';
-    public const TITLE = 'title';
-    public const CODE = 'code';
-    public const CATEGORY_ID = 'category_id';
-    public const IS_ACTIVE = 'is_active';
-    public const STORE_ID = 'store_id';
+    public const string CACHE_TAG = 'samp_card';
+    public const string CARD_ID = 'card_id';
+    public const string TITLE = 'title';
+    public const string CODE = 'code';
+    public const string CATEGORY_ID = 'category_id';
+    public const string IS_ACTIVE = 'is_active';
+    public const string STORE_ID = 'store_id';
 
     /**
      * Get card id
