@@ -31,7 +31,7 @@ class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(InputInterface $input = null, OutputInterface $output = null): int
     {
         if (null === $output) {
             $output = Factory::createOutput();
@@ -71,7 +71,7 @@ class Application extends BaseApplication
     /**
      * Initializes all commands.
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $selfUpdate = new SelfUpdateCommand(self::NAME, self::VERSION, 'mygento/jeeves');
 

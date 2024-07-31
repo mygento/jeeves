@@ -11,7 +11,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 {
     private const GEN_PATH = App::GEN . App::DS . 'crud' . App::DS;
     private const V = 'v1';
-    private const VARIANTS = ['7.4', '8.1', '8.2'];
+    private const VARIANTS = ['8.1', '8.2', '8.3'];
 
     private CommandTester $commandTester;
     private string $path;
@@ -24,7 +24,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->commandTester = new CommandTester($command);
     }
 
-    public function provider(): array
+    public static function provider(): array
     {
         $variants = [];
         foreach (self::VARIANTS as $v) {

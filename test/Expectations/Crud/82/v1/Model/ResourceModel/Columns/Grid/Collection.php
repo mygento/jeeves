@@ -17,6 +17,9 @@ class Collection extends ParentCollection implements SearchResultInterface
 {
     protected AggregationInterface $aggregations;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
@@ -28,7 +31,7 @@ class Collection extends ParentCollection implements SearchResultInterface
         string $resourceModel,
         string $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,

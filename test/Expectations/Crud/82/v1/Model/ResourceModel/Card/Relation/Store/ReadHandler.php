@@ -8,8 +8,9 @@ use Mygento\SampleModule\Model\ResourceModel\Card;
 
 class ReadHandler implements ExtensionInterface
 {
-    public function __construct(private readonly Card $resource)
-    {
+    public function __construct(
+        private readonly Card $resource,
+    ) {
     }
 
     /**

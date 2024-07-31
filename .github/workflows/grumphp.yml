@@ -18,12 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         php-versions:
-          - "7.4"
-          - "8.0"
           - "8.1"
-          # - '8.2'
+          - "8.2"
+          - "8.3"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
@@ -34,11 +33,9 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          # Use composer.json for key, if composer.lock is not committed.
-          # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - run: composer self-update --2
@@ -52,25 +49,25 @@ jobs:
         run: php vendor/bin/grumphp run -vvv
       - name: Install Composer dependencies without dev
         run: rm -fR vendor && composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
-        if: matrix.php-versions == '7.4'
+        if: matrix.php-versions == '8.1'
       - name: Install Box
-        run: wget https://github.com/box-project/box/releases/download/3.13.0/box.phar
-        if: matrix.php-versions == '7.4'
+        run: wget https://github.com/box-project/box/releases/download/4.5.1/box.phar
+        if: matrix.php-versions == '8.1'
       - name: Compile phar
         run: php box.phar compile
-        if: matrix.php-versions == '7.4'
+        if: matrix.php-versions == '8.1'
       - name: Compile Result
         run: ls -lah
-        if: matrix.php-versions == '7.4'
+        if: matrix.php-versions == '8.1'
       - name: Compile Result Upload
-        if: matrix.php-versions == '7.4'
+        if: matrix.php-versions == '8.1'
         uses: actions/upload-artifact@v3
         with:
           name: jeeves_new.phar
           path: jeeves.phar
       - name: Upload to Releases
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/') && matrix.php-versions == '7.4'
+        if: startsWith(github.ref, 'refs/tags/') && matrix.php-versions == '8.1'
         with:
           files: jeeves.phar
           token: ${{ secrets.token }}

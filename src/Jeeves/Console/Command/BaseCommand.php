@@ -63,7 +63,7 @@ abstract class BaseCommand extends Command
         $io = $this->getIO();
         $io->write(sprintf('Creating: <info>%s</info>.', $path));
 
-        return $fs->dumpFile($path, $content);
+        $fs->dumpFile($path, $content);
     }
 
     protected function runCodeStyleFixer()

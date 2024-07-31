@@ -24,7 +24,7 @@ class DataProvider extends ModifierPoolDataProvider
         string $requestFieldName,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        PoolInterface $pool = null,
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
 

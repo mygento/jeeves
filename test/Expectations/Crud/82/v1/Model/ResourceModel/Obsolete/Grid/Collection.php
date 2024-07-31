@@ -36,7 +36,7 @@ class Collection extends ParentCollection implements SearchResultInterface
         string $resourceModel,
         string $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,

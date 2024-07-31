@@ -119,6 +119,7 @@
                 <visible>true</visible>
                 <dataScope>customer_group</dataScope>
                 <validation>
+                    <rule name="validate-integer" xsi:type="boolean">true</rule>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
             </settings>

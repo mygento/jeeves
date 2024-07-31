@@ -23,7 +23,7 @@ class NamingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($right, $this->converter->getEntityName($left));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             ['CustomerAddress', 'CustomerAddress'],

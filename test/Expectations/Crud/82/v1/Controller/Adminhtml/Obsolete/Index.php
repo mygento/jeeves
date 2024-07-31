@@ -22,7 +22,7 @@ class Index extends \Mygento\SampleModule\Controller\Adminhtml\Obsolete
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
         \Mygento\SampleModule\Api\ObsoleteRepositoryInterface $repository,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
     ) {
         parent::__construct($repository, $coreRegistry, $context);
 
