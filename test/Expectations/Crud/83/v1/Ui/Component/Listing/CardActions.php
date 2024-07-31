@@ -6,7 +6,12 @@ use Mygento\Base\Ui\Component\Listing\Actions;
 
 class CardActions extends Actions
 {
-    protected string $route = 'sample_module';
-    protected string $controller = 'card';
-    protected string $key = 'card_id';
+    /** @var string */
+    protected $route = 'sample_module';
+
+    /** @var string */
+    protected $controller = 'card';
+
+    /** @var string */
+    protected $key = 'card_id';
 }

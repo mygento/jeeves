@@ -6,7 +6,12 @@ use Mygento\Base\Ui\Component\Listing\Actions;
 
 class CartItemActions extends Actions
 {
-    protected string $route = 'sample_module';
-    protected string $controller = 'cartitem';
-    protected string $key = 'cart_id';
+    /** @var string */
+    protected $route = 'sample_module';
+
+    /** @var string */
+    protected $controller = 'cartitem';
+
+    /** @var string */
+    protected $key = 'cart_id';
 }

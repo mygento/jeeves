@@ -24,14 +24,17 @@ class Actions extends Common
             ->setVisibility('protected');
 
         $namespace->addUse('\Mygento\Base\Ui\Component\Listing\Actions');
-        $router->setType('string');
-        $cont->setType('string');
+        $router->addComment('@var string');
+        $cont->addComment('@var string');
+        // not supported by Mygento/Base
+        // $router->setType('string');
+        // $cont->setType('string');
 
         if ($primaryKey !== 'id') {
             $key = $class->addProperty('key', $primaryKey)
                 ->setVisibility('protected');
-
-            $key->setType('string');
+            $key->addComment('@var string');
+            // $key->setType('string'); not supported by Mygento/Base
         }
 
         return $namespace;
