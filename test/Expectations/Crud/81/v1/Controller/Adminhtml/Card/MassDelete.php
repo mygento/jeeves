@@ -3,7 +3,6 @@
 namespace Mygento\SampleModule\Controller\Adminhtml\Card;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\Ui\Component\MassAction\Filter;
@@ -38,7 +37,7 @@ class MassDelete extends Card
             __('A total of %1 record(s) have been deleted.', $collectionSize)->render()
         );
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         return $resultRedirect->setPath('*/*/');
     }

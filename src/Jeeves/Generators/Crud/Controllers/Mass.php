@@ -19,7 +19,6 @@ class Mass extends Common
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
 
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
-        $namespace->addUse('Magento\Framework\Controller\ResultFactory');
 
         $class = $namespace->addClass($className)
             ->setExtends($rootNamespace . '\Controller\Adminhtml\\' . $entity);
@@ -89,7 +88,7 @@ class Mass extends Common
         . ');' . PHP_EOL
 
         . '/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
-        . '$resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);' . PHP_EOL
+        . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
         . 'return $resultRedirect->setPath(\'*/*/\');' . PHP_EOL);
 
         $execute->setReturnType('\Magento\Framework\Controller\ResultInterface');
