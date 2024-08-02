@@ -52,17 +52,20 @@ class Model extends Common
             if (isset($value['identity']) && $value['identity'] === true) {
                 $generated = true;
             }
-            $c = $interface->addConstant(strtoupper($name), strtolower($name))->setPublic();
+            $c = $interface->addConstant(strtoupper($name), strtolower($name))
+                ->setPublic();
             if ($hasTypedConst) {
                 $c->setType('string');
             }
-            $method = $this->snakeCaseToUpperCamelCase($name);
-            $get = $interface->addMethod('get' . $method)
-                ->setVisibility('public');
-            $get->addComment('Get ' . str_replace('_', ' ', $name));
 
-            $set = $interface->addMethod('set' . $method);
-            $set->addComment('Set ' . str_replace('_', ' ', $name))
+            $getter = $this->createGetterName($name, $value);
+            $get = $interface->addMethod($getter[0])
+                ->setVisibility('public');
+            $get->addComment($getter[1]);
+
+            $setter = $this->createSetterName($name, $value);
+            $set = $interface->addMethod($setter[0]);
+            $set->addComment($setter[1])
                 ->setVisibility('public');
             $param = $set->addParameter($this->snakeCaseToCamelCase($name));
 
@@ -73,7 +76,9 @@ class Model extends Common
             $set->setReturnType('self');
 
             if ($hasApi) {
-                $get->addComment('@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'));
+                $get->addComment(
+                    '@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null')
+                );
                 $set->addComment('@return $this');
             }
 
@@ -81,7 +86,9 @@ class Model extends Common
                 $param->setNullable(false);
                 $param->setType(null);
 
-                $set->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
+                $set->addComment(
+                    '@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name)
+                );
             }
         }
 
@@ -99,7 +106,9 @@ class Model extends Common
                 ->setVisibility('public');
 
             if ($hasApi) {
-                $getId->addComment('@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : ''));
+                $getId->addComment(
+                    '@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : '')
+                );
             }
 
             $getId->setReturnType($this->convertType($item['type']));
@@ -111,7 +120,9 @@ class Model extends Common
                 ->setVisibility('public');
 
             $setId->addParameter(self::DEFAULT_KEY);
-            $setId->addComment('@param ' . $this->convertType($item['type']) . ' $id');
+            $setId->addComment(
+                '@param ' . $this->convertType($item['type']) . ' $id'
+            );
 
             if ($hasApi) {
                 $setId->addComment('@return $this');

@@ -129,4 +129,49 @@ class Common extends \Mygento\Jeeves\Generators\Common
 
         return isset($value['nullable']) && $value['nullable'] === false;
     }
+
+    protected function createGetterName(string $name, array $params): array
+    {
+        $method = $this->snakeCaseToUpperCamelCase($name);
+        if ($params['type'] === 'boolean') {
+            if (str_starts_with($name, 'is_') ||
+                str_starts_with($name, 'has_') ||
+                str_starts_with($name, 'can_') ||
+                str_starts_with($name, 'should_')
+            ) {
+                return [
+                    $this->snakeCaseToCamelCase($name),
+                    ucfirst(str_replace('_', ' ', $name)),
+                ];
+            }
+
+            return [
+                'is' . $method,
+                'Is ' . str_replace('_', ' ', $name),
+            ];
+        }
+
+        return [
+            'get' . $method,
+            'Get ' . str_replace('_', ' ', $name),
+        ];
+    }
+
+    protected function createSetterName(string $name, array $params): array
+    {
+        $method = $this->snakeCaseToUpperCamelCase($name);
+        if ($params['type'] === 'boolean') {
+            if (str_starts_with($name, 'is_')) {
+                return [
+                    'set' . substr($method, 2),
+                    'Set ' . str_replace('_', ' ', substr($name, 3)),
+                ];
+            }
+        }
+
+        return [
+            'set' . $method,
+            'Set ' . str_replace('_', ' ', $name),
+        ];
+    }
 }

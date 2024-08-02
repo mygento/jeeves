@@ -81,19 +81,19 @@ class Poster extends AbstractModel implements PosterInterface
     }
 
     /**
-     * Get is active
+     * Is active
      */
-    public function getIsActive(): bool
+    public function isActive(): bool
     {
-        return $this->getData(self::IS_ACTIVE);
+        return $this->getData(self::ACTIVE);
     }
 
     /**
-     * Set is active
+     * Set active
      */
-    public function setIsActive(bool $isActive): self
+    public function setActive(bool $active): self
     {
-        return $this->setData(self::IS_ACTIVE, $isActive);
+        return $this->setData(self::ACTIVE, $active);
     }
 
     /**

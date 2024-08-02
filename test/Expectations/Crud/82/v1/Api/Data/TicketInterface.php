@@ -29,14 +29,14 @@ interface TicketInterface
     public function setName(?string $name): self;
 
     /**
-     * Get is active
+     * Is active
      */
-    public function getIsActive(): bool;
+    public function isActive(): bool;
 
     /**
-     * Set is active
+     * Set active
      */
-    public function setIsActive(bool $isActive): self;
+    public function setActive(bool $isActive): self;
 
     /**
      * Get ID

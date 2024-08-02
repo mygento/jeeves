@@ -62,14 +62,16 @@ class Model extends Common
             if (isset($value['identity']) && $value['identity'] === true) {
                 $generated = true;
             }
-            $method = $this->snakeCaseToUpperCamelCase($name);
-            $getter = $class->addMethod('get' . $method)
-                ->addComment('Get ' . str_replace('_', ' ', $name))
+
+            $getterName = $this->createGetterName($name, $value);
+            $getter = $class->addMethod($getterName[0])
+                ->addComment($getterName[1])
                 ->setVisibility('public')
                 ->setBody('return $this->getData(self::' . strtoupper($name) . ');');
 
-            $setter = $class->addMethod('set' . $method)
-                ->addComment('Set ' . str_replace('_', ' ', $name))
+            $setterName = $this->createSetterName($name, $value);
+            $setter = $class->addMethod($setterName[0])
+                ->addComment($setterName[1])
                 ->setVisibility('public');
             $setParam = $setter->addParameter($this->snakeCaseToCamelCase($name));
             $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');

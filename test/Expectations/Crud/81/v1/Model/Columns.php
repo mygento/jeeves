@@ -28,25 +28,25 @@ class Columns extends AbstractModel implements ColumnsInterface
     }
 
     /**
-     * Get is active
+     * Is active
      */
-    public function getIsActive(): bool
+    public function isActive(): bool
     {
         return $this->getData(self::IS_ACTIVE);
     }
 
     /**
-     * Set is active
+     * Set active
      */
-    public function setIsActive(bool $isActive): self
+    public function setActive(bool $isActive): self
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
     /**
-     * Get has flag
+     * Has flag
      */
-    public function getHasFlag(): ?bool
+    public function hasFlag(): ?bool
     {
         return $this->getData(self::HAS_FLAG);
     }

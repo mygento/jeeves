@@ -14,7 +14,7 @@ interface PosterInterface extends IdentityInterface
     public const NAME = 'name';
     public const SUBNAME = 'subname';
     public const FAMILY = 'family';
-    public const IS_ACTIVE = 'is_active';
+    public const ACTIVE = 'active';
     public const PRODUCT_ID = 'product_id';
 
     /**
@@ -67,16 +67,16 @@ interface PosterInterface extends IdentityInterface
     public function setFamily(?string $family): self;
 
     /**
-     * Get is active
+     * Is active
      * @return bool
      */
-    public function getIsActive(): bool;
+    public function isActive(): bool;
 
     /**
-     * Set is active
+     * Set active
      * @return $this
      */
-    public function setIsActive(bool $isActive): self;
+    public function setActive(bool $active): self;
 
     /**
      * Get product id

@@ -26,14 +26,14 @@ interface CartItemInterface
     public function setCartId(?int $cartId): self;
 
     /**
-     * Get is active
+     * Is active
      */
-    public function getIsActive(): bool;
+    public function isActive(): bool;
 
     /**
-     * Set is active
+     * Set active
      */
-    public function setIsActive(bool $isActive): self;
+    public function setActive(bool $isActive): self;
 
     /**
      * Get delivery date

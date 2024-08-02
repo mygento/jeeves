@@ -66,16 +66,16 @@ interface CardInterface extends IdentityInterface
     public function setCategoryId(int $categoryId): self;
 
     /**
-     * Get is active
+     * Is active
      * @return bool
      */
-    public function getIsActive(): bool;
+    public function isActive(): bool;
 
     /**
-     * Set is active
+     * Set active
      * @return $this
      */
-    public function setIsActive(bool $isActive): self;
+    public function setActive(bool $isActive): self;
 
     /**
      * Get store id
