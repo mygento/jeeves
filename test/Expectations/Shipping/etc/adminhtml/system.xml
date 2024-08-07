@@ -3,7 +3,7 @@
     <system>
         <section id="carriers">
             <group id="slowcourier" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>slowcourier</label>
+                <label>Slowcourier</label>
                 <field id="active" type="select" sortOrder="10" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

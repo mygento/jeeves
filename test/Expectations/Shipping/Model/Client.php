@@ -2,18 +2,18 @@
 
 namespace Mygento\SampleModule\Model;
 
-class Client extends \Mygento\Shipment\Model\AbstractClient
-{
-    /** \Mygento\SampleModule\Helper\Data */
-    private $helper;
+use Mygento\SampleModule\Helper\Data;
+use Mygento\Shipment\Model\AbstractClient;
+use Mygento\Shipment\Model\Client as BaseClient;
 
-    /**
-     * @param \Mygento\SampleModule\Helper\Data $helper
-     * @param \Mygento\Shipment\Model\Client $client
-     */
-    public function __construct(\Mygento\SampleModule\Helper\Data $helper, \Mygento\Shipment\Model\Client $client)
+class Client extends AbstractClient
+{
+    public function __construct(Data $helper, BaseClient $baseClient)
     {
-        $this->helper = $helper;
-        parent::__construct($client);
+        parent::__construct($helper, $baseClient);
+    }
+
+    public function sendApiRequest(string $method, $data, $scopeCode = null)
+    {
     }
 }

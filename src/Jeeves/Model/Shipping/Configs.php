@@ -94,7 +94,7 @@ class Configs extends Generator
         $generator = new System();
 
         return [
-            'label' => $entity['title'],
+            'label' => $this->getConverter()->getEntityPrintName($entity['title']),
             $generator->getEnabled(),
             $generator->getTitle(),
             $generator->getSort(),

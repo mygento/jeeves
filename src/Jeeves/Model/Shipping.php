@@ -4,6 +4,7 @@ namespace Mygento\Jeeves\Model;
 
 use Mygento\Jeeves\Generators\Shipping\Carrier;
 use Mygento\Jeeves\Generators\Shipping\Helper;
+use Mygento\Jeeves\Generators\Shipping\Model;
 use Mygento\Jeeves\IO\IOInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -86,6 +87,7 @@ class Shipping extends Generator
         $this->generateCarrier($carrier);
         $this->generateClient();
         $this->generateService();
+        $this->generateTaxModel();
 
         $result->updateCarrierConfigs([
             $carrier => [
@@ -126,10 +128,10 @@ class Shipping extends Generator
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genHelper(
-                strtolower($carrier),
-                $this->mod->getNamespace()
-            )
+                $generator->genHelper(
+                    strtolower($carrier),
+                    $this->mod->getNamespace()
+                )
         );
     }
 
@@ -142,13 +144,12 @@ class Shipping extends Generator
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genCarrier(
-                strtolower($carrier),
-                $namePath . 'Model\\Service',
-                $namePath . 'Model\\Carrier',
-                $namePath . 'Helper\\Data',
-                $this->mod->getNamespace()
-            )
+                $generator->genCarrier(
+                    strtolower($carrier),
+                    $namePath . 'Model\\Service',
+                    $namePath . 'Helper\\Data',
+                    $this->mod->getNamespace()
+                )
         );
     }
 
@@ -161,10 +162,10 @@ class Shipping extends Generator
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genClient(
-                $namePath . 'Helper\\Data',
-                $this->mod->getNamespace()
-            )
+                $generator->genClient(
+                    $namePath . 'Helper\\Data',
+                    $this->mod->getNamespace()
+                )
         );
     }
 
@@ -177,10 +178,25 @@ class Shipping extends Generator
         $this->writeFile(
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
-            $generator->genService(
-                $namePath . 'Model\\Client',
-                $this->mod->getNamespace()
-            )
+                $generator->genService(
+                    $namePath . 'Model\\Client',
+                    $namePath . 'Helper\\Data',
+                    $this->mod->getNamespace()
+                )
+        );
+    }
+
+    private function generateTaxModel()
+    {
+        $generator = new Model();
+        $filePath = $this->path . '/Model/Source/';
+        $fileName = 'Tax';
+        $this->writeFile(
+            $filePath . $fileName . '.php',
+            '<?php' . PHP_EOL . PHP_EOL .
+                $generator->genTax(
+                    $this->mod->getNamespace()
+                )
         );
     }
 }

@@ -10,46 +10,51 @@ class Carrier extends Common
     public function genCarrier(
         string $method,
         string $service,
-        string $carrier,
         string $helper,
         string $rootNamespace,
         string $phpVersion = PHP_VERSION
     ): PhpNamespace {
-        $typehint = version_compare($phpVersion, '7.4.0', '>=');
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Quote\Model\Quote\Address\RateRequest');
+        $namespace->addUse($helper);
+        $namespace->addUse('\Mygento\Shipment\Model\Carrier', 'BaseCarrier');
+        $namespace->addUse('\Magento\Framework\Profiler');
+        $namespace->addUse('\Mygento\Shipment\Model\AbstractCarrier');
+        $namespace->addUse('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $namespace->addUse('\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory');
+        $namespace->addUse('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $namespace->addUse('\Psr\Log\LoggerInterface');
         $class = $namespace->addClass('Carrier');
         $class->setExtends('\Mygento\Shipment\Model\AbstractCarrier');
 
-        $class->addProperty('code', $method)
+        $class->addProperty('_code', $method)
             ->setVisibility('protected')->addComment('@var string');
 
+        $class->addProperty('service')->setVisibility('private')->setType($service);
+
         $construct = $class->addMethod('__construct')
-            ->addComment('@param ' . $service . ' $service')
-            ->addComment('@param ' . $carrier . ' $carrier')
-            ->addComment('@param ' . $helper . ' $helper')
-            ->addComment('@param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig')
-            ->addComment('@param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory')
-            ->addComment('@param \Psr\Log\LoggerInterface $logger')
-            ->addComment('@param array $data')
             ->setVisibility('public');
 
         $construct->addParameter('service')->setType($service);
-        $construct->addParameter('carrier')->setType($carrier);
+        $construct->addParameter('baseCarrier')
+            ->setType('\Mygento\Shipment\Model\Carrier');
         $construct->addParameter('helper')->setType($helper);
-        $construct->addParameter('scopeConfig')->setType($service);
-        $construct->addParameter('rateErrorFactory')->setType($service);
-        $construct->addParameter('logger')->setType($service);
+        $construct->addParameter('scopeConfig')
+            ->setType('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $construct->addParameter('rateErrorFactory')
+            ->setType('\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory');
+        $construct->addParameter('logger')->setType('\Psr\Log\LoggerInterface');
+        $construct->addParameter('data')->setType('array')->setDefaultValue([]);
 
         $construct->setBody(
-            '$this->service = $service;' . PHP_EOL
+            '$this->service = $service;' . PHP_EOL . PHP_EOL
             . 'parent::__construct(' . PHP_EOL
-            . '    $helper,' . PHP_EOL
-            . '    $carrier,' . PHP_EOL
-            . '    $scopeConfig,' . PHP_EOL
-            . '    $rateErrorFactory,' . PHP_EOL
-            . '    $logger,' . PHP_EOL
-            . '    $data' . PHP_EOL
+            . self::TAB . '$baseCarrier,' . PHP_EOL
+            . self::TAB . '$helper,' . PHP_EOL
+            . self::TAB . '$scopeConfig,' . PHP_EOL
+            . self::TAB . '$rateErrorFactory,' . PHP_EOL
+            . self::TAB . '$logger,' . PHP_EOL
+            . self::TAB . '$data' . PHP_EOL
             . ');'
         );
 
@@ -61,111 +66,112 @@ class Carrier extends Common
 
         $collect->addParameter('request')->setType('\Magento\Quote\Model\Quote\Address\RateRequest');
         $collect->setBody(
-            '\Magento\Framework\Profiler::start($this->code . \'_collect_rate\');' . PHP_EOL . PHP_EOL
-            . '//Validation' . PHP_EOL
+            'Profiler::start($this->_code . \'_collect_rate\');' . PHP_EOL . PHP_EOL
+            . '// Validation' . PHP_EOL
             . '$valid = $this->validateRequest($request);' . PHP_EOL
             . 'if ($valid !== true) {' . PHP_EOL
-            . '    return $valid;' . PHP_EOL
+            . self::TAB . 'return $valid;' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
-            . '$data = [' . PHP_EOL
-            . '   \'city\' => $this->convertCity($request),' . PHP_EOL
-            . '   \'weight\' => $this->convertWeight($request),' . PHP_EOL
-            . '   \'order_sum\' => round($this->getCartTotal(), 0),' . PHP_EOL
-            . '   \'postcode\' => $this->getPostCode($request),' . PHP_EOL
-            . '];' . PHP_EOL . PHP_EOL
-            . '$response = $this->service->calculateDeliveryCost($data);' . PHP_EOL
-            . '$result = $this->carrier->getResult();' . PHP_EOL
-            . 'foreach ($response as $delivery) {' . PHP_EOL
-            . '    $method = [' . PHP_EOL
-            . '        \'code\' => $this->code,' . PHP_EOL
-            . '        \'title\' => $this->helper->getConfig(\'title\'),' . PHP_EOL
-            . '        \'method\' => $this->code,' . PHP_EOL
-            . '        \'name\' => $this->code,' . PHP_EOL
-            . '        \'price\' => $request->getFreeShipping() ? 0 : $delivery[\'cost\'],' . PHP_EOL
-            . '        \'cost\' => $request->getFreeShipping() ? 0 : $delivery[\'cost\'],' . PHP_EOL
-            . '        \'estimate_dates\' => [],' . PHP_EOL
-            . '    ];' . PHP_EOL . PHP_EOL
-            . '$rate = $this->createRateMethod($method);' . PHP_EOL
-            . '$result->append($rate);' . PHP_EOL
+            . '$calc = $this->baseCarrier->getCalculateRequest();' . PHP_EOL
+            . '$calc->setCity($this->convertCity($request));' . PHP_EOL
+            . '$calc->setIndex($request->getDestPostcode());' . PHP_EOL
+            . '$calc->setWeight($this->convertWeight($request));' . PHP_EOL
+            . '$calc->setOrderSum($request->getBaseSubtotalWithDiscountInclTax());' . PHP_EOL
+            . '$calc->setRawRequest($request);' . PHP_EOL . PHP_EOL
+            . '$methods = $this->service->calculateDeliveryCost($calc);' . PHP_EOL . PHP_EOL
+            . '$result = $this->baseCarrier->getResult();' . PHP_EOL
+            . 'foreach ($methods as $method) {' . PHP_EOL
+            . self::TAB . '$result->append($this->createRateMethod($method));' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
-            . '\Magento\Framework\Profiler::stop($this->code . \'_collect_rate\');' . PHP_EOL
+            . 'Profiler::stop($this->_code . \'_collect_rate\');' . PHP_EOL
             . 'return $result;' . PHP_EOL
         );
 
         return $namespace;
     }
 
-    public function genService($client, $rootNamespace)
+    public function genService(string $client, string $helper, string $rootNamespace): PhpNamespace
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
+        $namespace->addUse('\Mygento\Shipment\Model\AbstractService');
+        $namespace->addUse('\Magento\Framework\Api\SearchCriteriaBuilder');
+        $namespace->addUse('\Magento\Sales\Model\Order');
+        $namespace->addUse('\Mygento\Shipment\Api\Data\CalculateRequestInterface');
+        $namespace->addUse($helper);
+        $namespace->addUse('\Mygento\Shipment\Model\Service', 'BaseService');
         $class = $namespace->addClass('Service');
         $class->setExtends('\Mygento\Shipment\Model\AbstractService');
 
         $construct = $class->addMethod('__construct')
-            ->addComment('@param ' . $client . ' $client')
-            ->addComment('@param \Mygento\Shipment\Model\Service $service')
             ->setVisibility('public');
 
         $construct->addParameter('client')->setType($client);
-        $construct->addParameter('service')->setType('\Mygento\Shipment\Model\Service');
+        $construct->addParameter('helper')->setType($helper);
+        $construct->addParameter('baseService')->setType('\Mygento\Shipment\Model\Service');
+        $construct->addParameter('searchBuilder')->setType('\Magento\Framework\Api\SearchCriteriaBuilder');
 
         $construct->setBody(
-            '$this->client = $client;' . PHP_EOL
-            . 'parent::__construct($service);' . PHP_EOL
+            '$this->client = $client;' . PHP_EOL . PHP_EOL
+            . 'parent::__construct($baseService, $helper, $searchBuilder);' . PHP_EOL
         );
 
-        $class->addProperty('client')
-            ->setVisibility('private')->addComment($client);
+        $class->addProperty('client')->setType($client)
+            ->setVisibility('private');
 
         $calculate = $class->addMethod('calculateDeliveryCost')
-            ->addComment('@param array $params')
-            ->addComment('@return array')
             ->setReturnType('array')
             ->setVisibility('public');
 
-        $calculate->addParameter('params')->setType('array');
+        $calculate->addParameter('request')->setType('\Mygento\Shipment\Api\Data\CalculateRequestInterface');
         $calculate->setBody('return [];');
 
-        $create = $class->addMethod('orderCreate')
-            ->addComment('@param \Magento\Sales\Model\Order $order')
-            ->addComment('@param array $data')
+        $create = $class->addMethod('createOrder')
             ->setVisibility('public');
 
         $create->addParameter('order')->setType('\Magento\Sales\Model\Order');
-        $create->addParameter('data', [])->setType('array');
+        $create->addParameter('data', []);
         $create->setBody('');
 
-        $cancel = $class->addMethod('orderCancel')
+        $cancel = $class->addMethod('cancelOrder')
             ->addComment('@param int|string $orderId')
             ->setVisibility('public');
 
         $cancel->addParameter('orderId');
         $cancel->setBody('');
 
+        $update = $class->addMethod('updateOrderStatus')
+            ->setVisibility('public');
+
+        $update->addParameter('order')->setType('\Magento\Sales\Model\Order');
+        $update->setBody('');
+
         return $namespace;
     }
 
-    public function genClient($helper, $rootNamespace)
+    public function genClient(string $helper, string $rootNamespace): PhpNamespace
     {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
+        $namespace->addUse('\Mygento\Shipment\Model\AbstractClient');
+        $namespace->addUse($helper);
+        $namespace->addUse('\Mygento\Shipment\Model\Client', 'BaseClient');
         $class = $namespace->addClass('Client');
         $class->setExtends('\Mygento\Shipment\Model\AbstractClient');
 
         $construct = $class->addMethod('__construct')
-            ->addComment('@param ' . $helper . ' $helper')
-            ->addComment('@param \Mygento\Shipment\Model\Client $client')
             ->setVisibility('public');
 
         $construct->addParameter('helper')->setType($helper);
-        $construct->addParameter('client')->setType('\Mygento\Shipment\Model\Client');
+        $construct->addParameter('baseClient')->setType('\Mygento\Shipment\Model\Client');
 
         $construct->setBody(
-            '$this->helper = $helper;' . PHP_EOL
-            . 'parent::__construct($client);' . PHP_EOL
+            'parent::__construct($helper, $baseClient);' . PHP_EOL
         );
 
-        $class->addProperty('helper')
-            ->setVisibility('private')->addComment($helper);
+        $send = $class->addMethod('sendApiRequest')
+            ->setVisibility('public');
+        $send->addParameter('method')->setType('string');
+        $send->addParameter('data');
+        $send->addParameter('scopeCode')->setDefaultValue(null);
 
         return $namespace;
     }

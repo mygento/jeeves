@@ -42,6 +42,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->checkFile('Model/Client.php');
         $this->checkFile('Model/Carrier.php');
         $this->checkFile('Model/Service.php');
+        $this->checkFile('Model/Source/Tax.php');
     }
 
     private function checkFile($file)

@@ -2,34 +2,36 @@
 
 namespace Mygento\SampleModule\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Profiler;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
+use Mygento\SampleModule\Helper\Data;
+use Mygento\Shipment\Model\AbstractCarrier;
+use Mygento\Shipment\Model\Carrier as BaseCarrier;
+use Psr\Log\LoggerInterface;
 
-class Carrier extends \Mygento\Shipment\Model\AbstractCarrier
+class Carrier extends AbstractCarrier
 {
     /** @var string */
-    protected $code = 'slowcourier';
+    protected $_code = 'slowcourier';
 
-    /**
-     * @param \Mygento\SampleModule\Model\Service $service
-     * @param \Mygento\SampleModule\Model\Carrier $carrier
-     * @param \Mygento\SampleModule\Helper\Data $helper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param array $data
-     */
+    private Service $service;
+
     public function __construct(
         Service $service,
-        Carrier $carrier,
-        \Mygento\SampleModule\Helper\Data $helper,
-        Service $scopeConfig,
-        Service $rateErrorFactory,
-        Service $logger,
+        BaseCarrier $baseCarrier,
+        Data $helper,
+        ScopeConfigInterface $scopeConfig,
+        ErrorFactory $rateErrorFactory,
+        LoggerInterface $logger,
+        array $data = [],
     ) {
         $this->service = $service;
+
         parent::__construct(
+            $baseCarrier,
             $helper,
-            $carrier,
             $scopeConfig,
             $rateErrorFactory,
             $logger,
@@ -44,39 +46,29 @@ class Carrier extends \Mygento\Shipment\Model\AbstractCarrier
      */
     public function collectRates(RateRequest $request)
     {
-        \Magento\Framework\Profiler::start($this->code . '_collect_rate');
+        Profiler::start($this->_code . '_collect_rate');
 
-        //Validation
+        // Validation
         $valid = $this->validateRequest($request);
         if ($valid !== true) {
             return $valid;
         }
 
-        $data = [
-            'city' => $this->convertCity($request),
-            'weight' => $this->convertWeight($request),
-            'order_sum' => round($this->getCartTotal(), 0),
-            'postcode' => $this->getPostCode($request),
-        ];
+        $calc = $this->baseCarrier->getCalculateRequest();
+        $calc->setCity($this->convertCity($request));
+        $calc->setIndex($request->getDestPostcode());
+        $calc->setWeight($this->convertWeight($request));
+        $calc->setOrderSum($request->getBaseSubtotalWithDiscountInclTax());
+        $calc->setRawRequest($request);
 
-        $response = $this->service->calculateDeliveryCost($data);
-        $result = $this->carrier->getResult();
-        foreach ($response as $delivery) {
-            $method = [
-                'code' => $this->code,
-                'title' => $this->helper->getConfig('title'),
-                'method' => $this->code,
-                'name' => $this->code,
-                'price' => $request->getFreeShipping() ? 0 : $delivery['cost'],
-                'cost' => $request->getFreeShipping() ? 0 : $delivery['cost'],
-                'estimate_dates' => [],
-            ];
+        $methods = $this->service->calculateDeliveryCost($calc);
 
-            $rate = $this->createRateMethod($method);
-            $result->append($rate);
+        $result = $this->baseCarrier->getResult();
+        foreach ($methods as $method) {
+            $result->append($this->createRateMethod($method));
         }
 
-        \Magento\Framework\Profiler::stop($this->code . '_collect_rate');
+        Profiler::stop($this->_code . '_collect_rate');
 
         return $result;
     }
