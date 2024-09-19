@@ -1,0 +1,7 @@
+type SampleModulePoster @doc(description: "Poster") {
+    name: String @doc(description: "Name")
+    subname: String @doc(description: "Subname")
+    family: String @doc(description: "Family")
+    active: Boolean! @doc(description: "Active")
+    product_id: Int @doc(description: "Product_id")
+}

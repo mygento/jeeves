@@ -72,14 +72,14 @@
         </constraint>
     </table>
     <table name="mygento_sample_module_poster" resource="default" engine="innodb" comment="Poster Table">
-        <column xsi:type="int" name="id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
+        <column xsi:type="int" name="entity_id" nullable="false" identity="false" unsigned="true" comment="Banner ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="varchar" name="subname" nullable="true" length="255" comment="Subname"/>
         <column xsi:type="varchar" name="family" nullable="true" length="255" comment="Family"/>
         <column xsi:type="boolean" name="active" nullable="false" comment="Active"/>
         <column xsi:type="int" name="product_id" nullable="true" identity="false" unsigned="true" comment="Product_id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="id"/>
+            <column name="entity_id"/>
         </constraint>
         <constraint xsi:type="unique" referenceId="IX_NAME">
             <column name="family"/>

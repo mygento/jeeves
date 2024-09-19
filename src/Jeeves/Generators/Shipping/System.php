@@ -49,7 +49,7 @@ class System extends Common
                 'sortOrder' => '20',
             ]),
             self::V => [
-                'label' => 'Method Title',
+                'label' => 'Carrier Title',
                 'validate' => 'required-entry',
             ],
         ];

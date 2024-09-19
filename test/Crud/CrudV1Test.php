@@ -57,6 +57,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
         $this->checkXml('etc/events.xml');
         $this->checkXml('etc/module.xml');
         $this->checkFile('registration.php');
+        $this->checkFile('etc/schema.graphqls');
     }
 
     private function checkInterfaces()

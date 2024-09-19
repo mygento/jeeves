@@ -82,7 +82,7 @@ class Model extends Common
                 $set->addComment('@return $this');
             }
 
-            if ($this->snakeCaseToCamelCase($name) == 'id') {
+            if (in_array($this->snakeCaseToCamelCase($name), ['id', 'entityId'])) {
                 $param->setNullable(false);
                 $param->setType(null);
 

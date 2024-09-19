@@ -28,8 +28,8 @@ class Collection extends AbstractCollection
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null,
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,

@@ -5,7 +5,7 @@
             <slowcourier>
                 <active>0</active>
                 <name>slowcourier</name>
-                <title>slowcourier</title>
+                <title>Slowcourier</title>
                 <debug>0</debug>
                 <test>1</test>
                 <model>Mygento\SampleModule\Model\Carrier</model>

@@ -9,7 +9,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="title" type="text" sortOrder="20" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Method Title</label>
+                    <label>Carrier Title</label>
                     <validate>required-entry</validate>
                 </field>
                 <field id="sort_order" type="text" sortOrder="89" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">

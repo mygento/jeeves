@@ -16,20 +16,20 @@ class Poster extends AbstractModel implements PosterInterface
     }
 
     /**
-     * Get id
+     * Get entity id
      */
-    public function getId(): ?int
+    public function getEntityId(): ?int
     {
-        return $this->getData(self::ID);
+        return $this->getData(self::ENTITY_ID);
     }
 
     /**
-     * Set id
-     * @param int $id
+     * Set entity id
+     * @param int $entityId
      */
-    public function setId($id): self
+    public function setEntityId($entityId): self
     {
-        return $this->setData(self::ID, $id);
+        return $this->setData(self::ENTITY_ID, $entityId);
     }
 
     /**
@@ -110,6 +110,23 @@ class Poster extends AbstractModel implements PosterInterface
     public function setProductId(?int $productId): self
     {
         return $this->setData(self::PRODUCT_ID, $productId);
+    }
+
+    /**
+     * Get ID
+     */
+    public function getId(): ?int
+    {
+        return $this->getData(self::ENTITY_ID);
+    }
+
+    /**
+     * Set ID
+     * @param int $id
+     */
+    public function setId($id): self
+    {
+        return $this->setData(self::ENTITY_ID, $id);
     }
 
     /**

@@ -140,9 +140,10 @@ Mygento:
         api: true
         cacheable: true
         readonly: true
+        graphql: true
         cache_tag: samp_poster
         columns:
-          id:
+          entity_id:
             type: int
             pk: true
             unsigned: true

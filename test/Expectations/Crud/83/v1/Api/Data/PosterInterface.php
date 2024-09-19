@@ -10,7 +10,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 interface PosterInterface extends IdentityInterface
 {
     public const string CACHE_TAG = 'samp_poster';
-    public const string ID = 'id';
+    public const string ENTITY_ID = 'entity_id';
     public const string NAME = 'name';
     public const string SUBNAME = 'subname';
     public const string FAMILY = 'family';
@@ -18,17 +18,17 @@ interface PosterInterface extends IdentityInterface
     public const string PRODUCT_ID = 'product_id';
 
     /**
-     * Get id
+     * Get entity id
      * @return int|null
      */
-    public function getId(): ?int;
+    public function getEntityId(): ?int;
 
     /**
-     * Set id
-     * @param int $id
+     * Set entity id
+     * @param int $entityId
      * @return $this
      */
-    public function setId($id): self;
+    public function setEntityId($entityId): self;
 
     /**
      * Get name
@@ -89,4 +89,17 @@ interface PosterInterface extends IdentityInterface
      * @return $this
      */
     public function setProductId(?int $productId): self;
+
+    /**
+     * Get ID
+     * @return int|null
+     */
+    public function getId(): ?int;
+
+    /**
+     * Set ID
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id): self;
 }

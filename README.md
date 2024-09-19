@@ -46,6 +46,7 @@ look in ```.jeeves.phpunit_v1.yaml``` or ```.jeeves.phpunit_v0.yaml```
 | tablename | String | N | %vendor%_%module%_%entity%
 | comment | String | N
 | api | Boolean | N | false
+| graphql | Boolean | N | false
 | cacheable | Boolean | N | false
 | cache_tag | String | N
 | per_store | Boolean | N | false

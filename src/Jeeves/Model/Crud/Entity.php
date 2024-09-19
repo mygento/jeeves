@@ -16,6 +16,7 @@ class Entity extends Generator
     private Module $module;
     private $api;
     private $gui;
+    private bool $graphql = false;
     private bool $readonly = false;
     private bool $withStore = false;
     private $tablename;
@@ -105,6 +106,7 @@ class Entity extends Generator
         $this->readonly = $config['readonly'] ?? false;
         $this->withStore = $config['per_store'] ?? false;
         $this->comment = $config['comment'] ?? null;
+        $this->graphql = $config['graphql'] ?? false;
 
         $this->tablename = $config['tablename'] ??
             $this->getConverter()->camelCaseToSnakeCase($this->module->getVendor())
@@ -169,6 +171,11 @@ class Entity extends Generator
     public function hasApi(): bool
     {
         return $this->api;
+    }
+
+    public function hasGraphQL(): bool
+    {
+        return $this->graphql;
     }
 
     public function getEntityAcl()

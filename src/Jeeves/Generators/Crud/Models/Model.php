@@ -80,8 +80,12 @@ class Model extends Common
             $getter->setReturnNullable($generated ? true : !$notNullable);
 
             $setter->setReturnType('self');
-            $setParam->setType($this->convertType($value['type']));
-            $setParam->setNullable(!$notNullable);
+            if ($name === 'entity_id') {
+                $setter->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));
+            } else {
+                $setParam->setType($this->convertType($value['type']));
+                $setParam->setNullable(!$notNullable);
+            }
 
             if ($this->snakeCaseToCamelCase($name) == 'id') {
                 $setParam->setNullable(false);

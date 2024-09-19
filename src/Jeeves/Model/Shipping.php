@@ -92,14 +92,14 @@ class Shipping extends Generator
         $result->updateCarrierConfigs([
             $carrier => [
                 'active' => 0,
-                'title' => $carrier,
+                'code' => $carrier,
             ],
         ]);
         $result->updateDefaultConfigs([
             $carrier => [
                 'active' => 0,
                 'name' => $carrier,
-                'title' => $carrier,
+                'title' => $this->getConverter()->getEntityPrintName($carrier),
                 'debug' => '0',
                 'test' => '1',
                 'model' => $this->mod->getNamespace() . '\Model\Carrier',

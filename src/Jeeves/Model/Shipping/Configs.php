@@ -94,7 +94,7 @@ class Configs extends Generator
         $generator = new System();
 
         return [
-            'label' => $this->getConverter()->getEntityPrintName($entity['title']),
+            'label' => $this->getConverter()->getEntityPrintName($entity['code']),
             $generator->getEnabled(),
             $generator->getTitle(),
             $generator->getSort(),
@@ -102,7 +102,7 @@ class Configs extends Generator
             $generator->getDebug(),
             $generator->getAuthGroup(),
             $generator->getOptionsGroup(),
-            $generator->getPackageGroup($entity['title']),
+            $generator->getPackageGroup($entity['code']),
             $generator->getTaxGroup($namespace),
             $generator->getOrderStatusGroup(),
             $generator->getMarkingGroup(),

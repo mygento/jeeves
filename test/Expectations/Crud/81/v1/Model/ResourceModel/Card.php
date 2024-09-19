@@ -18,7 +18,7 @@ class Card extends AbstractDb
         private readonly EntityManager $entityManager,
         private readonly MetadataPool $metadataPool,
         Context $context,
-        string $connectionName = null,
+        ?string $connectionName = null,
     ) {
         parent::__construct($context, $connectionName);
     }

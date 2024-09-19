@@ -200,6 +200,10 @@ class Crud
             $this->generateAdminUI($entity);
         }
 
+        if ($entity->hasGraphQL()) {
+            $this->generateGraphQL($entity);
+        }
+
         $acl = [new Acl($entity->getEntityAcl(), $entity->getEntityAclTitle())];
         $dbschema = $this->generateDbSchema($entity);
         $events = $this->generateEvents($entity);
@@ -238,6 +242,12 @@ class Crud
     {
         $generator = new Crud\Models($this->io);
         $generator->generateModels($entity);
+    }
+
+    private function generateGraphQL(Crud\Entity $entity)
+    {
+        $generator = new Crud\GraphQL($this->io);
+        $generator->generateSchema($entity);
     }
 
     private function generateRepository(Crud\Entity $entity)

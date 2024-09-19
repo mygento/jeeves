@@ -2,7 +2,7 @@
 
 namespace Mygento\Jeeves\Model\Crud;
 
-use Mygento\Jeeves\Generators\Crud\Controllers  as Generators;
+use Mygento\Jeeves\Generators\Crud\Controllers as Generators;
 use Mygento\Jeeves\IO\IOInterface;
 use Mygento\Jeeves\Model\Generator;
 
