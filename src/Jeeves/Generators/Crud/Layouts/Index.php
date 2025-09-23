@@ -14,7 +14,7 @@ class Index extends Common
             $writer->setIndentString(self::TAB);
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
-                'urn:magento:framework:View/Layout/etc/page_configuration.xsd'
+                'urn:magento:framework:View/Layout/etc/page_configuration.xsd',
             );
             $writer->write([
                 [

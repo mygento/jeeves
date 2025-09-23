@@ -2,7 +2,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="mygento_sample_module_columns" resource="default" engine="innodb" comment="Columns Table">
         <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" comment="Column ID"/>
-        <column xsi:type="boolean" name="is_active" nullable="false" comment="Is_active"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="1" comment="Is_active"/>
         <column xsi:type="boolean" name="has_flag" nullable="false" comment="Has_flag"/>
         <column xsi:type="date" name="merge_date" nullable="true" comment="Merge_date"/>
         <column xsi:type="decimal" name="discount" nullable="false" precision="10" scale="4" comment="Discount"/>

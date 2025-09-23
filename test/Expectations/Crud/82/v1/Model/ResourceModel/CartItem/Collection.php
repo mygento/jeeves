@@ -18,7 +18,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             CartItem::class,
-            CartItemResource::class
+            CartItemResource::class,
         );
     }
 }

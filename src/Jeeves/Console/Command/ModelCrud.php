@@ -36,7 +36,7 @@ class ModelCrud extends BaseCommand
             ->setHelp(
                 <<<EOT
 <info>php jeeves.phar generate-model-crud</info>
-EOT
+EOT,
             );
     }
 
@@ -93,14 +93,14 @@ EOT
                     throw new \InvalidArgumentException(
                         'The package name ' . $value . ' is invalid'
                             . 'and have a vendor name, a forward slash, '
-                            . 'and a package name'
+                            . 'and a package name',
                     );
                 }
 
                 return $value;
             },
             null,
-            $fullname
+            $fullname,
         );
         list($v, $m) = explode('/', $fullname);
 
@@ -112,14 +112,14 @@ EOT
                 }
                 if (!preg_match('{^[a-zA-Z]+$}', $value)) {
                     throw new \InvalidArgumentException(
-                        'The entity name ' . $value . ' is invalid'
+                        'The entity name ' . $value . ' is invalid',
                     );
                 }
 
                 return $value;
             },
             null,
-            $e
+            $e,
         );
 
         $routepath = $input->getOption('routepath') ? $input->getOption('routepath') : $m;

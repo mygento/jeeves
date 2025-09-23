@@ -102,17 +102,20 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="merge_date" formElement="input">
+        <field name="merge_date" formElement="date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">columns</item>
                 </item>
             </argument>
             <settings>
-                <dataType>date</dataType>
+                <dataType>text</dataType>
                 <label translate="true">Merge Date</label>
                 <visible>true</visible>
                 <dataScope>merge_date</dataScope>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="discount" formElement="input">
@@ -189,27 +192,27 @@
                 </validation>
             </settings>
         </field>
-        <field name="created_at" formElement="input">
+        <field name="created_at" formElement="date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">columns</item>
                 </item>
             </argument>
             <settings>
-                <dataType>date</dataType>
+                <dataType>text</dataType>
                 <label translate="true">Created At</label>
                 <visible>false</visible>
                 <dataScope>created_at</dataScope>
             </settings>
         </field>
-        <field name="updated_at" formElement="input">
+        <field name="updated_at" formElement="date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">columns</item>
                 </item>
             </argument>
             <settings>
-                <dataType>date</dataType>
+                <dataType>text</dataType>
                 <label translate="true">Updated At</label>
                 <visible>false</visible>
                 <dataScope>updated_at</dataScope>

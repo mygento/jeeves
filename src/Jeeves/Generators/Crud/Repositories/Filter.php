@@ -11,7 +11,7 @@ class Filter extends Common
         string $className,
         string $interface,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model\SearchCriteria');
         $namespace->addUse($interface);
@@ -32,7 +32,7 @@ class Filter extends Common
             . self::TAB . $namespace->simplifyType($interface) . '::STORE_ID,' . PHP_EOL
             . self::TAB . '[\'in\' => $filter->getValue()]' . PHP_EOL
             . ');' . PHP_EOL . PHP_EOL
-            . 'return true;'
+            . 'return true;',
         );
 
         return $namespace;

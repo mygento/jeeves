@@ -29,18 +29,12 @@ class Service extends AbstractService
         return [];
     }
 
-    public function createOrder(Order $order, $data = [])
-    {
-    }
+    public function createOrder(Order $order, $data = []) {}
 
     /**
      * @param int|string $orderId
      */
-    public function cancelOrder($orderId)
-    {
-    }
+    public function cancelOrder($orderId) {}
 
-    public function updateOrderStatus(Order $order)
-    {
-    }
+    public function updateOrderStatus(Order $order) {}
 }

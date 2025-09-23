@@ -22,10 +22,10 @@ class GraphQL extends Generator
                 'type ' . $entity->getEntityApiName() . ' @doc(description: "' . ($entity->getComment() ?: $entity->getPrintName()) . '") {',
                 implode(
                     PHP_EOL,
-                    $columns
+                    $columns,
                 ),
                 '}',
-            ])
+            ]),
         );
     }
 
@@ -78,7 +78,7 @@ class GraphQL extends Generator
                 return self::TAB . $column . ': ' . $type . (!$nullable ? '!' : '') . ' @doc(description: "' . ($param['comment'] ?? ucfirst($column)) . '")';
             },
             array_keys($entity->getColumns()),
-            $entity->getColumns()
+            $entity->getColumns(),
         );
 
         return array_filter($result);

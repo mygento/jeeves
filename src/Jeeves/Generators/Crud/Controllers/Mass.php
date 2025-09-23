@@ -13,7 +13,7 @@ class Mass extends Common
         string $collection,
         string $repository,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);

@@ -23,7 +23,7 @@ class Database extends Generator
                 false,
                 'Entity ID',
                 false,
-                $column !== null ? $column->getUnsigned() : true
+                $column !== null ? $column->getUnsigned() : true,
             ),
             new DbColumn(
                 'store_id',
@@ -31,7 +31,7 @@ class Database extends Generator
                 false,
                 'Store ID',
                 false,
-                true
+                true,
             ),
         ];
     }
@@ -156,7 +156,7 @@ class Database extends Generator
             $precision,
             $scale,
             $default,
-            $onUpdate
+            $onUpdate,
         );
     }
 }

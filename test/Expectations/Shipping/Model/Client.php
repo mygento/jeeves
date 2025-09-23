@@ -13,7 +13,5 @@ class Client extends AbstractClient
         parent::__construct($helper, $baseClient);
     }
 
-    public function sendApiRequest(string $method, $data, $scopeCode = null)
-    {
-    }
+    public function sendApiRequest(string $method, $data, $scopeCode = null) {}
 }

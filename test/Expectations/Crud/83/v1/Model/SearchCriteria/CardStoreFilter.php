@@ -16,7 +16,7 @@ class CardStoreFilter implements CustomFilterInterface
     {
         $collection->addFilter(
             CardInterface::STORE_ID,
-            ['in' => $filter->getValue()]
+            ['in' => $filter->getValue()],
         );
 
         return true;

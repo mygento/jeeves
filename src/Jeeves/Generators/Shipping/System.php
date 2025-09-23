@@ -97,19 +97,19 @@ class System extends Common
                     'marking_flag',
                     'Field to flag marking need',
                     'Mygento\Base\Model\Source\OrderItem',
-                    ['enabled' => 1]
+                    ['enabled' => 1],
                 ),
                 $this->dropdown(
                     'marking_field',
                     'Field with mark',
                     'Mygento\Base\Model\Source\OrderItem',
-                    ['enabled' => 1]
+                    ['enabled' => 1],
                 ),
                 $this->dropdown(
                     'marking_refund',
                     'Field with refund mark',
                     'Mygento\Base\Model\Source\OrderItem',
-                    ['enabled' => 1]
+                    ['enabled' => 1],
                 ),
             ],
         ];
@@ -131,22 +131,22 @@ class System extends Common
                     'autoshipping_statuses',
                     'Enable autoship by status',
                     'Mygento\Base\Model\Source\Status',
-                    ['autoshipping' => 1]
+                    ['autoshipping' => 1],
                 ),
                 $this->dropdown(
                     'shipment_success_status',
                     'Order status after successful shipment',
-                    'Mygento\Base\Model\Source\Status'
+                    'Mygento\Base\Model\Source\Status',
                 ),
                 $this->dropdown(
                     'shipment_fail_status',
                     'Order status after failed shipment',
-                    'Mygento\Base\Model\Source\Status'
+                    'Mygento\Base\Model\Source\Status',
                 ),
                 $this->dropdown(
                     'track_check',
                     'Enable Track Check',
-                    self::YN
+                    self::YN,
                 ),
                 [
                     self::N => 'field',
@@ -170,7 +170,7 @@ class System extends Common
                     'Mygento\Base\Model\Source\Status',
                     [
                         'track_check' => 1,
-                    ]
+                    ],
                 ),
             ],
         ];
@@ -193,7 +193,7 @@ class System extends Common
                     'Mygento\Shipment\Model\Source\Weightunits',
                     [],
                     [],
-                    ['config_path' => 'carriers/' . $method . '/weight_unit']
+                    ['config_path' => 'carriers/' . $method . '/weight_unit'],
                 ),
                 $this->dropdown(
                     'dimension_unit',
@@ -201,7 +201,7 @@ class System extends Common
                     'Mygento\Shipment\Model\Source\Dimensionunits',
                     [],
                     [],
-                    ['config_path' => 'carriers/' . $method . '/dimension_unit']
+                    ['config_path' => 'carriers/' . $method . '/dimension_unit'],
                 ),
                 $this->WLH($method),
             ],
@@ -224,25 +224,25 @@ class System extends Common
                     'tax_same',
                     'Same tax for all products',
                     self::YN,
-                    ['tax' => 1]
+                    ['tax' => 1],
                 ),
                 $this->dropdown(
                     'tax_products',
                     'Tax value for all products',
                     $namespace . '\Model\Source\Tax',
-                    ['tax' => 1, 'tax_same' => 1]
+                    ['tax' => 1, 'tax_same' => 1],
                 ),
                 $this->dropdown(
                     'tax_product_attr',
                     'Product Tax Attribute',
                     'Mygento\Base\Model\Source\Attributes',
-                    ['tax' => 1, 'tax_same' => 0]
+                    ['tax' => 1, 'tax_same' => 0],
                 ),
                 $this->dropdown(
                     'tax_shipping',
                     'Shipping Tax',
                     $namespace . '\Model\Source\Tax',
-                    ['tax' => 1]
+                    ['tax' => 1],
                 ),
             ],
         ];
@@ -259,7 +259,7 @@ class System extends Common
                 'Mygento\Base\Model\Source\Attributes',
                 [],
                 [],
-                ['config_path' => 'carriers/' . $method . '/' . $p]
+                ['config_path' => 'carriers/' . $method . '/' . $p],
             );
             $result[] = [
                 self::N => 'field',
@@ -288,7 +288,7 @@ class System extends Common
         array $field,
         bool $default = true,
         bool $website = true,
-        bool $store = true
+        bool $store = true,
     ): array {
         $field['translate'] = 'label';
         $field['showInDefault'] = $default ? '1' : '0';
@@ -304,7 +304,7 @@ class System extends Common
         string $source,
         array $depends = [],
         array $attr = [],
-        array $other = []
+        array $other = [],
     ): array {
         $value = [
             'label' => $label,
@@ -336,7 +336,7 @@ class System extends Common
         string $source,
         array $depends = [],
         array $attr = [],
-        array $other = []
+        array $other = [],
     ): array {
         $value = [
             'label' => $label,

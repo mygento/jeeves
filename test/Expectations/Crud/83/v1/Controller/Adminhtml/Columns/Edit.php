@@ -35,7 +35,7 @@ class Edit extends Columns
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(
-                    __('This Columns no longer exists')->render()
+                    __('This Columns no longer exists')->render(),
                 );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -50,11 +50,11 @@ class Edit extends Columns
         $resultPage->setActiveMenu('Mygento_SampleModule::columns');
         $resultPage->addBreadcrumb(
             $entityId ? __('Edit Columns')->render() : __('New Columns')->render(),
-            $entityId ? __('Edit Columns')->render() : __('New Columns')->render()
+            $entityId ? __('Edit Columns')->render() : __('New Columns')->render(),
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Columns')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entityId ? $entity->getTitle() : __('New Columns')->render()
+            $entityId ? $entity->getTitle() : __('New Columns')->render(),
         );
 
         return $resultPage;

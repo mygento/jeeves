@@ -14,7 +14,7 @@ class Repository extends Common
         string $print,
         string $rootNamespace,
         bool $hasApi = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Api');
         $interface = $namespace->addInterface($className);

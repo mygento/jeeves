@@ -46,7 +46,7 @@ class Save extends Columns
             } catch (NoSuchEntityException $e) {
                 if (!$entity->getId()) {
                     $this->messageManager->addErrorMessage(
-                        __('This Columns no longer exists')->render()
+                        __('This Columns no longer exists')->render(),
                     );
 
                     return $resultRedirect->setPath('*/*/');
@@ -61,7 +61,7 @@ class Save extends Columns
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(
-                __('You saved the Columns')->render()
+                __('You saved the Columns')->render(),
             );
             $this->dataPersistor->clear('sample_module_columns');
             if ($this->getRequest()->getParam('back')) {
@@ -74,7 +74,7 @@ class Save extends Columns
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
-                __('Something went wrong while saving the Columns')->render()
+                __('Something went wrong while saving the Columns')->render(),
             );
         }
         $this->dataPersistor->set('sample_module_columns', $data);

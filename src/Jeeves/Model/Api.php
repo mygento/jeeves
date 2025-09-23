@@ -15,7 +15,7 @@ class Api
         string $method,
         string $class,
         string $classMethod,
-        string $resource
+        string $resource,
     ) {
         $this->url = $url;
         $this->method = $method;

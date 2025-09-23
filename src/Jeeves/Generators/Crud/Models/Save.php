@@ -12,7 +12,7 @@ class Save extends Common
         string $interface,
         string $resourceClass,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
@@ -90,7 +90,7 @@ class Save extends Common
                 . self::TAB . '}' . PHP_EOL
                 . self::TAB . '$connection->insertMultiple($table, $data);' . PHP_EOL
                 . '}' . PHP_EOL . PHP_EOL
-                . 'return $entity;'
+                . 'return $entity;',
             );
         $execute->addParameter('entity');
         $execute->addParameter('arguments')->setDefaultValue([]);

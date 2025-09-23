@@ -21,13 +21,13 @@ class DbColumn
         string $type,
         bool $nullable,
         string $comment = '',
-        bool $identity = null,
-        bool $unsigned = null,
-        int $length = null,
-        int $precision = null,
-        int $scale = null,
-        string $default = null,
-        bool $onUpdate = null
+        ?bool $identity = null,
+        ?bool $unsigned = null,
+        ?int $length = null,
+        ?int $precision = null,
+        ?int $scale = null,
+        ?string $default = null,
+        ?bool $onUpdate = null,
     ) {
         $this->name = $name;
         $this->type = $type;

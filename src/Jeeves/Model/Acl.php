@@ -8,7 +8,7 @@ class Acl
     private $title;
     private $children;
 
-    public function __construct(string $id, string $title, array $children = null)
+    public function __construct(string $id, string $title, ?array $children = null)
     {
         $this->id = $id;
         $this->title = $title;

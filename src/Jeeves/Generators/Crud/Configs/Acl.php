@@ -74,7 +74,7 @@ class Acl extends Common
                 function ($entity) {
                     return $this->generateAdminAcl($entity);
                 },
-                $acl->getChildren()
+                $acl->getChildren(),
             );
         }
 

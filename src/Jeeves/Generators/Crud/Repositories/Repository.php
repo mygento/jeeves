@@ -17,7 +17,7 @@ class Repository extends Common
         string $entityInterface,
         string $rootNamespace,
         bool $withStore = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
@@ -185,7 +185,7 @@ class Repository extends Common
                 . self::TAB . self::TAB . '$exception' . PHP_EOL
                 . self::TAB . ');' . PHP_EOL
                 . '}' . PHP_EOL
-                . 'return $entity;'
+                . 'return $entity;',
         );
 
         $delete = $class->addMethod('delete')->setVisibility('public');

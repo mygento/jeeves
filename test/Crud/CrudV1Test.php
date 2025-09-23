@@ -11,7 +11,7 @@ class CrudV1Test extends \PHPUnit\Framework\TestCase
 {
     private const GEN_PATH = App::GEN . App::DS . 'crud' . App::DS;
     private const V = 'v1';
-    private const VARIANTS = ['8.1', '8.2', '8.3'];
+    private const VARIANTS = ['8.1', '8.2', '8.3', '8.4'];
 
     private CommandTester $commandTester;
     private string $path;

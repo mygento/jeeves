@@ -25,8 +25,7 @@ class CartItemRepository implements CartItemRepositoryInterface
         private readonly CartItemInterfaceFactory $entityFactory,
         private readonly CartItemSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionProcessorInterface $collectionProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NoSuchEntityException
@@ -37,7 +36,7 @@ class CartItemRepository implements CartItemRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('A Sample Module Cart Item with id "%1" does not exist', $entityId)
+                __('A Sample Module Cart Item with id "%1" does not exist', $entityId),
             );
         }
 
@@ -54,7 +53,7 @@ class CartItemRepository implements CartItemRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the Sample Module Cart Item'),
-                $exception
+                $exception,
             );
         }
 
@@ -70,7 +69,7 @@ class CartItemRepository implements CartItemRepositoryInterface
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __($exception->getMessage())
+                __($exception->getMessage()),
             );
         }
 

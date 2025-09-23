@@ -15,7 +15,7 @@ class AdminRoute extends Common
             function (Model\AdminRoute $route) {
                 return $this->getAdminRoute($route);
             },
-            array_values($routes)
+            array_values($routes),
         );
 
         return $service->write('config', function ($writer) use ($routeList) {

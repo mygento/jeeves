@@ -30,7 +30,7 @@ class DbSchema extends Common
                     [$primaryContraint],
                     $indexList,
                     $constraintList,
-                    $indexFKList
+                    $indexFKList,
                 ),
             ];
         }, $schema);
@@ -54,7 +54,7 @@ class DbSchema extends Common
 
                 return $indx['columns'][0];
             },
-            array_values($entity->getIndexes())
+            array_values($entity->getIndexes()),
         ));
 
         return array_filter(array_map(
@@ -71,11 +71,11 @@ class DbSchema extends Common
                     ],
                     self::V => array_map(
                         [$this, 'getIndexColumn'],
-                        [$param['column']]
+                        [$param['column']],
                     ),
                 ];
             },
-            array_values($entity->getFk())
+            array_values($entity->getFk()),
         ));
     }
 
@@ -135,7 +135,7 @@ class DbSchema extends Common
                 ];
             },
             array_keys($fk),
-            $fk
+            $fk,
         );
     }
 
@@ -174,7 +174,7 @@ class DbSchema extends Common
                         ],
                         self::V => array_map(
                             [$this, 'getIndexColumn'],
-                            $param['columns']
+                            $param['columns'],
                         ),
                     ];
                 }
@@ -187,12 +187,12 @@ class DbSchema extends Common
                     ],
                     self::V => array_map(
                         [$this, 'getIndexColumn'],
-                        $param['columns']
+                        $param['columns'],
                     ),
                 ];
             },
             array_keys($indexes),
-            $indexes
+            $indexes,
         );
     }
 

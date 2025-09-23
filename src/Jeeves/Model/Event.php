@@ -2,6 +2,4 @@
 
 namespace Mygento\Jeeves\Model;
 
-class Event
-{
-}
+class Event {}

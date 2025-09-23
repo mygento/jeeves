@@ -25,7 +25,7 @@ class Listing extends Common
         string $primaryKey,
         array $fields = self::DEFAULT_FIELDS,
         bool $readonly = false,
-        bool $withStore = false
+        bool $withStore = false,
     ): string {
         $service = $this->getService();
         if ($withStore) {
@@ -56,7 +56,7 @@ class Listing extends Common
             $writer->setIndentString(self::TAB);
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
-                'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
+                'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd',
             );
 
             $actionColumn = $readonly ? [] : [
@@ -196,7 +196,7 @@ class Listing extends Common
         string $inline,
         string $select,
         string $editor,
-        string $primaryKey
+        string $primaryKey,
     ) {
         return [
             'editorConfig' => [

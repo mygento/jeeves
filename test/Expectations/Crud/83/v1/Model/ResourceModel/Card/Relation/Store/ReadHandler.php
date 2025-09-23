@@ -10,8 +10,7 @@ class ReadHandler implements ExtensionInterface
 {
     public function __construct(
         private readonly Card $resource,
-    ) {
-    }
+    ) {}
 
     /**
      * @inheritDoc

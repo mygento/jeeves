@@ -17,12 +17,12 @@ class Configs extends Generator
     {
         $this->writeFile(
             $result->getPath() . '/etc/adminhtml/system.xml',
-            $this->genSystemXml($result)
+            $this->genSystemXml($result),
         );
 
         $this->writeFile(
             $result->getPath() . '/etc/config.xml',
-            $this->genConfigXml($result)
+            $this->genConfigXml($result),
         );
     }
 

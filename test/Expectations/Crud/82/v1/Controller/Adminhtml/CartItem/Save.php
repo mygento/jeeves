@@ -46,7 +46,7 @@ class Save extends CartItem
             } catch (NoSuchEntityException $e) {
                 if (!$entity->getId()) {
                     $this->messageManager->addErrorMessage(
-                        __('This Cart Item no longer exists')->render()
+                        __('This Cart Item no longer exists')->render(),
                     );
 
                     return $resultRedirect->setPath('*/*/');
@@ -61,7 +61,7 @@ class Save extends CartItem
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(
-                __('You saved the Cart Item')->render()
+                __('You saved the Cart Item')->render(),
             );
             $this->dataPersistor->clear('sample_module_cartitem');
             if ($this->getRequest()->getParam('back')) {
@@ -74,7 +74,7 @@ class Save extends CartItem
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
-                __('Something went wrong while saving the Cart Item')->render()
+                __('Something went wrong while saving the Cart Item')->render(),
             );
         }
         $this->dataPersistor->set('sample_module_cartitem', $data);

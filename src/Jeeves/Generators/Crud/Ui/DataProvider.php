@@ -14,7 +14,7 @@ class DataProvider extends Common
         string $className,
         string $persistor,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model\\' . ucfirst($entity));
         $namespace->addUse('Magento\Framework\App\Request\DataPersistorInterface');

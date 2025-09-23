@@ -11,11 +11,11 @@ class Model extends Common
         string $className,
         string $primary,
         string $rootNamespace,
-        string $cacheTag = null,
+        ?string $cacheTag = null,
         array $fields = self::DEFAULT_FIELDS,
         bool $hasApi = false,
         bool $withStore = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $hasTypedConst = $this->hasTypedConst($phpVersion);
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
@@ -75,9 +75,9 @@ class Model extends Common
             $param->setType($this->convertType($value['type']));
             $set->setReturnType('self');
 
-            if ($hasApi) {
+            if ($hasApi || $withStore) {
                 $get->addComment(
-                    '@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null')
+                    '@return ' . $this->convertType($value['type']) . ($notNullable ? '' : '|null'),
                 );
                 $set->addComment('@return $this');
             }
@@ -87,7 +87,7 @@ class Model extends Common
                 $param->setType(null);
 
                 $set->addComment(
-                    '@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name)
+                    '@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name),
                 );
             }
         }
@@ -107,7 +107,7 @@ class Model extends Common
 
             if ($hasApi) {
                 $getId->addComment(
-                    '@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : '')
+                    '@return ' . $this->convertType($item['type']) . ($item['nullable'] ? '|null' : ''),
                 );
             }
 
@@ -121,10 +121,10 @@ class Model extends Common
 
             $setId->addParameter(self::DEFAULT_KEY);
             $setId->addComment(
-                '@param ' . $this->convertType($item['type']) . ' $id'
+                '@param ' . $this->convertType($item['type']) . ' $id',
             );
 
-            if ($hasApi) {
+            if ($hasApi || $withStore) {
                 $setId->addComment('@return $this');
             }
 

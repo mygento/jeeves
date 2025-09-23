@@ -35,7 +35,7 @@ class Edit extends Card
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(
-                    __('This Card no longer exists')->render()
+                    __('This Card no longer exists')->render(),
                 );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -50,11 +50,11 @@ class Edit extends Card
         $resultPage->setActiveMenu('Mygento_SampleModule::card');
         $resultPage->addBreadcrumb(
             $entityId ? __('Edit Card')->render() : __('New Card')->render(),
-            $entityId ? __('Edit Card')->render() : __('New Card')->render()
+            $entityId ? __('Edit Card')->render() : __('New Card')->render(),
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Card')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entityId ? $entity->getTitle() : __('New Card')->render()
+            $entityId ? $entity->getTitle() : __('New Card')->render(),
         );
 
         return $resultPage;

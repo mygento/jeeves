@@ -21,7 +21,7 @@ class Workplace extends BaseCommand
             ->setHelp(
                 <<<EOT
 <info>php jeeves.phar workplace</info>
-EOT
+EOT,
             );
     }
 
@@ -39,7 +39,7 @@ EOT
                 return $value;
             },
             null,
-            $name
+            $name,
         );
 
         $path = $input->getOption('path') . '/';
@@ -71,7 +71,7 @@ EOT
                     'type' => 'magento2',
                 ],
             ],
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES,
         );
     }
 }

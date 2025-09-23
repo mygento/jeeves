@@ -37,7 +37,7 @@ class Collection extends AbstractCollection
             $fetchStrategy,
             $eventManager,
             $connection,
-            $resource
+            $resource,
         );
     }
 
@@ -48,7 +48,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Card::class,
-            CardResource::class
+            CardResource::class,
         );
     }
 
@@ -63,7 +63,7 @@ class Collection extends AbstractCollection
 
         $connection = $this->getConnection();
         $select = $connection->select()->from(
-            ['entity_store' => $this->getTable($this->getMainTable() . '_store')]
+            ['entity_store' => $this->getTable($this->getMainTable() . '_store')],
         )->where('entity_store.entity_id IN (?)', $linkedIds);
 
         $result = $connection->fetchAll($select);
@@ -97,7 +97,7 @@ class Collection extends AbstractCollection
         $this->getSelect()->join(
             ['store_table' => $this->getMainTable() . '_store'],
             'main_table.' . $linkField . ' = store_table.entity_id',
-            []
+            [],
         )->group('main_table.' . $linkField);
 
         parent::_renderFiltersBefore();

@@ -134,7 +134,8 @@ class Common extends \Mygento\Jeeves\Generators\Common
     {
         $method = $this->snakeCaseToUpperCamelCase($name);
         if ($params['type'] === 'boolean') {
-            if (str_starts_with($name, 'is_') ||
+            if (
+                str_starts_with($name, 'is_') ||
                 str_starts_with($name, 'has_') ||
                 str_starts_with($name, 'can_') ||
                 str_starts_with($name, 'should_')

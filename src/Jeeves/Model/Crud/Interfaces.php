@@ -36,8 +36,8 @@ class Interfaces extends Generator
                 $entity->getColumns(),
                 $entity->hasApi(),
                 $entity->withStore(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 
@@ -57,8 +57,8 @@ class Interfaces extends Generator
                 $this->getConverter()->getEntityPrintName($entity->getName()),
                 $entity->getNamespace(),
                 $entity->hasApi(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 
@@ -77,8 +77,8 @@ class Interfaces extends Generator
                 $this->getConverter()->getEntityPrintName($entity->getName()),
                 $namePath . $entity->getEntityName() . 'Interface',
                 $entity->getNamespace(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 }

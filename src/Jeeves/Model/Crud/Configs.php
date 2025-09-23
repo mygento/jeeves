@@ -43,7 +43,7 @@ class Configs extends Generator
 
         $this->writeFile(
             $result->getPath() . '/etc/adminhtml/routes.xml',
-            $generator->generateAdminRoutes($result->getAdminRoute())
+            $generator->generateAdminRoutes($result->getAdminRoute()),
         );
     }
 
@@ -57,7 +57,7 @@ class Configs extends Generator
 
         $this->writeFile(
             $result->getPath() . '/etc/acl.xml',
-            $generator->generateAdminAcls($result->getAclEntities(), $result->getAclConfigs())
+            $generator->generateAdminAcls($result->getAclEntities(), $result->getAclConfigs()),
         );
     }
 
@@ -71,7 +71,7 @@ class Configs extends Generator
 
         $this->writeFile(
             $result->getPath() . '/etc/adminhtml/menu.xml',
-            $generator->generateAdminMenu($result->getMenu())
+            $generator->generateAdminMenu($result->getMenu()),
         );
     }
 
@@ -81,8 +81,8 @@ class Configs extends Generator
         $this->writeFile(
             $result->getPath() . '/etc/di.xml',
             $generator->generateDI(
-                $result->getDi()
-            )
+                $result->getDi(),
+            ),
         );
     }
 
@@ -92,7 +92,7 @@ class Configs extends Generator
 
         $this->writeFile(
             $result->getPath() . '/etc/db_schema.xml',
-            $generator->generateSchema($result->getDbSchema())
+            $generator->generateSchema($result->getDbSchema()),
         );
     }
 
@@ -105,7 +105,7 @@ class Configs extends Generator
 
         $this->writeFile(
             $result->getPath() . '/etc/events.xml',
-            $generator->generateEvents($result->getEvents())
+            $generator->generateEvents($result->getEvents()),
         );
     }
 
@@ -114,7 +114,7 @@ class Configs extends Generator
         $generator = new Module();
         $this->writeFile(
             $result->getPath() . '/etc/module.xml',
-            $generator->generateModule($result->getModule())
+            $generator->generateModule($result->getModule()),
         );
     }
 
@@ -126,7 +126,7 @@ class Configs extends Generator
         $generator = new WebApi();
         $this->writeFile(
             $result->getPath() . '/etc/webapi.xml',
-            $generator->generateWebAPI($result->getWebApi())
+            $generator->generateWebAPI($result->getWebApi()),
         );
     }
 
@@ -138,7 +138,7 @@ class Configs extends Generator
             '\Magento\Framework\Component\ComponentRegistrar::register(' . PHP_EOL .
             '   \Magento\Framework\Component\ComponentRegistrar::MODULE,' . PHP_EOL .
             '   \'' . $result->getModule() . '\',' . PHP_EOL .
-            '   __DIR__' . PHP_EOL . ');'
+            '   __DIR__' . PHP_EOL . ');',
         );
     }
 }

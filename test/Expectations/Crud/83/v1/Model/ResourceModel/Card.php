@@ -76,7 +76,7 @@ class Card extends AbstractDb
             ->join(
                 ['e' => $this->getMainTable()],
                 'es.entity_id = e.' . $linkField,
-                []
+                [],
             )
             ->where('e.' . $entityMetadata->getIdentifierField() . ' = :entity_id');
 

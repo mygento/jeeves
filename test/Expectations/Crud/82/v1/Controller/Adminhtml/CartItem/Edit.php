@@ -35,7 +35,7 @@ class Edit extends CartItem
                 $entity = $this->repository->getById($entityId);
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(
-                    __('This Cart Item no longer exists')->render()
+                    __('This Cart Item no longer exists')->render(),
                 );
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -50,11 +50,11 @@ class Edit extends CartItem
         $resultPage->setActiveMenu('Mygento_SampleModule::cartitem');
         $resultPage->addBreadcrumb(
             $entityId ? __('Edit Cart Item')->render() : __('New Cart Item')->render(),
-            $entityId ? __('Edit Cart Item')->render() : __('New Cart Item')->render()
+            $entityId ? __('Edit Cart Item')->render() : __('New Cart Item')->render(),
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Cart Item')->render());
         $resultPage->getConfig()->getTitle()->prepend(
-            $entityId ? $entity->getTitle() : __('New Cart Item')->render()
+            $entityId ? $entity->getTitle() : __('New Cart Item')->render(),
         );
 
         return $resultPage;

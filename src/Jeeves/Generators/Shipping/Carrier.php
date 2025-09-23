@@ -12,7 +12,7 @@ class Carrier extends Common
         string $service,
         string $helper,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Quote\Model\Quote\Address\RateRequest');
@@ -55,7 +55,7 @@ class Carrier extends Common
             . self::TAB . '$rateErrorFactory,' . PHP_EOL
             . self::TAB . '$logger,' . PHP_EOL
             . self::TAB . '$data' . PHP_EOL
-            . ');'
+            . ');',
         );
 
         $collect = $class->addMethod('collectRates')
@@ -84,7 +84,7 @@ class Carrier extends Common
             . self::TAB . '$result->append($this->createRateMethod($method));' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'Profiler::stop($this->_code . \'_collect_rate\');' . PHP_EOL
-            . 'return $result;' . PHP_EOL
+            . 'return $result;' . PHP_EOL,
         );
 
         return $namespace;
@@ -112,7 +112,7 @@ class Carrier extends Common
 
         $construct->setBody(
             '$this->client = $client;' . PHP_EOL . PHP_EOL
-            . 'parent::__construct($baseService, $helper, $searchBuilder);' . PHP_EOL
+            . 'parent::__construct($baseService, $helper, $searchBuilder);' . PHP_EOL,
         );
 
         $class->addProperty('client')->setType($client)
@@ -164,7 +164,7 @@ class Carrier extends Common
         $construct->addParameter('baseClient')->setType('\Mygento\Shipment\Model\Client');
 
         $construct->setBody(
-            'parent::__construct($helper, $baseClient);' . PHP_EOL
+            'parent::__construct($helper, $baseClient);' . PHP_EOL,
         );
 
         $send = $class->addMethod('sendApiRequest')

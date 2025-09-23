@@ -25,8 +25,7 @@ class PosterRepository implements PosterRepositoryInterface
         private readonly PosterInterfaceFactory $entityFactory,
         private readonly PosterSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionProcessorInterface $collectionProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NoSuchEntityException
@@ -37,7 +36,7 @@ class PosterRepository implements PosterRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('A Sample Module Poster with id "%1" does not exist', $entityId)
+                __('A Sample Module Poster with id "%1" does not exist', $entityId),
             );
         }
 
@@ -54,7 +53,7 @@ class PosterRepository implements PosterRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the Sample Module Poster'),
-                $exception
+                $exception,
             );
         }
 
@@ -70,7 +69,7 @@ class PosterRepository implements PosterRepositoryInterface
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __($exception->getMessage())
+                __($exception->getMessage()),
             );
         }
 

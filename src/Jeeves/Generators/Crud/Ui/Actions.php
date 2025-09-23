@@ -13,7 +13,7 @@ class Actions extends Common
         string $className,
         string $primaryKey,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Ui\Component\Listing');
         $class = $namespace->addClass($className);

@@ -130,8 +130,8 @@ class Shipping extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
                 $generator->genHelper(
                     strtolower($carrier),
-                    $this->mod->getNamespace()
-                )
+                    $this->mod->getNamespace(),
+                ),
         );
     }
 
@@ -148,8 +148,8 @@ class Shipping extends Generator
                     strtolower($carrier),
                     $namePath . 'Model\\Service',
                     $namePath . 'Helper\\Data',
-                    $this->mod->getNamespace()
-                )
+                    $this->mod->getNamespace(),
+                ),
         );
     }
 
@@ -164,8 +164,8 @@ class Shipping extends Generator
             '<?php' . PHP_EOL . PHP_EOL .
                 $generator->genClient(
                     $namePath . 'Helper\\Data',
-                    $this->mod->getNamespace()
-                )
+                    $this->mod->getNamespace(),
+                ),
         );
     }
 
@@ -181,8 +181,8 @@ class Shipping extends Generator
                 $generator->genService(
                     $namePath . 'Model\\Client',
                     $namePath . 'Helper\\Data',
-                    $this->mod->getNamespace()
-                )
+                    $this->mod->getNamespace(),
+                ),
         );
     }
 
@@ -195,8 +195,8 @@ class Shipping extends Generator
             $filePath . $fileName . '.php',
             '<?php' . PHP_EOL . PHP_EOL .
                 $generator->genTax(
-                    $this->mod->getNamespace()
-                )
+                    $this->mod->getNamespace(),
+                ),
         );
     }
 }

@@ -25,9 +25,7 @@ class Entity extends Generator
     private $adminRoute;
     private $comment;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function getConfig()
     {
@@ -219,7 +217,7 @@ class Entity extends Generator
             . str_replace(
                 '_',
                 '',
-                $this->getConverter()->camelCaseToSnakeCase($this->name)
+                $this->getConverter()->camelCaseToSnakeCase($this->name),
             );
     }
 

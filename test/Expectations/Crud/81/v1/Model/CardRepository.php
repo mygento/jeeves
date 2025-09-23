@@ -27,8 +27,7 @@ class CardRepository implements CardRepositoryInterface
         private readonly CardSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly StoreManagerInterface $storeManager,
         private readonly CollectionProcessorInterface $collectionProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NoSuchEntityException
@@ -39,7 +38,7 @@ class CardRepository implements CardRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('A Sample Module Card with id "%1" does not exist', $entityId)
+                __('A Sample Module Card with id "%1" does not exist', $entityId),
             );
         }
 
@@ -60,7 +59,7 @@ class CardRepository implements CardRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the Sample Module Card'),
-                $exception
+                $exception,
             );
         }
 
@@ -76,7 +75,7 @@ class CardRepository implements CardRepositoryInterface
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __($exception->getMessage())
+                __($exception->getMessage()),
             );
         }
 

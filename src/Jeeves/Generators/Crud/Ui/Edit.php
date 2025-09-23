@@ -19,7 +19,7 @@ class Edit extends Common
         string $entity,
         string $primary,
         array $fields = self::DEFAULT_FIELDS,
-        bool $withStore = false
+        bool $withStore = false,
     ): string {
         $service = $this->getService();
         if ($withStore) {
@@ -37,7 +37,7 @@ class Edit extends Common
         return $service->write('form', function ($writer) use ($uiComponent, $dataSource, $submit, $provider, $fieldset, $primary) {
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
-                'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd'
+                'urn:magento:module:Magento_Ui:etc/ui_configuration.xsd',
             );
             $writer->setIndentString(self::TAB);
             $writer->write([
@@ -232,8 +232,8 @@ class Edit extends Common
             case 'date':
             case 'datetime':
             case 'timestamp':
-                $dataType = 'date';
-                $formElement = 'input';
+                $dataType = 'text';
+                $formElement = 'date';
                 break;
             case 'bool':
             case 'boolean':
@@ -299,7 +299,7 @@ class Edit extends Common
             $this->setFormElements($field, $param),
             $param,
             $notNullable,
-            $visible
+            $visible,
         );
     }
 
@@ -412,6 +412,16 @@ class Edit extends Common
                     ];
                 }
                 break;
+            case 'date':
+                $rules[] = [
+                    self::N => 'rule',
+                    self::A => [
+                        self::N => 'validate-date',
+                        'xsi:type' => 'boolean',
+                    ],
+                    self::V => 'true',
+                ];
+                // no break
             default:
                 break;
         }

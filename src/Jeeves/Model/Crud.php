@@ -139,17 +139,17 @@ class Crud
                 $mod->getFullname() => new Acl(
                     $mod->getFullname() . '::root',
                     $mod->getFullPrintName(),
-                    $aclEntity
+                    $aclEntity,
                 ),
-            ]
+            ],
         );
         $result->updateAclConfigs(
             [
                 new Acl(
                     $mod->getFullname() . '::config',
-                    $mod->getFullPrintName()
+                    $mod->getFullPrintName(),
                 ),
-            ]
+            ],
         );
 
         if ($gui) {
@@ -158,9 +158,9 @@ class Crud
                     $mod->getFullname() => new AdminRoute(
                         $mod->getRouteName(),
                         $mod->getFullname(),
-                        $mod->getAdminRoute()
+                        $mod->getAdminRoute(),
                     ),
-                ]
+                ],
             );
         }
 
@@ -171,7 +171,7 @@ class Crud
                     $mod->getPrintName(),
                     $mod->getFullname(),
                     'Magento_Backend::stores',
-                    $mod->getFullname() . '::root'
+                    $mod->getFullname() . '::root',
                 ),
             ]);
             $result->updateMenu($menuEntity);
@@ -215,7 +215,7 @@ class Crud
                 $entity->getFullname(),
                 $entity->getFullname() . '::root',
                 $entity->getFullname() . '::' . $entity->getEntityLowercase(),
-                $entity->getModule()->getAdminRoute() . '/' . $entity->getEntityLowercase()
+                $entity->getModule()->getAdminRoute() . '/' . $entity->getEntityLowercase(),
             ),
         ];
 
@@ -298,7 +298,7 @@ class Crud
                 $fk,
                 [
                     $entity->getPrimaryKey(),
-                ]
+                ],
             ),
         ];
 
@@ -311,7 +311,7 @@ class Crud
                 $comment . ' With Store',
                 $generator->getIndexesPerStore($entity),
                 $generator->getFkPerStore($entity),
-                $generator->getPrimaryPerStore()
+                $generator->getPrimaryPerStore(),
             );
         }
 

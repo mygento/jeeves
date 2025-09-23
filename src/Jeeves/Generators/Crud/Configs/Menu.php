@@ -13,7 +13,7 @@ class Menu extends Common
             function ($entity) {
                 return $this->getAdminMenuEntity($entity);
             },
-            $entities
+            $entities,
         );
         $service = $this->getService();
 

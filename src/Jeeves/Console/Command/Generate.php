@@ -17,7 +17,7 @@ class Generate extends BaseCommand
             ->setHelp(
                 <<<EOT
 <info>php jeeves.phar generate</info>
-EOT
+EOT,
             );
     }
 

@@ -25,8 +25,7 @@ class ColumnsRepository implements ColumnsRepositoryInterface
         private readonly ColumnsInterfaceFactory $entityFactory,
         private readonly ColumnsSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionProcessorInterface $collectionProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NoSuchEntityException
@@ -37,7 +36,7 @@ class ColumnsRepository implements ColumnsRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('A Sample Module Columns with id "%1" does not exist', $entityId)
+                __('A Sample Module Columns with id "%1" does not exist', $entityId),
             );
         }
 
@@ -54,7 +53,7 @@ class ColumnsRepository implements ColumnsRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the Sample Module Columns'),
-                $exception
+                $exception,
             );
         }
 
@@ -70,7 +69,7 @@ class ColumnsRepository implements ColumnsRepositoryInterface
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __($exception->getMessage())
+                __($exception->getMessage()),
             );
         }
 

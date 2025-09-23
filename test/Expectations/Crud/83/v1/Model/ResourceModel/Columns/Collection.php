@@ -18,7 +18,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Columns::class,
-            ColumnsResource::class
+            ColumnsResource::class,
         );
     }
 }

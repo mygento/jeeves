@@ -32,7 +32,7 @@ class Columns extends AbstractModel implements ColumnsInterface
      */
     public function isActive(): bool
     {
-        return $this->getData(self::IS_ACTIVE);
+        return (bool) $this->getData(self::IS_ACTIVE);
     }
 
     /**

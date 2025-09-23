@@ -56,7 +56,7 @@ class ErrorHandler
      *
      * @param IOInterface|null $io
      */
-    public static function register(IOInterface $io = null)
+    public static function register(?IOInterface $io = null)
     {
         set_error_handler([__CLASS__, 'handle']);
         error_reporting(E_ALL | E_STRICT);

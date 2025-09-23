@@ -35,7 +35,7 @@ class Carrier extends AbstractCarrier
             $scopeConfig,
             $rateErrorFactory,
             $logger,
-            $data
+            $data,
         );
     }
 

@@ -47,7 +47,7 @@ class Ticket extends AbstractModel implements TicketInterface
      */
     public function isActive(): bool
     {
-        return $this->getData(self::IS_ACTIVE);
+        return (bool) $this->getData(self::IS_ACTIVE);
     }
 
     /**

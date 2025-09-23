@@ -13,10 +13,10 @@ class Model extends Common
         string $resource,
         string $rootNamespace,
         string $event,
-        string $cacheTag = null,
+        ?string $cacheTag = null,
         array $fields = self::DEFAULT_FIELDS,
         bool $withStore = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse('Magento\Framework\Model\AbstractModel');
@@ -63,11 +63,16 @@ class Model extends Common
                 $generated = true;
             }
 
+            $cast = ' ';
+            if ($notNullable && $value['type'] == 'boolean') {
+                $cast = ' (bool) ';
+            }
+
             $getterName = $this->createGetterName($name, $value);
             $getter = $class->addMethod($getterName[0])
                 ->addComment($getterName[1])
                 ->setVisibility('public')
-                ->setBody('return $this->getData(self::' . strtoupper($name) . ');');
+                ->setBody('return' . $cast . '$this->getData(self::' . strtoupper($name) . ');');
 
             $setterName = $this->createSetterName($name, $value);
             $setter = $class->addMethod($setterName[0])

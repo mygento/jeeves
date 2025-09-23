@@ -11,7 +11,7 @@ class Menu
     private $resource;
     private $action;
 
-    public function __construct(string $id, string $name, string $code, string $parent, string $resource, string $action = null)
+    public function __construct(string $id, string $name, string $code, string $parent, string $resource, ?string $action = null)
     {
         $this->id = $id;
         $this->name = $name;

@@ -2,5 +2,9 @@
 <ruleset name="Jeeves">
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/test/Expectations*</exclude-pattern>
-    <rule ref="PSR2"/>
+    <rule ref="PSR12">
+        <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+    </rule>
 </ruleset>

@@ -18,7 +18,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Ticket::class,
-            TicketResource::class
+            TicketResource::class,
         );
     }
 }

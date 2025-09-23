@@ -10,7 +10,7 @@ class Delete extends Common
     public function genAdminDeleteController(
         string $entity,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Controller\Adminhtml\\' . $entity);
 

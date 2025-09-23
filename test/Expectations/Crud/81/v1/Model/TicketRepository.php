@@ -25,8 +25,7 @@ class TicketRepository implements TicketRepositoryInterface
         private readonly TicketInterfaceFactory $entityFactory,
         private readonly TicketSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionProcessorInterface $collectionProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NoSuchEntityException
@@ -37,7 +36,7 @@ class TicketRepository implements TicketRepositoryInterface
         $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(
-                __('A Sample Module Ticket with id "%1" does not exist', $entityId)
+                __('A Sample Module Ticket with id "%1" does not exist', $entityId),
             );
         }
 
@@ -54,7 +53,7 @@ class TicketRepository implements TicketRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the Sample Module Ticket'),
-                $exception
+                $exception,
             );
         }
 
@@ -70,7 +69,7 @@ class TicketRepository implements TicketRepositoryInterface
             $this->resource->delete($entity);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __($exception->getMessage())
+                __($exception->getMessage()),
             );
         }
 

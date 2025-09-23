@@ -22,7 +22,7 @@ class DbTable
         array $fk = [],
         array $primary = [],
         string $resource = 'default',
-        string $engine = 'innodb'
+        string $engine = 'innodb',
     ) {
         $this->columns = $columns;
         $this->resource = $resource;

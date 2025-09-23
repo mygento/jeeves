@@ -13,7 +13,7 @@ class Search extends Common
         string $print,
         string $entInterface,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Api\Data');
         $namespace->addUse('\Magento\Framework\Api\SearchResultsInterface');

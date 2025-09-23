@@ -21,14 +21,14 @@ class Apis extends Generator
                 'GET',
                 $repo,
                 'getById',
-                $entity->getEntityAcl()
+                $entity->getEntityAcl(),
             ),
             new Api(
                 $entity->getEntityApiName() . '/search',
                 'GET',
                 $repo,
                 'getList',
-                $entity->getEntityAcl()
+                $entity->getEntityAcl(),
             ),
         ];
         if (!$entity->isReadOnly()) {
@@ -37,21 +37,21 @@ class Apis extends Generator
                 'POST',
                 $repo,
                 'save',
-                $entity->getEntityAcl()
+                $entity->getEntityAcl(),
             );
             $api[] = new Api(
                 $entity->getEntityApiName() . '/:id',
                 'PUT',
                 $repo,
                 'save',
-                $entity->getEntityAcl()
+                $entity->getEntityAcl(),
             );
             $api[] = new Api(
                 $entity->getEntityApiName() . '/:entityId',
                 'DELETE',
                 $repo,
                 'deleteById',
-                $entity->getEntityAcl()
+                $entity->getEntityAcl(),
             );
         }
 

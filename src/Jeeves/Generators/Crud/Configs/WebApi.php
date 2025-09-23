@@ -47,7 +47,7 @@ class WebApi extends Common
             $writer->setIndentString(self::TAB);
             $writer->writeAttribute(
                 'xsi:noNamespaceSchemaLocation',
-                'urn:magento:module:Magento_Webapi:etc/webapi.xsd'
+                'urn:magento:module:Magento_Webapi:etc/webapi.xsd',
             );
             $writer->write($entityList);
         });

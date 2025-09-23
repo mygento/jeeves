@@ -82,7 +82,7 @@ abstract class BaseCommand extends Command
                 'stop-on-violation' => false,
             ],
             getcwd(),
-            new \PhpCsFixer\ToolInfo()
+            new \PhpCsFixer\ToolInfo(),
         );
         $errorsManager = new \PhpCsFixer\Error\ErrorsManager();
         $runner = new \PhpCsFixer\Runner\Runner(
@@ -95,7 +95,7 @@ abstract class BaseCommand extends Command
             $resolver->isDryRun(),
             $resolver->getCacheManager(),
             $resolver->getDirectory(),
-            $resolver->shouldStopOnViolation()
+            $resolver->shouldStopOnViolation(),
         );
 
         $io = $this->getIO();
@@ -126,7 +126,7 @@ abstract class BaseCommand extends Command
         $io = $this->getIO();
         $io->write(['', sprintf(
             'Files that were not fixed due to errors reported during %s:',
-            $process
+            $process,
         )]);
         foreach ($errors as $i => $error) {
             $io->writeError(sprintf('%4d) %s', $i + 1, $error->getFilePath()));

@@ -33,7 +33,7 @@ class Layouts extends Generator
         $path = $parent . '_index';
         $this->writeFile(
             $entity->getPath() . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutIndex($uiComponent)
+            $generator->generateAdminLayoutIndex($uiComponent),
         );
     }
 
@@ -44,7 +44,7 @@ class Layouts extends Generator
         $path = $parent . '_edit';
         $this->writeFile(
             $entity->getPath() . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutEdit($editUiComponent)
+            $generator->generateAdminLayoutEdit($editUiComponent),
         );
     }
 
@@ -54,7 +54,7 @@ class Layouts extends Generator
         $path = $parent . '_new';
         $this->writeFile(
             $entity->getPath() . '/view/adminhtml/layout/' . $path . '.xml',
-            $generator->generateAdminLayoutNew($editUiComponent)
+            $generator->generateAdminLayoutNew($editUiComponent),
         );
     }
 }

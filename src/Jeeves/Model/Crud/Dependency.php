@@ -38,7 +38,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         );
     }
 
@@ -54,7 +54,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         );
     }
 
@@ -70,7 +70,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         );
     }
 
@@ -87,7 +87,7 @@ class Dependency extends Generator
                     self::V => $entity->getNamespace() . '\\Api\\' . $entity->getEntityName() . 'RepositoryInterface',
                 ];
             },
-            $entities
+            $entities,
         );
 
         return [
@@ -151,7 +151,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         ));
     }
 
@@ -212,7 +212,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         );
     }
 
@@ -238,7 +238,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         );
     }
 
@@ -259,7 +259,7 @@ class Dependency extends Generator
                     self::V => $entity->getNamespace() . '\\Model\\ResourceModel\\' . $entity->getEntityName() . '\\Grid\\Collection',
                 ];
             },
-            $entities
+            $entities,
         ));
 
         if (empty($result)) {
@@ -340,7 +340,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         ));
     }
 
@@ -378,7 +378,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         ));
 
         if (empty($result)) {
@@ -473,7 +473,7 @@ class Dependency extends Generator
                     ],
                 ];
             },
-            $entities
+            $entities,
         ));
 
         if (empty($result)) {
@@ -516,7 +516,7 @@ class Dependency extends Generator
                     self::V => 'Magento\Framework\EntityManager\AbstractModelHydrator',
                 ];
             },
-            $entities
+            $entities,
         ));
 
         if (empty($result)) {

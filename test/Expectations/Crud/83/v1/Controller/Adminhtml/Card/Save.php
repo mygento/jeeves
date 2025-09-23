@@ -46,7 +46,7 @@ class Save extends Card
             } catch (NoSuchEntityException $e) {
                 if (!$entity->getId()) {
                     $this->messageManager->addErrorMessage(
-                        __('This Card no longer exists')->render()
+                        __('This Card no longer exists')->render(),
                     );
 
                     return $resultRedirect->setPath('*/*/');
@@ -61,7 +61,7 @@ class Save extends Card
         try {
             $this->repository->save($entity);
             $this->messageManager->addSuccessMessage(
-                __('You saved the Card')->render()
+                __('You saved the Card')->render(),
             );
             $this->dataPersistor->clear('sample_module_card');
             if ($this->getRequest()->getParam('back')) {
@@ -74,7 +74,7 @@ class Save extends Card
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
-                __('Something went wrong while saving the Card')->render()
+                __('Something went wrong while saving the Card')->render(),
             );
         }
         $this->dataPersistor->set('sample_module_card', $data);

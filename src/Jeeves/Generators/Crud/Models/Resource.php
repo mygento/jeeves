@@ -14,7 +14,7 @@ class Resource extends Common
         string $rootNamespace,
         string $interface,
         bool $withStore = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
@@ -150,7 +150,7 @@ class Resource extends Common
             . self::TAB . ')' . PHP_EOL
             . self::TAB . '->where(\'e.\' . $entityMetadata->getIdentifierField() . \' = :entity_id\');' . PHP_EOL . PHP_EOL
 
-            . 'return $connection->fetchCol($select, [\'entity_id\' => (int) $id]);'
+            . 'return $connection->fetchCol($select, [\'entity_id\' => (int) $id]);',
         );
 
         return $namespace;

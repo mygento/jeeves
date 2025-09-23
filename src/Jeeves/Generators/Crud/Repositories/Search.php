@@ -11,7 +11,7 @@ class Search extends Common
         string $className,
         string $interface,
         string $rootNamespace,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ): PhpNamespace {
         $namespace = new PhpNamespace($rootNamespace . '\Model');
         $namespace->addUse($interface);

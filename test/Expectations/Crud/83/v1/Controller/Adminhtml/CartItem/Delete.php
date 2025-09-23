@@ -17,7 +17,7 @@ class Delete extends CartItem
         $entityId = (int) $this->getRequest()->getParam('id');
         if (!$entityId) {
             $this->messageManager->addErrorMessage(
-                __('We can not find a Cart Item to delete.')->render()
+                __('We can not find a Cart Item to delete.')->render(),
             );
 
             return $resultRedirect->setPath('*/*/');
@@ -26,7 +26,7 @@ class Delete extends CartItem
         try {
             $this->repository->deleteById($entityId);
             $this->messageManager->addSuccessMessage(
-                __('You deleted the Cart Item')->render()
+                __('You deleted the Cart Item')->render(),
             );
 
             return $resultRedirect->setPath('*/*/');

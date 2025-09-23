@@ -17,7 +17,7 @@ class Delete extends Columns
         $entityId = (int) $this->getRequest()->getParam('id');
         if (!$entityId) {
             $this->messageManager->addErrorMessage(
-                __('We can not find a Columns to delete.')->render()
+                __('We can not find a Columns to delete.')->render(),
             );
 
             return $resultRedirect->setPath('*/*/');
@@ -26,7 +26,7 @@ class Delete extends Columns
         try {
             $this->repository->deleteById($entityId);
             $this->messageManager->addSuccessMessage(
-                __('You deleted the Columns')->render()
+                __('You deleted the Columns')->render(),
             );
 
             return $resultRedirect->setPath('*/*/');

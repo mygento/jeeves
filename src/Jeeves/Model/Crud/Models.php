@@ -39,8 +39,8 @@ class Models extends Generator
                 $entity->getCacheTag(),
                 $entity->getColumns(),
                 $entity->withStore(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 
@@ -59,8 +59,8 @@ class Models extends Generator
                 $entity->getNamespace(),
                 $entity->getEntityName() . 'Interface',
                 $entity->withStore(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 
@@ -81,8 +81,8 @@ class Models extends Generator
                 $entity->getEntityName() . 'Interface',
                 $entity->getPrimaryKey(),
                 $entity->withStore(),
-                $entity->getPhpVersion()
-            )
+                $entity->getPhpVersion(),
+            ),
         );
     }
 }

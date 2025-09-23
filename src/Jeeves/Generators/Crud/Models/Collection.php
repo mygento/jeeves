@@ -16,7 +16,7 @@ class Collection extends Common
         string $interface,
         string $key,
         bool $withStore = false,
-        string $phpVersion = PHP_VERSION
+        string $phpVersion = PHP_VERSION,
     ) {
         $constructorProp = $this->hasConstructorProp($phpVersion);
         $readonlyProp = $this->hasReadOnlyProp($phpVersion);
@@ -140,7 +140,7 @@ class Collection extends Common
             . 'foreach ($this as $item) {' . PHP_EOL
             . self::TAB . '$item->setData(\'store_id\', $stores);' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
-            . 'return parent::_afterLoad();'
+            . 'return parent::_afterLoad();',
         );
 
         $renderFilterBefore = $class->addMethod('_renderFiltersBefore')->setVisibility('protected');
@@ -159,7 +159,7 @@ class Collection extends Common
             . self::TAB . '[]'
             . ')->group(\'main_table.\' . $linkField);' . PHP_EOL . PHP_EOL
 
-            . 'parent::_renderFiltersBefore();'
+            . 'parent::_renderFiltersBefore();',
         );
 
         return $namespace;

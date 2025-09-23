@@ -18,7 +18,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Poster::class,
-            PosterResource::class
+            PosterResource::class,
         );
     }
 }

@@ -31,7 +31,7 @@ class CartItem extends AbstractModel implements CartItemInterface
      */
     public function isActive(): bool
     {
-        return $this->getData(self::IS_ACTIVE);
+        return (bool) $this->getData(self::IS_ACTIVE);
     }
 
     /**

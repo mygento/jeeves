@@ -15,6 +15,7 @@ Mygento:
             comment: "Column ID"
           is_active:
             type: boolean
+            default: 1
           has_flag:
             type: boolean
             nullable: true

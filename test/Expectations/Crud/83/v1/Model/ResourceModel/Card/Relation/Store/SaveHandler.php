@@ -12,8 +12,7 @@ class SaveHandler implements ExtensionInterface
     public function __construct(
         private readonly Card $resource,
         private readonly MetadataPool $metadataPool,
-    ) {
-    }
+    ) {}
 
     /**
      * @inheritDoc
