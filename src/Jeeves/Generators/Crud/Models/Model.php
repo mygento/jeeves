@@ -63,23 +63,38 @@ class Model extends Common
                 $generated = true;
             }
 
-            $cast = ' ';
+            $cast = '';
             if ($notNullable && $value['type'] == 'boolean') {
-                $cast = ' (bool) ';
+                $cast = '(bool) ';
+            }
+            if ($notNullable && $withStore) {
+                $cast = '(' . $this->convertType($value['type']) . ') ';
+            }
+            $getterBody = '$this->getData(self::' . strtoupper($name) . ')';
+            if ($value['type'] == 'json') {
+                $cast = '';
+                $getterBody = 'json_decode($this->getData(self::OPTIONS) ?? ' . ($notNullable ? '\'[]\'' : '\'null\'') . ', true)';
             }
 
             $getterName = $this->createGetterName($name, $value);
             $getter = $class->addMethod($getterName[0])
                 ->addComment($getterName[1])
                 ->setVisibility('public')
-                ->setBody('return' . $cast . '$this->getData(self::' . strtoupper($name) . ');');
+                ->setBody('return ' . $cast . $getterBody . ';');
 
             $setterName = $this->createSetterName($name, $value);
             $setter = $class->addMethod($setterName[0])
                 ->addComment($setterName[1])
                 ->setVisibility('public');
             $setParam = $setter->addParameter($this->snakeCaseToCamelCase($name));
-            $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', $' . $this->snakeCaseToCamelCase($name) . ');');
+            $setterBody = '$' . $this->snakeCaseToCamelCase($name);
+            if ($value['type'] == 'json' && !$notNullable) {
+                $setterBody = 'null !== $options ? json_encode($options) : null';
+            }
+            if ($value['type'] == 'json' && $notNullable) {
+                $setterBody = 'json_encode($options)';
+            }
+            $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', ' . $setterBody . ');');
 
             $getter->setReturnType($this->convertType($value['type']));
             $getter->setReturnNullable($generated ? true : !$notNullable);

@@ -123,6 +123,7 @@ class Database extends Generator
             case 'text':
             case 'mediumtext':
             case 'longtext':
+            case 'json':
                 break;
             case 'varchar':
                 $length = $param['length'] ?? 255;

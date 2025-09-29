@@ -171,6 +171,22 @@ class CartItem extends AbstractModel implements CartItemInterface
     }
 
     /**
+     * Get options
+     */
+    public function getOptions(): ?array
+    {
+        return json_decode($this->getData(self::OPTIONS) ?? 'null', true);
+    }
+
+    /**
+     * Set options
+     */
+    public function setOptions(?array $options): self
+    {
+        return $this->setData(self::OPTIONS, null !== $options ? json_encode($options) : null);
+    }
+
+    /**
      * Get ID
      */
     public function getId(): ?int

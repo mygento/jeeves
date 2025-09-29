@@ -14,6 +14,7 @@ interface CartItemInterface
     public const string UPDATED_AT = 'updated_at';
     public const string DISCOUNT = 'discount';
     public const string PRICE = 'price';
+    public const string OPTIONS = 'options';
 
     /**
      * Get cart id
@@ -114,6 +115,16 @@ interface CartItemInterface
      * Set price
      */
     public function setPrice(?float $price): self;
+
+    /**
+     * Get options
+     */
+    public function getOptions(): ?array;
+
+    /**
+     * Set options
+     */
+    public function setOptions(?array $options): self;
 
     /**
      * Get ID

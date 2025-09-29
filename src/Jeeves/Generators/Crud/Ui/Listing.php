@@ -442,6 +442,8 @@ class Listing extends Common
         $notNullable = isset($param['nullable']) && $param['nullable'] === false;
         $options = null;
         switch ($param['type']) {
+            case 'json':
+                return [];
             case 'bool':
             case 'boolean':
                 $filter = 'select';

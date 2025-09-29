@@ -212,6 +212,8 @@ class Edit extends Common
         }
 
         switch ($param['type']) {
+            case 'json':
+                return [];
             case 'text':
             case 'mediumtext':
             case 'longtext':

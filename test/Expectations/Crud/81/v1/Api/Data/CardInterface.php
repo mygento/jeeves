@@ -13,6 +13,7 @@ interface CardInterface extends IdentityInterface
     public const CARD_ID = 'card_id';
     public const TITLE = 'title';
     public const CODE = 'code';
+    public const OPTIONS = 'options';
     public const CATEGORY_ID = 'category_id';
     public const IS_ACTIVE = 'is_active';
     public const STORE_ID = 'store_id';
@@ -52,6 +53,18 @@ interface CardInterface extends IdentityInterface
      * @return $this
      */
     public function setCode(?string $code): self;
+
+    /**
+     * Get options
+     * @return array
+     */
+    public function getOptions(): array;
+
+    /**
+     * Set options
+     * @return $this
+     */
+    public function setOptions(array $options): self;
 
     /**
      * Get category id

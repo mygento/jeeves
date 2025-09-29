@@ -46,6 +46,7 @@ class GraphQL extends Generator
                         break;
                     case 'blob':
                     case 'varbinary':
+                    case 'json':
                         return null;
                     case 'int':
                     case 'smallint':

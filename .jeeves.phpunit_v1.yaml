@@ -96,6 +96,8 @@ Mygento:
             type: decimal
           price:
             type: price
+          options:
+            type: json
         indexes:
           IX_CITY:
             columns: ["city"]
@@ -117,6 +119,9 @@ Mygento:
             type: varchar
           code:
             type: varchar
+          options:
+            type: json
+            nullable: false
           category_id:
             type: int
             nullable: false

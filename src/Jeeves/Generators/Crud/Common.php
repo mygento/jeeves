@@ -116,6 +116,8 @@ class Common extends \Mygento\Jeeves\Generators\Common
             case 'real':
             case 'double':
                 return 'float';
+            case 'json':
+                return 'array';
             default:
                 return $type;
         }

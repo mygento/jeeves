@@ -64,11 +64,27 @@ class Card extends AbstractModel implements CardInterface
     }
 
     /**
+     * Get options
+     */
+    public function getOptions(): array
+    {
+        return json_decode($this->getData(self::OPTIONS) ?? '[]', true);
+    }
+
+    /**
+     * Set options
+     */
+    public function setOptions(array $options): self
+    {
+        return $this->setData(self::OPTIONS, json_encode($options));
+    }
+
+    /**
      * Get category id
      */
     public function getCategoryId(): int
     {
-        return $this->getData(self::CATEGORY_ID);
+        return (int) $this->getData(self::CATEGORY_ID);
     }
 
     /**
