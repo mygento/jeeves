@@ -123,9 +123,24 @@ class Common extends \Mygento\Jeeves\Generators\Common
         }
     }
 
-    protected function isNullable(array $value): bool
+    protected function shouldReturnNull(array $value): bool
     {
-        if ($value['type'] === 'boolean' && !isset($value['nullable'])) {
+        if (isset($value['identity']) && $value['identity'] === true) {
+            return true;
+        }
+        if ($value['type'] === 'boolean') {
+            return false;
+        }
+        if ($value['type'] == 'json') {
+            return !$this->isNotNullable($value);
+        }
+
+        return true;
+    }
+
+    protected function isNotNullable(array $value): bool
+    {
+        if ($value['type'] === 'boolean') {
             return true;
         }
 

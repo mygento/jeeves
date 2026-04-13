@@ -49,7 +49,7 @@ interface CartItemInterface
     /**
      * Get city
      */
-    public function getCity(): string;
+    public function getCity(): ?string;
 
     /**
      * Set city
@@ -59,7 +59,7 @@ interface CartItemInterface
     /**
      * Get customer group
      */
-    public function getCustomerGroup(): int;
+    public function getCustomerGroup(): ?int;
 
     /**
      * Set customer group
@@ -69,7 +69,7 @@ interface CartItemInterface
     /**
      * Get description
      */
-    public function getDescription(): string;
+    public function getDescription(): ?string;
 
     /**
      * Set description
@@ -79,7 +79,7 @@ interface CartItemInterface
     /**
      * Get created at
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Set created at
@@ -89,7 +89,7 @@ interface CartItemInterface
     /**
      * Get updated at
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Set updated at

@@ -40,12 +40,12 @@ interface ColumnsInterface
     /**
      * Has flag
      */
-    public function hasFlag(): ?bool;
+    public function hasFlag(): bool;
 
     /**
      * Set has flag
      */
-    public function setHasFlag(?bool $hasFlag): self;
+    public function setHasFlag(bool $hasFlag): self;
 
     /**
      * Get merge date
@@ -60,7 +60,7 @@ interface ColumnsInterface
     /**
      * Get discount
      */
-    public function getDiscount(): float;
+    public function getDiscount(): ?float;
 
     /**
      * Set discount
@@ -90,7 +90,7 @@ interface ColumnsInterface
     /**
      * Get name
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
      * Set name
@@ -100,7 +100,7 @@ interface ColumnsInterface
     /**
      * Get description
      */
-    public function getDescription(): string;
+    public function getDescription(): ?string;
 
     /**
      * Set description
@@ -110,7 +110,7 @@ interface ColumnsInterface
     /**
      * Get created at
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Set created at
@@ -120,7 +120,7 @@ interface ColumnsInterface
     /**
      * Get updated at
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Set updated at

@@ -70,7 +70,7 @@ interface CardInterface extends IdentityInterface
      * Get category id
      * @return int
      */
-    public function getCategoryId(): int;
+    public function getCategoryId(): ?int;
 
     /**
      * Set category id

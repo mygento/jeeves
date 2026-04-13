@@ -53,7 +53,8 @@ class Model extends Common
         $pk = [];
 
         foreach ($fields as $name => $value) {
-            $notNullable = $this->isNullable($value);
+            $notNullable = $this->isNotNullable($value);
+            $forcedType = $value['type'] === 'boolean';
             if (isset($value['pk']) && $value['pk'] === true) {
                 $pk[$name] = $value;
                 $pk[$name]['nullable'] = !$notNullable;
@@ -97,8 +98,7 @@ class Model extends Common
             $setter->setBody('return $this->setData(self::' . strtoupper($name) . ', ' . $setterBody . ');');
 
             $getter->setReturnType($this->convertType($value['type']));
-            $getter->setReturnNullable($generated ? true : !$notNullable);
-
+            $getter->setReturnNullable($this->shouldReturnNull($value));
             $setter->setReturnType('self');
             if ($name === 'entity_id') {
                 $setter->addComment('@param ' . $this->convertType($value['type']) . ' $' . $this->snakeCaseToCamelCase($name));

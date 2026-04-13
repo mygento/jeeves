@@ -82,7 +82,7 @@ class Card extends AbstractModel implements CardInterface
     /**
      * Get category id
      */
-    public function getCategoryId(): int
+    public function getCategoryId(): ?int
     {
         return (int) $this->getData(self::CATEGORY_ID);
     }

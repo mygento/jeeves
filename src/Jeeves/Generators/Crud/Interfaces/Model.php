@@ -43,7 +43,7 @@ class Model extends Common
         $pk = [];
 
         foreach ($fields as $name => $value) {
-            $notNullable = $this->isNullable($value);
+            $notNullable = $this->isNotNullable($value);
             if (isset($value['pk']) && $value['pk'] === true) {
                 $pk[$name] = $value;
                 $pk[$name]['nullable'] = !$notNullable;
@@ -70,7 +70,7 @@ class Model extends Common
             $param = $set->addParameter($this->snakeCaseToCamelCase($name));
 
             $get->setReturnType($this->convertType($value['type']));
-            $get->setReturnNullable($generated ? true : !$notNullable);
+            $get->setReturnNullable($this->shouldReturnNull($value));
             $param->setNullable(!$notNullable);
             $param->setType($this->convertType($value['type']));
             $set->setReturnType('self');

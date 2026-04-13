@@ -46,15 +46,15 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Has flag
      */
-    public function hasFlag(): ?bool
+    public function hasFlag(): bool
     {
-        return $this->getData(self::HAS_FLAG);
+        return (bool) $this->getData(self::HAS_FLAG);
     }
 
     /**
      * Set has flag
      */
-    public function setHasFlag(?bool $hasFlag): self
+    public function setHasFlag(bool $hasFlag): self
     {
         return $this->setData(self::HAS_FLAG, $hasFlag);
     }
@@ -78,7 +78,7 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Get discount
      */
-    public function getDiscount(): float
+    public function getDiscount(): ?float
     {
         return $this->getData(self::DISCOUNT);
     }
@@ -126,7 +126,7 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Get name
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->getData(self::NAME);
     }
@@ -142,7 +142,7 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Get description
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->getData(self::DESCRIPTION);
     }
@@ -158,7 +158,7 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Get created at
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
         return $this->getData(self::CREATED_AT);
     }
@@ -174,7 +174,7 @@ class Columns extends AbstractModel implements ColumnsInterface
     /**
      * Get updated at
      */
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->getData(self::UPDATED_AT);
     }

@@ -61,7 +61,7 @@ class CartItem extends AbstractModel implements CartItemInterface
     /**
      * Get city
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->getData(self::CITY);
     }
@@ -77,7 +77,7 @@ class CartItem extends AbstractModel implements CartItemInterface
     /**
      * Get customer group
      */
-    public function getCustomerGroup(): int
+    public function getCustomerGroup(): ?int
     {
         return $this->getData(self::CUSTOMER_GROUP);
     }
@@ -93,7 +93,7 @@ class CartItem extends AbstractModel implements CartItemInterface
     /**
      * Get description
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->getData(self::DESCRIPTION);
     }
@@ -109,7 +109,7 @@ class CartItem extends AbstractModel implements CartItemInterface
     /**
      * Get created at
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
         return $this->getData(self::CREATED_AT);
     }
@@ -125,7 +125,7 @@ class CartItem extends AbstractModel implements CartItemInterface
     /**
      * Get updated at
      */
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->getData(self::UPDATED_AT);
     }
