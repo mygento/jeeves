@@ -135,10 +135,10 @@ class Collection extends Common
             . '}' . PHP_EOL . PHP_EOL
             . '$stores = [];' . PHP_EOL
             . 'foreach ($result as $r) {' . PHP_EOL
-            . self::TAB . '$stores[] = $r[\'store_id\'];' . PHP_EOL
+            . self::TAB . '$stores[$r[\'entity_id\']][] = $r[\'store_id\'];' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'foreach ($this as $item) {' . PHP_EOL
-            . self::TAB . '$item->setData(\'store_id\', $stores);' . PHP_EOL
+            . self::TAB . '$item->setData(\'store_id\', $stores[$item->getId()]);' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'return parent::_afterLoad();',
         );

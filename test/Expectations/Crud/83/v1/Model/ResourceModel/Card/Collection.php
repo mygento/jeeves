@@ -73,11 +73,11 @@ class Collection extends AbstractCollection
 
         $stores = [];
         foreach ($result as $r) {
-            $stores[] = $r['store_id'];
+            $stores[$r['entity_id']][] = $r['store_id'];
         }
 
         foreach ($this as $item) {
-            $item->setData('store_id', $stores);
+            $item->setData('store_id', $stores[$item->getId()]);
         }
 
         return parent::_afterLoad();
