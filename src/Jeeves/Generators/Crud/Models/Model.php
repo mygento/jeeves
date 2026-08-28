@@ -54,7 +54,6 @@ class Model extends Common
 
         foreach ($fields as $name => $value) {
             $notNullable = $this->isNotNullable($value);
-            $forcedType = $value['type'] === 'boolean';
             if (isset($value['pk']) && $value['pk'] === true) {
                 $pk[$name] = $value;
                 $pk[$name]['nullable'] = !$notNullable;
@@ -67,9 +66,6 @@ class Model extends Common
             $cast = '';
             if ($notNullable && $value['type'] == 'boolean') {
                 $cast = '(bool) ';
-            }
-            if ($notNullable && $withStore) {
-                $cast = '(' . $this->convertType($value['type']) . ') ';
             }
             $getterBody = '$this->getData(self::' . strtoupper($name) . ')';
             if ($value['type'] == 'json') {
