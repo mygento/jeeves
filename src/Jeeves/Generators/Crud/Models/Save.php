@@ -62,7 +62,7 @@ class Save extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('@inheritDoc')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public')
             ->setBody(
                 '$entityMetadata = $this->metadataPool->getMetadata(' . $namespace->simplifyType($interface) . '::class);' . PHP_EOL

@@ -70,7 +70,7 @@ class Collection extends Common
 
         $construct = $class->addMethod('__construct')->setVisibility('public');
 
-        $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
+        $construct->addComment('@SuppressWarnings("PHPMD.ExcessiveParameterList")');
 
         if ($constructorProp) {
             $construct

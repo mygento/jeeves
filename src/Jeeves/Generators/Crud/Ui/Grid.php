@@ -62,7 +62,7 @@ class Grid extends Common
             $namespace->addUse('\Magento\Framework\EntityManager\MetadataPool');
         }
 
-        $construct->addComment('@SuppressWarnings(PHPMD.ExcessiveParameterList)');
+        $construct->addComment('@SuppressWarnings("PHPMD.ExcessiveParameterList")');
 
         $construct->setBody('parent::__construct(' . PHP_EOL
             . ($withStore ? '$metadataPool,' . PHP_EOL : '')
@@ -98,7 +98,7 @@ class Grid extends Common
         $setSearchCriteria = $class->addMethod('setSearchCriteria')
             ->addComment('@param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria')
             ->addComment('@return $this')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public');
         $setSearchCriteria->addParameter('searchCriteria')
             ->setType('\Magento\Framework\Api\SearchCriteriaInterface')
@@ -113,7 +113,7 @@ class Grid extends Common
         $setTotalCount = $class->addMethod('setTotalCount')
             ->addComment('@param int $totalCount')
             ->addComment('@return $this')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public');
         $setTotalCount->addParameter('totalCount');
         $setTotalCount->setBody('return $this;');
@@ -121,7 +121,7 @@ class Grid extends Common
         $setItems = $class->addMethod('setItems')
             ->addComment('@param \Magento\Framework\Api\ExtensibleDataInterface[] $items')
             ->addComment('@return $this')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public');
         $setItems->addParameter('items')->setType('array')->setDefaultValue(null);
         $setItems->setBody('return $this;');

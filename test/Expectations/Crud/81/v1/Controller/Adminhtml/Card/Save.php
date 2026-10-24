@@ -27,8 +27,8 @@ class Save extends Card
     /**
      * Save Card action
      *
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     public function execute(): ResultInterface
     {

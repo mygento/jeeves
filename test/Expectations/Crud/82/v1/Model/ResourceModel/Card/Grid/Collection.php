@@ -19,7 +19,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     protected AggregationInterface $aggregations;
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings("PHPMD.ExcessiveParameterList")
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -80,7 +80,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     public function setSearchCriteria(?SearchCriteriaInterface $searchCriteria = null)
     {
@@ -98,7 +98,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     /**
      * @param int $totalCount
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     public function setTotalCount($totalCount)
     {
@@ -108,7 +108,7 @@ class Collection extends ParentCollection implements SearchResultInterface
     /**
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     public function setItems(?array $items = null)
     {

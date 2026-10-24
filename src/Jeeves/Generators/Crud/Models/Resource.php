@@ -102,7 +102,7 @@ class Resource extends Common
         $load = $class->addMethod('load')
             ->addComment('@inheritDoc')
             ->addComment('')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public');
 
         $load->addParameter('object')->setType('\Magento\Framework\Model\AbstractModel');

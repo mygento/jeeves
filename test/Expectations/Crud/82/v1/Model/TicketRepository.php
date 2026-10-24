@@ -15,7 +15,7 @@ use Mygento\SampleModule\Api\TicketRepositoryInterface;
 use Mygento\SampleModule\Model\ResourceModel\Ticket\CollectionFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 readonly class TicketRepository implements TicketRepositoryInterface
 {

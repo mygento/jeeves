@@ -48,7 +48,7 @@ class Read extends Common
 
         $execute = $class->addMethod('execute')
             ->addComment('@inheritDoc')
-            ->addComment('@SuppressWarnings(PHPMD.UnusedFormalParameter)')
+            ->addComment('@SuppressWarnings("PHPMD.UnusedFormalParameter")')
             ->setVisibility('public')
             ->setBody('if ($entity->getId()) {' . PHP_EOL
             . self::TAB . '$stores = $this->resource->lookupStoreIds((int) $entity->getId());' . PHP_EOL

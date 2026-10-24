@@ -15,7 +15,7 @@ use Mygento\SampleModule\Api\Data\ColumnsSearchResultsInterfaceFactory;
 use Mygento\SampleModule\Model\ResourceModel\Columns\CollectionFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 class ColumnsRepository implements ColumnsRepositoryInterface
 {

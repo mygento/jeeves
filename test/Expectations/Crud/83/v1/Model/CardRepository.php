@@ -16,7 +16,7 @@ use Mygento\SampleModule\Api\Data\CardSearchResultsInterfaceFactory;
 use Mygento\SampleModule\Model\ResourceModel\Card\CollectionFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 readonly class CardRepository implements CardRepositoryInterface
 {

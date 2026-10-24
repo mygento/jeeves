@@ -27,8 +27,8 @@ class Save extends Columns
     /**
      * Save Columns action
      *
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     public function execute(): ResultInterface
     {

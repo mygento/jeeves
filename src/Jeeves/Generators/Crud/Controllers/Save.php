@@ -81,8 +81,8 @@ class Save extends Common
         $execute = $class->addMethod('execute')
             ->addComment('Save ' . $entityName . ' action')
             ->addComment('')
-            ->addComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)')
-            ->addComment('@SuppressWarnings(PHPMD.CyclomaticComplexity)')
+            ->addComment('@SuppressWarnings("PHPMD.CouplingBetweenObjects")')
+            ->addComment('@SuppressWarnings("PHPMD.CyclomaticComplexity")')
             ->setBody('/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */' . PHP_EOL
                 . '$resultRedirect = $this->resultRedirectFactory->create();' . PHP_EOL
                 . '$data = $this->getRequest()->getPostValue();' . PHP_EOL

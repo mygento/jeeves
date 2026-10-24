@@ -15,7 +15,7 @@ use Mygento\SampleModule\Api\Data\CartItemSearchResultsInterfaceFactory;
 use Mygento\SampleModule\Model\ResourceModel\CartItem\CollectionFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 readonly class CartItemRepository implements CartItemRepositoryInterface
 {

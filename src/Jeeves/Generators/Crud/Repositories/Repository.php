@@ -31,7 +31,7 @@ class Repository extends Common
 
         $class = $namespace->addClass($className);
         $class->setImplements([$repoInterface]);
-        $class->setComment('@SuppressWarnings(PHPMD.CouplingBetweenObjects)');
+        $class->setComment('@SuppressWarnings("PHPMD.CouplingBetweenObjects")');
 
         if ($readonlyClass) {
             $class->setReadOnly($readonlyClass);

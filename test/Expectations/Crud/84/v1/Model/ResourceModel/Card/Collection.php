@@ -20,7 +20,7 @@ class Collection extends AbstractCollection
     protected $_idFieldName = CardResource::TABLE_PRIMARY_KEY;
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings("PHPMD.ExcessiveParameterList")
      */
     public function __construct(
         private readonly MetadataPool $metadataPool,

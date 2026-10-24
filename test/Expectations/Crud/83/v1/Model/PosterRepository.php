@@ -15,7 +15,7 @@ use Mygento\SampleModule\Api\PosterRepositoryInterface;
 use Mygento\SampleModule\Model\ResourceModel\Poster\CollectionFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 readonly class PosterRepository implements PosterRepositoryInterface
 {
